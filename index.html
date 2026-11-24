@@ -123,7 +123,7 @@ const load = () => Promise.all(Object.entries(SRC).map(([k, s]) => new Promise(r
 
 // ================= 状態 =================
 const st = {
-  x: 320, dir: 1, moving: false, phase: 0,
+  x: 200, dir: 1, moving: false, phase: 0,
   flags: {},            // 出来事のフラグ
   evidence: [],         // 集めた証拠（順不同）
   insights: [],
@@ -392,7 +392,7 @@ function frame(ts) {
   const sx = cv.width / W, sy = cv.height / H;
   g.setTransform(sx, 0, 0, sy, 0, 0); g.imageSmoothingQuality = 'high';
   drawFar(cam); drawTrees(cam); drawGround(cam);
-  drawSign(360 - cam, '花野の国（仮）'); drawSign(2400 - cam, '東 → 谷の吊り橋');
+  drawSign(430 - cam, '花野の国（仮）'); drawSign(2400 - cam, '東 → 谷の吊り橋');
   HOUSES.forEach(h => drawHouse(h, cam));
   NPCS.forEach(n => drawActor(n, cam)); drawRabbit(cam); drawNono(cam); drawFore(cam);
   // 夕暮れの色かぶせ
