@@ -108,7 +108,7 @@ button:active,button.hold{background:rgba(243,160,122,.28)}
 <script>
 {
 // ================= 設定 =================
-const W = 960, H = 540, GROUND = 452, WORLD = 5760; // 1国＝6画面
+const W = 960, H = 540, GROUND = 452, WORLD = 6000; // 1国＝約6画面
 const SPEED = 230;
 const IMG = {};
 const SRC = {
@@ -119,7 +119,7 @@ const SRC = {
   lumber_normal:'assets/extra_lumberjack_normal.webp', lumber_fun:'assets/extra_lumberjack_fun.webp', lumber_surprise:'assets/extra_lumberjack_surprise.webp',
   porter_normal:'assets/extra_porter_normal.webp'
 };
-for (const n of ['house_small','house_large','inn','bakery','lumber_hut','elder_house']) SRC['b_' + n] = 'assets/buildings/' + n + '.webp';
+for (const n of ['house_small','house_large','inn','bakery','lumber_hut','elder_house','rope_bridge_broken','rope_bridge_fixed']) SRC['b_' + n] = 'assets/buildings/' + n + '.webp';
 const load = () => Promise.all(Object.entries(SRC).map(([k, s]) => new Promise(r => { const i = new Image(); i.onload = () => { IMG[k] = i; r(); }; i.onerror = () => r(); i.src = s; })));
 
 // ================= 状態 =================
@@ -181,7 +181,7 @@ function lines(id) {
   if (id === 'villager') {
     if (!f.heard) { f.heard = true; addEvidence('heard');
       return [['villager','normal','やあ、旅の人。東へ行くのかい？'],['villager','surprise','隣村のもんが言ってたんだが、東の吊り橋が落ちたらしいよ。'],['villager','normal','まあ、聞いた話だけどね。気をつけて。'],['me','','（旅日誌に書いておこう）']]; }
-    if (f.seen && !f.toldVillager) { f.toldVillager = true;
+    if (f.seen && !f.toldVillager) { f.toldVillager = true; f.bridgeFixed = true;
       return [['villager','surprise','おや、戻ってきたのかい。橋はどうだった？'],['me','','落ちてたのは、手すりの縄だけでした。'],['villager','joy','なんだ、そうだったのか！ 隣村のやつ、話を大きくしたな。'],['villager','normal','いや……わしも、ちょっと大きくして話したかもしれん。']]; }
     return f.seen ? [['villager','joy','手すりの縄か。直しに行ってやらんとな。']] : [['villager','normal','東の橋の話、本当かどうか。見てきた人がいればなあ。']];
   }
@@ -200,6 +200,11 @@ function lines(id) {
     if (!st.evidence.includes('crossed')) { addEvidence('crossed');
       return [['porter','normal','ふう。重い荷を背負って、今朝その先の吊り橋を渡ってきたところさ。'],['porter','normal','揺れはひどかったし、片側がなんだか頼りなかったけどね。'],['me','', f.heard ? '（落ちた橋は、渡れないはず……）' : '（橋があるんだ）']]; }
     return [['porter','normal','西の村まであと少し。足だけが頼りさ。']];
+  }
+  if (id === 'bridge' && f.bridgeFixed) {
+    if (f.sawFixed) return [['me','','新しい縄の手すり。次の国へは、また今度。']];
+    f.sawFixed = true;
+    return [['me','','あ……手すりが、新しい縄になっている。'],['me','','ゴンジさんたちが、直しに来てくれたんだ。'],['me','','行きと帰りで、同じ橋なのに、ちがって見える。']];
   }
   if (id === 'bridge') { addEvidence('seen'); f.seen = true;
     return [['me','','……橋だ。ちゃんと架かっている。'],['me','','落ちていたのは、片側の手すりの縄だけだ。'],['me','', f.heard ? '（「橋が落ちた」は、少しちがったみたいだ。村に戻って話してみよう）' : '（縄が切れている。誰かに知らせたほうがいいかな）'],['me','','この先は次の国。（試作はここまで）']]; }
@@ -314,18 +319,14 @@ function drawGround(cam) {
   for (let i = Math.floor(cam / 8); i < (cam + W) / 8; i++) { const x = i * 8 - cam; if (x < end) g.fillRect(x, GROUND - 4 * rnd(i), 8, 6); }
   if (end < W) drawGorge(end);
 }
+// 吊り橋：画像（崖つき）を左の崖の草の上端が地面に合うように置く。帰りに直っていれば直った絵
+const BRIDGE = { scale: 1, grassTop: 37, leftEdge: 140, w: 866 };
 function drawGorge(x0) {
+  const bx = x0 - BRIDGE.leftEdge + 10, by = GROUND - BRIDGE.grassTop - 32;
   g.fillStyle = '#0d0c14'; g.fillRect(x0, GROUND, W - x0 + 1, H - GROUND);
-  g.fillStyle = '#2c3f2e'; g.fillRect(x0 - 6, GROUND, 6, H - GROUND);
-  const x1 = x0 + 440;
-  if (x1 < W) { g.fillStyle = '#2c3f2e'; g.fillRect(x1, GROUND, W - x1, H - GROUND); }
-  // 吊り橋：床板は無事、手前の手すりの縄が垂れ下がっている
-  const sag = x => 26 * Math.sin(Math.PI * (x - x0) / 440);
-  g.strokeStyle = '#3a2a1c'; g.lineWidth = 3;
-  for (let x = x0; x <= x1; x += 14) { g.fillStyle = (Math.floor(x / 14) % 2) ? '#8a6a48' : '#7a5c3e'; g.fillRect(x, GROUND + sag(x) - 2, 12, 7); }
-  g.beginPath(); for (let x = x0; x <= x1; x += 10) g.lineTo(x, GROUND - 46 + sag(x) * 1.1); g.stroke(); // 奥の手すり（無事）
-  g.strokeStyle = '#5a4430'; g.beginPath(); g.moveTo(x0, GROUND - 46); g.quadraticCurveTo(x0 + 60, GROUND + 70, x0 + 90, GROUND + 120); g.stroke(); // 切れた縄
-  g.fillStyle = '#4a3726'; g.fillRect(x0 - 4, GROUND - 56, 8, 58); if (x1 < W) g.fillRect(x1 - 4, GROUND - 56, 8, 58);
+  const im = IMG[st.flags.bridgeFixed ? 'b_rope_bridge_fixed' : 'b_rope_bridge_broken'];
+  if (im) { g.drawImage(im, bx, by, BRIDGE.w, im.height * BRIDGE.w / im.width); return; }
+  g.fillStyle = '#4a3726'; g.fillRect(x0 - 4, GROUND - 56, 8, 58);
 }
 function drawHouse(hs, cam) {
   const bi = IMG['b_' + hs.img];
