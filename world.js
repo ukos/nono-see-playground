@@ -97,20 +97,20 @@
     props: [['torii', 200, 250], ['stone_lantern', 1300, 170], ['pine', 2150, 300], ['stone_lantern', 3150, 170], ['jp_castle', 4300, 430]],
     buildings: [['buke_gate', 380], ['machiya', 900], ['teahouse', 1550], ['nagaya', 2250], ['samurai_mansion', 3250, 0.95]],
     npcs: [
-      { id: 'wakai', name: '若い衆', actor: 'sasuke', x: 800, face: -1 },
+      { id: 'wakai', name: '若い衆', actor: 'apprentice', x: 800, face: -1 },
       { id: 'soba', name: '屋台のそば屋', actor: 'craftsman', x: 2200, face: -1 }
     ],
     weather: { clear: 4, drizzle: 4, fog: 1, wind: 1 },
     talk: {
       wakai(S) {
         const f = S.f;
-        if (S.back) return [['npc', 'fun', 'よう、旅の人。ゆうべ、ちゃんと十六文払ってそばを食ったよ。'], ['npc', 'fun', 'うまかった。……ごまかして食うより、うまかった気がする。']];
-        if (f.wakaiHonest) return [['npc', 'fun', '今夜はふつうに食う。ふつうに、な。']];
+        if (S.back) return [['npc', 'normal', 'よう、旅の人。ゆうべ、ちゃんと十六文払ってそばを食ったよ。'], ['npc', 'normal', 'うまかった。……ごまかして食うより、うまかった気がする。']];
+        if (f.wakaiHonest) return [['npc', 'normal', '今夜はふつうに食う。ふつうに、な。']];
         if (f.sobaAsked) { f.wakaiHonest = true;
-          return [['npc', 'fun', 'どうだった？ そば屋に時刻を聞かれたら、九つって言ってくれたか？'], ['me', '', '朝の四つです、と答えました。'], ['npc', 'sorrow', '……正直だなあ。いや、そりゃそうだ。朝だもんな。'], ['npc', 'fun', '人に頼まなきゃできねえたくらみは、もうたくらみじゃねえや。今夜は、ちゃんと払う。'], ['insight', '', '正直に答えただけで、だれかのたくらみが一つ止まった。']]; }
-        if (f.wakaiPlan) return [['npc', 'fun', '頼んだぞ。時刻を聞かれたら、九つ。九つだ。']];
+          return [['npc', 'normal', 'どうだった？ そば屋に時刻を聞かれたら、九つって言ってくれたか？'], ['me', '', '朝の四つです、と答えました。'], ['npc', 'normal', '……正直だなあ。いや、そりゃそうだ。朝だもんな。'], ['npc', 'normal', '人に頼まなきゃできねえたくらみは、もうたくらみじゃねえや。今夜は、ちゃんと払う。'], ['insight', '', '正直に答えただけで、だれかのたくらみが一つ止まった。']]; }
+        if (f.wakaiPlan) return [['npc', 'normal', '頼んだぞ。時刻を聞かれたら、九つ。九つだ。']];
         f.wakaiPlan = true;
-        return [['npc', 'fun', 'なあ旅の人、ひと儲けの話を聞いてくれ。'], ['npc', 'fun', 'そば屋で勘定のとき、銭を数えながら「いま何どきだい」と聞く。'], ['npc', 'fun', '「九つ」と答えさせて、九の次から数える。一文浮くって寸法さ。'], ['npc', 'fun', 'あのおやじ、時計を持ってねえ。旅の人、時刻を聞かれたら「九つ」と言ってくれよ。'], ['me', '', '（……それは、うそになる）']];
+        return [['npc', 'normal', 'なあ旅の人、ひと儲けの話を聞いてくれ。'], ['npc', 'normal', 'そば屋で勘定のとき、銭を数えながら「いま何どきだい」と聞く。'], ['npc', 'normal', '「九つ」と答えさせて、九の次から数える。一文浮くって寸法さ。'], ['npc', 'normal', 'あのおやじ、時計を持ってねえ。旅の人、時刻を聞かれたら「九つ」と言ってくれよ。'], ['me', '', '（……それは、うそになる）']];
       },
       soba(S) {
         const f = S.f;
@@ -129,9 +129,9 @@
     props: [['tree_old_roots', 700, 260], ['pine', 2900, 280], ['stone_lantern', 4000, 150]],
     buildings: [['cn_paifang', 300], ['cn_house', 1000], ['cn_teahouse', 1650], ['cn_nagaya', 2450, 1.1], ['cn_mansion', 3550, 1.15], ['cn_tower', 4650, 1.2]],
     npcs: [
-      { id: 'okami', name: '茶館の女将', actor: 'akane', x: 1100, face: -1 },
+      { id: 'okami', name: '茶館の女将', actor: 'kimono_woman', x: 1100, face: -1 },
       { id: 'yui_koutou', name: YUI('赤い服の娘'), sprite: 'yui_red', x: 2600, face: -1 },
-      { id: 'teishu', name: '魚屋の亭主', actor: 'homura', x: 3700, face: -1 }
+      { id: 'teishu', name: '魚屋の亭主', actor: 'lanternman', x: 3700, face: -1 }
     ],
     weather: { clear: 5, drizzle: 2, fog: 2, squall: 1 },
     talk: {
@@ -165,8 +165,8 @@
     props: [['rock', 600, 90], ['bush', 2000, 80], ['watchtower', 3100, 300], ['rock2', 5200, 100]],
     buildings: [['yurt_smoke', 700], ['sheep_pen', 1300, 1.1], ['yurt', 2400], ['stable', 3500, 1.15], ['yurt', 4700, 0.9]],
     npcs: [
-      { id: 'mei', name: 'メイ（羊飼い）', actor: 'mei', x: 1900, face: -1 },
-      { id: 'hayate', name: 'ハヤテ（馬飼い）', actor: 'hayate', x: 4200, face: -1 }
+      { id: 'mei', name: 'アイラ（羊飼い）', actor: 'braidgirl', x: 1900, face: -1 },
+      { id: 'hayate', name: 'バトゥ（馬飼い）', actor: 'hunter', x: 4200, face: -1 }
     ],
     places: [{ id: 'bell', name: '草むらの鈴の音', x: 5300, verb: '聞く' }],
     weather: { clear: 3, wind: 5, typhoon: 1, drizzle: 1 },
@@ -174,11 +174,11 @@
       mei(S) {
         const f = S.f;
         if (S.back && f.bellHeard && !f.lambHome) { f.lambHome = true;
-          return [['npc', 'joy', 'あっ……帰ってきた！ あの子が、あなたのうしろから。'], ['npc', 'joy', 'あの子、人の歩くほうへついてくる癖があるの。'], ['npc', 'joy', 'あなた、東から、ここまでずっと歩いてきたでしょう。'], ['insight', '', 'ただ歩いていただけで、だれかの帰り道になっていた。']]; }
-        if (f.lambHome) return [['npc', 'joy', '今夜は、柵の中で数えたら、ちゃんと全部いる。']];
-        if (f.meiTold) return [['npc', 'sorrow', '風が強くなる前に、見つかればいいんだけど。']];
+          return [['npc', 'normal', 'あっ……帰ってきた！ あの子が、あなたのうしろから。'], ['npc', 'normal', 'あの子、人の歩くほうへついてくる癖があるの。'], ['npc', 'normal', 'あなた、東から、ここまでずっと歩いてきたでしょう。'], ['insight', '', 'ただ歩いていただけで、だれかの帰り道になっていた。']]; }
+        if (f.lambHome) return [['npc', 'normal', '今夜は、柵の中で数えたら、ちゃんと全部いる。']];
+        if (f.meiTold) return [['npc', 'normal', '風が強くなる前に、見つかればいいんだけど。']];
         f.meiTold = true;
-        return [['npc', 'sorrow', '子羊が一頭、群れからはぐれたの。首に鈴をつけた子。'], ['npc', 'sorrow', '風が強くなると、鈴の音が聞こえなくなる。'], ['npc', 'sorrow', '追いかけると逃げるの。……どうしたらいいのか、わからない。']];
+        return [['npc', 'normal', '子羊が一頭、群れからはぐれたの。首に鈴をつけた子。'], ['npc', 'normal', '風が強くなると、鈴の音が聞こえなくなる。'], ['npc', 'normal', '追いかけると逃げるの。……どうしたらいいのか、わからない。']];
       },
       hayate(S) {
         const f = S.f;
@@ -203,7 +203,7 @@
     props: [['palm', 300, 300], ['palm', 2250, 320], ['bush_berry', 4200, 90]],
     buildings: [['in_market', 500], ['in_haveli', 1150], ['in_blue', 1900], ['pk_lahore', 2650], ['pk_mosque', 3400], ['pk_mountain', 4550]],
     npcs: [
-      { id: 'kogane', name: 'コガネ（買い物客）', actor: 'kogane', x: 800, face: -1 },
+      { id: 'kogane', name: 'ビクラム（買い物客）', actor: 'turban', x: 800, face: -1 },
       { id: 'tanurio', name: 'ラジュ（香辛料売り）', actor: 'mustache', x: 2000, face: -1 },
       { id: 'rei_iro', name: REI('白いシャツの娘'), sprite: 'rei_shirt', x: 3600, face: -1 }
     ],
@@ -242,7 +242,7 @@
     buildings: [['adobe', 500], ['mideast_white', 1300], ['adobe', 2700, 0.9], ['mideast_white', 3600, 0.95]],
     npcs: [
       { id: 'first', name: 'ファースト（WATCH）', actor: 'first', x: 800, face: 1, sheet: FIRST, pose: f => f.firstMet ? 'idle' : 'crouch' },
-      { id: 'iwao', name: 'イワオ（水売り）', actor: 'iwao', x: 1900, face: -1 },
+      { id: 'iwao', name: 'ハミド（水売り）', actor: 'veiled', x: 1900, face: -1 },
       { id: 'wizard', name: '旅の魔法使い', actor: 'wizard', x: 2900, face: -1 }
     ],
     places: [{ id: 'well', name: '古い井戸', x: 4000, verb: '見る' }],
@@ -288,8 +288,8 @@
     npcs: [
       { id: 'yui', name: YUI('剣を帯びた娘'), sprite: f => f.yuiKnown ? 'yui_queen' : 'yui_uniform', x: 1300, face: -1 },
       { id: 'mermaid', name: '人魚', actor: 'mermaid', x: 3000, face: -1 },
-      { id: 'envoy', name: '海の向こうの使者', actor: 'kurogane', x: 4700, face: -1, when: f => !f.envoyMoved },
-      { id: 'envoy2', name: '海の向こうの使者', actor: 'kurogane', x: 1650, face: -1, when: f => f.envoyMoved }
+      { id: 'envoy', name: '海の向こうの使者', actor: 'knight', x: 4700, face: -1, when: f => !f.envoyMoved },
+      { id: 'envoy2', name: '海の向こうの使者', actor: 'knight', x: 1650, face: -1, when: f => f.envoyMoved }
     ],
     weather: { clear: 6, wind: 2, typhoon: 1, squall: 1 },
     talk: {
@@ -378,8 +378,8 @@
     props: [['pine_snow', 300, 300], ['tree_snow', 2900, 300], ['pine_snow', 4400, 320]],
     buildings: [['nordic_red', 500], ['nordic_red', 1500, 0.85], ['lumber_hut', 2400, 1.4], ['nordic_red', 3400, 1.05]],
     npcs: [
-      { id: 'yoru', name: 'ヨル（黒猫）', actor: 'yoru', x: 900, face: -1 },
-      { id: 'roujin', name: '火守りのコテツ', actor: 'kotetsu', x: 2000, face: -1 }
+      { id: 'yoru', name: 'ソルヴェイ', actor: 'snowkid', x: 900, face: -1 },
+      { id: 'roujin', name: '火守りのオーラヴ', actor: 'lanternsage', x: 2000, face: -1 }
     ],
     places: [{ id: 'window', name: 'いちばん東の家の窓', x: 3700, verb: '見る' }],
     weather: { snow: 6, clear: 2, densefog: 1, wind: 1 },
@@ -418,14 +418,14 @@
       { id: 'second', name: 'セカンド（WATCH）', actor: 'second', x: 1300, face: 1, sheet: SECOND,
         pose: f => f.secondDone ? 'wave' : f.secondAsked ? 'sneak' : 'crouch', leaveWhen: f => f.secondDone },
       { id: 'mizuchi', name: 'ミラ（絵描き）', actor: 'scarfwoman', x: 2600, face: -1 },
-      { id: 'shiro', name: 'シロ（港の子）', actor: 'shiro', x: 4000, face: -1 }
+      { id: 'shiro', name: 'ティト（港の子）', actor: 'flower_boy', x: 4000, face: -1 }
     ],
     weather: { clear: 5, squall: 2, wind: 2, drizzle: 1 },
     talk: {
       second(S) {
         const f = S.f;
         if (f.shiroBell && !f.secondDone) { f.secondDone = true;
-          return [['me', '', '鈴の持ち主は、港の子のシロでした。猫の首輪の鈴だそうです。'], ['npc', 'normal', '……猫か。どうりで、子どもの手のにおいがしないと思った。'], ['npc', 'normal', '任務完了だ。シロには、おれから返しに行く。'],
+          return [['me', '', '鈴の持ち主は、港の子のティトでした。猫の首輪の鈴だそうです。'], ['npc', 'normal', '……猫か。どうりで、子どもの手のにおいがしないと思った。'], ['npc', 'normal', '任務完了だ。ティトには、おれから返しに行く。'],
             ...(f.firstMet
               ? [['me', '', 'サハリアで、ファーストさんから伝言です。「小さな任務ほど、きちんと終わらせろ」'], ['npc', 'normal', '……先輩らしい。いま、ちょうど守ったところだと伝えてくれ。']]
               : []),
@@ -437,7 +437,7 @@
       mizuchi(S) {
         const f = S.f;
         if (S.back) return [['npc', 'normal', '黒い服の男が、猫に鈴をつけてやってたよ。……絵になる光景だった。']];
-        if (f.secondAsked) return [['npc', 'normal', '青い鈴？ この町で青を使ってる家は、二軒だけだ。'], ['npc', 'normal', '一軒は空き家。もう一軒は、東のシロの家。窓枠が、鈴と同じ青だ。']];
+        if (f.secondAsked) return [['npc', 'normal', '青い鈴？ この町で青を使ってる家は、二軒だけだ。'], ['npc', 'normal', '一軒は空き家。もう一軒は、東のティトの家。窓枠が、鈴と同じ青だ。']];
         return [['npc', 'normal', 'この町の家は、みんな色がちがうだろう？'], ['npc', 'normal', '船を塗った余りのペンキで塗るんだ。だから、どの色も少しずつしかない。']];
       },
       shiro(S) {
@@ -459,7 +459,7 @@
     buildings: [['sea_barrack', 400], ['sea_twostory', 950], ['sea_stall', 1550], ['sea_shop', 2150], ['sea_tall', 2750], ['sea_stilt', 3500], ['stilt_house', 4400], ['sea_barrack', 5300, 0.9]],
     npcs: [
       { id: 'mitsu2', name: 'ミツ（運び屋）', actor: 'porter', x: 600, face: 1 },
-      { id: 'gou', name: 'ゴウ（屋台）', actor: 'gou', x: 1500, face: -1 },
+      { id: 'gou', name: 'ソム（屋台）', actor: 'grocer', x: 1500, face: -1 },
       { id: 'yui_mizu', name: YUI('水着の娘'), sprite: 'yui_swim', x: 2400, face: -1 },
       { id: 'second2', name: 'セカンド（WATCH）', actor: 'second', x: 3600, face: 1, sheet: SECOND, pose: () => 'carry', when: f => f.secondDone },
       { id: 'rei_mizu', name: REI('忍び装束の人'), sprite: 'rei_ninja', x: 5300, face: -1 }
@@ -491,7 +491,7 @@
       mitsu2(S) {
         const f = S.f;
         if (S.back) return f.boardsSent ? [['npc', 'normal', 'さて、帰りは手ぶらだ。軽い軽い。また西で会おう。']] : [['npc', 'normal', 'もう一息なんだけどね。足が棒だよ。']];
-        if (f.boardsSent) return [['npc', 'normal', 'ゴウが迎えに来たよ。あとは、あいつが担ぐってさ。']];
+        if (f.boardsSent) return [['npc', 'normal', 'ソムが迎えに来たよ。あとは、あいつが担ぐってさ。']];
         if (f.mitsuArrived) return [['npc', 'normal', 'もう一息なんだけどね。足が棒だよ。']];
         f.mitsuArrived = true;
         const hello = S.met('porter')
@@ -500,7 +500,7 @@
         const rumor = f.seen
           ? [['npc', 'normal', 'そういえば、あの橋のうわさ。結局どうだった？'], ['me', '', '落ちてたのは、手すりの縄だけでした。'], ['npc', 'normal', 'やっぱりね。うわさは、運ぶ荷より速くて、重くなる。']]
           : [];
-        return [...hello, ['npc', 'normal', 'この板を、ゴウって屋台に届けるんだ。……少し休んでから行くよ。'], ...rumor];
+        return [...hello, ['npc', 'normal', 'この板を、ソムって屋台に届けるんだ。……少し休んでから行くよ。'], ...rumor];
       },
       rei_mizu(S) {
         const f = S.f;
@@ -517,7 +517,7 @@
     props: [['reeds', 500, 120], ['tree_green', 1700, 250], ['bush', 3000, 80], ['reeds2', 4900, 120]],
     buildings: [['thatched_farm', 900, 0.9], ['uk_terrace', 2700], ['nordic_red', 3300, 0.9], ['house_small', 5000, 1.5]],
     npcs: [
-      { id: 'pim', name: 'ピム（少年）', actor: 'nibulus', x: 700, face: 1 },
+      { id: 'pim', name: 'ピム（少年）', actor: 'graykid', x: 700, face: 1 },
       { id: 'miller', name: '粉屋のゴロ', actor: 'oldsmith', x: 2300, face: -1 },
       { id: 'keeper', name: '堤防番のアンナ', actor: 'archer', x: 4500, face: -1 }
     ],
@@ -604,19 +604,19 @@
     props: [['pine_snow', 500, 280], ['rune_stone', 2900, 120], ['rock_moss', 4000, 110], ['pine_snow', 5200, 300]],
     buildings: [['pk_mountain', 700, 0.95], ['pk_mountain', 3300, 0.8]],
     npcs: [
-      { id: 'lhakpa', name: '茶屋のラクパ', actor: 'mei', x: 1200, face: -1 },
-      { id: 'guide', name: '黙った案内人', actor: 'iwao', x: 2500, face: -1 },
-      { id: 'dorje', name: 'ラクパの兄', actor: 'sasuke', x: 4300, face: -1 }
+      { id: 'lhakpa', name: '茶屋のラクパ', actor: 'lanterngirl', x: 1200, face: -1 },
+      { id: 'guide', name: '黙った案内人', actor: 'backpacker', x: 2500, face: -1 },
+      { id: 'dorje', name: 'ラクパの兄', actor: 'ranchhand', x: 4300, face: -1 }
     ],
     weather: { clear: 4, wind: 2, fog: 2, snow: 2 },
     talk: {
       lhakpa(S) {
         const f = S.f;
-        if (S.back) return [['npc', 'joy', 'ゆうべ、峠は吹雪だったの。兄さん、ここで甘いお茶を三杯も飲んでた。'], ['npc', 'joy', 'あなたが、石のことを教えてくれたんでしょう。']];
-        if (f.dorjeWaits) return [['npc', 'joy', '兄さん、待つって？ ……よかった。お茶、もう一杯どうぞ。']];
-        if (f.lhakpaTold) return [['npc', 'sorrow', '案内人さんは、何も言わないの。でも、何も見ていないわけじゃない。']];
+        if (S.back) return [['npc', 'normal', 'ゆうべ、峠は吹雪だったの。兄さん、ここで甘いお茶を三杯も飲んでた。'], ['npc', 'normal', 'あなたが、石のことを教えてくれたんでしょう。']];
+        if (f.dorjeWaits) return [['npc', 'normal', '兄さん、待つって？ ……よかった。お茶、もう一杯どうぞ。']];
+        if (f.lhakpaTold) return [['npc', 'normal', '案内人さんは、何も言わないの。でも、何も見ていないわけじゃない。']];
         f.lhakpaTold = true;
-        return [['npc', 'normal', '峠の風は冷たかったでしょう。甘いお茶をどうぞ。'], ['npc', 'sorrow', '兄さんが、今日のうちに峠を越えるって。荷を待ってる人がいるの。'], ['npc', 'sorrow', 'あの案内人さんに聞いてって言ったのに、あの人、口をきかないから。']];
+        return [['npc', 'normal', '峠の風は冷たかったでしょう。甘いお茶をどうぞ。'], ['npc', 'normal', '兄さんが、今日のうちに峠を越えるって。荷を待ってる人がいるの。'], ['npc', 'normal', 'あの案内人さんに聞いてって言ったのに、あの人、口をきかないから。']];
       },
       guide(S) {
         const f = S.f;
@@ -627,7 +627,7 @@
       },
       dorje(S) {
         const f = S.f;
-        if (S.back) return [['npc', 'fun', '峠の向こうの人に、一日遅れたって謝ったら、笑われたよ。'], ['npc', 'fun', '「吹雪の日に着いたら、謝るのはこっちのほうだった」ってさ。']];
+        if (S.back) return [['npc', 'normal', '峠の向こうの人に、一日遅れたって謝ったら、笑われたよ。'], ['npc', 'normal', '「吹雪の日に着いたら、謝るのはこっちのほうだった」ってさ。']];
         if (f.dorjeWaits) return [['npc', 'normal', '雲が晴れたら行く。荷は逃げない。']];
         if (f.stonesSeen) { f.dorjeWaits = true;
           return [['npc', 'normal', '案内人は、黙ってたろう？ 黙ってるのは、行けってことさ。'], ['me', '', '峠の雲を指さして、石を三つ積んでいました。'], ['npc', 'normal', '……三つ？'], ['npc', 'normal', 'この村じゃ、石三つは「待て」だ。子どものころ、親父に教わった。'], ['npc', 'normal', '……忘れてたよ。急いでると、知ってることまで見えなくなる。今日は、待つ。'], ['insight', '', '言葉がなくても、指さす先を見れば、わかることがある。']]; }
@@ -644,7 +644,7 @@
     buildings: [['it_tuscan', 600], ['it_townhouse', 1300, 0.9], ['it_tuscan', 4100, 0.85]],
     npcs: [
       { id: 'host', name: '祭りの世話役', actor: 'festival', x: 1000, face: -1 },
-      { id: 'lucia', name: 'ルチア', actor: 'akane', x: 2300, face: -1 },
+      { id: 'lucia', name: 'ルチア', actor: 'farmgirl', x: 2300, face: -1 },
       { id: 'master', name: '道ばたの老人', actor: 'elder', x: 5100, face: -1 }
     ],
     places: [{ id: 'vat', name: 'ぶどうの桶', x: 2900, verb: '踏む' }],
@@ -688,7 +688,7 @@
     buildings: [['thatched_farm', 300, 0.8], ['adobe', 4900, 0.8]],
     npcs: [
       { id: 'west', name: '西の村のムワンギ', actor: 'craftsman', x: 1000, face: 1 },
-      { id: 'east', name: '東の村のオティエノ', actor: 'kogane', x: 4400, face: -1 }
+      { id: 'east', name: '東の村のオティエノ', actor: 'tribewarrior', x: 4400, face: -1 }
     ],
     places: [{ id: 'sun', name: '東の空', x: 2700, verb: '見る' }],
     weather: { clear: 7, wind: 2, drizzle: 1 },
