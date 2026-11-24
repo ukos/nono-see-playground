@@ -510,5 +510,51 @@
     }
   });
 
+  // ---------------------------------------------------------------- 12 大事件（堤防のしみ。戦わずに、知らせて間に合わせる）
+  C.push({
+    id: 'kazaguruma', name: 'ネーデラ', sub: '風車の低地', time: 'morning', screens: 6, far: 'windmills_morning',
+    hill: '#2a3a34', ground: ['#6a9a5a', '#3e5a3c', '#7a6a54'], tint: 'rgba(120,140,170,.05)', bscale: 1.0,
+    props: [['reeds', 500, 120], ['tree_green', 1700, 250], ['bush', 3000, 80], ['reeds2', 4900, 120]],
+    buildings: [['thatched_farm', 900, 0.9], ['uk_terrace', 2700], ['nordic_red', 3300, 0.9], ['house_small', 5000, 1.5]],
+    npcs: [
+      { id: 'pim', name: 'ピム（少年）', actor: 'nibulus', x: 700, face: 1 },
+      { id: 'miller', name: '粉屋のゴロ', actor: 'oni', x: 2300, face: -1 },
+      { id: 'keeper', name: '堤防番のアンナ', actor: 'archer', x: 4500, face: -1 }
+    ],
+    places: [{ id: 'leak', name: '堤防の手形', x: 450, verb: '見る', when: f => f.dikeFixed }],
+    weather: { wind: 1 }, // 風車が排水に回るので、この国はいつも強風
+    talk: {
+      leak(S) {
+        const f = S.f;
+        return [['me', '', '（しみのあとに、小さな手形のついた粘土が詰めてある）'], ['me', '', '（堤防の向こうは海だ。こっちのほうが、低い）']];
+      },
+      pim(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'しみのところ、粘土に、ぼくの手形を残したんだ。乾いたら、ずっと残るって！']];
+        if (f.dikeFixed) return [['npc', 'normal', 'みんな来てくれた！ 指がまだ、じんじんする。']];
+        if (f.pimAsked) return [['npc', 'normal', 'はやく……！ 指が、もう冷たくて。']];
+        f.pimAsked = true;
+        return [['npc', 'normal', '旅の人！ 堤防から、水がしみ出してる！'], ['me', '', '（少年の小さな指の下から、水が細く噴き出している）'], ['npc', 'normal', '指でふさいでるけど、離したら、穴が広がっちゃう。'], ['npc', 'normal', '東の水門に、堤防番のアンナさんがいる。知らせて！ ぼく、ここを離れられない。']];
+      },
+      miller(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '今日の粉は、ちょっとだけ塩の味がする気がする。……気のせいだな。']];
+        if (f.dikeFixed) return [['npc', 'normal', '風に礼を言っとけ。今日の風がなけりゃ、水は抜けなかった。']];
+        if (f.pimAsked && !f.millRun) { f.millRun = true;
+          return [['npc', 'normal', '堤防がしみてる？ ……この風なら、風車で水をかき出せる。'], ['npc', 'normal', '粉ひきは後回しだ。羽根を排水に切りかえる。おまえは、アンナのところへ走れ！']]; }
+        if (f.millRun) return [['npc', 'normal', '羽根は回ってる。走れ、旅の人！']];
+        return [['npc', 'normal', 'いい風だ。こういう日は、粉がよく挽ける。'], ['npc', 'normal', '……顔がこわい？ よく言われる。粉は白いぞ。']];
+      },
+      keeper(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'あの子、将来いい堤防番になる。指一本で、村を守ったんだから。']];
+        if (f.dikeFixed) return [['npc', 'normal', '粘土は詰めた。今夜は、わたしが見張る。']];
+        if (f.pimAsked) { f.dikeFixed = true;
+          return [['npc', 'normal', 'しみてる？ どこ！ ……西の端か。'], ['npc', 'normal', 'ゴロの風車が回ってる。水位が少し下がってるのは、そのせいか。'], ['npc', 'normal', '鐘を鳴らす！ 粘土と人を集めて、すぐ行く。知らせてくれて助かった。'], ['insight', '', '気づいた子、知らせた旅人、風車を回した粉屋。一人では、間に合わなかった。']]; }
+        return [['npc', 'normal', '風の強い日は、堤防の機嫌が悪い。見回りが増える。'], ['npc', 'normal', 'この国の半分は、海より低いんだ。知ってたかい？']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
