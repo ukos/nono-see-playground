@@ -23,6 +23,10 @@ for (const c of world.C) {
   if (c.screens < 4 || c.screens > 8) R(id, 'W', `広さが 4〜8 画面の外: ${c.screens}`);
   for (const [b] of c.buildings) if (!has(`assets/buildings/${b}.webp`)) R(id, 'E', `建物がない: ${b}`);
   for (const [p] of c.props || []) if (!has(`assets/props/${p}.webp`)) R(id, 'E', `小物がない: ${p}`);
+  for (const [k, x] of c.animals || []) {
+    if (!has(`assets/animals/${k}_0.webp`)) R(id, 'E', `動物の絵がない: ${k}`);
+    if (x < 40 || x > c.screens * 960 - 40) R(id, 'E', `動物 ${k} が国の外にいる: x=${x}`);
+  }
   const W = c.screens * 960;
   const xs = [];
   for (const n of c.npcs) {

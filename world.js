@@ -17,6 +17,8 @@
 //                     全身ドット絵の住人は sheet（シート定義。画像は assets/actors/<actor>_sheet.webp）と pose(f)、
 //                     when(f)（いるときだけ）、leaveWhen(f)（その後は歩き去る）を持てる
 //   places          : 見る・聞くだけの場所 { id, name, x, verb('見る'/'聞く'), when(f) }。会話は talk[id]
+//   animals         : 動物 [種類, x, {mode('walk'/'stay'/'fly'), range, face, when(f), back('only'/'not'), h, shy, follow(f, back), moveTo:[条件, x]}]
+//                     種類と大きさ・ふるまいは game.js の ANIM。絵は assets/animals/<種類>_<コマ>.webp
 //   weather         : 起こりやすい天候と重み { clear, drizzle, squall, typhoon, wind, fog, densefog, snow }
 //   talk            : 住人ごとの会話。S を受け取り行の配列を返す
 //                     行＝[話し手, 表情, 文]。話し手は 'npc'（話している相手）/ 'me'（nono）/ 'insight'（気づき）
@@ -48,6 +50,7 @@
     rabbit: 2000,
     gap: { x: 5180, kind: 'rope' }, // 谷と吊り橋
     weather: { clear: 6, drizzle: 2, wind: 1, fog: 1 },
+    animals: [['rooster', 1500], ['hen', 1640], ['hen', 1760], ['cat_orange', 3000], ['dog_brown', 5200]],
     talk: {
       villager(S) {
         const f = S.f;
@@ -101,6 +104,7 @@
       { id: 'soba', name: '屋台のそば屋', actor: 'craftsman', x: 2200, face: -1 }
     ],
     weather: { clear: 4, drizzle: 4, fog: 1, wind: 1 },
+    animals: [['dog_shiba', 1400], ['crow', 3200], ['cat_calico', 3900]],
     talk: {
       wakai(S) {
         const f = S.f;
@@ -134,6 +138,7 @@
       { id: 'teishu', name: '魚屋の亭主', actor: 'lanternman', x: 3700, face: -1 }
     ],
     weather: { clear: 5, drizzle: 2, fog: 2, squall: 1 },
+    animals: [['cat_black', 1800], ['dog_pug', 4500, { range: 180 }]],
     talk: {
       okami(S) {
         const f = S.f;
@@ -170,6 +175,10 @@
     ],
     places: [{ id: 'bell', name: '草むらの鈴の音', x: 5300, verb: '聞く' }],
     weather: { clear: 3, wind: 5, typhoon: 1, drizzle: 1 },
+    animals: [['sheep', 1700, { range: 220 }], ['sheep', 1820, { range: 220 }], ['sheep', 2150, { range: 160 }],
+      // はぐれた子羊：行きは近づくと逃げ、帰りは nono のうしろをついてくる
+      ['sheep', 5300, { h: 36, shy: true, follow: (f, back) => back && f.bellHeard && !f.lambHome, moveTo: [f => f.lambHome, 1350] }],
+      ['horse_bay', 4330, { mode: 'stay', face: -1 }], ['hawk', 3000, { mode: 'fly' }]],
     talk: {
       mei(S) {
         const f = S.f;
@@ -208,6 +217,7 @@
       { id: 'rei_iro', name: REI('白いシャツの娘'), sprite: 'rei_shirt', x: 3600, face: -1 }
     ],
     weather: { clear: 5, squall: 2, wind: 1 },
+    animals: [['cow', 2700, { mode: 'stay' }], ['crow', 4300], ['donkey', 5000, { mode: 'stay', face: -1 }]],
     talk: {
       kogane(S) {
         const f = S.f;
@@ -247,6 +257,7 @@
     ],
     places: [{ id: 'well', name: '古い井戸', x: 4000, verb: '見る' }],
     weather: { clear: 6, wind: 3, fog: 1 },
+    animals: [['camel', 3400, { face: -1 }], ['camel', 3650]],
     talk: {
       first(S) {
         const f = S.f;
@@ -292,6 +303,7 @@
       { id: 'envoy2', name: '海の向こうの使者', actor: 'knight', x: 1650, face: -1, when: f => f.envoyMoved }
     ],
     weather: { clear: 6, wind: 2, typhoon: 1, squall: 1 },
+    animals: [['cat_white', 2200], ['cat_calico', 3700]],
     talk: {
       yui(S) {
         const f = S.f;
@@ -335,6 +347,7 @@
     ],
     places: [{ id: 'steps', name: '霧の中の足音', x: 5500, verb: '聞く', when: f => f.reiAsked && !f.stepsHeard }],
     weather: { fog: 4, densefog: 3, drizzle: 2, clear: 1 },
+    animals: [['dog_bulldog', 1800], ['sheep', 3200], ['sheep', 3380]],
     talk: {
       yui_kiri(S) {
         const f = S.f;
@@ -383,6 +396,7 @@
     ],
     places: [{ id: 'window', name: 'いちばん東の家の窓', x: 3700, verb: '見る' }],
     weather: { snow: 6, clear: 2, densefog: 1, wind: 1 },
+    animals: [['dog_husky', 1400], ['dog_samoyed', 2700]],
     talk: {
       yoru(S) {
         const f = S.f;
@@ -421,6 +435,9 @@
       { id: 'shiro', name: 'ティト（港の子）', actor: 'flower_boy', x: 4000, face: -1 }
     ],
     weather: { clear: 5, squall: 2, wind: 2, drizzle: 1 },
+    animals: [['dog_spot', 1900], ['llama', 5600, { mode: 'stay' }],
+      // 猫のチロ：鈴が戻ってから、帰り道にティトのそばにいる
+      ['cat_orange', 4150, { back: 'only', when: f => f.shiroBell, range: 160 }]],
     talk: {
       second(S) {
         const f = S.f;
@@ -465,6 +482,7 @@
       { id: 'rei_mizu', name: REI('忍び装束の人'), sprite: 'rei_ninja', x: 5300, face: -1 }
     ],
     weather: { squall: 4, drizzle: 2, clear: 3, typhoon: 1 },
+    animals: [['duck', 1000], ['chicks', 1100], ['cat_siamese', 3000], ['hen', 4500]],
     talk: {
       gou(S) {
         const f = S.f;
@@ -523,6 +541,7 @@
     ],
     places: [{ id: 'leak', name: '堤防の手形', x: 450, verb: '見る', when: f => f.dikeFixed }],
     weather: { wind: 1 }, // 風車が排水に回るので、この国はいつも強風
+    animals: [['duck', 1300], ['cow', 3300, { mode: 'stay' }], ['cow', 3550, { mode: 'stay', face: -1 }], ['sheep', 5200]],
     talk: {
       leak(S) {
         const f = S.f;
@@ -571,6 +590,7 @@
       { id: 'hex', name: '塩の六角形', x: 4300, verb: '見る' }
     ],
     weather: { clear: 6, drizzle: 3, wind: 1 },
+    animals: [['llama', 2000, { mode: 'stay' }], ['donkey', 3720, { mode: 'stay', face: -1 }], ['llama', 4900]],
     talk: {
       kappa(S) {
         const f = S.f;
@@ -609,6 +629,7 @@
       { id: 'dorje', name: 'ラクパの兄', actor: 'ranchhand', x: 4300, face: -1 }
     ],
     weather: { clear: 4, wind: 2, fog: 2, snow: 2 },
+    animals: [['dog_mastiff', 1450, { mode: 'stay' }], ['yak', 3300, { mode: 'stay' }], ['yak', 3600], ['crow', 5000]],
     talk: {
       lhakpa(S) {
         const f = S.f;
@@ -649,6 +670,7 @@
     ],
     places: [{ id: 'vat', name: 'ぶどうの桶', x: 2900, verb: '踏む' }],
     weather: { clear: 6, drizzle: 2, wind: 1 },
+    animals: [['donkey', 1700, { mode: 'stay' }], ['cat_calico', 3600], ['hen', 4300], ['rooster', 4420]],
     talk: {
       host(S) {
         const f = S.f;
@@ -692,6 +714,7 @@
     ],
     places: [{ id: 'sun', name: '東の空', x: 2700, verb: '見る' }],
     weather: { clear: 7, wind: 2, drizzle: 1 },
+    animals: [['cow', 1500, { mode: 'stay' }], ['cow', 1750], ['dog_brown', 3500], ['cow', 4700, { mode: 'stay', face: -1 }], ['hawk', 2700, { mode: 'fly' }]],
     talk: {
       west(S) {
         const f = S.f;

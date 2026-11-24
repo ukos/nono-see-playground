@@ -403,6 +403,77 @@ function drawActor(n, cam) {
   g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 34, 7, 0, 0, Math.PI * 2); g.fill();
   if (im) { g.save(); g.translate(x, 0); g.scale(n.face || -1, 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
 }
+// ---------------------------------------------------------------- 動物（ペット・家畜・鳥）
+// 国の animals: [[種類, x, {mode, range, when, back, face}]]
+//   mode: 'walk'（うろうろ歩く・既定）／'stay'（その場にいる）／'fly'（空を回る）
+//   back: 'only'（帰り道だけ）／'not'（行きだけ）
+//   h: 表示の高さを上書き（子羊など）／shy: 近づくと逃げる／follow(f, back): 真のあいだ nono のうしろをついて歩く
+//   moveTo: [条件(f), 新しいx] 条件が真になったら、そこを住みかにする
+// 種類の表：[表示の高さ, コマ数, ふるまい]  ふるまい dog＝寄ってくる／cat＝気ままに／bird＝近づくと逃げる／big＝のんびり
+const ANIM = {
+  dog_samoyed: [46, 2, 'dog'], dog_shiba: [44, 2, 'dog'], dog_spot: [40, 2, 'dog'], dog_puppy: [38, 2, 'dog'], dog_brown: [44, 2, 'dog'],
+  dog_mastiff: [56, 1, 'dog'], dog_akita: [50, 2, 'dog'], dog_bulldog: [40, 2, 'dog'], dog_husky: [50, 2, 'dog'], dog_dane: [72, 2, 'dog'],
+  dog_pug: [34, 2, 'dog'], dog_borzoi: [62, 2, 'dog'],
+  cat_calico: [34, 2, 'cat'], cat_black: [34, 2, 'cat'], cat_orange: [34, 2, 'cat'], cat_white: [34, 2, 'cat'], cat_persian: [38, 2, 'cat'], cat_siamese: [36, 2, 'cat'],
+  owl: [42, 2, 'bird'], duck: [36, 2, 'bird'], chicks: [26, 2, 'bird'], crow: [34, 2, 'bird'], rooster: [34, 1, 'bird'], hen: [30, 1, 'bird'],
+  sheep: [50, 2, 'big'], horse: [118, 1, 'big'], horse_bay: [120, 2, 'big'], cow: [92, 1, 'big'], donkey: [88, 1, 'big'], camel: [128, 1, 'big'],
+  yak: [92, 1, 'big'], llama: [110, 1, 'big'], turtle: [28, 1, 'big'], hawk: [40, 1, 'fly']
+};
+const ANIMALS = [];
+C.forEach(c => (c.animals || []).forEach(([k, x, o = {}], j) => {
+  const a = ANIM[k]; if (!a) return;
+  ANIMALS.push({ k, c, home: c.x0 + x, x: c.x0 + x, dir: o.face || (j % 2 ? -1 : 1), o, h: o.h || a[0], n: a[1], kind: o.mode === 'fly' ? 'fly' : a[2],
+    mode: o.mode || (a[2] === 'big' && a[1] === 1 ? 'stay' : 'walk'), range: o.range || (a[2] === 'big' ? 160 : 260), pause: Math.random() * 2, ph: Math.random() * 9 });
+}));
+function animalShown(a) {
+  if (a.o.when && !a.o.when(st.flags)) return false;
+  const back = st.maxX >= a.c.x1 - 2 && st.x < a.c.x1;
+  return !(a.o.back === 'only' && !back) && !(a.o.back === 'not' && back);
+}
+function drawAnimals(cam, dt) {
+  const followers = [];
+  for (const a of ANIMALS) {
+    if (a.x - cam < -400 || a.x - cam > W + 400 || !animalShown(a)) continue;
+    const d = st.x - a.x, near = Math.abs(d) < 150;
+    let moving = false;
+    const back = st.maxX >= a.c.x1 - 2 && st.x < a.c.x1;
+    if (a.o.moveTo && !a.moved && a.o.moveTo[0](st.flags)) { a.moved = true; a.home = a.c.x0 + a.o.moveTo[1]; if (!a.following) a.x = a.home; }
+    a.following = !!(a.o.follow && a.o.follow(st.flags, back));
+    if (a.following) {
+      const tx = st.x - st.dir * 80, dd = tx - a.x;
+      if (Math.abs(dd) > 6) { a.dir = Math.sign(dd); a.x += a.dir * Math.min(Math.abs(dd), (Math.abs(dd) > 160 ? 320 : st.moving ? 235 : 90) * dt); moving = true; }
+      else a.dir = st.dir;
+      followers.push([a, moving]); continue;
+    }
+    if (a.kind === 'fly') { a.x = a.home + Math.sin(st.t * 0.25 + a.ph) * 380; moving = true; }
+    else if (a.mode === 'walk') {
+      const sp = a.kind === 'bird' ? 55 : a.kind === 'big' ? 22 : 42;
+      if ((a.kind === 'bird' || a.o.shy) && near) { a.dir = d > 0 ? -1 : 1; a.x += a.dir * 120 * dt; moving = true; }
+      else if (a.kind === 'dog' && near && Math.abs(d) > 70) { a.dir = Math.sign(d); a.x += a.dir * 70 * dt; moving = true; }
+      else if (a.kind === 'dog' && near) { a.dir = Math.sign(d) || 1; }
+      else if ((a.pause -= dt) < 0) {
+        a.x += a.dir * sp * dt; moving = true;
+        if (Math.abs(a.x - a.home) > a.range / 2) { a.dir = Math.sign(a.home - a.x); a.pause = 1 + Math.random() * 3; }
+        else if (Math.random() < dt * 0.25) a.pause = 0.8 + Math.random() * 2.5;
+      }
+      a.x = Math.max(a.c.x0 + 40, Math.min(a.c.x1 - 40, a.x)); // 国の外へは出ない
+    } else if (near && a.kind !== 'big') a.dir = Math.sign(d) || a.dir;
+    drawAnimal(a, cam, moving);
+  }
+  for (const [a, m] of followers) drawAnimal(a, cam, m); // ついてくる動物は手前に
+}
+function drawAnimal(a, cam, moving) {
+  {
+    const fi = a.n > 1 ? (moving ? Math.floor(st.t * 6 + a.ph) % 2 : (a.mode === 'stay' ? Math.floor(st.t / 3 + a.ph) % 2 : 0)) : 0;
+    const im = img(`assets/animals/${a.k}_${fi}.webp`); if (!im) return;
+    const h = a.h, w = im.width * h / im.height, x = a.x - cam;
+    const y = a.kind === 'fly' ? 70 + Math.sin(st.t * 0.6 + a.ph) * 18 : GROUND + 6 - h - (moving && a.n === 1 ? Math.abs(Math.sin(st.t * 8 + a.ph)) * 2 : 0);
+    const dir = a.kind === 'fly' ? 1 : a.dir;
+    if (a.kind !== 'fly') { g.fillStyle = 'rgba(0,0,0,.16)'; g.beginPath(); g.ellipse(x, GROUND + 5, w * 0.36, 4, 0, 0, Math.PI * 2); g.fill(); }
+    g.save(); g.translate(x, 0); g.scale(dir, 1); g.drawImage(im, -w / 2, y, w, h); g.restore();
+  }
+}
+
 const rabbit = { hop: 0, dx: 0 };
 function drawRabbit(cam) {
   const c = C.find(c => c.rabbit != null); if (!c) return;
@@ -497,6 +568,7 @@ function frame(ts) {
   for (const c of C.slice(1)) drawSign(c.x0 - cam, `← ${C[c.i - 1].name} ｜ ${c.name} →`);
   drawSign(WORLD - 260 - cam, 'この先は、まだ見ぬ国（試作はここまで）');
   drawProps(cam); drawBuildings(cam); drawBridge(cam);
+  drawAnimals(cam, busy ? 0 : dt);
   for (const n of NPCS) drawActor(n, cam);
   drawPlaces(cam); drawRabbit(cam); drawNono(cam); drawFore(cam);
   g.fillStyle = cc.tint || 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);
