@@ -11,6 +11,9 @@
 //   bscale          : 建物の倍率（素材の解像度差を吸収）
 //   buildings       : [画像名, 国の左端からのx, 倍率(省略可)]
 //   npcs            : { id, name, actor, x, face(1=右向き,-1=左向き) }
+//                     1枚絵の住人は sprite（assets/actors/<sprite>.webp。f を受け取る関数でも可）、name も関数にできる。
+//                     全身ドット絵の住人は sheet（シート定義。画像は assets/actors/<actor>_sheet.webp）と pose(f)、
+//                     when(f)（いるときだけ）、leaveWhen(f)（その後は歩き去る）を持てる
 //   weather         : 起こりやすい天候と重み { clear, drizzle, squall, typhoon, wind, fog, densefog, snow }
 //   talk            : 住人ごとの会話。S を受け取り行の配列を返す
 //                     行＝[話し手, 表情, 文]。話し手は 'npc'（話している相手）/ 'me'（nono）/ 'insight'（気づき）
@@ -18,6 +21,14 @@
 //                     S.ev(k)（噂の証拠を得る）, S.has(k), S.met(npcId)
 (function () {
   const C = [];
+  // 全身ドット絵のシート（1コマの幅・高さ、立ちコマの背丈、コマ番号、nono に対する背の高さ）
+  const AGENT = { idle: 0, walk1: 1, walk2: 2, sneak: 3, crouch: 4, push: 5, wave: 6, carry: 7 };
+  const SECOND = { fw: 160, fh: 359, figure: 312, frames: AGENT, h: 1.12 };
+  const SECOND_YOUNG = { fw: 262, fh: 478, figure: 456, frames: AGENT, h: 0.8 };
+  // ユイとレイは国ごとに衣装が変わる。正体がわかるまでは衣装で呼ぶ
+  const YUI = alt => f => f.insightShirakabe ? 'ユイ' : alt;
+  const REI = alt => f => f.insightKiri ? 'レイ' : alt;
+  const FIRST = { fw: 289, fh: 597, figure: 583, frames: { idle: 0, walk1: 1, walk2: 2, sneak: 3, crouch: 4, wave: 5, carry: 6 }, h: 1.18 };
 
   // ---------------------------------------------------------------- 1
   C.push({
@@ -81,10 +92,22 @@
     buildings: [['buke_gate', 380], ['machiya', 900], ['teahouse', 1550], ['nagaya', 2250], ['samurai_mansion', 3250, 0.95]],
     npcs: [
       { id: 'soba', name: '屋台のそば屋', actor: 'craftsman', x: 1400, face: -1 },
-      { id: 'wakai', name: '若い衆', actor: 'sasuke', x: 2900, face: -1 }
+      { id: 'wakai', name: '若い衆', actor: 'sasuke', x: 2900, face: -1 },
+      { id: 'yui_take', name: YUI('巫女姿の娘'), sprite: 'yui_miko', x: 600, face: -1 },
+      { id: 'rei_take', name: REI('袴の娘'), sprite: 'rei_hakama', x: 3800, face: -1 }
     ],
     weather: { clear: 4, drizzle: 4, fog: 1, wind: 1 },
     talk: {
+      yui_take(S) {
+        return S.f.insightShirakabe
+          ? [['npc', '', 'あら、旅の人。港ではありがとう。'], ['npc', '', 'ここでは巫女のユイ。……王女だってことは、内緒よ。']]
+          : [['npc', '', 'この里の社で、少しだけ手伝いをしているの。'], ['npc', '', '剣より、ほうきのほうが難しいわね。']];
+      },
+      rei_take(S) {
+        return S.f.insightKiri
+          ? [['npc', '', '霧の島では、助かった。……ここでは、ただの稽古。']]
+          : [['npc', '', '……稽古の帰り。任務じゃない日も、ある。']];
+      },
       soba(S) {
         const f = S.f;
         if (f.wakaiTold && !f.insightTake) { f.insightTake = true;
@@ -110,10 +133,22 @@
     buildings: [['cn_paifang', 300], ['cn_house', 1000], ['cn_teahouse', 1650], ['cn_nagaya', 2450, 1.1], ['cn_mansion', 3550, 1.15], ['cn_tower', 4650, 1.2]],
     npcs: [
       { id: 'okami', name: '茶館の女将', actor: 'akane', x: 2000, face: -1 },
-      { id: 'teishu', name: '魚屋の亭主', actor: 'homura', x: 3300, face: -1 }
+      { id: 'teishu', name: '魚屋の亭主', actor: 'homura', x: 3300, face: -1 },
+      { id: 'yui_koutou', name: YUI('赤い服の娘'), sprite: 'yui_red', x: 1300, face: -1 },
+      { id: 'rei_koutou', name: REI('仮面の人'), sprite: 'rei_thief_red', x: 4300, face: -1 }
     ],
     weather: { clear: 5, drizzle: 2, fog: 2, squall: 1 },
     talk: {
+      yui_koutou(S) {
+        return S.f.insightShirakabe
+          ? [['npc', '', 'ここの揚げ菓子は、港のより甘いの。使者にも教えてあげなきゃ。']]
+          : [['npc', '', 'お茶を飲みに来ただけよ。……この服？ 目立たないようにと思って。'], ['me', '', '（すごく目立っている……）']];
+      },
+      rei_koutou(S) {
+        return S.f.insightKiri
+          ? [['npc', '', 'この仮面は、仕事着。……見なかったことにして。']]
+          : [['npc', '', '……見なかったことにして。'], ['me', '', '（仮面をしている……）']];
+      },
       teishu(S) {
         const f = S.f;
         if (S.back && f.insightKoutou) return [['npc', 'normal', '女房のやつ、最近なにか言いたそうなんだ。'], ['npc', 'normal', '……まあ、いいさ。言いたくなったら言うだろう。']];
@@ -137,10 +172,16 @@
     buildings: [['yurt_smoke', 700], ['sheep_pen', 1300, 1.1], ['yurt', 2400], ['stable', 3500, 1.15], ['yurt', 4700, 0.9]],
     npcs: [
       { id: 'mei', name: 'メイ（羊飼い）', actor: 'mei', x: 1800, face: -1 },
-      { id: 'hayate', name: 'ハヤテ（馬飼い）', actor: 'hayate', x: 4200, face: -1 }
+      { id: 'hayate', name: 'ハヤテ（馬飼い）', actor: 'hayate', x: 4200, face: -1 },
+      { id: 'yui_kaze', name: YUI('星柄の服の娘'), sprite: 'yui_starry', x: 3000, face: -1 }
     ],
     weather: { clear: 4, wind: 4, typhoon: 1, drizzle: 1 },
     talk: {
+      yui_kaze(S) {
+        return S.f.insightShirakabe
+          ? [['npc', '', '北の星だけは動かない、って。わたしの国の歌にもあるの。']]
+          : [['npc', '', '草原の夜は、星が近いわ。'], ['npc', '', 'この服、星の柄なの。……空には負けてるけど。']];
+      },
       mei(S) {
         const f = S.f;
         if (S.back && f.hayateTold) return [['npc', 'joy', 'ほら、帰ってきた。はぐれてた子。'], ['npc', 'joy', 'あなたも、帰り道ね。']];
@@ -164,10 +205,14 @@
     buildings: [['in_market', 500], ['in_haveli', 1150], ['in_blue', 1900], ['pk_lahore', 2650], ['pk_mosque', 3400], ['pk_mountain', 4550]],
     npcs: [
       { id: 'tanurio', name: 'タヌリオ（香辛料売り）', actor: 'tanurio', x: 900, face: -1 },
-      { id: 'kogane', name: 'コガネ（買い物客）', actor: 'kogane', x: 2400, face: -1 }
+      { id: 'kogane', name: 'コガネ（買い物客）', actor: 'kogane', x: 2400, face: -1 },
+      { id: 'rei_iro', name: REI('白いシャツの娘'), sprite: 'rei_shirt', x: 3800, face: -1 }
     ],
     weather: { clear: 5, squall: 2, wind: 1 },
     talk: {
+      rei_iro(S) {
+        return [['npc', '', '市場で、情報を買っている。香辛料のついでに。'], ...(S.f.insightKiri ? [['npc', '', 'タヌリオの店は、話が長い。情報も、長い。']] : [])];
+      },
       tanurio(S) {
         const f = S.f;
         if (f.koganeTold && !f.insightIro) { f.insightIro = true;
@@ -192,7 +237,9 @@
     buildings: [['adobe', 500], ['mideast_white', 1300], ['adobe', 2700, 0.9], ['mideast_white', 3600, 0.95]],
     npcs: [
       { id: 'iwao', name: 'イワオ（水売り）', actor: 'iwao', x: 1100, face: -1 },
-      { id: 'wizard', name: '旅の魔法使い', actor: 'wizard', x: 3200, face: -1 }
+      { id: 'wizard', name: '旅の魔法使い', actor: 'wizard', x: 3200, face: -1 },
+      { id: 'first', name: 'ファースト（WATCH）', actor: 'first', x: 2200, face: 1, sheet: FIRST, pose: f => f.firstMet ? 'idle' : 'crouch' },
+      { id: 'yui_suna', name: YUI('魔女の帽子の娘'), sprite: 'yui_witch', x: 4000, face: -1 }
     ],
     weather: { clear: 6, wind: 3, fog: 1 },
     talk: {
@@ -202,6 +249,17 @@
           return [['npc', 'normal', '……魔法使いのじいさんに、何か聞いたか。'], ['npc', 'normal', '子どもらに井戸を教えるのは、商売じゃない。水は、子どもから取るもんじゃない。'], ['npc', 'normal', '言いふらすなよ。商売の顔が立たん。'], ['insight', '', '人に見せる顔と、本当の顔はちがうこともある。悪いほうにだけじゃなく。']]; }
         if (f.insightSuna) return [['npc', 'normal', '水はいらんか。……旅の人には、一杯おまけだ。']];
         return [['npc', 'normal', '水はいらんか。一杯、銅貨一枚。'], ['npc', 'normal', '高い？ ここでは水より高いものはない。'], ['npc', 'normal', '井戸の場所は教えん。それが商売だからな。']];
+      },
+      yui_suna(S) {
+        return S.f.insightShirakabe
+          ? [['npc', '', 'この帽子、思ったより便利なの。砂が入らない。']]
+          : [['npc', '', '魔法使いのおじいさんに弟子入り……したわけじゃないわ。日よけよ、日よけ。']];
+      },
+      first(S) {
+        const f = S.f;
+        if (f.firstMet) return [['npc', 'normal', '水脈は、まだ細いが生きている。来年も、この村の井戸は涸れない。'], ['npc', 'normal', '後輩に会ったら、よろしく頼む。']];
+        f.firstMet = true;
+        return [['npc', 'normal', '……動くな。いや、冗談だ。'], ['npc', 'normal', 'WATCH のエージェント、ファーストだ。この砂の下の、古い水脈を測っている。'], ['npc', 'normal', '任務の中身？ 村の水が、来年も足りるかどうか。それだけだ。'], ['npc', 'normal', '後輩に、セカンドというのがいる。東の坂の港あたりで、小さな任務をしているはずだ。'], ['npc', 'normal', '会ったら伝えてくれ。「小さな任務ほど、きちんと終わらせろ」と。']];
       },
       wizard(S) {
         S.f.wizardTold = true;
@@ -216,7 +274,8 @@
     hill: '#22303a', ground: ['#8aa06a', '#7a6a5a', '#c8b8a0'], tint: 'rgba(40,80,140,.06)', bscale: 1.1,
     buildings: [['gr_chapel', 350], ['es_white', 900], ['it_townhouse', 1550], ['med_white', 2100, 0.9], ['es_gate', 2900], ['it_tuscan', 3500], ['gr_temple', 4400]],
     npcs: [
-      { id: 'yui', name: '剣を帯びた娘', actor: 'yui', x: 1300, face: -1 },
+      { id: 'yui', name: YUI('剣を帯びた娘'), sprite: f => f.insightShirakabe ? 'yui_queen' : 'yui_uniform', x: 1300, face: -1 },
+      { id: 'rei_shira', name: REI('着物の娘'), sprite: 'rei_kimono', x: 3200, face: -1 },
       { id: 'mermaid', name: '人魚', actor: 'mermaid', x: 5000, face: -1 }
     ],
     weather: { clear: 6, wind: 2, typhoon: 1, squall: 1 },
@@ -225,9 +284,14 @@
         const f = S.f;
         if (f.mermaidTold && !f.insightShirakabe) { f.insightShirakabe = true;
           return [['npc', 'normal', '……あの使者と、話したの。'], ['npc', 'fun', '国の話じゃなくて、好きな食べ物の話。あの人、甘い揚げ菓子に目がないの。'], ['npc', 'fun', '国の名前を外したら、ただの、お腹のすいた人だった。'], ['npc', 'normal', 'わたしはユイ。ある国の……まあ、いいわ。また会いましょう、旅の人。'], ['insight', '', '名前より先に、その人を見る。']]; }
-        if (f.insightShirakabe) return [['npc', 'fun', '揚げ菓子の店、教えてもらったの。あなたもどう？']];
+        if (f.insightShirakabe) return [['npc', '', 'この格好？ 今日は正式に、あの使者と会うの。'], ['npc', '', 'ほんとうはね、ある国の王女なの。……旅のあいだは、内緒にしてね。']];
         f.yuiTold = true;
         return [['npc', 'normal', '……旅の人？ わたしは、ただの剣士よ。'], ['npc', 'normal', 'この港に、海の向こうの国の使者が来るの。わたしの国と、長く争ってきた国。'], ['npc', 'sorrow', '名前を聞いただけで、剣に手がいく。おかしいわよね。']];
+      },
+      rei_shira(S) {
+        return S.f.insightKiri
+          ? [['npc', '', 'ユイの晴れ姿を見に来た。……言わないで。']]
+          : [['npc', '', '港の祭りを、見に来ただけ。……ほんとうに。']];
       },
       mermaid(S) {
         const f = S.f;
@@ -244,11 +308,18 @@
     hill: '#1c2430', ground: ['#4a6a4a', '#34443a', '#6a6a60'], tint: 'rgba(60,70,100,.10)', bscale: 1.0,
     buildings: [['uk_tudor', 400], ['uk_terrace', 900], ['uk_terrace', 1180], ['city_building', 1700, 0.95], ['white_mansion', 2500, 0.95], ['castle_gate', 3500], ['treehouse', 5000, 0.9]],
     npcs: [
-      { id: 'rei', name: '黒衣の女', actor: 'rei', x: 2300, face: -1 },
-      { id: 'elf', name: '霧の森の人', actor: 'elf', x: 5600, face: -1 }
+      { id: 'rei', name: REI('赤いマフラーの女'), sprite: 'rei_trench', x: 2300, face: -1 },
+      { id: 'yui_kiri', name: YUI('黒いスーツの娘'), sprite: 'yui_suit', x: 1600, face: -1 },
+      { id: 'elf', name: '霧の森の人', actor: 'elf', x: 5600, face: -1 },
+      { id: 'young', name: '黒い服の少年', actor: 'second_young', x: 4300, face: 1, sheet: SECOND_YOUNG, pose: f => f.insightKiri ? 'wave' : 'sneak' }
     ],
     weather: { fog: 4, densefog: 3, drizzle: 2, clear: 1 },
     talk: {
+      yui_kiri(S) {
+        return S.f.insightKiri
+          ? [['npc', '', 'レイとは、昔からの知り合いなの。……どこで知り合ったかは、内緒。']]
+          : [['npc', '', '……ここでは、ある人の護衛をしているの。'], ['npc', '', 'その人？ 赤いマフラーの、無口な人よ。']];
+      },
       rei(S) {
         const f = S.f;
         if (f.elfTold && !f.insightKiri) { f.insightKiri = true;
@@ -257,10 +328,16 @@
         f.reiTold = true;
         return [['npc', 'normal', '……見られたか。ある男を追っている。'], ['npc', 'normal', '黒い外套の、背の高い男。見なかった？'], ['me', '', '見てない、と思う……'], ['npc', 'normal', '「思う」は、いちばん困る答えだ。'], ['npc', 'normal', '森のほうを見てきてくれる？ 見ていないなら、見ていないと言って。']];
       },
+      young(S) {
+        const f = S.f; f.youngMet = true;
+        if (f.insightKiri) return [['npc', 'normal', 'お姉さんに聞いたよ。「見ていないなら、見ていないと言え」って。'], ['npc', 'normal', 'メモしとく！ エージェントの心得、その一！']];
+        if (f.reiTold) return [['npc', 'normal', 'あの赤いマフラーのお姉さん、本物のエージェントだよね！？'], ['npc', 'normal', 'ぼくも、あんなふうになりたい。']];
+        return [['npc', 'normal', 'しーっ！ いま、尾行の練習中なんだ。'], ['npc', 'normal', '大きくなったら、エージェントになる。名前も、もう決めてある。'], ['npc', 'normal', '……ひみつ！']];
+      },
       elf(S) {
         const f = S.f;
         if (f.reiTold) f.elfTold = true;
-        return [['npc', 'normal', '霧の日はね、みんな何かを見た気になるの。'], ['npc', 'normal', '影も、木も、人に見える。'], ['npc', 'normal', 'だから、見えたものより、聞こえた足音を信じるといいわ。'], ...(f.reiTold ? [['me', '', '（足音は、しなかった。黒衣の人に知らせよう）']] : [])];
+        return [['npc', 'normal', '霧の日はね、みんな何かを見た気になるの。'], ['npc', 'normal', '影も、木も、人に見える。'], ['npc', 'normal', 'だから、見えたものより、聞こえた足音を信じるといいわ。'], ...(f.reiTold ? [['me', '', '（足音は、しなかった。赤いマフラーの人に知らせよう）']] : [])];
       }
     }
   });
@@ -272,10 +349,18 @@
     buildings: [['nordic_red', 500], ['nordic_red', 1500, 0.85], ['lumber_hut', 2400, 1.4], ['nordic_red', 3400, 1.05]],
     npcs: [
       { id: 'roujin', name: '火守りの老人', actor: 'elder', x: 1250, face: -1 },
-      { id: 'yoru', name: 'ヨル（黒猫）', actor: 'yoru', x: 3000, face: -1 }
+      { id: 'yoru', name: 'ヨル（黒猫）', actor: 'yoru', x: 3000, face: -1 },
+      { id: 'yui_yuki', name: YUI('青いケープの娘'), sprite: 'yui_cape', x: 2100, face: -1 },
+      { id: 'rei_yuki', name: REI('紺の外套の人'), sprite: 'rei_thief', x: 4100, face: -1 }
     ],
     weather: { snow: 6, clear: 2, densefog: 1, wind: 1 },
     talk: {
+      yui_yuki(S) {
+        return [['npc', '', '雪の国は好き。剣が冷たくて、手がかじかむけど。'], ...(S.f.insightShirakabe ? [['npc', '', 'あの火守りのおじいさんに、わたしも灯りをもらったの。']] : [])];
+      },
+      rei_yuki(S) {
+        return [['npc', '', '夜の雪は、足あとが残る。だから、この仕事には向かない。'], ['npc', '', '……今日は、ただの散歩。']];
+      },
       roujin(S) {
         const f = S.f;
         if (f.yoruTold && !f.insightYuki) { f.insightYuki = true;
@@ -297,10 +382,22 @@
     buildings: [['mx_house', 400], ['mx_church', 1000], ['br_townhouse', 1550], ['br_hillside', 2150], ['cl_hill_house', 2950], ['ar_boca', 3450], ['cl_stilt', 4150], ['ar_estancia', 5300]],
     npcs: [
       { id: 'mizuchi', name: 'ミズチ（絵描き）', actor: 'mizuchi', x: 1900, face: -1 },
-      { id: 'shiro', name: 'シロ（港の子）', actor: 'shiro', x: 3900, face: -1 }
+      { id: 'shiro', name: 'シロ（港の子）', actor: 'shiro', x: 3900, face: -1 },
+      // WATCH のエージェント SECOND（全身ドット絵。任務が終わると歩き去る）
+      { id: 'second', name: 'セカンド（WATCH）', actor: 'second', x: 3000, face: 1, sheet: SECOND,
+        pose: f => f.secondDone ? 'wave' : f.secondAsked ? 'sneak' : 'crouch',
+        leaveWhen: f => f.secondDone },
+      { id: 'yui_saka', name: YUI('鎧の娘'), sprite: 'yui_armor', x: 700, face: -1 },
+      { id: 'rei_saka', name: REI('Tシャツの娘'), sprite: 'rei_tee', x: 5000, face: -1 }
     ],
     weather: { clear: 5, squall: 2, wind: 2, drizzle: 1 },
     talk: {
+      yui_saka(S) {
+        return [['npc', '', '港の祭りで、剣の型を見せる役なの。'], ['npc', '', '戦うためじゃない剣も、悪くないわね。']];
+      },
+      rei_saka(S) {
+        return [['npc', '', '休暇中。……ほんとうよ。'], ['npc', '', '坂の町は、走りがいがある。']];
+      },
       mizuchi(S) {
         const f = S.f;
         if (f.shiroTold && !f.insightSaka) { f.insightSaka = true;
@@ -309,8 +406,25 @@
         return [['npc', 'normal', 'この町の家は、みんな色がちがうだろう？'], ['npc', 'normal', '船を塗った余りのペンキで塗るんだ。だから、どの色も少しずつしかない。']];
       },
       shiro(S) {
-        S.f.shiroTold = true;
-        return [['npc', 'normal', 'ぼくの家は、青と黄色と、ちょっとだけ赤！'], ['npc', 'normal', '赤は、おとなりの船の色なんだ。'], ['npc', 'normal', '来年は、どんな色の船が来るかなあ。']];
+        const f = S.f;
+        const bell = f.secondAsked && !f.shiroBell
+          ? (f.shiroBell = true, [['npc', 'normal', '青い鈴？ それ、ぼくの！ 猫の首輪につけてたんだ。'], ['npc', 'normal', '黒い服のお兄さんが持ってるの？ 教えてくれてありがとう！'], ['me', '', '（セカンドさんに知らせよう）']])
+          : [];
+        if (f.shiroTold) return bell.length ? bell : [['npc', 'normal', '猫がね、鈴がないと、どこにいるかわかんないの。']];
+        f.shiroTold = true;
+        return [['npc', 'normal', 'ぼくの家は、青と黄色と、ちょっとだけ赤！'], ['npc', 'normal', '赤は、おとなりの船の色なんだ。'], ['npc', 'normal', '来年は、どんな色の船が来るかなあ。'], ...bell];
+      },
+      second(S) {
+        const f = S.f;
+        if (f.shiroBell && !f.secondDone) { f.secondDone = true;
+          return [['npc', 'normal', '持ち主は、港の子のシロか。……助かった。'], ['npc', 'normal', '任務完了だ。'],
+            ...(f.firstMet
+              ? [['me', '', '砂の国で、ファーストさんから伝言です。「小さな任務ほど、きちんと終わらせろ」って。'], ['npc', 'normal', '……先輩に会ったのか。それは、あの人の口ぐせだ。'], ['npc', 'normal', 'いま、ちょうど守ったところだと伝えてくれ。']]
+              : [['npc', 'normal', '大げさだって？ 小さな任務ほど、きちんと終わらせたいんだ。']]),
+            ['npc', 'normal', 'じゃあな、旅の人。']]; }
+        if (f.secondAsked) return [['npc', 'normal', '青い鈴の持ち主、まだ見つからない。子どもの持ち物だと思うんだが。']];
+        f.secondAsked = true;
+        return [['npc', 'normal', '……しっ。WATCH のエージェント、セカンドだ。'], ['npc', 'normal', '任務中でね。この坂の町で、落とし物の持ち主を探している。'], ['npc', 'normal', '小さな青い鈴だ。持ち主に心当たりは？']];
       }
     }
   });
@@ -322,16 +436,32 @@
     buildings: [['sea_barrack', 400], ['sea_twostory', 950], ['sea_stall', 1550], ['sea_shop', 2150], ['sea_tall', 2750], ['sea_stilt', 3500], ['stilt_house', 4400], ['sea_barrack', 5300, 0.9]],
     npcs: [
       { id: 'gou', name: 'ゴウ（屋台）', actor: 'gou', x: 1900, face: -1 },
-      { id: 'mitsu2', name: 'ミツ（運び屋）', actor: 'porter', x: 4100, face: -1 }
+      { id: 'mitsu2', name: 'ミツ（運び屋）', actor: 'porter', x: 4100, face: -1 },
+      { id: 'second2', name: 'セカンド（WATCH）', actor: 'second', x: 2950, face: 1, sheet: SECOND, pose: () => 'carry', when: f => f.secondDone },
+      { id: 'yui_mizu', name: YUI('水着の娘'), sprite: 'yui_swim', x: 1200, face: -1 },
+      { id: 'rei_mizu', name: REI('忍び装束の人'), sprite: 'rei_ninja', x: 5200, face: -1 }
     ],
     weather: { squall: 4, drizzle: 2, clear: 3, typhoon: 1 },
     talk: {
+      yui_mizu(S) {
+        return [['npc', '', 'スコールのあとは、泳ぐのがいちばん！'], ['npc', '', '……王女らしくない？ いいのよ、旅のあいだは。']];
+      },
+      rei_mizu(S) {
+        return S.f.insightKiri
+          ? [['npc', '', '追っていた男は、この町で見つけた。'], ['npc', '', '霧の島で「見ていない」と言ってくれたから、ここだとわかった。'], ['npc', '', 'ありがとう、旅の人。……nono、だったわね。']]
+          : [['npc', '', '……忍びの仕事中。話しかけないで。']];
+      },
       gou(S) {
         const f = S.f;
         if (f.mitsuMet2 && !f.insightMizu) { f.insightMizu = true;
           return [['npc', 'normal', 'ミツに会ったか。あいつの荷は、いつもこの町が終点だ。'], ['npc', 'normal', '雨の季節は、ここらは水が上がる。だから家を高くするのさ。毎年、少しずつな。'], ['npc', 'normal', '水と喧嘩しても勝てん。一緒に上がればいい。'], ['insight', '', '水が上がるなら、家も上がればいい。']]; }
         if (f.insightMizu) return [['npc', 'normal', '食っていきな。スコールのあとの麺はうまいぞ。']];
         return [['npc', 'normal', '食っていきな。雨の季節は、ここらは水が上がる。'], ['npc', 'normal', '家ごと水に浸かる？ だから、家を高くするのさ。']];
+      },
+      second2(S) {
+        const f = S.f;
+        return [['npc', 'normal', 'また会ったな、旅の人。次の任務さ。'], ['npc', 'normal', '袋の中身？ ……この町の子どもたちに配る、本だ。'], ['npc', 'normal', 'WATCH の任務には、こういうのもある。'],
+          ...(f.youngMet ? [['npc', 'normal', '……子どものころ、霧の島で尾行の練習をしていた。旅人に見つかって、恥ずかしかったな。'], ['npc', 'normal', 'いや、何の話でもない。']] : [])];
       },
       mitsu2(S) {
         const f = S.f;

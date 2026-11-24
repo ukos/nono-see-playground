@@ -10,6 +10,10 @@ for (const [i, c] of C.entries()) {
 }
 const WORLD = acc;
 const NPCS = C.flatMap(c => c.npcs);
+const present = n => (!n.when || n.when(st.flags)) && !st.flags[n.id + 'Gone'] && !(n.leaveWhen && n.leaveWhen(st.flags) && n.off);
+const npcX = n => n.ax + (n.off || 0);
+const nameOf = n => typeof n.name === 'function' ? n.name(st.flags) : n.name;
+const spriteOf = n => typeof n.sprite === 'function' ? n.sprite(st.flags) : n.sprite;
 const countryAt = x => C.find(c => x < c.x1) || C[C.length - 1];
 
 // ================= 画像（必要になった国から順に読み込む） =================
@@ -25,7 +29,7 @@ const P = {
 };
 function prefetch(c) {
   if (!c || c._pf) return; c._pf = true;
-  img(P.far(c.far)); c.buildings.forEach(b => img(P.b(b[0]))); c.npcs.forEach(n => img(P.a(n.actor, 'normal')));
+  img(P.far(c.far)); c.buildings.forEach(b => img(P.b(b[0]))); c.npcs.forEach(n => n.sprite ? img(`assets/actors/${spriteOf(n)}.webp`) : img(P.a(n.actor, n.sheet ? 'sheet' : 'normal')));
   if (c.gap) { img(P.b('rope_bridge_broken')); img(P.b('rope_bridge_fixed')); }
 }
 [P.nono, P.face, P.trees, P.grass, P.rabbit].forEach(img);
@@ -198,8 +202,10 @@ function showLine() {
     return;
   }
   ins.classList.remove('on'); talk.classList.add('on');
-  if (sp === 'npc' && c.who.actor) {
-    twho.textContent = c.who.name;
+  if (sp === 'npc' && c.who.sprite) {
+    twho.textContent = nameOf(c.who); tpic.onerror = null; tpic.src = `assets/actors/${spriteOf(c.who)}.webp`;
+  } else if (sp === 'npc' && c.who.actor) {
+    twho.textContent = nameOf(c.who);
     const normal = P.a(c.who.actor, 'normal');
     tpic.onerror = () => { tpic.onerror = null; tpic.src = normal; };
     tpic.src = face ? P.a(c.who.actor, face) : normal;
@@ -250,7 +256,7 @@ function groundOffset(x) { // 吊り橋の上では足もとが下がる
 // ================= 入力 =================
 function nearTarget() {
   let best = null, bd = 90;
-  for (const n of NPCS) { const d = Math.abs(n.ax - st.x); if (d < bd) { bd = d; best = n; } }
+  for (const n of NPCS) { if (!present(n)) continue; const d = Math.abs(n.ax - st.x); if (d < bd) { bd = d; best = n; } }
   if (best) return best;
   const c = countryAt(st.x), b = bridgeOf(c);
   if (b && st.x > b.gx - 220 && st.x < b.gx + 40) return { id: 'bridge', c, isPlace: true };
@@ -357,7 +363,25 @@ function drawBuildings(cam) {
   }
 }
 function drawActor(n, cam) {
-  const x = n.ax - cam; if (x < -120 || x > W + 120) return;
+  if ((n.when && !n.when(st.flags)) || st.flags[n.id + 'Gone']) return;
+  const x = npcX(n) - cam; if (x < -160 || x > W + 160) return;
+  if (n.sprite) {
+    const im = img(`assets/actors/${spriteOf(n)}.webp`); if (!im) return;
+    const h = NONO_H * (n.h || 1.04), w = im.width * h / im.height;
+    g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 28, 6, 0, 0, Math.PI * 2); g.fill();
+    g.save(); g.translate(x, 0); g.scale(n.face || -1, 1); g.drawImage(im, -w / 2, GROUND + 6 - h + Math.sin(st.t * 1.6 + n.ax) * 1, w, h); g.restore();
+    return;
+  }
+  if (n.sheet) {
+    const im = img(P.a(n.actor, 'sheet')); if (!im) return;
+    const S = n.sheet, leaving = n.off > 0;
+    const fr = leaving ? S.frames[Math.floor(st.t * 6) % 2 ? 'walk1' : 'walk2'] : (S.frames[(n.pose && n.pose(st.flags)) || 'idle'] ?? 0);
+    const s = NONO_H * (S.h || 1) / S.figure, w = S.fw * s, h = S.fh * s;
+    g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 30, 6, 0, 0, Math.PI * 2); g.fill();
+    g.save(); g.translate(x, 0); g.scale(leaving ? 1 : (n.face || 1), 1);
+    g.drawImage(im, fr * S.fw, 0, S.fw, S.fh, -w / 2, GROUND + 6 - h, w, h); g.restore();
+    return;
+  }
   const im = img(P.a(n.actor, 'normal')), h = NONO_H, w = h * .75;
   g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 34, 7, 0, 0, Math.PI * 2); g.fill();
   if (im) { g.save(); g.translate(x, 0); g.scale(n.face || -1, 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
@@ -429,6 +453,11 @@ function frame(ts) {
     showBanner(here); setWeather(pickWeather(here)); wx.timer = 40 + Math.random() * 50; if (first) save();
   }
   prefetch(here); prefetch(C[here.i + 1]); prefetch(C[here.i - 1]);
+  if (!busy) for (const n of NPCS) {
+    if (!n.leaveWhen || !n.leaveWhen(st.flags) || st.flags[n.id + 'Gone']) continue;
+    if (!n.wait) n.wait = st.t + 1.2; // 手を挙げてから歩き出す
+    if (st.t > n.wait) { n.off = (n.off || 0) + 120 * dt; if (n.off > 1400) st.flags[n.id + 'Gone'] = true; }
+  }
   const cam = Math.max(0, Math.min(WORLD - W, st.x - W * 0.42));
   const camDx = lastCam == null ? 0 : cam - lastCam; lastCam = cam;
   updateWeather(dt, camDx);
