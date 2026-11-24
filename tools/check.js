@@ -48,15 +48,29 @@ for (const c of world.C) {
   }
 }
 
+// ---- 特別枠（伝説＝うわさの正体が本物だった／ゲスト＝ライバル本人）は、10か国に1か国まで
+{
+  const sp = world.C.filter(c => c.npcs.some(n => n.special));
+  const cap = Math.max(1, Math.floor(world.C.length / 10));
+  if (sp.length > cap) R('_world', 'E', `特別枠の国が ${sp.length} か国（上限 ${cap}）: ${sp.map(c => c.id).join('、')}`);
+  world.C.forEach((c, i) => {
+    if (!c.npcs.some(n => n.special)) return;
+    const near = world.C.findIndex((d, j) => j !== i && Math.abs(j - i) < 5 && d.npcs.some(n => n.special));
+    if (near >= 0) R(c.id, 'W', `特別枠が ${world.C[near].id} と近い（5か国以上あけたい）`);
+    c.npcs.filter(n => n.special && !['legend', 'guest'].includes(n.special)).forEach(n => R(c.id, 'E', `special は 'legend' か 'guest': ${n.id}`));
+  });
+}
+
 // ---- 役者の使い回し（同じ顔の別人が近い国に出ると、同一人物に見える）
 {
   const seen = {};
-  // ストック（使わない）役者：十二支を含むライバル15人、妖怪、骸骨
+  // ストック（普段は使わない）役者：十二支を含むライバル15人、妖怪、骸骨、人魚・エルフなど人間でない者
   const STOCK = new Set(['nibulus', 'iwao', 'kotetsu', 'shiro', 'homura', 'mizuchi', 'hayate', 'mei', 'sasuke', 'kogane', 'kurogane', 'gou', 'tanurio', 'akane', 'yoru',
-    'kappa', 'mummy', 'oni', 'tengu', 'skeleton', 'hitotsume', 'hitotsume2', 'rokuro']);
+    'kappa', 'mummy', 'oni', 'tengu', 'skeleton', 'hitotsume', 'hitotsume2', 'rokuro',
+    'mermaid', 'mermaid2', 'pinkmermaid', 'merking', 'elf', 'elf2', 'woodelf', 'moon']);
   world.C.forEach((c, i) => c.npcs.forEach(n => {
     const key = n.actor || (typeof n.sprite === 'string' ? n.sprite : null); if (!key) return;
-    if (STOCK.has(key.replace(/_(sheet|neck)$/, ''))) R(c.id, 'E', `役者 ${key} はストック扱い（使わない）`);
+    if (STOCK.has(key.replace(/_(sheet|neck)$/, '')) && !n.special) R(c.id, 'E', `役者 ${key} はストック扱い。出すなら特別枠（npc に special: 'legend' か 'guest'）にする`);
     const nm = typeof n.name === 'function' ? n.name({}) : n.name;
     for (const [j, name, cid] of seen[key] || []) {
       if (name === nm || j === i) continue; // 同じ人物の再登場、同じ国の中は対象外

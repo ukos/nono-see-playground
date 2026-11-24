@@ -287,7 +287,7 @@
     buildings: [['gr_chapel', 350], ['es_white', 900], ['it_townhouse', 1550], ['med_white', 2100, 0.9], ['es_gate', 2900], ['it_tuscan', 3500], ['gr_temple', 4400]],
     npcs: [
       { id: 'yui', name: YUI('剣を帯びた娘'), sprite: f => f.yuiKnown ? 'yui_queen' : 'yui_uniform', x: 1300, face: -1 },
-      { id: 'mermaid', name: '人魚', actor: 'mermaid', x: 3000, face: -1 },
+      { id: 'mermaid', name: '人魚', actor: 'mermaid', x: 3000, face: -1, special: 'legend' },
       { id: 'envoy', name: '海の向こうの使者', actor: 'knight', x: 4700, face: -1, when: f => !f.envoyMoved },
       { id: 'envoy2', name: '海の向こうの使者', actor: 'knight', x: 1650, face: -1, when: f => f.envoyMoved }
     ],
@@ -330,7 +330,7 @@
     npcs: [
       { id: 'yui_kiri', name: YUI('黒いスーツの娘'), sprite: 'yui_suit', x: 1300, face: -1 },
       { id: 'rei', name: REI('赤いマフラーの女'), sprite: 'rei_trench', x: 2300, face: -1 },
-      { id: 'elf', name: '霧の森の人', actor: 'elf', x: 3800, face: -1 },
+      { id: 'elf', name: '霧の森の薬草とり', actor: 'herbgranny', x: 3800, face: -1 },
       { id: 'young', name: '黒い服の少年', actor: 'second_young', x: 4900, face: 1, sheet: SECOND_YOUNG, pose: f => f.reiKnown ? 'wave' : 'sneak', when: f => f.stepsHeard }
     ],
     places: [{ id: 'steps', name: '霧の中の足音', x: 5500, verb: '聞く', when: f => f.reiAsked && !f.stepsHeard }],
