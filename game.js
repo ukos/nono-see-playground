@@ -262,7 +262,10 @@ function nearTarget() {
   for (const n of NPCS) { if (!present(n)) continue; const d = Math.abs(n.ax - st.x); if (d < bd) { bd = d; best = n; } }
   if (best) return best;
   const c = countryAt(st.x), b = bridgeOf(c);
-  if (b && st.x > b.gx - 220 && st.x < b.gx + 40) return { id: 'bridge', c, isPlace: true };
+  if (b && st.x > b.gx - 220 && st.x < b.gx + 40) return { id: 'bridge', c, isPlace: true, verb: '見る' };
+  for (const p of c.places || []) { // 見る・聞くだけの場所（足あと、窓、鈴の音など）
+    if ((!p.when || p.when(st.flags)) && Math.abs(c.x0 + p.x - st.x) < 90) return { id: p.id, c, isPlace: true, verb: p.verb || '見る', ax: c.x0 + p.x };
+  }
   return null;
 }
 function act() {
@@ -428,9 +431,20 @@ function drawFore(cam) {
     g.globalAlpha = .9; g.drawImage(im, x, H - h + 20, w, h); g.globalAlpha = 1;
   }
 }
+function drawPlaces(cam) {
+  for (const c of C) {
+    if (!c.places || c.x1 < cam || c.x0 > cam + W) continue;
+    for (const p of c.places) {
+      if (p.when && !p.when(st.flags)) continue;
+      const x = c.x0 + p.x - cam; if (x < -20 || x > W + 20) continue;
+      const a = .35 + .25 * Math.sin(st.t * 3 + p.x);
+      g.fillStyle = `rgba(255,236,180,${a})`; g.beginPath(); g.ellipse(x, GROUND + 6, 18, 4, 0, 0, Math.PI * 2); g.fill();
+    }
+  }
+}
 function drawPrompt(cam) {
   if (st.talking || st.journal) return; const t = nearTarget(); if (!t) return;
-  const x = (t.isPlace ? st.x : t.ax) - cam, y = GROUND - 165 + Math.sin(st.t * 4) * 3, label = t.isPlace ? '見る' : '話す';
+  const x = (t.isPlace ? (t.ax || st.x) : npcX(t)) - cam, y = GROUND - 165 + Math.sin(st.t * 4) * 3, label = t.isPlace ? t.verb : '話す';
   g.font = '16px "DotGothic16",monospace'; g.textAlign = 'center';
   g.fillStyle = 'rgba(18,13,31,.85)'; g.fillRect(x - 34, y - 20, 68, 28); g.strokeStyle = '#f3a07a'; g.lineWidth = 2; g.strokeRect(x - 34, y - 20, 68, 28);
   g.fillStyle = '#f6eee6'; g.fillText('▼' + label, x, y);
@@ -484,7 +498,7 @@ function frame(ts) {
   drawSign(WORLD - 260 - cam, 'この先は、まだ見ぬ国（試作はここまで）');
   drawProps(cam); drawBuildings(cam); drawBridge(cam);
   for (const n of NPCS) drawActor(n, cam);
-  drawRabbit(cam); drawNono(cam); drawFore(cam);
+  drawPlaces(cam); drawRabbit(cam); drawNono(cam); drawFore(cam);
   g.fillStyle = cc.tint || 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);
   const tl = TIME[cc.time || 'dusk']; if (tl.fill) { g.fillStyle = tl.fill; g.fillRect(0, 0, W, H); }
   drawWeather(cam, st.x - cam);
