@@ -31,6 +31,7 @@ function prefetch(c) {
   if (!c || c._pf) return; c._pf = true;
   img(P.far(c.far)); c.buildings.forEach(b => img(P.b(b[0]))); c.npcs.forEach(n => n.sprite ? img(`assets/actors/${spriteOf(n)}.webp`) : img(P.a(n.actor, n.sheet ? 'sheet' : 'normal')));
   if (c.gap) { img(P.b('rope_bridge_broken')); img(P.b('rope_bridge_fixed')); }
+  (c.props || []).forEach(p => img(`assets/props/${p[0]}.webp`));
 }
 [P.nono, P.face, P.trees, P.grass, P.rabbit].forEach(img);
 
@@ -241,7 +242,7 @@ function renderJournal() {
 }
 function toggleJournal(on) { st.journal = on ?? !st.journal; $('journal').classList.toggle('on', st.journal); if (st.journal) renderJournal(); }
 
-// ================= 吊り橋（花野の国の谷） =================
+// ================= 吊り橋（オランジェの谷） =================
 function bridgeOf(c) {
   if (!c.gap) return null;
   const gx = c.x0 + c.gap.x;
@@ -350,6 +351,17 @@ function drawSign(x, label) {
   g.fillStyle = '#8a6a48'; g.fillRect(x - tw / 2, GROUND - 78, tw, 28);
   g.fillStyle = '#f6eee6'; g.textAlign = 'center'; g.fillText(label, x, GROUND - 58);
 }
+function drawProps(cam) {
+  for (const c of C) {
+    if (!c.props || c.x1 < cam - 800 || c.x0 > cam + W + 800) continue;
+    for (const [name, rx, ph] of c.props) {
+      const im = img(`assets/props/${name}.webp`); if (!im) continue;
+      const h = ph, w = im.width * h / im.height, x = c.x0 + rx - cam;
+      if (x > W + 20 || x + w < -20) continue;
+      g.drawImage(im, x, GROUND + 8 - h, w, h);
+    }
+  }
+}
 function drawBuildings(cam) {
   for (const c of C) {
     if (c.x1 < cam - 800 || c.x0 > cam + W + 800) continue;
@@ -433,7 +445,7 @@ function drawHUD(c) {
 }
 let bannerT = null;
 function showBanner(c) {
-  const b = $('banner'); b.innerHTML = `${esc(c.name)}<small>${c.i + 1} / ${C.length}</small>`;
+  const b = $('banner'); b.innerHTML = `${esc(c.name)}<small>${esc(c.sub || '')}　${c.i + 1} / ${C.length}</small>`;
   b.classList.add('on'); clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('on'), 2600);
 }
 
@@ -468,7 +480,7 @@ function frame(ts) {
   const first = C[0]; drawSign(first.x0 + 430 - cam, first.name);
   for (const c of C.slice(1)) drawSign(c.x0 - cam, `← ${C[c.i - 1].name} ｜ ${c.name} →`);
   drawSign(WORLD - 260 - cam, 'この先は、まだ見ぬ国（試作はここまで）');
-  drawBuildings(cam); drawBridge(cam);
+  drawProps(cam); drawBuildings(cam); drawBridge(cam);
   for (const n of NPCS) drawActor(n, cam);
   drawRabbit(cam); drawNono(cam); drawFore(cam);
   g.fillStyle = cc.tint || 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);

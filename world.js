@@ -2,13 +2,14 @@
 // 1つの国＝「遠景＋建物＋住人＋エピソード＋天候」の型。国を増やすときは COUNTRIES に1件足すだけ。
 //
 // 国の項目
-//   id, name        : 識別子と表示名（名前は仮。実在名か架空名かは未定）
+//   id, name, sub   : 識別子、国名（実在の国をもじった名前）、その土地の呼び名
 //   screens         : 広さ（1画面＝960px、4〜8）
 //   far             : 遠景 assets/far/<far>.webp
 //   mid             : 'trees'（森のシルエット）か省略
 //   hill, ground    : 中景の丘の色、地面の色 [草, 土, 道]
 //   tint            : 画面全体にかける色
 //   bscale          : 建物の倍率（素材の解像度差を吸収）
+//   props           : 木や岩などの小物 [画像名, x, 高さpx]（assets/props/）。建物より奥に描く
 //   buildings       : [画像名, 国の左端からのx, 倍率(省略可)]
 //   npcs            : { id, name, actor, x, face(1=右向き,-1=左向き) }
 //                     1枚絵の住人は sprite（assets/actors/<sprite>.webp。f を受け取る関数でも可）、name も関数にできる。
@@ -32,8 +33,9 @@
 
   // ---------------------------------------------------------------- 1
   C.push({
-    id: 'hanano', name: '花野の国', screens: 7, far: 'flower', mid: 'trees',
+    id: 'hanano', name: 'オランジェ', sub: '花野の村', screens: 7, far: 'flower', mid: 'trees',
     hill: '#1e2a2a', ground: ['#5d8a55', '#3e5a3c', '#6b5a45'], tint: 'rgba(80,40,90,.10)', bscale: 1.6,
+    props: [['tree_green', 450, 260], ['bush_berry', 1050, 90], ['tree_autumn', 1980, 250], ['stump', 2950, 70], ['rock_moss', 3700, 110], ['tree_green', 4300, 280], ['pine', 4700, 300]],
     buildings: [['house_small', 560], ['bakery', 1100], ['house_large', 1640], ['elder_house', 2260], ['lumber_hut', 3080]],
     npcs: [
       { id: 'villager', name: 'ゴンジ（村人）', actor: 'villager', x: 940, face: -1 },
@@ -87,8 +89,9 @@
 
   // ---------------------------------------------------------------- 2
   C.push({
-    id: 'take', name: '竹の里', screens: 5, far: 'bamboo',
+    id: 'take', name: 'ジャポネ', sub: '竹の里', screens: 5, far: 'bamboo',
     hill: '#1f2a22', ground: ['#5f8a4a', '#3a5034', '#7a6a50'], tint: 'rgba(40,60,40,.08)', bscale: 1.05,
+    props: [['torii', 200, 250], ['stone_lantern', 1300, 170], ['pine', 2150, 300], ['stone_lantern', 3150, 170], ['jp_castle', 4300, 430]],
     buildings: [['buke_gate', 380], ['machiya', 900], ['teahouse', 1550], ['nagaya', 2250], ['samurai_mansion', 3250, 0.95]],
     npcs: [
       { id: 'soba', name: '屋台のそば屋', actor: 'craftsman', x: 1400, face: -1 },
@@ -128,8 +131,9 @@
 
   // ---------------------------------------------------------------- 3
   C.push({
-    id: 'koutou', name: '紅灯の都', screens: 6, far: 'valley',
+    id: 'koutou', name: 'キャセイ', sub: '紅灯の都', screens: 6, far: 'valley',
     hill: '#2a1e26', ground: ['#6a7a4a', '#4a3e34', '#8a7258'], tint: 'rgba(120,30,30,.08)', bscale: 1.3,
+    props: [['tree_old_roots', 700, 260], ['pine', 2900, 280], ['stone_lantern', 4000, 150]],
     buildings: [['cn_paifang', 300], ['cn_house', 1000], ['cn_teahouse', 1650], ['cn_nagaya', 2450, 1.1], ['cn_mansion', 3550, 1.15], ['cn_tower', 4650, 1.2]],
     npcs: [
       { id: 'okami', name: '茶館の女将', actor: 'akane', x: 2000, face: -1 },
@@ -167,8 +171,9 @@
 
   // ---------------------------------------------------------------- 4
   C.push({
-    id: 'kaze', name: '風の草原', screens: 6, far: 'highland',
+    id: 'kaze', name: 'モンゴーラ', sub: '風の草原', screens: 6, far: 'highland',
     hill: '#243024', ground: ['#7aa05a', '#4a6a3a', '#8a7a5a'], tint: 'rgba(60,80,40,.06)', bscale: 1.0,
+    props: [['rock', 600, 90], ['bush', 2000, 80], ['watchtower', 3100, 300], ['rock2', 5200, 100]],
     buildings: [['yurt_smoke', 700], ['sheep_pen', 1300, 1.1], ['yurt', 2400], ['stable', 3500, 1.15], ['yurt', 4700, 0.9]],
     npcs: [
       { id: 'mei', name: 'メイ（羊飼い）', actor: 'mei', x: 1800, face: -1 },
@@ -200,8 +205,9 @@
 
   // ---------------------------------------------------------------- 5
   C.push({
-    id: 'iro', name: '色の都', screens: 6, far: 'twilight',
+    id: 'iro', name: 'インダスタン', sub: '色の都', screens: 6, far: 'twilight',
     hill: '#2e2018', ground: ['#8a8a4a', '#6a4a30', '#a08060'], tint: 'rgba(140,80,30,.08)', bscale: 1.0,
+    props: [['palm', 300, 300], ['palm', 2250, 320], ['bush_berry', 4200, 90]],
     buildings: [['in_market', 500], ['in_haveli', 1150], ['in_blue', 1900], ['pk_lahore', 2650], ['pk_mosque', 3400], ['pk_mountain', 4550]],
     npcs: [
       { id: 'tanurio', name: 'タヌリオ（香辛料売り）', actor: 'tanurio', x: 900, face: -1 },
@@ -232,8 +238,9 @@
 
   // ---------------------------------------------------------------- 6
   C.push({
-    id: 'suna', name: '砂の国', screens: 5, far: 'desert', fore: false,
+    id: 'suna', name: 'サハリア', sub: '砂の国', screens: 5, far: 'desert', fore: false,
     hill: '#3a2a20', ground: ['#c8a46a', '#a07a4a', '#b89064'], tint: 'rgba(160,100,40,.08)', bscale: 1.0,
+    props: [['cactus', 300, 140], ['palm', 900, 300], ['pyramid', 1780, 300], ['desert_temple', 4200, 320]],
     buildings: [['adobe', 500], ['mideast_white', 1300], ['adobe', 2700, 0.9], ['mideast_white', 3600, 0.95]],
     npcs: [
       { id: 'iwao', name: 'イワオ（水売り）', actor: 'iwao', x: 1100, face: -1 },
@@ -270,8 +277,9 @@
 
   // ---------------------------------------------------------------- 7
   C.push({
-    id: 'shirakabe', name: '白壁の港', screens: 6, far: 'sea',
+    id: 'shirakabe', name: 'グレシア', sub: '白壁の港', screens: 6, far: 'sea',
     hill: '#22303a', ground: ['#8aa06a', '#7a6a5a', '#c8b8a0'], tint: 'rgba(40,80,140,.06)', bscale: 1.1,
+    props: [['tree_olive', 2600, 300], ['lighthouse', 5250, 420], ['boat_wreck', 5500, 200]],
     buildings: [['gr_chapel', 350], ['es_white', 900], ['it_townhouse', 1550], ['med_white', 2100, 0.9], ['es_gate', 2900], ['it_tuscan', 3500], ['gr_temple', 4400]],
     npcs: [
       { id: 'yui', name: YUI('剣を帯びた娘'), sprite: f => f.insightShirakabe ? 'yui_queen' : 'yui_uniform', x: 1300, face: -1 },
@@ -304,8 +312,9 @@
 
   // ---------------------------------------------------------------- 8
   C.push({
-    id: 'kiri', name: '霧の島', screens: 7, far: 'mountains', mid: 'trees',
+    id: 'kiri', name: 'ブリテニア', sub: '霧の島', screens: 7, far: 'mountains', mid: 'trees',
     hill: '#1c2430', ground: ['#4a6a4a', '#34443a', '#6a6a60'], tint: 'rgba(60,70,100,.10)', bscale: 1.0,
+    props: [['tower_ivy', 3100, 380], ['rune_stone', 4100, 110], ['tree_dead', 4600, 260], ['stone_chapel', 6100, 360]],
     buildings: [['uk_tudor', 400], ['uk_terrace', 900], ['uk_terrace', 1180], ['city_building', 1700, 0.95], ['white_mansion', 2500, 0.95], ['castle_gate', 3500], ['treehouse', 5000, 0.9]],
     npcs: [
       { id: 'rei', name: REI('赤いマフラーの女'), sprite: 'rei_trench', x: 2300, face: -1 },
@@ -344,8 +353,9 @@
 
   // ---------------------------------------------------------------- 9
   C.push({
-    id: 'yuki', name: '雪の村', screens: 5, far: 'snow', fore: false,
+    id: 'yuki', name: 'ノルヴィーク', sub: '雪の村', screens: 5, far: 'snow', fore: false,
     hill: '#3a4458', ground: ['#e8eef4', '#c4ccd8', '#a8b0bc'], tint: 'rgba(80,100,160,.10)', bscale: 1.0,
+    props: [['pine_snow', 300, 300], ['tree_snow', 2900, 300], ['pine_snow', 4400, 320]],
     buildings: [['nordic_red', 500], ['nordic_red', 1500, 0.85], ['lumber_hut', 2400, 1.4], ['nordic_red', 3400, 1.05]],
     npcs: [
       { id: 'roujin', name: '火守りの老人', actor: 'elder', x: 1250, face: -1 },
@@ -377,8 +387,9 @@
 
   // ---------------------------------------------------------------- 10
   C.push({
-    id: 'saka', name: '坂の港', screens: 7, far: 'volcano',
+    id: 'saka', name: 'チリーノ', sub: '坂の港', screens: 7, far: 'volcano',
     hill: '#2a2030', ground: ['#7a9a5a', '#5a4a3a', '#9a8a70'], tint: 'rgba(120,60,80,.06)', bscale: 1.05,
+    props: [['palm', 2650, 300], ['step_pyramid', 5800, 360], ['cactus', 6300, 140]],
     buildings: [['mx_house', 400], ['mx_church', 1000], ['br_townhouse', 1550], ['br_hillside', 2150], ['cl_hill_house', 2950], ['ar_boca', 3450], ['cl_stilt', 4150], ['ar_estancia', 5300]],
     npcs: [
       { id: 'mizuchi', name: 'ミズチ（絵描き）', actor: 'mizuchi', x: 1900, face: -1 },
@@ -419,7 +430,7 @@
         if (f.shiroBell && !f.secondDone) { f.secondDone = true;
           return [['npc', 'normal', '持ち主は、港の子のシロか。……助かった。'], ['npc', 'normal', '任務完了だ。'],
             ...(f.firstMet
-              ? [['me', '', '砂の国で、ファーストさんから伝言です。「小さな任務ほど、きちんと終わらせろ」って。'], ['npc', 'normal', '……先輩に会ったのか。それは、あの人の口ぐせだ。'], ['npc', 'normal', 'いま、ちょうど守ったところだと伝えてくれ。']]
+              ? [['me', '', 'サハリアで、ファーストさんから伝言です。「小さな任務ほど、きちんと終わらせろ」って。'], ['npc', 'normal', '……先輩に会ったのか。それは、あの人の口ぐせだ。'], ['npc', 'normal', 'いま、ちょうど守ったところだと伝えてくれ。']]
               : [['npc', 'normal', '大げさだって？ 小さな任務ほど、きちんと終わらせたいんだ。']]),
             ['npc', 'normal', 'じゃあな、旅の人。']]; }
         if (f.secondAsked) return [['npc', 'normal', '青い鈴の持ち主、まだ見つからない。子どもの持ち物だと思うんだが。']];
@@ -431,8 +442,9 @@
 
   // ---------------------------------------------------------------- 11
   C.push({
-    id: 'mizu', name: '水上の町', screens: 7, far: 'marsh',
+    id: 'mizu', name: 'シャムラ', sub: '水上の町', screens: 7, far: 'marsh',
     hill: '#1e2a26', ground: ['#5a7a4a', '#4a3e30', '#7a6a54'], tint: 'rgba(40,90,80,.08)', bscale: 1.05,
+    props: [['reeds', 3300, 120], ['palm', 4100, 320], ['jungle_temple_tree', 6000, 400]],
     buildings: [['sea_barrack', 400], ['sea_twostory', 950], ['sea_stall', 1550], ['sea_shop', 2150], ['sea_tall', 2750], ['sea_stilt', 3500], ['stilt_house', 4400], ['sea_barrack', 5300, 0.9]],
     npcs: [
       { id: 'gou', name: 'ゴウ（屋台）', actor: 'gou', x: 1900, face: -1 },
@@ -467,8 +479,8 @@
         const f = S.f;
         f.mitsuMet2 = true;
         const lines = S.met('porter')
-          ? [['npc', 'normal', 'おや、花野の国で会った旅の人じゃないか！'], ['npc', 'normal', 'ずいぶん遠くで会うもんだね。荷は、ここで下ろすのさ。']]
-          : [['npc', 'normal', 'はじめまして。運び屋のミツだよ。西の花野の国から、荷を運んできた。']];
+          ? [['npc', 'normal', 'おや、オランジェで会った旅の人じゃないか！'], ['npc', 'normal', 'ずいぶん遠くで会うもんだね。荷は、ここで下ろすのさ。']]
+          : [['npc', 'normal', 'はじめまして。運び屋のミツだよ。西のオランジェから、荷を運んできた。']];
         if (f.seen) lines.push(['npc', 'normal', 'そういえば、あの橋のうわさ。結局どうだった？'], ['me', '', '落ちてたのは、手すりの縄だけでした。'], ['npc', 'normal', 'やっぱりね。うわさは、運ぶ荷より速くて、重くなる。']);
         return lines;
       }
