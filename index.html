@@ -119,6 +119,7 @@ const SRC = {
   lumber_normal:'assets/extra_lumberjack_normal.webp', lumber_fun:'assets/extra_lumberjack_fun.webp', lumber_surprise:'assets/extra_lumberjack_surprise.webp',
   porter_normal:'assets/extra_porter_normal.webp'
 };
+for (const n of ['house_small','house_large','inn','bakery','lumber_hut','elder_house']) SRC['b_' + n] = 'assets/buildings/' + n + '.webp';
 const load = () => Promise.all(Object.entries(SRC).map(([k, s]) => new Promise(r => { const i = new Image(); i.onload = () => { IMG[k] = i; r(); }; i.onerror = () => r(); i.src = s; })));
 
 // ================= 状態 =================
@@ -154,14 +155,22 @@ function shift(a, b) { const d = b - a; return d > .25 ? 'ぐっと信じた' : 
 function addEvidence(k) { if (!st.evidence.includes(k)) st.evidence.push(k); }
 
 // ================= 世界の配置 =================
-const HOUSES = [ { x: 640, w: 210, h: 150, roof: '#7a3b3b' }, { x: 1180, w: 250, h: 170, roof: '#5b4a7a' }, { x: 1560, w: 190, h: 140, roof: '#7a5a3b' } ];
+// 建物：x は左端、画像は assets/buildings/<img>.webp（無い場合は仮の手続き描画）
+const BSCALE = 1.6;
+const HOUSES = [
+  { x: 560, img: 'house_small', w: 210, h: 150, roof: '#7a3b3b' },
+  { x: 1100, img: 'bakery', w: 210, h: 140, roof: '#7a5a3b' },
+  { x: 1640, img: 'house_large', w: 250, h: 170, roof: '#5b4a7a' },
+  { x: 2260, img: 'elder_house', w: 230, h: 160, roof: '#7a5a3b' },
+  { x: 3080, img: 'lumber_hut', w: 260, h: 160, roof: '#6a4a30' }
+];
 const NPCS = [
   { id: 'villager', name: 'ゴンジ（村人）', x: 940, img: 'villager', face: -1 },
-  { id: 'elder', name: '長老', x: 1460, img: 'elder', face: -1 },
-  { id: 'lumber', name: 'ダイ（木こり）', x: 2760, img: 'lumber', face: -1 },
+  { id: 'elder', name: '長老', x: 2420, img: 'elder', face: -1 },
+  { id: 'lumber', name: 'ダイ（木こり）', x: 3360, img: 'lumber', face: -1 },
   { id: 'porter', name: 'ミツ（運び屋）', x: 4020, img: 'porter', face: 1 }
 ];
-const RABBIT = { x: 2050, hop: 0 };
+const RABBIT = { x: 2000, hop: 0 };
 const CLIFF = 5180;      // ここから先は谷
 const BRIDGE_SEE = 4980; // ここまで来ると橋が見える
 
@@ -319,6 +328,14 @@ function drawGorge(x0) {
   g.fillStyle = '#4a3726'; g.fillRect(x0 - 4, GROUND - 56, 8, 58); if (x1 < W) g.fillRect(x1 - 4, GROUND - 56, 8, 58);
 }
 function drawHouse(hs, cam) {
+  const bi = IMG['b_' + hs.img];
+  if (bi) {
+    const w = bi.width * BSCALE, h = bi.height * BSCALE, x = hs.x - cam;
+    if (x > W + 40 || x + w < -40) return;
+    g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(x + w / 2, GROUND + 4, w * 0.52, 9, 0, 0, Math.PI * 2); g.fill();
+    g.drawImage(bi, x, GROUND + 6 - h, w, h);
+    return;
+  }
   const x = hs.x - cam, y = GROUND; if (x > W + 40 || x + hs.w < -40) return;
   g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(x + 6, y - 2, hs.w, 6);
   g.fillStyle = '#5a4535'; g.fillRect(x, y - hs.h, hs.w, hs.h);
@@ -336,7 +353,7 @@ function drawSign(x, label) {
 }
 function drawActor(n, cam) {
   const im = IMG[n.img + '_normal']; const x = n.x - cam; if (x < -120 || x > W + 120) return;
-  const h = 150, w = h * 0.75;
+  const h = 128, w = h * 0.75;
   g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 38, 7, 0, 0, Math.PI * 2); g.fill();
   if (im) { g.save(); g.translate(x, 0); g.scale(n.face, 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.x) * 1.2, w, h); g.restore(); }
 }
@@ -347,7 +364,7 @@ function drawRabbit(cam) {
   const h = 54, w = im.width * h / im.height; g.drawImage(im, x - w / 2, GROUND - h + 6 - RABBIT.hop, w, h);
 }
 function drawNono(cam) {
-  const im = IMG.nono; const x = st.x - cam; const h = 150, w = h * 176 / 224;
+  const im = IMG.nono; const x = st.x - cam; const h = 128, w = h * 176 / 224;
   g.fillStyle = 'rgba(0,0,0,.32)'; g.beginPath(); g.ellipse(x, GROUND + 4, 34, 7, 0, 0, Math.PI * 2); g.fill();
   if (!im) return;
   const row = st.dir > 0 ? 0 : 1, col = st.moving ? [0, 1, 2, 1][Math.floor(st.phase) % 4] : 1;
@@ -392,7 +409,7 @@ function frame(ts) {
   const sx = cv.width / W, sy = cv.height / H;
   g.setTransform(sx, 0, 0, sy, 0, 0); g.imageSmoothingQuality = 'high';
   drawFar(cam); drawTrees(cam); drawGround(cam);
-  drawSign(430 - cam, '花野の国（仮）'); drawSign(2400 - cam, '東 → 谷の吊り橋');
+  drawSign(430 - cam, '花野の国（仮）'); drawSign(2900 - cam, '東 → 谷の吊り橋');
   HOUSES.forEach(h => drawHouse(h, cam));
   NPCS.forEach(n => drawActor(n, cam)); drawRabbit(cam); drawNono(cam); drawFore(cam);
   // 夕暮れの色かぶせ
