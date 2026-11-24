@@ -204,7 +204,7 @@
     buildings: [['in_market', 500], ['in_haveli', 1150], ['in_blue', 1900], ['pk_lahore', 2650], ['pk_mosque', 3400], ['pk_mountain', 4550]],
     npcs: [
       { id: 'kogane', name: 'コガネ（買い物客）', actor: 'kogane', x: 800, face: -1 },
-      { id: 'tanurio', name: 'タヌリオ（香辛料売り）', actor: 'tanurio', x: 2000, face: -1 },
+      { id: 'tanurio', name: 'ラジュ（香辛料売り）', actor: 'mustache', x: 2000, face: -1 },
       { id: 'rei_iro', name: REI('白いシャツの娘'), sprite: 'rei_shirt', x: 3600, face: -1 }
     ],
     weather: { clear: 5, squall: 2, wind: 1 },
@@ -218,13 +218,13 @@
       },
       tanurio(S) {
         const f = S.f;
-        if (S.back) return [['npc', 'joy', 'おや、帰りかい。こんどはどんな話を持ってきた？'], ['npc', 'fun', '……いや、もう一袋分の話を、あんたの顔がしとる。']];
-        if (f.spice) return [['npc', 'joy', 'あの話、今夜うちの子に聞かせてやるよ。']];
+        if (S.back) return [['npc', 'normal', 'おや、帰りかい。こんどはどんな話を持ってきた？'], ['npc', 'normal', '……いや、もう一袋分の話を、あんたの顔がしとる。']];
+        if (f.spice) return [['npc', 'normal', 'あの話、今夜うちの子に聞かせてやるよ。']];
         f.spice = true;
         const story = S.f.seen
-          ? [['me', '', '西の村で、「橋が落ちた」と聞いて、見に行ったんです。'], ['me', '', '落ちていたのは、手すりの縄一本でした。'], ['npc', 'joy', 'はっはっは！ うわさってのは、そういうもんだ。']]
-          : [['me', '', '……ここまで歩いてきた道のことなら。'], ['me', '', '草原で、鈴をつけた子羊がはぐれていました。'], ['npc', 'joy', 'ほう。で、羊は？ ……帰り道でわかる、か。いいね。']];
-        return [['npc', 'normal', 'いらっしゃい。値札はないよ。何と換える？'], ['me', '', 'お金は、あまりなくて……'], ['npc', 'fun', 'なら、旅の話でいい。ここらの者は、遠くの話に飢えとる。'], ...story, ['npc', 'joy', 'いい話だ。一袋、持っていきな。'], ['insight', '', '道で聞いた話が、ここでは香辛料一袋になった。']];
+          ? [['me', '', '西の村で、「橋が落ちた」と聞いて、見に行ったんです。'], ['me', '', '落ちていたのは、手すりの縄一本でした。'], ['npc', 'normal', 'はっはっは！ うわさってのは、そういうもんだ。']]
+          : [['me', '', '……ここまで歩いてきた道のことなら。'], ['me', '', '草原で、鈴をつけた子羊がはぐれていました。'], ['npc', 'normal', 'ほう。で、羊は？ ……帰り道でわかる、か。いいね。']];
+        return [['npc', 'normal', 'いらっしゃい。値札はないよ。何と換える？'], ['me', '', 'お金は、あまりなくて……'], ['npc', 'normal', 'なら、旅の話でいい。ここらの者は、遠くの話に飢えとる。'], ...story, ['npc', 'normal', 'いい話だ。一袋、持っていきな。'], ['insight', '', '道で聞いた話が、ここでは香辛料一袋になった。']];
       },
       rei_iro(S) {
         const f = S.f;
@@ -417,7 +417,7 @@
     npcs: [
       { id: 'second', name: 'セカンド（WATCH）', actor: 'second', x: 1300, face: 1, sheet: SECOND,
         pose: f => f.secondDone ? 'wave' : f.secondAsked ? 'sneak' : 'crouch', leaveWhen: f => f.secondDone },
-      { id: 'mizuchi', name: 'ミズチ（絵描き）', actor: 'mizuchi', x: 2600, face: -1 },
+      { id: 'mizuchi', name: 'ミラ（絵描き）', actor: 'scarfwoman', x: 2600, face: -1 },
       { id: 'shiro', name: 'シロ（港の子）', actor: 'shiro', x: 4000, face: -1 }
     ],
     weather: { clear: 5, squall: 2, wind: 2, drizzle: 1 },
@@ -518,7 +518,7 @@
     buildings: [['thatched_farm', 900, 0.9], ['uk_terrace', 2700], ['nordic_red', 3300, 0.9], ['house_small', 5000, 1.5]],
     npcs: [
       { id: 'pim', name: 'ピム（少年）', actor: 'nibulus', x: 700, face: 1 },
-      { id: 'miller', name: '粉屋のゴロ', actor: 'oni', x: 2300, face: -1 },
+      { id: 'miller', name: '粉屋のゴロ', actor: 'oldsmith', x: 2300, face: -1 },
       { id: 'keeper', name: '堤防番のアンナ', actor: 'archer', x: 4500, face: -1 }
     ],
     places: [{ id: 'leak', name: '堤防の手形', x: 450, verb: '見る', when: f => f.dikeFixed }],
@@ -563,8 +563,8 @@
     props: [['cactus', 600, 150], ['rock', 2200, 80], ['rock2', 4600, 100]],
     buildings: [['adobe', 300, 0.8], ['adobe', 5000, 0.7]],
     npcs: [
-      { id: 'kappa', name: '写真屋のカパ', actor: 'kappa', x: 1300, face: -1 },
-      { id: 'tapa', name: '塩掘りのタパ', actor: 'mummy', x: 3500, face: -1 }
+      { id: 'kappa', name: '写真屋のカルロ', actor: 'tabletscout', x: 1300, face: -1 },
+      { id: 'tapa', name: '塩掘りのタパ', actor: 'miner', x: 3500, face: -1 }
     ],
     places: [
       { id: 'salt', name: '足もとの塩', x: 2500, verb: '見る' },
@@ -577,14 +577,14 @@
         if (S.back) return [['npc', 'normal', '見てくれ、ゆうべ、降ったんだ！ 足もとまで、空が来てる！'], ['npc', 'normal', '旅の人、そこに立ってくれ。……空の上を歩いてるみたいだ。'], ['npc', 'normal', 'タパも来てる。掘れない日は、空を見に来るんだとさ。'], ['insight', '', '同じ場所でも、雨のあとに来れば、空が二つになる。']];
         if (f.kappaTold) return [['npc', 'normal', '空、見てくれ。雲ひとつない。……今日もだめだ。']];
         f.kappaTold = true;
-        return [['me', '', '（かっぱが、頭の皿を空に向けて、じっと立っている）'], ['npc', 'normal', '……雨を待ってる。もう二十日、晴れっぱなし。宿代が、そろそろ底をつく。'], ['npc', 'normal', '雨のあと、この湖は空を映す鏡になる。足もとまで水が来ないと、写真にならない。'], ['npc', 'normal', 'それに、写す人がいない。こんなところ、だれも歩いてこないからね。'], ['npc', 'normal', 'かっぱが雨を待つのは、おかしいかい？ ……おかしくないだろう。']];
+        return [['me', '', '（写真屋が、三脚の横で空を見上げて、じっと立っている）'], ['npc', 'normal', '……雨を待ってる。もう二十日、晴れっぱなし。宿代が、そろそろ底をつく。'], ['npc', 'normal', '雨のあと、この湖は空を映す鏡になる。足もとまで水が来ないと、写真にならない。'], ['npc', 'normal', 'それに、写す人がいない。こんなところ、だれも歩いてこないからね。'], ['npc', 'normal', '晴れを嫌う写真屋は、おかしいかい？ ……ここでは、おかしくないんだ。']];
       },
       tapa(S) {
         const f = S.f;
-        if (S.back) return [['npc', 'normal', '降っちまった。三日は掘れない。'], ['npc', 'normal', '……まあいい。掘れない日は、空の上を歩く日だ。かっぱに写されてやるさ。']];
-        if (f.tapaTold) return [['npc', 'normal', '雨よ、降るな。……かっぱのやつは、反対のことを祈ってるがね。']];
+        if (S.back) return [['npc', 'normal', '降っちまった。三日は掘れない。'], ['npc', 'normal', '……まあいい。掘れない日は、空の上を歩く日だ。カルロに写されてやるさ。']];
+        if (f.tapaTold) return [['npc', 'normal', '雨よ、降るな。……カルロのやつは、反対のことを祈ってるがね。']];
         f.tapaTold = true;
-        return [['npc', 'normal', 'この顔かい？ 塩の照り返しで、目も肌もやられる。だから巻いてる。'], ['npc', 'normal', '雨が降ったら、塩が水に沈んで、三日は掘れない。そのぶん稼ぎがなくなる。'], ['npc', 'normal', 'あの写真屋は、毎朝「降れ」って空に頼んでる。おれは「降るな」って頼んでる。'], ['npc', 'normal', 'どっちの頼みを聞くかは、空の勝手だ。']];
+        return [['npc', 'normal', 'この帽子かい？ 塩の照り返しで、目も肌もやられる。だから深くかぶる。'], ['npc', 'normal', '雨が降ったら、塩が水に沈んで、三日は掘れない。そのぶん稼ぎがなくなる。'], ['npc', 'normal', 'あの写真屋は、毎朝「降れ」って空に頼んでる。おれは「降るな」って頼んでる。'], ['npc', 'normal', 'どっちの頼みを聞くかは、空の勝手だ。']];
       },
       salt(S) {
         if (S.back) return [['me', '', '（足もとの水に、空と雲が映っている。自分が、空に立っている）']];
@@ -643,7 +643,7 @@
     props: [['tree_olive', 400, 280], ['bush_berry', 1700, 90], ['tree_olive', 3600, 300], ['stump', 4800, 70]],
     buildings: [['it_tuscan', 600], ['it_townhouse', 1300, 0.9], ['it_tuscan', 4100, 0.85]],
     npcs: [
-      { id: 'host', name: '祭りの世話役', actor: 'tanurio', x: 1000, face: -1 },
+      { id: 'host', name: '祭りの世話役', actor: 'festival', x: 1000, face: -1 },
       { id: 'lucia', name: 'ルチア', actor: 'akane', x: 2300, face: -1 },
       { id: 'master', name: '道ばたの老人', actor: 'elder', x: 5100, face: -1 }
     ],
@@ -652,10 +652,10 @@
     talk: {
       host(S) {
         const f = S.f;
-        if (S.back) return [['npc', 'joy', '聞いたよ、人ちがいだったって！ はっはっは！'], ['npc', 'joy', 'でもな、去年の名人より、あんたのほうが楽しそうに踏んでたぞ。来年も来い。']];
-        if (f.hostMet) return [['npc', 'joy', '桶はルチアの家の前だ。名人の足、楽しみにしてるよ！']];
+        if (S.back) return [['npc', 'normal', '聞いたよ、人ちがいだったって！ はっはっは！'], ['npc', 'normal', 'でもな、去年の名人より、あんたのほうが楽しそうに踏んでたぞ。来年も来い。']];
+        if (f.hostMet) return [['npc', 'normal', '桶はルチアの家の前だ。名人の足、楽しみにしてるよ！']];
         f.hostMet = true;
-        return [['npc', 'joy', '来たか、名人！ 赤いマントの旅人が来ると、手紙にあった！'], ['me', '', 'え、ちがいます。ぼくは、ただの……'], ['npc', 'joy', '謙遜するな！ 今年のぶどう踏み祭り、あんたが一番手だ。'], ['npc', 'joy', '桶はルチアの家の前。さあ、さあ！']];
+        return [['npc', 'normal', '来たか、名人！ 赤いマントの旅人が来ると、手紙にあった！'], ['me', '', 'え、ちがいます。ぼくは、ただの……'], ['npc', 'normal', '謙遜するな！ 今年のぶどう踏み祭り、あんたが一番手だ。'], ['npc', 'normal', '桶はルチアの家の前。さあ、さあ！']];
       },
       lucia(S) {
         const f = S.f;
