@@ -1,16 +1,28 @@
 # SEE — walk through the world
 
-nono が広い世界をただ歩いて旅する、戦わないRPG（企画No.10）。単一HTML＋JavaScript のブラウザゲーム。
+nono が広い世界をただ歩いて旅する、戦わないRPG（企画No.10）。ブラウザゲーム（HTML＋JavaScript）。
 
 - 遊ぶ：https://ukos.github.io/nono-see-playground/
 - 操作：← → で歩く ／ Space で話す ／ J で旅日誌（画面下のボタンでも可）
+- 進み具合はブラウザに自動保存（タイトルの「旅をつづける」）
 
-## 試作の範囲
-- 1国（花野の国・仮）6画面ぶんのサイドスクロール、パララックス背景
-- 住人との会話、噂「東の吊り橋が落ちたらしい」の確信度（ベイズ更新）と旅日誌
-- 行きと帰りで変わる会話、長老からの気づき
+## ファイル
+- `index.html`：画面と見た目
+- `game.js`：ゲーム本体（移動・描画・会話・旅日誌・天候・セーブ）
+- `world.js`：世界のデータ。**国を増やすときはここに1件足すだけ**（項目の説明はファイル冒頭）
+- `assets/far/`：遠景（HD-2D Lite 由来）
+- `assets/buildings/`：建物・橋（本作用に生成、65点＋）
+- `assets/actors/`：住人の顔（Stage Actor の役者）
+
+## いまある国（11）
+花野の国 → 竹の里 → 紅灯の都 → 風の草原 → 色の都 → 砂の国 → 白壁の港 → 霧の島 → 雪の村 → 坂の港 → 水上の町
+
+各国に住人2人前後と、短いエピソード、nono の「気づき」が1つ。行きと帰りで会話や景色が変わる。
+
+## 天候
+晴れ・小雨・スコール・台風・強風・霧・濃霧・雪。国ごとに起こりやすさを `weather` で指定し、時間とともに移り変わる。強風と台風では向かい風で歩みが重くなる。
 
 ## 素材の出所
-- 遠景・中景・前景・nono 歩行・ウサギ：ukos/nono-hd2d `lite/assets/`
-- 住人の顔：ukos/nono-playground `stage-actor/actors/`（extra_villager / extra_elder / extra_lumberjack / extra_porter）
-- タイトルロゴ・アイコン：本作用に生成
+- 遠景・nono 歩行・森のシルエット・前景の草・ウサギ：ukos/nono-hd2d `lite/assets/`
+- 住人の顔：ukos/nono-playground `stage-actor/actors/`
+- 建物・橋・タイトルロゴ・アイコン：本作用に生成

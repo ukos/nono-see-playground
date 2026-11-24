@@ -1,0 +1,467 @@
+// SEE ― ゲーム本体（状態管理・描画・会話・天候）。世界のデータは world.js。
+{
+// ================= 世界の組み立て =================
+const W = 960, H = 540, GROUND = 452, SPEED = 230, NONO_H = 128;
+const C = window.SEE_WORLD.countries;
+let acc = 0;
+for (const [i, c] of C.entries()) {
+  c.i = i; c.x0 = acc; c.w = c.screens * W; acc += c.w; c.x1 = acc;
+  for (const n of c.npcs) { n.ax = c.x0 + n.x; n.c = c; }
+}
+const WORLD = acc;
+const NPCS = C.flatMap(c => c.npcs);
+const countryAt = x => C.find(c => x < c.x1) || C[C.length - 1];
+
+// ================= 画像（必要になった国から順に読み込む） =================
+const cache = {};
+function img(src) {
+  let e = cache[src];
+  if (!e) { e = cache[src] = { ok: false, im: new Image() }; e.im.onload = () => { e.ok = true; }; e.im.src = src; }
+  return e.ok ? e.im : null;
+}
+const P = {
+  far: k => `assets/far/${k}.webp`, b: k => `assets/buildings/${k}.webp`, a: (k, f) => `assets/actors/${k}_${f}.webp`,
+  nono: 'assets/nono_side.webp', face: 'assets/nono_face.webp', trees: 'assets/far_trees.webp', grass: 'assets/shore_grass.webp', rabbit: 'assets/rabbit.webp'
+};
+function prefetch(c) {
+  if (!c || c._pf) return; c._pf = true;
+  img(P.far(c.far)); c.buildings.forEach(b => img(P.b(b[0]))); c.npcs.forEach(n => img(P.a(n.actor, 'normal')));
+  if (c.gap) { img(P.b('rope_bridge_broken')); img(P.b('rope_bridge_fixed')); }
+}
+[P.nono, P.face, P.trees, P.grass, P.rabbit].forEach(img);
+
+// ================= 状態とセーブ =================
+const fresh = () => ({ x: 200, dir: 1, moving: false, phase: 0, flags: {}, evidence: [], insights: [], met: {}, maxX: 200, visited: {},
+  talking: null, journal: false, cool: 0, keyL: false, keyR: false, t: 0, cur: null });
+let st = fresh();
+const KEY = 'see-save-v1';
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify({ x: st.x, flags: st.flags, evidence: st.evidence, insights: st.insights, met: st.met, maxX: st.maxX, visited: st.visited })); } catch (e) { /* 保存できない環境では何もしない */ }
+}
+function loadSave() { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } }
+function clearSave() { try { localStorage.removeItem(KEY); } catch (e) { /* 同上 */ } }
+
+// ================= うわさと確信度（ベイズ更新。画面に数式は出さない） =================
+const RUMOR = {
+  text: '東の吊り橋が落ちたらしい', prior: 0.6,
+  ev: {
+    heard: { lr: 1, who: 'ゴンジ（村人）', note: '隣村の人から聞いた、と言っていた' },
+    sound: { lr: 2.6, who: 'ダイ（木こり）', note: '夜中に東の谷でドーンと大きな音がした' },
+    crossed: { lr: 0.22, who: 'ミツ（運び屋）', note: '今朝その橋を渡ってきた。揺れはひどかった' },
+    seen: { lr: 0.03, who: '自分の目', note: '橋は架かっていた。切れていたのは手すりの縄だった' }
+  }
+};
+function confidenceTrail() {
+  if (!st.flags.heard) return [];
+  let odds = RUMOR.prior / (1 - RUMOR.prior);
+  const out = [{ key: 'heard', p: RUMOR.prior }];
+  for (const k of st.evidence) { if (k === 'heard' || !RUMOR.ev[k]) continue; odds *= RUMOR.ev[k].lr; out.push({ key: k, p: odds / (1 + odds) }); }
+  return out;
+}
+const word = p => p >= .85 ? 'ほぼ確か' : p >= .65 ? 'たぶん本当' : p >= .4 ? 'どちらとも言えない' : p >= .15 ? 'あやしい' : 'ちがったみたい';
+const shift = (a, b) => { const d = b - a; return d > .25 ? 'ぐっと信じた' : d > .05 ? '少し信じた' : d < -.25 ? 'ぐっと疑った' : d < -.05 ? '少し疑った' : '変わらない'; };
+
+// ================= 天候 =================
+const WN = { clear: '晴れ', drizzle: '小雨', squall: 'スコール', typhoon: '台風', wind: '強風', fog: '霧', densefog: '濃霧', snow: '雪' };
+const WX = {
+  clear: {},
+  drizzle: { rain: 150, len: 10, spd: 520, slant: .12, width: 1, dark: .10 },
+  squall: { rain: 520, len: 22, spd: 900, slant: .22, width: 1.6, dark: .26, splash: 1 },
+  typhoon: { rain: 620, len: 26, spd: 1000, slant: .95, width: 1.6, dark: .34, leaves: 45, wind: 1, flash: 1, splash: 1 },
+  wind: { leaves: 55, wind: .8, streak: 26, dark: .04 },
+  fog: { fog: .42, dark: .04 },
+  densefog: { fog: .8, hole: 1, dark: .06 },
+  snow: { snow: 260, dark: .03 }
+};
+const wx = { type: 'clear', k: 1, next: null, timer: 30, flash: 0, dir: -1 };
+const rain = [], snow = [], leaves = [], streaks = [], splashes = [];
+function pickWeather(c) {
+  const w = c.weather || { clear: 1 }; let tot = 0; for (const k in w) tot += w[k];
+  let r = Math.random() * tot; for (const k in w) { r -= w[k]; if (r <= 0) return k; } return 'clear';
+}
+function setWeather(t) { if (t !== wx.type || wx.next) wx.next = t; }
+function wxp(name) { return (WX[wx.type][name] || 0) * wx.k; }
+function windSpeedFactor() { // 向かい風は重く、追い風は少し軽い
+  const w = (WX[wx.type].wind || 0) * wx.k; if (!w || !st.moving) return 1;
+  return st.dir === wx.dir ? 1 + .15 * w : 1 - .35 * w;
+}
+function updateWeather(dt, camDx) {
+  wx.timer -= dt;
+  if (wx.timer <= 0) { wx.timer = 40 + Math.random() * 50; setWeather(pickWeather(st.cur)); }
+  if (wx.next) { wx.k -= dt / 2.5; if (wx.k <= 0) { wx.type = wx.next; wx.next = null; wx.k = 0; } }
+  else wx.k = Math.min(1, wx.k + dt / 2.5);
+  const p = WX[wx.type], d = wx.dir;
+  // 雨
+  const nr = Math.round((p.rain || 0) * wx.k);
+  while (rain.length < nr) rain.push({ x: Math.random() * (W + 400) - 200, y: Math.random() * H - H, v: Math.random() });
+  rain.length = Math.min(rain.length, nr);
+  for (const r of rain) {
+    r.y += p.spd * dt * (.8 + r.v * .4); r.x += p.spd * p.slant * d * dt - camDx;
+    if (r.y > GROUND + 20 + r.v * 70) {
+      if (p.splash && splashes.length < 80 && Math.random() < .5) splashes.push({ x: r.x, y: r.y, life: .25 });
+      r.y = -20 - Math.random() * 120; r.x = Math.random() * (W + 600) - 300;
+    }
+  }
+  for (let i = splashes.length - 1; i >= 0; i--) { splashes[i].life -= dt; splashes[i].x -= camDx; if (splashes[i].life <= 0) splashes.splice(i, 1); }
+  // 雪
+  const ns = Math.round((p.snow || 0) * wx.k);
+  while (snow.length < ns) snow.push({ x: Math.random() * W, y: Math.random() * H - H * .5, r: Math.random(), ph: Math.random() * 6 });
+  snow.length = Math.min(snow.length, ns);
+  for (const s of snow) {
+    s.y += (28 + s.r * 26) * dt; s.x += Math.sin(st.t * 1.3 + s.ph) * 18 * dt - camDx * (.6 + s.r * .4);
+    if (s.y > H) { s.y = -6; s.x = Math.random() * W; }
+    if (s.x < -10) s.x += W + 20; if (s.x > W + 10) s.x -= W + 20;
+  }
+  // 木の葉と風の筋
+  const nl = Math.round((p.leaves || 0) * wx.k);
+  while (leaves.length < nl) leaves.push({ x: d < 0 ? W + Math.random() * 300 : -Math.random() * 300, y: Math.random() * (GROUND + 40), r: Math.random() * 6, vr: (Math.random() - .5) * 10, v: Math.random(), c: ['#6a8a3a', '#a08a3a', '#8a5a2a', '#5a7a4a'][Math.floor(Math.random() * 4)] });
+  leaves.length = Math.min(leaves.length, nl);
+  for (const l of leaves) {
+    l.x += d * (380 + l.v * 300) * (p.wind || .5) * dt - camDx; l.y += Math.sin(st.t * 3 + l.r) * 40 * dt + 12 * dt; l.r += l.vr * dt;
+    if ((d < 0 && l.x < -20) || (d > 0 && l.x > W + 20) || l.y > H) { l.x = d < 0 ? W + 20 + Math.random() * 100 : -20 - Math.random() * 100; l.y = Math.random() * (GROUND + 20); }
+  }
+  const nk = Math.round((p.streak || 0) * wx.k);
+  while (streaks.length < nk) streaks.push({ x: Math.random() * W, y: Math.random() * GROUND, l: 40 + Math.random() * 90, v: Math.random() });
+  streaks.length = Math.min(streaks.length, nk);
+  for (const s of streaks) { s.x += d * (900 + s.v * 500) * dt - camDx; if (s.x < -150) { s.x = W + 50; s.y = Math.random() * GROUND; } if (s.x > W + 150) { s.x = -50; s.y = Math.random() * GROUND; } }
+  // 稲光（台風）
+  if (p.flash && wx.k > .6 && Math.random() < dt * .07) wx.flash = 1;
+  wx.flash = Math.max(0, wx.flash - dt * 2.2);
+}
+let fogTex = null;
+function fogTexture() {
+  if (fogTex) return fogTex;
+  const c = document.createElement('canvas'); c.width = 1024; c.height = 320; const q = c.getContext('2d');
+  for (let i = 0; i < 70; i++) {
+    const x = Math.random() * 1024, y = 60 + Math.random() * 230, r = 60 + Math.random() * 140;
+    for (const dx of [-1024, 0, 1024]) { // 横につなげても継ぎ目が出ないように
+      const gr = q.createRadialGradient(x + dx, y, 0, x + dx, y, r); gr.addColorStop(0, 'rgba(235,238,245,.28)'); gr.addColorStop(1, 'rgba(235,238,245,0)');
+      q.fillStyle = gr; q.fillRect(x + dx - r, y - r, r * 2, r * 2);
+    }
+  }
+  return fogTex = c;
+}
+function drawWeather(cam, nx) {
+  const p = WX[wx.type], k = wx.k;
+  if (rain.length) {
+    g.strokeStyle = `rgba(200,215,240,${.35 + .25 * k})`; g.lineWidth = p.width || 1; g.beginPath();
+    const sl = p.slant * wx.dir;
+    for (const r of rain) { g.moveTo(r.x, r.y); g.lineTo(r.x - sl * p.len, r.y - p.len); }
+    g.stroke();
+    g.strokeStyle = 'rgba(210,225,245,.5)'; g.lineWidth = 1;
+    for (const s of splashes) { g.beginPath(); g.ellipse(s.x, s.y, 6 * (1 - s.life * 3), 2, 0, 0, Math.PI * 2); g.stroke(); }
+  }
+  if (snow.length) { g.fillStyle = 'rgba(250,252,255,.9)'; for (const s of snow) { const z = 2 + s.r * 3; g.fillRect(s.x, s.y, z, z); } }
+  if (streaks.length) { g.strokeStyle = 'rgba(255,255,255,.18)'; g.lineWidth = 1.5; g.beginPath(); for (const s of streaks) { g.moveTo(s.x, s.y); g.lineTo(s.x + s.l, s.y); } g.stroke(); }
+  for (const l of leaves) { g.save(); g.translate(l.x, l.y); g.rotate(l.r); g.fillStyle = l.c; g.fillRect(-4, -2, 8, 4); g.restore(); }
+  const fog = wxp('fog');
+  if (fog) {
+    const t = fogTexture();
+    for (const [sp, y, a] of [[.35, GROUND - 300, .8], [.7, GROUND - 200, 1]]) {
+      const off = -((cam * sp + st.t * 14 * sp) % t.width);
+      g.globalAlpha = Math.min(1, fog * a * (p.hole ? .7 : 1.6));
+      for (let x = off; x < W; x += t.width) g.drawImage(t, x, y, t.width, t.height);
+    }
+    g.globalAlpha = 1;
+    if (p.hole) { // 濃霧：自分のまわりだけ少し見える
+      const gr = g.createRadialGradient(nx, GROUND - 70, 120, nx, GROUND - 70, 470);
+      gr.addColorStop(0, 'rgba(214,220,230,0)'); gr.addColorStop(1, `rgba(214,220,230,${.88 * k})`);
+      g.fillStyle = gr; g.fillRect(0, 0, W, H);
+    } else { g.fillStyle = `rgba(214,220,230,${.18 * fog})`; g.fillRect(0, 0, W, H); }
+  }
+  const dark = wxp('dark'); if (dark) { g.fillStyle = `rgba(10,14,30,${dark})`; g.fillRect(0, 0, W, H); }
+  if (wx.flash > 0) { g.fillStyle = `rgba(240,245,255,${wx.flash * .55})`; g.fillRect(0, 0, W, H); }
+}
+
+// ================= 会話 =================
+const $ = id => document.getElementById(id);
+const talk = $('talk'), tsay = $('tsay'), twho = $('twho'), tpic = $('tpic'), ins = $('insight');
+let typing = null;
+function ctx(c) {
+  return {
+    f: st.flags, back: st.maxX >= c.x1 - 2 && st.x < c.x1,
+    ev: k => { if (!st.evidence.includes(k)) st.evidence.push(k); },
+    has: k => st.evidence.includes(k), met: id => !!st.met[id]
+  };
+}
+function startTalk(target) {
+  const c = target.c, fn = c.talk[target.id]; if (!fn) return;
+  const ls = fn(ctx(c)); if (!ls || !ls.length) return;
+  st.met[target.id] = true;
+  st.talking = { ls, i: 0, who: target }; st.moving = false; showLine();
+}
+function showLine() {
+  const c = st.talking, [sp, face, text] = c.ls[c.i];
+  if (sp === 'insight') {
+    talk.classList.remove('on'); $('ibody').textContent = text; ins.classList.add('on');
+    if (!st.insights.some(x => x.text === text)) { st.insights.push({ c: c.who.c.name, text }); save(); }
+    return;
+  }
+  ins.classList.remove('on'); talk.classList.add('on');
+  if (sp === 'npc' && c.who.actor) {
+    twho.textContent = c.who.name;
+    const normal = P.a(c.who.actor, 'normal');
+    tpic.onerror = () => { tpic.onerror = null; tpic.src = normal; };
+    tpic.src = face ? P.a(c.who.actor, face) : normal;
+  } else { twho.textContent = 'nono'; tpic.onerror = null; tpic.src = P.face; }
+  let n = 0; tsay.textContent = ''; clearInterval(typing);
+  typing = setInterval(() => { n++; tsay.textContent = text.slice(0, n); if (n >= text.length) { clearInterval(typing); typing = null; } }, 32);
+}
+function advance() {
+  const c = st.talking; if (!c) return;
+  if (typing) { clearInterval(typing); typing = null; tsay.textContent = c.ls[c.i][2]; return; }
+  c.i++;
+  if (c.i >= c.ls.length) { st.talking = null; st.cool = st.t + .35; talk.classList.remove('on'); ins.classList.remove('on'); save(); return; }
+  showLine();
+}
+
+// ================= 旅日誌 =================
+const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+function renderJournal() {
+  const tr = confidenceTrail();
+  if (!tr.length) $('jr').innerHTML = '<p class="empty">まだ、うわさは聞いていない。</p>';
+  else {
+    const p = tr[tr.length - 1].p;
+    $('jr').innerHTML = `<div class="rumor"><div class="q">「${esc(RUMOR.text)}」</div>
+      <div class="meter"><div class="bar"><div class="fill" style="width:${Math.round(p * 100)}%"></div></div><span class="w">${esc(word(p))}</span></div>
+      <div class="trail" aria-label="見え方の移り変わり">${tr.map(t => `<i style="height:${Math.max(4, Math.round(t.p * 34))}px"></i>`).join('')}</div>
+      <ul class="log">${tr.map((t, i) => `<li><b>${esc(RUMOR.ev[t.key].who)}</b>：${esc(RUMOR.ev[t.key].note)}${i ? `　→ ${esc(shift(tr[i - 1].p, t.p))}` : '　→ 話を聞いた'}</li>`).join('')}</ul></div>`;
+  }
+  $('ji').innerHTML = st.insights.length
+    ? `<ul class="log">${st.insights.map(s => `<li><span class="c">${esc(s.c)}</span>${esc(s.text)}</li>`).join('')}</ul>`
+    : '<p class="empty">まだ、ない。</p>';
+  const n = C.filter(c => st.visited[c.id]).length;
+  $('jv').innerHTML = `<span>${n} / ${C.length}</span>` + C.map(c => st.visited[c.id] ? `<span>${esc(c.name)}</span>` : '<span class="no">？？？</span>').join('');
+}
+function toggleJournal(on) { st.journal = on ?? !st.journal; $('journal').classList.toggle('on', st.journal); if (st.journal) renderJournal(); }
+
+// ================= 吊り橋（花野の国の谷） =================
+function bridgeOf(c) {
+  if (!c.gap) return null;
+  const gx = c.x0 + c.gap.x;
+  return { gx, bx: gx - 130, deck0: gx + 10, deck1: gx + 596, end: gx + 700 };
+}
+function groundOffset(x) { // 吊り橋の上では足もとが下がる
+  const b = bridgeOf(countryAt(x)); if (!b || x < b.deck0 || x > b.deck1) return 0;
+  const t = (x - b.deck0) / (b.deck1 - b.deck0), edge = Math.min(1, (x - b.deck0) / 30, (b.deck1 - x) / 30);
+  return 26 * edge + 18 * Math.sin(Math.PI * t);
+}
+
+// ================= 入力 =================
+function nearTarget() {
+  let best = null, bd = 90;
+  for (const n of NPCS) { const d = Math.abs(n.ax - st.x); if (d < bd) { bd = d; best = n; } }
+  if (best) return best;
+  const c = countryAt(st.x), b = bridgeOf(c);
+  if (b && st.x > b.gx - 220 && st.x < b.gx + 40) return { id: 'bridge', c, isPlace: true };
+  return null;
+}
+function act() {
+  if (st.journal) return toggleJournal(false);
+  if (ins.classList.contains('on') || st.talking) return advance();
+  if (st.t < st.cool) return;
+  const t = nearTarget(); if (t) startTalk(t);
+}
+addEventListener('keydown', e => {
+  if (!$('game').classList.contains('on')) return;
+  if (e.key === 'ArrowLeft' || e.key === 'a') st.keyL = true;
+  if (e.key === 'ArrowRight' || e.key === 'd') st.keyR = true;
+  if (e.key === ' ' || e.key === 'Enter' || e.key === 'z') { e.preventDefault(); act(); }
+  if (e.key === 'j' || e.key === 'J') toggleJournal();
+});
+addEventListener('keyup', e => { if (e.key === 'ArrowLeft' || e.key === 'a') st.keyL = false; if (e.key === 'ArrowRight' || e.key === 'd') st.keyR = false; });
+function holdBtn(el, k) {
+  const on = e => { e.preventDefault(); st[k] = true; el.classList.add('hold'); };
+  const off = () => { st[k] = false; el.classList.remove('hold'); };
+  el.addEventListener('pointerdown', on); ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => el.addEventListener(t, off));
+}
+holdBtn($('bl'), 'keyL'); holdBtn($('br'), 'keyR');
+$('bt').addEventListener('click', act); $('bj').addEventListener('click', () => toggleJournal());
+$('jclose').addEventListener('click', () => toggleJournal(false));
+talk.addEventListener('click', advance); ins.addEventListener('click', advance);
+
+// ================= 描画 =================
+const cv = $('cv'), g = cv.getContext('2d');
+function fitCanvas() { const r = cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d)); }
+const ro = new ResizeObserver(fitCanvas); ro.observe(cv);
+const rnd = i => { const s = Math.sin(i * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); };
+
+function drawFarImage(im, cam, alpha) {
+  if (!im) return;
+  const h = H * 0.92, w = im.width * h / im.height, off = -(cam * 0.06) % (w * 2);
+  g.globalAlpha = alpha;
+  for (let x = off - w * 2; x < W + w; x += w) {
+    const k = Math.round((x - off) / w); // 交互に左右反転して継ぎ目を消す
+    if (k % 2) { g.save(); g.translate(x + w, 0); g.scale(-1, 1); g.drawImage(im, 0, 0, w, h); g.restore(); } else g.drawImage(im, x, 0, w, h);
+  }
+  g.globalAlpha = 1;
+}
+function drawFar(cam) {
+  g.fillStyle = '#2a2040'; g.fillRect(0, 0, W, H);
+  const center = cam + W / 2, c = countryAt(center);
+  drawFarImage(img(P.far(c.far)), cam, 1);
+  const dR = c.x1 - center, dL = center - c.x0, nx = C[c.i + 1], pv = C[c.i - 1];
+  if (nx && dR < 480) drawFarImage(img(P.far(nx.far)), cam, (480 - dR) / 960);
+  else if (pv && dL < 480) drawFarImage(img(P.far(pv.far)), cam, (480 - dL) / 960);
+  g.fillStyle = '#151a1c'; g.fillRect(0, H * 0.92 - 2, W, H);
+  return c;
+}
+function drawMid(cam, c) {
+  const tr = img(P.trees);
+  if (c.mid === 'trees' && tr) {
+    const w = 1100, h = tr.height * w / tr.width, off = -(cam * 0.3) % w;
+    g.globalAlpha = .85; for (let x = off - w; x < W + w; x += w) g.drawImage(tr, x, GROUND - h + 18, w, h); g.globalAlpha = 1;
+  }
+  g.fillStyle = c.hill || '#1e2a2a';
+  g.beginPath(); g.moveTo(0, GROUND + 4);
+  for (let x = 0; x <= W; x += 16) { const wx2 = x + cam * 0.45; g.lineTo(x, GROUND - 14 - Math.sin(wx2 / 230) * 10 - Math.sin(wx2 / 71) * 4); }
+  g.lineTo(W, GROUND + 4); g.closePath(); g.fill();
+}
+function drawGround(cam) {
+  for (const c of C) {
+    if (c.x1 < cam || c.x0 > cam + W) continue;
+    const [top, base, road] = c.ground || ['#5d8a55', '#3e5a3c', '#6b5a45'];
+    const a = Math.max(0, c.x0 - cam), z = Math.min(W, c.x1 - cam);
+    const grd = g.createLinearGradient(0, GROUND, 0, H); grd.addColorStop(0, base); grd.addColorStop(1, '#171f1c');
+    g.fillStyle = grd; g.fillRect(a, GROUND, z - a + 1, H - GROUND);
+    g.fillStyle = road; g.fillRect(a, GROUND + 20, z - a + 1, 26);
+    g.fillStyle = top;
+    for (let i = Math.floor((cam + a) / 8); i < (cam + z) / 8; i++) g.fillRect(i * 8 - cam, GROUND - 4 * rnd(i), 8, 6);
+    const b = bridgeOf(c);
+    if (b) { g.fillStyle = '#0d0c14'; g.fillRect(b.gx - cam, GROUND - 6, b.end - b.gx, H - GROUND + 6); }
+  }
+}
+function drawBridge(cam) {
+  const c = countryAt(cam + W / 2), b = bridgeOf(c) || bridgeOf(C[c.i + 1] || c); if (!b) return;
+  if (b.bx - cam > W || b.bx + 866 - cam < 0) return;
+  const im = img(P.b(st.flags.bridgeFixed ? 'rope_bridge_fixed' : 'rope_bridge_broken'));
+  if (im) g.drawImage(im, b.bx - cam, GROUND - 37 - 32, 866, im.height * 866 / im.width);
+}
+function drawSign(x, label) {
+  if (x < -200 || x > W + 200) return;
+  g.font = '15px "DotGothic16",monospace'; const tw = g.measureText(label).width + 24;
+  g.fillStyle = '#4a3726'; g.fillRect(x - 3, GROUND - 70, 6, 70);
+  g.fillStyle = '#8a6a48'; g.fillRect(x - tw / 2, GROUND - 78, tw, 28);
+  g.fillStyle = '#f6eee6'; g.textAlign = 'center'; g.fillText(label, x, GROUND - 58);
+}
+function drawBuildings(cam) {
+  for (const c of C) {
+    if (c.x1 < cam - 800 || c.x0 > cam + W + 800) continue;
+    for (const [name, rx, sc] of c.buildings) {
+      const im = img(P.b(name)); if (!im) continue;
+      const s = (sc || 1) * (c.bscale || 1), w = im.width * s, h = im.height * s, x = c.x0 + rx - cam;
+      if (x > W + 20 || x + w < -20) continue;
+      g.fillStyle = 'rgba(0,0,0,.28)'; g.beginPath(); g.ellipse(x + w / 2, GROUND + 4, w * .52, 9, 0, 0, Math.PI * 2); g.fill();
+      g.drawImage(im, x, GROUND + 6 - h, w, h);
+    }
+  }
+}
+function drawActor(n, cam) {
+  const x = n.ax - cam; if (x < -120 || x > W + 120) return;
+  const im = img(P.a(n.actor, 'normal')), h = NONO_H, w = h * .75;
+  g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 34, 7, 0, 0, Math.PI * 2); g.fill();
+  if (im) { g.save(); g.translate(x, 0); g.scale(n.face || -1, 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
+}
+const rabbit = { hop: 0, dx: 0 };
+function drawRabbit(cam) {
+  const c = C.find(c => c.rabbit != null); if (!c) return;
+  const im = img(P.rabbit); const wxr = c.x0 + c.rabbit + rabbit.dx, x = wxr - cam; if (!im || x < -80 || x > W + 80) return;
+  const near = Math.abs(wxr - st.x) < 160; rabbit.hop = near ? Math.abs(Math.sin(st.t * 9)) * 10 : 0;
+  if (near) rabbit.dx += (wxr > st.x ? 1 : -1) * 40 / 60;
+  const h = 46, w = im.width * h / im.height; g.drawImage(im, x - w / 2, GROUND - h + 6 - rabbit.hop, w, h);
+}
+function drawNono(cam) {
+  const im = img(P.nono), x = st.x - cam, h = NONO_H, w = h * 176 / 224, oy = groundOffset(st.x);
+  g.fillStyle = 'rgba(0,0,0,.32)'; g.beginPath(); g.ellipse(x, GROUND + 4 + oy, 30, 6, 0, 0, Math.PI * 2); g.fill();
+  if (!im) return;
+  const row = st.dir > 0 ? 0 : 1, col = st.moving ? [0, 1, 2, 1][Math.floor(st.phase) % 4] : 1;
+  const bob = st.moving ? Math.abs(Math.sin(st.phase * Math.PI)) * 3 : 0;
+  g.save(); g.translate(x, GROUND + 6 - h - bob + oy);
+  if (col === 0) g.scale(-1, 1); // 原画の横向き1コマ目は顔が逆向き（HD-2D Lite と同じ補正）
+  g.drawImage(im, col * 176, row * 224, 176, 224, -w / 2 * .92, 0, w * .92, h);
+  g.restore();
+}
+function drawFore(cam) {
+  const im = img(P.grass); if (!im) return;
+  for (let i = Math.floor(cam * 1.2 / 520) - 1; i < (cam * 1.2 + W) / 520 + 1; i++) {
+    const wxg = (i * 520 + rnd(i) * 260) / 1.2, c = countryAt(wxg), b = bridgeOf(c);
+    if (c.fore === false || (b && wxg > b.gx - 60 && wxg < b.end)) continue;
+    const x = i * 520 + rnd(i) * 260 - cam * 1.2, h = 70 + rnd(i + 3) * 30, w = im.width * h / im.height;
+    g.globalAlpha = .9; g.drawImage(im, x, H - h + 20, w, h); g.globalAlpha = 1;
+  }
+}
+function drawPrompt(cam) {
+  if (st.talking || st.journal) return; const t = nearTarget(); if (!t) return;
+  const x = (t.isPlace ? st.x : t.ax) - cam, y = GROUND - 165 + Math.sin(st.t * 4) * 3, label = t.isPlace ? '見る' : '話す';
+  g.font = '16px "DotGothic16",monospace'; g.textAlign = 'center';
+  g.fillStyle = 'rgba(18,13,31,.85)'; g.fillRect(x - 34, y - 20, 68, 28); g.strokeStyle = '#f3a07a'; g.lineWidth = 2; g.strokeRect(x - 34, y - 20, 68, 28);
+  g.fillStyle = '#f6eee6'; g.fillText('▼' + label, x, y);
+}
+function drawHUD(c) {
+  const label = `${c.name}　${WN[wx.next || wx.type]}`;
+  g.font = '15px "DotGothic16",monospace'; g.textAlign = 'left';
+  const tw = Math.max(220, g.measureText(label).width + 24);
+  g.fillStyle = 'rgba(18,13,31,.6)'; g.fillRect(16, 14, tw, 50);
+  g.fillStyle = '#f6eee6'; g.fillText(label, 26, 36);
+  const bw = tw - 20; g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(26, 48, bw, 4);
+  g.fillStyle = 'rgba(255,255,255,.45)'; for (const k of C) g.fillRect(26 + k.x0 / WORLD * bw, 45, 1, 10);
+  g.fillStyle = '#f3a07a'; g.fillRect(26 + st.x / WORLD * bw - 3, 44, 6, 12);
+}
+let bannerT = null;
+function showBanner(c) {
+  const b = $('banner'); b.innerHTML = `${esc(c.name)}<small>${c.i + 1} / ${C.length}</small>`;
+  b.classList.add('on'); clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('on'), 2600);
+}
+
+// ================= ループ =================
+let last = 0, lastCam = null, saveT = 0;
+function frame(ts) {
+  const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts; st.t += dt;
+  const busy = st.talking || st.journal || ins.classList.contains('on');
+  const v = busy ? 0 : (st.keyR ? 1 : 0) - (st.keyL ? 1 : 0);
+  st.moving = v !== 0; if (v) st.dir = v;
+  st.x = Math.max(60, Math.min(WORLD - 60, st.x + v * SPEED * windSpeedFactor() * dt));
+  if (st.moving) st.phase += dt * 6.2;
+  st.maxX = Math.max(st.maxX, st.x);
+  const here = countryAt(st.x);
+  if (here !== st.cur) {
+    const first = !st.visited[here.id]; st.cur = here; st.visited[here.id] = true;
+    showBanner(here); setWeather(pickWeather(here)); wx.timer = 40 + Math.random() * 50; if (first) save();
+  }
+  prefetch(here); prefetch(C[here.i + 1]); prefetch(C[here.i - 1]);
+  const cam = Math.max(0, Math.min(WORLD - W, st.x - W * 0.42));
+  const camDx = lastCam == null ? 0 : cam - lastCam; lastCam = cam;
+  updateWeather(dt, camDx);
+  saveT += dt; if (saveT > 4) { saveT = 0; save(); }
+
+  g.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0); g.imageSmoothingQuality = 'high';
+  const cc = drawFar(cam); drawMid(cam, cc); drawGround(cam);
+  const first = C[0]; drawSign(first.x0 + 430 - cam, first.name);
+  for (const c of C.slice(1)) drawSign(c.x0 - cam, `← ${C[c.i - 1].name} ｜ ${c.name} →`);
+  drawSign(WORLD - 260 - cam, 'この先は、まだ見ぬ国（試作はここまで）');
+  drawBuildings(cam); drawBridge(cam);
+  for (const n of NPCS) drawActor(n, cam);
+  drawRabbit(cam); drawNono(cam); drawFore(cam);
+  g.fillStyle = cc.tint || 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);
+  drawWeather(cam, st.x - cam);
+  drawPrompt(cam); drawHUD(cc);
+  requestAnimationFrame(frame);
+}
+
+// ================= タイトル =================
+const saved = loadSave();
+if (saved) { $('start').textContent = '旅をつづける'; $('restart').hidden = false; }
+let started = false, armed = false;
+function begin(data) {
+  if (started) return; started = true;
+  if (data) Object.assign(st, { x: data.x, flags: data.flags || {}, evidence: data.evidence || [], insights: data.insights || [], met: data.met || {}, maxX: data.maxX || data.x, visited: data.visited || {} });
+  $('title').classList.remove('on'); $('game').classList.add('on'); fitCanvas();
+  requestAnimationFrame(frame);
+}
+$('start').addEventListener('click', () => begin(saved));
+$('restart').addEventListener('click', () => {
+  if (!armed) { armed = true; $('restart').textContent = 'もう一度押すと、はじめから'; return; }
+  clearSave(); begin(null);
+});
+window.__st = st; window.__wx = wx; window.__setWeather = t => { wx.type = t; wx.next = null; wx.k = 1; }; // 試作の確認用
+}
