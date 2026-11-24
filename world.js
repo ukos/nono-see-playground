@@ -7,6 +7,7 @@
 //   far             : 遠景 assets/far/<far>.webp
 //   mid             : 'trees'（森のシルエット）か省略
 //   hill, ground    : 中景の丘の色、地面の色 [草, 土, 道]
+//   time            : 時間帯 'morning' / 'noon' / 'dusk'（省略時）/ 'night'。画面の明るさが変わる
 //   tint            : 画面全体にかける色
 //   bscale          : 建物の倍率（素材の解像度差を吸収）
 //   props           : 木や岩などの小物 [画像名, x, 高さpx]（assets/props/）。建物より奥に描く
@@ -131,8 +132,8 @@
 
   // ---------------------------------------------------------------- 3
   C.push({
-    id: 'koutou', name: 'キャセイ', sub: '紅灯の都', screens: 6, far: 'valley',
-    hill: '#2a1e26', ground: ['#6a7a4a', '#4a3e34', '#8a7258'], tint: 'rgba(120,30,30,.08)', bscale: 1.3,
+    id: 'koutou', name: 'キャセイ', sub: '紅灯の都', time: 'night', screens: 6, far: 'mystic_night',
+    hill: '#2a1e26', ground: ['#6a7a4a', '#4a3e34', '#8a7258'], tint: 'rgba(40,20,80,.10)', bscale: 1.3,
     props: [['tree_old_roots', 700, 260], ['pine', 2900, 280], ['stone_lantern', 4000, 150]],
     buildings: [['cn_paifang', 300], ['cn_house', 1000], ['cn_teahouse', 1650], ['cn_nagaya', 2450, 1.1], ['cn_mansion', 3550, 1.15], ['cn_tower', 4650, 1.2]],
     npcs: [
@@ -277,8 +278,8 @@
 
   // ---------------------------------------------------------------- 7
   C.push({
-    id: 'shirakabe', name: 'グレシア', sub: '白壁の港', screens: 6, far: 'sea',
-    hill: '#22303a', ground: ['#8aa06a', '#7a6a5a', '#c8b8a0'], tint: 'rgba(40,80,140,.06)', bscale: 1.1,
+    id: 'shirakabe', name: 'グレシア', sub: '白壁の港', time: 'noon', screens: 6, far: 'beach_noon',
+    hill: '#22303a', ground: ['#8aa06a', '#7a6a5a', '#c8b8a0'], tint: 'rgba(255,250,230,.0)', bscale: 1.1,
     props: [['tree_olive', 2600, 300], ['lighthouse', 5250, 420], ['boat_wreck', 5500, 200]],
     buildings: [['gr_chapel', 350], ['es_white', 900], ['it_townhouse', 1550], ['med_white', 2100, 0.9], ['es_gate', 2900], ['it_tuscan', 3500], ['gr_temple', 4400]],
     npcs: [
@@ -312,8 +313,8 @@
 
   // ---------------------------------------------------------------- 8
   C.push({
-    id: 'kiri', name: 'ブリテニア', sub: '霧の島', screens: 7, far: 'mountains', mid: 'trees',
-    hill: '#1c2430', ground: ['#4a6a4a', '#34443a', '#6a6a60'], tint: 'rgba(60,70,100,.10)', bscale: 1.0,
+    id: 'kiri', name: 'ブリテニア', sub: '霧の島', time: 'morning', screens: 7, far: 'cliffs_morning', mid: 'trees',
+    hill: '#1c2430', ground: ['#4a6a4a', '#34443a', '#6a6a60'], tint: 'rgba(60,70,100,.08)', bscale: 1.0,
     props: [['tower_ivy', 3100, 380], ['rune_stone', 4100, 110], ['tree_dead', 4600, 260], ['stone_chapel', 6100, 360]],
     buildings: [['uk_tudor', 400], ['uk_terrace', 900], ['uk_terrace', 1180], ['city_building', 1700, 0.95], ['white_mansion', 2500, 0.95], ['castle_gate', 3500], ['treehouse', 5000, 0.9]],
     npcs: [
@@ -353,8 +354,8 @@
 
   // ---------------------------------------------------------------- 9
   C.push({
-    id: 'yuki', name: 'ノルヴィーク', sub: '雪の村', screens: 5, far: 'snow', fore: false,
-    hill: '#3a4458', ground: ['#e8eef4', '#c4ccd8', '#a8b0bc'], tint: 'rgba(80,100,160,.10)', bscale: 1.0,
+    id: 'yuki', name: 'ノルヴィーク', sub: '雪の村', time: 'morning', screens: 5, far: 'fjord_morning', fore: false,
+    hill: '#3a4458', ground: ['#e8eef4', '#c4ccd8', '#a8b0bc'], tint: 'rgba(120,140,190,.08)', bscale: 1.0,
     props: [['pine_snow', 300, 300], ['tree_snow', 2900, 300], ['pine_snow', 4400, 320]],
     buildings: [['nordic_red', 500], ['nordic_red', 1500, 0.85], ['lumber_hut', 2400, 1.4], ['nordic_red', 3400, 1.05]],
     npcs: [

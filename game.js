@@ -67,6 +67,8 @@ const word = p => p >= .85 ? 'ほぼ確か' : p >= .65 ? 'たぶん本当' : p >
 const shift = (a, b) => { const d = b - a; return d > .25 ? 'ぐっと信じた' : d > .05 ? '少し信じた' : d < -.25 ? 'ぐっと疑った' : d < -.05 ? '少し疑った' : '変わらない'; };
 
 // ================= 天候 =================
+// 時間帯：画面にかける光の色（夜は暗く青く、朝はやわらかい暖色、昼はそのまま）
+const TIME = { morning: { name: '朝', fill: 'rgba(255,214,170,.07)' }, noon: { name: '昼', fill: null }, dusk: { name: '夕暮れ', fill: null }, night: { name: '夜', fill: 'rgba(14,18,52,.34)' } };
 const WN = { clear: '晴れ', drizzle: '小雨', squall: 'スコール', typhoon: '台風', wind: '強風', fog: '霧', densefog: '濃霧', snow: '雪' };
 const WX = {
   clear: {},
@@ -434,7 +436,7 @@ function drawPrompt(cam) {
   g.fillStyle = '#f6eee6'; g.fillText('▼' + label, x, y);
 }
 function drawHUD(c) {
-  const label = `${c.name}　${WN[wx.next || wx.type]}`;
+  const label = `${c.name}　${TIME[c.time || 'dusk'].name}・${WN[wx.next || wx.type]}`;
   g.font = '15px "DotGothic16",monospace'; g.textAlign = 'left';
   const tw = Math.max(220, g.measureText(label).width + 24);
   g.fillStyle = 'rgba(18,13,31,.6)'; g.fillRect(16, 14, tw, 50);
@@ -484,6 +486,7 @@ function frame(ts) {
   for (const n of NPCS) drawActor(n, cam);
   drawRabbit(cam); drawNono(cam); drawFore(cam);
   g.fillStyle = cc.tint || 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);
+  const tl = TIME[cc.time || 'dusk']; if (tl.fill) { g.fillStyle = tl.fill; g.fillRect(0, 0, W, H); }
   drawWeather(cam, st.x - cam);
   drawPrompt(cam); drawHUD(cc);
   requestAnimationFrame(frame);
