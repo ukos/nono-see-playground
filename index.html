@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>SEE ― walk through the world</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1a1838">
+<meta name="apple-mobile-web-app-title" content="SEE">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/*
+VOICE: 静かな夕暮れ、旅人のひとり言。
+IDEA: 旅人の手帳と、通りすぎる風景の絵巻。
+PICTURE: 横長の夕景パララックスに nono が立つゲーム画面そのもの。
+COLOUR and TYPE: 夕焼けの紫紺 #1d1630・茜 #f3a07a・草 #2f4a3a、ドット絵は DotGothic16、地の文は Zen Maru Gothic。
+LAYOUT: 上にゲーム画面（16:9）、下に同じ幅の操作ボタン4つ。タイトルは別画面。
+*/
+:root{color-scheme:dark;--bg:#120d1f;--ink:#f6eee6;--dim:#b9aec4;--akane:#f3a07a;--leaf:#8fc79a;--panel:rgba(22,16,38,.92);--line:rgba(243,160,122,.35)}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:16px/1.6 "Zen Maru Gothic",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center}
+.screen.on{display:flex}
+/* ---- タイトル ---- */
+#title{background:#1a1838;gap:18px;padding:16px}
+#title::before{content:"";position:absolute;inset:-40px;background:url(assets/title_logo.webp) center/cover;filter:blur(28px) brightness(.55);z-index:-1}
+#title{isolation:isolate;overflow:hidden}
+#title .logo{width:min(92vw,calc(100dvh - 120px),720px);aspect-ratio:1;border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.45);animation:rise 1.2s ease-out both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+@media (prefers-reduced-motion:reduce){#title .logo{animation:none}}
+.btns{display:grid;gap:8px;width:min(360px,86vw)}
+button{font:700 16px/1 "Zen Maru Gothic",sans-serif;color:var(--ink);background:rgba(18,13,31,.72);border:2px solid var(--line);border-radius:10px;height:52px;width:100%;padding:0 16px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+button:focus-visible{outline:3px solid var(--akane);outline-offset:2px}
+button:active,button.hold{background:rgba(243,160,122,.28)}
+.note{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:13px;color:#e6cfe0;opacity:.8;white-space:nowrap}
+/* ---- ゲーム ---- */
+#game{justify-content:flex-start;background:#0b0816}
+#stage{position:relative;width:100vw;max-width:calc((100dvh - 76px) * 16 / 9);aspect-ratio:16/9;margin-top:auto;overflow:hidden;background:#000}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#pad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%;max-width:calc((100dvh - 76px) * 16 / 9);padding:10px 10px max(10px,env(safe-area-inset-bottom));margin-bottom:auto}
+#pad button{height:56px;font-size:15px}
+/* 会話窓 */
+#talk{position:absolute;left:2%;right:2%;bottom:3%;display:none;gap:12px;align-items:flex-end;background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:10px 14px 12px;cursor:pointer}
+#talk.on{display:flex}
+#talk img{width:clamp(64px,12%,108px);aspect-ratio:3/4;object-fit:cover;object-position:top;border-radius:8px;background:#2a2046;flex:none}
+#talk .who{font-family:"DotGothic16",monospace;color:var(--akane);font-size:clamp(13px,1.9vw,17px);white-space:nowrap}
+#talk .say{font-size:clamp(14px,2.3vw,20px);line-height:1.55;min-height:3.1em}
+#talk .more{position:absolute;right:12px;bottom:6px;color:var(--akane);font-size:12px;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+/* 気づきカード */
+#insight{position:absolute;left:50%;top:18%;transform:translateX(-50%);width:min(78%,560px);display:none;text-align:left;background:linear-gradient(#2b1f45f0,#1b1430f0);border:2px solid var(--akane);border-radius:14px;padding:16px 20px;cursor:pointer}
+#insight.on{display:block}
+#insight .h{font-family:"DotGothic16",monospace;color:var(--akane);font-size:14px;white-space:nowrap}
+#insight .b{font-size:clamp(16px,2.6vw,22px);margin-top:6px}
+/* 旅日誌 */
+#journal{position:absolute;inset:4%;display:none;flex-direction:column;background:#f3e9d8;color:#2b2233;border-radius:10px;box-shadow:0 10px 0 #b9a585,0 0 0 4px #6b4a3a inset;padding:16px 20px;overflow:auto}
+#journal.on{display:flex}
+#journal h2{font-family:"DotGothic16",monospace;font-weight:400;font-size:22px;margin:0 0 8px;white-space:nowrap}
+#journal h3{font-size:15px;margin:14px 0 6px;color:#7a4a3a;white-space:nowrap}
+.rumor{background:#fffaf0;border:1px solid #d8c6a6;border-radius:8px;padding:10px 12px}
+.rumor .q{font-weight:700}
+.meter{display:flex;align-items:center;gap:10px;margin:8px 0 4px}
+.meter .bar{flex:1;height:14px;background:#e4d6bd;border-radius:7px;overflow:hidden}
+.meter .fill{height:100%;background:linear-gradient(90deg,#c9798a,#e9a56a);transition:width .8s ease}
+.meter .w{font-family:"DotGothic16",monospace;white-space:nowrap;font-size:15px}
+.trail{display:flex;gap:4px;align-items:flex-end;height:34px;margin:6px 0}
+.trail i{display:block;width:14px;background:#c9a77f;border-radius:3px 3px 0 0}
+.trail i:last-child{background:#d9775c}
+.log{margin:4px 0 0;padding:0;list-style:none;font-size:14px}
+.log li{padding:3px 0;border-top:1px dashed #d8c6a6}
+.log b{color:#7a4a3a}
+.empty{color:#8a7d73;font-size:14px}
+#journal .close{margin-top:auto;padding-top:14px}
+#journal .close button{color:#2b2233;background:#e8dcc4;border-color:#b9a585}
+</style>
+</head>
+<body>
+
+<section id="title" class="screen on">
+  <img class="logo" src="assets/title_logo.webp" alt="SEE ― walk through the world">
+  <div class="btns"><button id="start">旅をはじめる</button></div>
+</section>
+
+<section id="game" class="screen">
+  <div id="stage">
+    <canvas id="cv" width="960" height="540"></canvas>
+    <div id="talk"><img id="tpic" alt=""><div style="flex:1"><div class="who" id="twho"></div><div class="say" id="tsay"></div></div><span class="more">▼</span></div>
+    <div id="insight"><div class="h">nono の気づき</div><div class="b" id="ibody"></div></div>
+    <div id="journal">
+      <h2>旅日誌</h2>
+      <h3>うわさ</h3><div id="jr"></div>
+      <h3>気づき</h3><div id="ji"></div>
+      <div class="close"><button id="jclose">日誌を閉じる</button></div>
+    </div>
+  </div>
+  <div id="pad">
+    <button id="bl">◀ 左へ</button>
+    <button id="br">右へ ▶</button>
+    <button id="bt">話す</button>
+    <button id="bj">旅日誌</button>
+  </div>
+</section>
+
+<script>
+{
+// ================= 設定 =================
+const W = 960, H = 540, GROUND = 452, WORLD = 5760; // 1国＝6画面
+const SPEED = 230;
+const IMG = {};
+const SRC = {
+  far:'assets/far_flower.webp', trees:'assets/far_trees.webp', grass:'assets/shore_grass.webp',
+  nono:'assets/nono_side.webp', rabbit:'assets/rabbit.webp',
+  villager_normal:'assets/extra_villager_normal.webp', villager_joy:'assets/extra_villager_joy.webp', villager_surprise:'assets/extra_villager_surprise.webp',
+  elder_normal:'assets/extra_elder_normal.webp', elder_joy:'assets/extra_elder_joy.webp',
+  lumber_normal:'assets/extra_lumberjack_normal.webp', lumber_fun:'assets/extra_lumberjack_fun.webp', lumber_surprise:'assets/extra_lumberjack_surprise.webp',
+  porter_normal:'assets/extra_porter_normal.webp'
+};
+const load = () => Promise.all(Object.entries(SRC).map(([k, s]) => new Promise(r => { const i = new Image(); i.onload = () => { IMG[k] = i; r(); }; i.onerror = () => r(); i.src = s; })));
+
+// ================= 状態 =================
+const st = {
+  x: 320, dir: 1, moving: false, phase: 0,
+  flags: {},            // 出来事のフラグ
+  evidence: [],         // 集めた証拠（順不同）
+  insights: [],
+  talking: null, journal: false, keyL: false, keyR: false, t: 0
+};
+
+// ================= うわさと確信度（ベイズ更新） =================
+// 事前の確からしさと、証拠ごとの「どれだけ話を後押しするか」（尤度比）。画面には数式を出さない。
+const RUMOR = {
+  id: 'bridge', text: '東の吊り橋が落ちたらしい',
+  prior: 0.6,
+  ev: {
+    heard:  { lr: 1,    who: 'ゴンジ（村人）', note: '隣村の人から聞いた、と言っていた' },
+    sound:  { lr: 2.6,  who: 'ダイ（木こり）', note: '夜中に東の谷でドーンと大きな音がした' },
+    crossed:{ lr: 0.22, who: 'ミツ（運び屋）', note: '今朝その橋を渡ってきた。揺れはひどかった' },
+    seen:   { lr: 0.03, who: '自分の目',       note: '橋は架かっていた。落ちていたのは手すりの縄だった' }
+  }
+};
+function confidenceTrail() {
+  if (!st.flags.heard) return [];
+  let odds = RUMOR.prior / (1 - RUMOR.prior);
+  const out = [{ key: 'heard', p: RUMOR.prior }];
+  for (const k of st.evidence) { if (k === 'heard') continue; odds *= RUMOR.ev[k].lr; out.push({ key: k, p: odds / (1 + odds) }); }
+  return out;
+}
+function word(p) { return p >= .85 ? 'ほぼ確か' : p >= .65 ? 'たぶん本当' : p >= .4 ? 'どちらとも言えない' : p >= .15 ? 'あやしい' : 'ちがったみたい'; }
+function shift(a, b) { const d = b - a; return d > .25 ? 'ぐっと信じた' : d > .05 ? '少し信じた' : d < -.25 ? 'ぐっと疑った' : d < -.05 ? '少し疑った' : '変わらない'; }
+function addEvidence(k) { if (!st.evidence.includes(k)) st.evidence.push(k); }
+
+// ================= 世界の配置 =================
+const HOUSES = [ { x: 640, w: 210, h: 150, roof: '#7a3b3b' }, { x: 1180, w: 250, h: 170, roof: '#5b4a7a' }, { x: 1560, w: 190, h: 140, roof: '#7a5a3b' } ];
+const NPCS = [
+  { id: 'villager', name: 'ゴンジ（村人）', x: 940, img: 'villager', face: -1 },
+  { id: 'elder', name: '長老', x: 1460, img: 'elder', face: -1 },
+  { id: 'lumber', name: 'ダイ（木こり）', x: 2760, img: 'lumber', face: -1 },
+  { id: 'porter', name: 'ミツ（運び屋）', x: 4020, img: 'porter', face: 1 }
+];
+const RABBIT = { x: 2050, hop: 0 };
+const CLIFF = 5180;      // ここから先は谷
+const BRIDGE_SEE = 4980; // ここまで来ると橋が見える
+
+// ================= 会話 =================
+// 各行：[話者キー, 表情, 文]。話者キー me = nono のひとり言
+function lines(id) {
+  const f = st.flags;
+  if (id === 'villager') {
+    if (!f.heard) { f.heard = true; addEvidence('heard');
+      return [['villager','normal','やあ、旅の人。東へ行くのかい？'],['villager','surprise','隣村のもんが言ってたんだが、東の吊り橋が落ちたらしいよ。'],['villager','normal','まあ、聞いた話だけどね。気をつけて。'],['me','','（旅日誌に書いておこう）']]; }
+    if (f.seen && !f.toldVillager) { f.toldVillager = true;
+      return [['villager','surprise','おや、戻ってきたのかい。橋はどうだった？'],['me','','落ちてたのは、手すりの縄だけでした。'],['villager','joy','なんだ、そうだったのか！ 隣村のやつ、話を大きくしたな。'],['villager','normal','いや……わしも、ちょっと大きくして話したかもしれん。']]; }
+    return f.seen ? [['villager','joy','手すりの縄か。直しに行ってやらんとな。']] : [['villager','normal','東の橋の話、本当かどうか。見てきた人がいればなあ。']];
+  }
+  if (id === 'elder') {
+    if (f.seen && f.heard && !f.insight) { f.insight = true;
+      return [['elder','normal','橋を見てきたそうじゃな。'],['elder','normal','人の話はな、みんな少しずつ本当で、少しずつちがう。'],['elder','joy','藪の中というやつじゃ。それでも歩いて、見に行く者がおる。'],['elder','joy','おぬしのような旅人がな。'],['insight','','聞いた話は、自分の足で確かめるまで、半分だけ信じておく。']]; }
+    if (f.insight) return [['elder','joy','気をつけてな。道は、行きと帰りで顔が変わるものじゃ。']];
+    return [['elder','normal','この村は、行く人も帰る人も通りすぎていく。'],['elder','joy','通りすぎる者にも、見えるものはあるじゃろう。']];
+  }
+  if (id === 'lumber') {
+    if (!st.evidence.includes('sound')) { addEvidence('sound');
+      return [['lumber','normal','よう。この先は谷だぞ。'],['lumber','surprise','そういや昨夜、東の谷のほうでドーンとでかい音がしたんだ。'],['lumber','fun','木が倒れたのか、何かが落ちたのか……おれは寝ちまったがな！'],['me','', f.heard ? '（橋の話と、合っている……？）' : '（何の音だろう）']]; }
+    return [['lumber','fun','音の正体がわかったら教えてくれよ。']];
+  }
+  if (id === 'porter') {
+    if (!st.evidence.includes('crossed')) { addEvidence('crossed');
+      return [['porter','normal','ふう。重い荷を背負って、今朝その先の吊り橋を渡ってきたところさ。'],['porter','normal','揺れはひどかったし、片側がなんだか頼りなかったけどね。'],['me','', f.heard ? '（落ちた橋は、渡れないはず……）' : '（橋があるんだ）']]; }
+    return [['porter','normal','西の村まであと少し。足だけが頼りさ。']];
+  }
+  if (id === 'bridge') { addEvidence('seen'); f.seen = true;
+    return [['me','','……橋だ。ちゃんと架かっている。'],['me','','落ちていたのは、片側の手すりの縄だけだ。'],['me','', f.heard ? '（「橋が落ちた」は、少しちがったみたいだ。村に戻って話してみよう）' : '（縄が切れている。誰かに知らせたほうがいいかな）'],['me','','この先は次の国。（試作はここまで）']]; }
+  return [];
+}
+const SPEAKER = { me: { name: 'nono', pic: null }, villager: { name: 'ゴンジ（村人）', pic: 'villager' }, elder: { name: '長老', pic: 'elder' }, lumber: { name: 'ダイ（木こり）', pic: 'lumber' }, porter: { name: 'ミツ（運び屋）', pic: 'porter' } };
+
+const $ = id => document.getElementById(id);
+const talk = $('talk'), tsay = $('tsay'), twho = $('twho'), tpic = $('tpic'), ins = $('insight');
+let typing = null;
+function startTalk(id) { const ls = lines(id); if (!ls.length) return; st.talking = { ls, i: 0 }; st.moving = false; showLine(); }
+function showLine() {
+  const c = st.talking; const [sp, face, text] = c.ls[c.i];
+  if (sp === 'insight') { talk.classList.remove('on'); $('ibody').textContent = text; ins.classList.add('on'); if (!st.insights.includes(text)) st.insights.push(text); return; }
+  ins.classList.remove('on'); talk.classList.add('on');
+  const s = SPEAKER[sp]; twho.textContent = s.name;
+  const im = s.pic ? (IMG[s.pic + '_' + face] || IMG[s.pic + '_normal']) : null;
+  tpic.src = s.pic ? (im ? im.src : '') : 'assets/nono_face.webp';
+  let n = 0; tsay.textContent = ''; clearInterval(typing);
+  typing = setInterval(() => { n++; tsay.textContent = text.slice(0, n); if (n >= text.length) { clearInterval(typing); typing = null; } }, 32);
+}
+function advance() {
+  const c = st.talking; if (!c) return;
+  if (typing) { clearInterval(typing); typing = null; tsay.textContent = c.ls[c.i][2]; return; }
+  c.i++;
+  if (c.i >= c.ls.length) { st.talking = null; st.cool = st.t + .35; talk.classList.remove('on'); ins.classList.remove('on'); return; }
+  showLine();
+}
+
+// ================= 旅日誌 =================
+const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+function renderJournal() {
+  const tr = confidenceTrail();
+  if (!tr.length) $('jr').innerHTML = '<p class="empty">まだ、うわさは聞いていない。</p>';
+  else {
+    const p = tr[tr.length - 1].p;
+    $('jr').innerHTML = `<div class="rumor"><div class="q">「${esc(RUMOR.text)}」</div>
+      <div class="meter"><div class="bar"><div class="fill" style="width:${Math.round(p * 100)}%"></div></div><span class="w">${esc(word(p))}</span></div>
+      <div class="trail" aria-label="見え方の移り変わり">${tr.map(t => `<i style="height:${Math.max(4, Math.round(t.p * 34))}px"></i>`).join('')}</div>
+      <ul class="log">${tr.map((t, i) => `<li><b>${esc(RUMOR.ev[t.key].who)}</b>：${esc(RUMOR.ev[t.key].note)}${i ? `　→ ${esc(shift(tr[i - 1].p, t.p))}` : '　→ 話を聞いた'}</li>`).join('')}</ul></div>`;
+  }
+  $('ji').innerHTML = st.insights.length ? `<ul class="log">${st.insights.map(s => `<li>${esc(s)}</li>`).join('')}</ul>` : '<p class="empty">まだ、ない。</p>';
+}
+function toggleJournal(on) { st.journal = on ?? !st.journal; $('journal').classList.toggle('on', st.journal); if (st.journal) renderJournal(); }
+
+// ================= 入力 =================
+function nearNpc() {
+  for (const n of NPCS) if (Math.abs(n.x - st.x) < 90) return n.id;
+  if (st.x > BRIDGE_SEE) return 'bridge';
+  return null;
+}
+function act() {
+  if (st.journal) return toggleJournal(false);
+  if (ins.classList.contains('on') || st.talking) return advance();
+  if (st.t < (st.cool || 0)) return; const id = nearNpc(); if (id) startTalk(id);
+}
+addEventListener('keydown', e => {
+  if (!$('game').classList.contains('on')) { if (e.key === 'Enter' || e.key === ' ') begin(); return; }
+  if (e.key === 'ArrowLeft' || e.key === 'a') st.keyL = true;
+  if (e.key === 'ArrowRight' || e.key === 'd') st.keyR = true;
+  if (e.key === ' ' || e.key === 'Enter' || e.key === 'z') { e.preventDefault(); act(); }
+  if (e.key === 'j' || e.key === 'J') toggleJournal();
+});
+addEventListener('keyup', e => { if (e.key === 'ArrowLeft' || e.key === 'a') st.keyL = false; if (e.key === 'ArrowRight' || e.key === 'd') st.keyR = false; });
+function holdBtn(el, k) {
+  const on = e => { e.preventDefault(); st[k] = true; el.classList.add('hold'); };
+  const off = () => { st[k] = false; el.classList.remove('hold'); };
+  el.addEventListener('pointerdown', on); ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => el.addEventListener(t, off));
+}
+holdBtn($('bl'), 'keyL'); holdBtn($('br'), 'keyR');
+$('bt').addEventListener('click', act); $('bj').addEventListener('click', () => toggleJournal());
+$('jclose').addEventListener('click', () => toggleJournal(false));
+talk.addEventListener('click', advance); ins.addEventListener('click', advance);
+
+// ================= 描画 =================
+const cv = $('cv'), g = cv.getContext('2d');
+function fitCanvas() { const r = cv.getBoundingClientRect(), d = Math.min(2, devicePixelRatio || 1); cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); }
+const ro = new ResizeObserver(fitCanvas); ro.observe(cv);
+function rnd(i) { const s = Math.sin(i * 127.1 + 311.7) * 43758.5453; return s - Math.floor(s); }
+
+function drawFar(cam) {
+  const im = IMG.far; if (!im) { g.fillStyle = '#5a3d6e'; g.fillRect(0, 0, W, H); return; }
+  const h = H * 0.92, w = im.width * h / im.height, off = -(cam * 0.06) % (w * 2);
+  for (let x = off - w * 2; x < W + w; x += w) {
+    const k = Math.round((x - off) / w); // 交互に左右反転して継ぎ目を消す
+    g.save(); if (k % 2) { g.translate(x + w, 0); g.scale(-1, 1); g.drawImage(im, 0, 0, w, h); } else g.drawImage(im, x, 0, w, h); g.restore();
+  }
+  g.fillStyle = '#151a1c'; g.fillRect(0, h - 2, W, H - h + 2);
+}
+function drawTrees(cam) {
+  const im = IMG.trees; if (!im) return;
+  const w = 1100, h = im.height * w / im.width, off = -(cam * 0.3) % w;
+  g.globalAlpha = .85;
+  for (let x = off - w; x < W + w; x += w) g.drawImage(im, x, GROUND - h + 18, w, h);
+  g.globalAlpha = 1;
+  // 中景の丘（夕闇）
+  g.fillStyle = '#1e2a2a';
+  g.beginPath(); g.moveTo(0, GROUND + 4);
+  for (let x = 0; x <= W; x += 16) { const wx = x + cam * 0.45; g.lineTo(x, GROUND - 14 - Math.sin(wx / 230) * 10 - Math.sin(wx / 71) * 4); }
+  g.lineTo(W, GROUND + 4); g.closePath(); g.fill();
+}
+function drawGround(cam) {
+  const end = CLIFF - cam;
+  const grd = g.createLinearGradient(0, GROUND, 0, H); grd.addColorStop(0, '#3e5a3c'); grd.addColorStop(.18, '#2c3f2e'); grd.addColorStop(1, '#171f1c');
+  g.fillStyle = grd; g.fillRect(0, GROUND, Math.min(W, end), H - GROUND);
+  // 道
+  g.fillStyle = '#6b5a45'; g.fillRect(0, GROUND + 20, Math.min(W, end), 26);
+  g.fillStyle = '#7d6a52';
+  for (let i = Math.floor(cam / 40); i < (cam + W) / 40; i++) { const x = i * 40 - cam; if (x < end) g.fillRect(x + rnd(i) * 30, GROUND + 26 + rnd(i + 9) * 14, 6, 3); }
+  // 草の縁（ドット）
+  g.fillStyle = '#5d8a55';
+  for (let i = Math.floor(cam / 8); i < (cam + W) / 8; i++) { const x = i * 8 - cam; if (x < end) g.fillRect(x, GROUND - 4 * rnd(i), 8, 6); }
+  if (end < W) drawGorge(end);
+}
+function drawGorge(x0) {
+  g.fillStyle = '#0d0c14'; g.fillRect(x0, GROUND, W - x0 + 1, H - GROUND);
+  g.fillStyle = '#2c3f2e'; g.fillRect(x0 - 6, GROUND, 6, H - GROUND);
+  const x1 = x0 + 440;
+  if (x1 < W) { g.fillStyle = '#2c3f2e'; g.fillRect(x1, GROUND, W - x1, H - GROUND); }
+  // 吊り橋：床板は無事、手前の手すりの縄が垂れ下がっている
+  const sag = x => 26 * Math.sin(Math.PI * (x - x0) / 440);
+  g.strokeStyle = '#3a2a1c'; g.lineWidth = 3;
+  for (let x = x0; x <= x1; x += 14) { g.fillStyle = (Math.floor(x / 14) % 2) ? '#8a6a48' : '#7a5c3e'; g.fillRect(x, GROUND + sag(x) - 2, 12, 7); }
+  g.beginPath(); for (let x = x0; x <= x1; x += 10) g.lineTo(x, GROUND - 46 + sag(x) * 1.1); g.stroke(); // 奥の手すり（無事）
+  g.strokeStyle = '#5a4430'; g.beginPath(); g.moveTo(x0, GROUND - 46); g.quadraticCurveTo(x0 + 60, GROUND + 70, x0 + 90, GROUND + 120); g.stroke(); // 切れた縄
+  g.fillStyle = '#4a3726'; g.fillRect(x0 - 4, GROUND - 56, 8, 58); if (x1 < W) g.fillRect(x1 - 4, GROUND - 56, 8, 58);
+}
+function drawHouse(hs, cam) {
+  const x = hs.x - cam, y = GROUND; if (x > W + 40 || x + hs.w < -40) return;
+  g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(x + 6, y - 2, hs.w, 6);
+  g.fillStyle = '#5a4535'; g.fillRect(x, y - hs.h, hs.w, hs.h);
+  g.fillStyle = '#6a5240'; for (let yy = y - hs.h + 8; yy < y; yy += 14) g.fillRect(x, yy, hs.w, 2);
+  g.fillStyle = hs.roof; g.beginPath(); g.moveTo(x - 18, y - hs.h); g.lineTo(x + hs.w / 2, y - hs.h - 70); g.lineTo(x + hs.w + 18, y - hs.h); g.closePath(); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.08)'; g.beginPath(); g.moveTo(x + hs.w / 2, y - hs.h - 70); g.lineTo(x + hs.w + 18, y - hs.h); g.lineTo(x + hs.w / 2, y - hs.h); g.closePath(); g.fill();
+  const glow = .75 + .15 * Math.sin(st.t * 2 + hs.x);
+  g.fillStyle = `rgba(255,196,120,${glow})`; g.fillRect(x + 24, y - hs.h + 34, 34, 28); g.fillRect(x + hs.w - 58, y - hs.h + 34, 34, 28);
+  g.fillStyle = '#3a2a20'; g.fillRect(x + hs.w / 2 - 18, y - 62, 36, 62);
+}
+function drawSign(x, label) {
+  g.fillStyle = '#4a3726'; g.fillRect(x - 3, GROUND - 70, 6, 70);
+  g.fillStyle = '#8a6a48'; g.fillRect(x - 62, GROUND - 78, 124, 30);
+  g.fillStyle = '#f6eee6'; g.font = '16px "DotGothic16",monospace'; g.textAlign = 'center'; g.fillText(label, x, GROUND - 57);
+}
+function drawActor(n, cam) {
+  const im = IMG[n.img + '_normal']; const x = n.x - cam; if (x < -120 || x > W + 120) return;
+  const h = 150, w = h * 0.75;
+  g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 38, 7, 0, 0, Math.PI * 2); g.fill();
+  if (im) { g.save(); g.translate(x, 0); g.scale(n.face, 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.x) * 1.2, w, h); g.restore(); }
+}
+function drawRabbit(cam) {
+  const im = IMG.rabbit; if (!im) return; const x = RABBIT.x - cam; if (x < -80 || x > W + 80) return;
+  const near = Math.abs(RABBIT.x - st.x) < 160; RABBIT.hop = near ? Math.abs(Math.sin(st.t * 9)) * 10 : 0;
+  if (near) RABBIT.x += (RABBIT.x > st.x ? 1 : -1) * 40 / 60;
+  const h = 54, w = im.width * h / im.height; g.drawImage(im, x - w / 2, GROUND - h + 6 - RABBIT.hop, w, h);
+}
+function drawNono(cam) {
+  const im = IMG.nono; const x = st.x - cam; const h = 150, w = h * 176 / 224;
+  g.fillStyle = 'rgba(0,0,0,.32)'; g.beginPath(); g.ellipse(x, GROUND + 4, 34, 7, 0, 0, Math.PI * 2); g.fill();
+  if (!im) return;
+  const row = st.dir > 0 ? 0 : 1, col = st.moving ? [0, 1, 2, 1][Math.floor(st.phase) % 4] : 1;
+  const bob = st.moving ? Math.abs(Math.sin(st.phase * Math.PI)) * 3 : 0;
+  g.save(); g.translate(x, GROUND + 6 - h - bob);
+  if (col === 0) { g.scale(-1, 1); } // 原画の横向き1コマ目は顔が逆向き（HD-2D Lite と同じ補正）
+  g.drawImage(im, col * 176, row * 224, 176, 224, -w / 2 * 0.92, 0, w * 0.92, h);
+  g.restore();
+}
+function drawFore(cam) {
+  const im = IMG.grass; if (!im) return;
+  for (let i = Math.floor(cam * 1.2 / 520) - 1; i < (cam * 1.2 + W) / 520 + 1; i++) {
+    const wx = i * 520 + rnd(i) * 260, x = wx - cam * 1.2; const h = 70 + rnd(i + 3) * 30, w = im.width * h / im.height;
+    if (wx / 1.2 > CLIFF - 60) continue; g.globalAlpha = .9; g.drawImage(im, x, H - h + 20, w, h); g.globalAlpha = 1;
+  }
+}
+function drawPrompt(cam) {
+  if (st.talking || st.journal) return; const id = nearNpc(); if (!id) return;
+  const n = NPCS.find(n => n.id === id); const x = (n ? n.x : st.x) - cam, y = GROUND - 180 + Math.sin(st.t * 4) * 3;
+  const label = n ? '話す' : '見る';
+  g.font = '16px "DotGothic16",monospace'; g.textAlign = 'center';
+  g.fillStyle = 'rgba(18,13,31,.85)'; g.fillRect(x - 34, y - 20, 68, 28); g.strokeStyle = '#f3a07a'; g.lineWidth = 2; g.strokeRect(x - 34, y - 20, 68, 28);
+  g.fillStyle = '#f6eee6'; g.fillText('▼' + label, x, y);
+}
+function drawHUD() {
+  const p = st.x / CLIFF;
+  g.fillStyle = 'rgba(18,13,31,.6)'; g.fillRect(16, 14, 260, 34);
+  g.fillStyle = '#f6eee6'; g.font = '15px "DotGothic16",monospace'; g.textAlign = 'left'; g.fillText('花野の国（仮）', 26, 37);
+  g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(140, 29, 124, 4); g.fillStyle = '#f3a07a'; g.fillRect(140 + p * 120, 26, 6, 10);
+}
+
+// ================= ループ =================
+let last = 0;
+function frame(ts) {
+  const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts; st.t += dt;
+  const busy = st.talking || st.journal || ins.classList.contains('on');
+  const v = busy ? 0 : (st.keyR ? 1 : 0) - (st.keyL ? 1 : 0);
+  st.moving = v !== 0; if (v) st.dir = v;
+  st.x = Math.max(60, Math.min(CLIFF - 30, st.x + v * SPEED * dt));
+  if (st.moving) st.phase += dt * 6.2;
+  const cam = Math.max(0, Math.min(WORLD - W, st.x - W * 0.42));
+  const sx = cv.width / W, sy = cv.height / H;
+  g.setTransform(sx, 0, 0, sy, 0, 0); g.imageSmoothingQuality = 'high';
+  drawFar(cam); drawTrees(cam); drawGround(cam);
+  drawSign(360 - cam, '花野の国（仮）'); drawSign(2400 - cam, '東 → 谷の吊り橋');
+  HOUSES.forEach(h => drawHouse(h, cam));
+  NPCS.forEach(n => drawActor(n, cam)); drawRabbit(cam); drawNono(cam); drawFore(cam);
+  // 夕暮れの色かぶせ
+  g.fillStyle = 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);
+  drawPrompt(cam); drawHUD();
+  requestAnimationFrame(frame);
+}
+
+// ================= 画面遷移 =================
+let started = false;
+function begin() {
+  if (started) return; started = true;
+  $('title').classList.remove('on'); $('game').classList.add('on'); fitCanvas();
+}
+$('start').addEventListener('click', begin);
+window.__st = st; // 試作の確認用
+load().then(() => requestAnimationFrame(frame));
+}
+</script>
+</body>
+</html>
