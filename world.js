@@ -90,8 +90,8 @@
 
   // ---------------------------------------------------------------- 2
   C.push({
-    id: 'take', name: 'ジャポネ', sub: '竹の里', screens: 5, far: 'bamboo',
-    hill: '#1f2a22', ground: ['#5f8a4a', '#3a5034', '#7a6a50'], tint: 'rgba(40,60,40,.08)', bscale: 1.05,
+    id: 'take', name: 'ジャポネ', sub: '竹の里', time: 'morning', screens: 5, far: 'rice_terraces_morning',
+    hill: '#1f2a22', ground: ['#5f8a4a', '#3a5034', '#7a6a50'], tint: 'rgba(40,60,40,.04)', bscale: 1.05,
     props: [['torii', 200, 250], ['stone_lantern', 1300, 170], ['pine', 2150, 300], ['stone_lantern', 3150, 170], ['jp_castle', 4300, 430]],
     buildings: [['buke_gate', 380], ['machiya', 900], ['teahouse', 1550], ['nagaya', 2250], ['samurai_mansion', 3250, 0.95]],
     npcs: [
@@ -239,8 +239,8 @@
 
   // ---------------------------------------------------------------- 6
   C.push({
-    id: 'suna', name: 'サハリア', sub: '砂の国', screens: 5, far: 'desert', fore: false,
-    hill: '#3a2a20', ground: ['#c8a46a', '#a07a4a', '#b89064'], tint: 'rgba(160,100,40,.08)', bscale: 1.0,
+    id: 'suna', name: 'サハリア', sub: '砂の国', time: 'night', screens: 5, far: 'oasis_night', fore: false,
+    hill: '#3a2a20', ground: ['#c8a46a', '#a07a4a', '#b89064'], tint: 'rgba(30,30,90,.06)', bscale: 1.0,
     props: [['cactus', 300, 140], ['palm', 900, 300], ['pyramid', 1780, 300], ['desert_temple', 4200, 320]],
     buildings: [['adobe', 500], ['mideast_white', 1300], ['adobe', 2700, 0.9], ['mideast_white', 3600, 0.95]],
     npcs: [
@@ -443,8 +443,8 @@
 
   // ---------------------------------------------------------------- 11
   C.push({
-    id: 'mizu', name: 'シャムラ', sub: '水上の町', screens: 7, far: 'marsh',
-    hill: '#1e2a26', ground: ['#5a7a4a', '#4a3e30', '#7a6a54'], tint: 'rgba(40,90,80,.08)', bscale: 1.05,
+    id: 'mizu', name: 'シャムラ', sub: '水上の町', time: 'noon', screens: 7, far: 'mangrove_noon',
+    hill: '#1e2a26', ground: ['#5a7a4a', '#4a3e30', '#7a6a54'], tint: 'rgba(40,90,80,.03)', bscale: 1.05,
     props: [['reeds', 3300, 120], ['palm', 4100, 320], ['jungle_temple_tree', 6000, 400]],
     buildings: [['sea_barrack', 400], ['sea_twostory', 950], ['sea_stall', 1550], ['sea_shop', 2150], ['sea_tall', 2750], ['sea_stilt', 3500], ['stilt_house', 4400], ['sea_barrack', 5300, 0.9]],
     npcs: [

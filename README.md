@@ -34,3 +34,7 @@ nono が広い世界をただ歩いて旅する、戦わないRPG（企画No.10�
 - 遠景・nono 歩行・森のシルエット・前景の草・ウサギ：ukos/nono-hd2d `lite/assets/`
 - 住人の顔：ukos/nono-playground `stage-actor/actors/`
 - 建物・橋・タイトルロゴ・アイコン：本作用に生成
+
+## 遠景（assets/far/）
+国の `far` に名前を書くと使える。名前の末尾は時間帯（morning / noon / night。無印は夕暮れ）。
+未使用のものは、次に増やす国に割り当てる。
