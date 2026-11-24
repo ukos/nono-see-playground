@@ -51,8 +51,12 @@ for (const c of world.C) {
 // ---- 役者の使い回し（同じ顔の別人が近い国に出ると、同一人物に見える）
 {
   const seen = {};
+  // ストック（使わない）役者：十二支を含むライバル15人、妖怪、骸骨
+  const STOCK = new Set(['nibulus', 'iwao', 'kotetsu', 'shiro', 'homura', 'mizuchi', 'hayate', 'mei', 'sasuke', 'kogane', 'kurogane', 'gou', 'tanurio', 'akane', 'yoru',
+    'kappa', 'mummy', 'oni', 'tengu', 'skeleton', 'hitotsume', 'hitotsume2', 'rokuro']);
   world.C.forEach((c, i) => c.npcs.forEach(n => {
     const key = n.actor || (typeof n.sprite === 'string' ? n.sprite : null); if (!key) return;
+    if (STOCK.has(key.replace(/_(sheet|neck)$/, ''))) R(c.id, 'E', `役者 ${key} はストック扱い（使わない）`);
     const nm = typeof n.name === 'function' ? n.name({}) : n.name;
     for (const [j, name, cid] of seen[key] || []) {
       if (name === nm || j === i) continue; // 同じ人物の再登場、同じ国の中は対象外
