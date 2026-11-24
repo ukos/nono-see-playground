@@ -48,6 +48,22 @@ for (const c of world.C) {
   }
 }
 
+// ---- 役者の使い回し（同じ顔の別人が近い国に出ると、同一人物に見える）
+{
+  const seen = {};
+  world.C.forEach((c, i) => c.npcs.forEach(n => {
+    const key = n.actor || (typeof n.sprite === 'string' ? n.sprite : null); if (!key) return;
+    const nm = typeof n.name === 'function' ? n.name({}) : n.name;
+    for (const [j, name, cid] of seen[key] || []) {
+      if (name === nm || j === i) continue; // 同じ人物の再登場、同じ国の中は対象外
+      const d = i - j;
+      if (d < 6) R(c.id, 'E', `役者 ${key} が ${d} か国前の「${name}」（${cid}）と別人として出る。6か国以上あける`);
+      else R(c.id, 'W', `役者 ${key} を ${d} か国前の「${name}」（${cid}）と使い回している`);
+    }
+    (seen[key] = seen[key] || []).push([i, nm, c.id]);
+  }));
+}
+
 // ---- シミュレーション結果のチェック
 for (const c of world.C) {
   const L = log.filter(e => e.c === c.id);

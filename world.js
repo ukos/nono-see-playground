@@ -556,5 +556,168 @@
     }
   });
 
+  // ---------------------------------------------------------------- 13 祈りがぶつかる（雨を待つ人と、降るなと願う人）
+  C.push({
+    id: 'shio', name: 'ボリビアナ', sub: '塩の湖', time: 'noon', screens: 6, far: 'salt_lake_noon', fore: false,
+    hill: '#b8b0a8', ground: ['#e8e4dc', '#d4cec4', '#c8beb0'], tint: 'rgba(200,220,255,.04)', bscale: 1.0,
+    props: [['cactus', 600, 150], ['rock', 2200, 80], ['rock2', 4600, 100]],
+    buildings: [['adobe', 300, 0.8], ['adobe', 5000, 0.7]],
+    npcs: [
+      { id: 'kappa', name: '写真屋のカパ', actor: 'kappa', x: 1300, face: -1 },
+      { id: 'tapa', name: '塩掘りのタパ', actor: 'mummy', x: 3500, face: -1 }
+    ],
+    places: [
+      { id: 'salt', name: '足もとの塩', x: 2500, verb: '見る' },
+      { id: 'hex', name: '塩の六角形', x: 4300, verb: '見る' }
+    ],
+    weather: { clear: 6, drizzle: 3, wind: 1 },
+    talk: {
+      kappa(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '見てくれ、ゆうべ、降ったんだ！ 足もとまで、空が来てる！'], ['npc', 'normal', '旅の人、そこに立ってくれ。……空の上を歩いてるみたいだ。'], ['npc', 'normal', 'タパも来てる。掘れない日は、空を見に来るんだとさ。'], ['insight', '', '同じ場所でも、雨のあとに来れば、空が二つになる。']];
+        if (f.kappaTold) return [['npc', 'normal', '空、見てくれ。雲ひとつない。……今日もだめだ。']];
+        f.kappaTold = true;
+        return [['me', '', '（かっぱが、頭の皿を空に向けて、じっと立っている）'], ['npc', 'normal', '……雨を待ってる。もう二十日、晴れっぱなし。宿代が、そろそろ底をつく。'], ['npc', 'normal', '雨のあと、この湖は空を映す鏡になる。足もとまで水が来ないと、写真にならない。'], ['npc', 'normal', 'それに、写す人がいない。こんなところ、だれも歩いてこないからね。'], ['npc', 'normal', 'かっぱが雨を待つのは、おかしいかい？ ……おかしくないだろう。']];
+      },
+      tapa(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '降っちまった。三日は掘れない。'], ['npc', 'normal', '……まあいい。掘れない日は、空の上を歩く日だ。かっぱに写されてやるさ。']];
+        if (f.tapaTold) return [['npc', 'normal', '雨よ、降るな。……かっぱのやつは、反対のことを祈ってるがね。']];
+        f.tapaTold = true;
+        return [['npc', 'normal', 'この顔かい？ 塩の照り返しで、目も肌もやられる。だから巻いてる。'], ['npc', 'normal', '雨が降ったら、塩が水に沈んで、三日は掘れない。そのぶん稼ぎがなくなる。'], ['npc', 'normal', 'あの写真屋は、毎朝「降れ」って空に頼んでる。おれは「降るな」って頼んでる。'], ['npc', 'normal', 'どっちの頼みを聞くかは、空の勝手だ。']];
+      },
+      salt(S) {
+        if (S.back) return [['me', '', '（足もとの水に、空と雲が映っている。自分が、空に立っている）']];
+        return [['me', '', '（白い地面が、どこまでも続く。歩くと、塩がさくさく鳴る）']];
+      },
+      hex(S) {
+        if (S.back) return [['me', '', '（六角形の模様が、うすい水の下に沈んで見える）']];
+        return [['me', '', '（地面に、六角形の模様が並んでいる。タパさんたちが掘ったあとが、少しずつ埋まっていく）']];
+      }
+    }
+  });
+
+  // ---------------------------------------------------------------- 14 言葉のない返事（黙った案内人の合図を読む）
+  C.push({
+    id: 'mine', name: 'ネパラ', sub: '雪の峰', time: 'noon', screens: 6, far: 'snow_peaks_noon',
+    hill: '#3a4656', ground: ['#8a9a7a', '#5a5a4a', '#8a8070'], tint: 'rgba(160,190,230,.05)', bscale: 1.0,
+    props: [['pine_snow', 500, 280], ['rune_stone', 2900, 120], ['rock_moss', 4000, 110], ['pine_snow', 5200, 300]],
+    buildings: [['pk_mountain', 700, 0.95], ['pk_mountain', 3300, 0.8]],
+    npcs: [
+      { id: 'lhakpa', name: '茶屋のラクパ', actor: 'mei', x: 1200, face: -1 },
+      { id: 'guide', name: '黙った案内人', actor: 'iwao', x: 2500, face: -1 },
+      { id: 'dorje', name: 'ラクパの兄', actor: 'sasuke', x: 4300, face: -1 }
+    ],
+    weather: { clear: 4, wind: 2, fog: 2, snow: 2 },
+    talk: {
+      lhakpa(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'joy', 'ゆうべ、峠は吹雪だったの。兄さん、ここで甘いお茶を三杯も飲んでた。'], ['npc', 'joy', 'あなたが、石のことを教えてくれたんでしょう。']];
+        if (f.dorjeWaits) return [['npc', 'joy', '兄さん、待つって？ ……よかった。お茶、もう一杯どうぞ。']];
+        if (f.lhakpaTold) return [['npc', 'sorrow', '案内人さんは、何も言わないの。でも、何も見ていないわけじゃない。']];
+        f.lhakpaTold = true;
+        return [['npc', 'normal', '峠の風は冷たかったでしょう。甘いお茶をどうぞ。'], ['npc', 'sorrow', '兄さんが、今日のうちに峠を越えるって。荷を待ってる人がいるの。'], ['npc', 'sorrow', 'あの案内人さんに聞いてって言ったのに、あの人、口をきかないから。']];
+      },
+      guide(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（案内人は、峠のほうを見て、石を一つだけ積んだ）'], ['me', '', '（今日は行ける、ということらしい）']];
+        if (f.stonesSeen) return [['me', '', '（案内人は、三つの石に、そっと手を置いたまま動かない）']];
+        f.stonesSeen = true;
+        return [['me', '', '（案内人は何も言わず、峠の上を指さした。白い峰に、雲がかかりはじめている）'], ['me', '', '（それから、足もとに石を一つ、二つ、三つと積んだ）'], ['me', '', '（……どういう意味だろう）']];
+      },
+      dorje(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'fun', '峠の向こうの人に、一日遅れたって謝ったら、笑われたよ。'], ['npc', 'fun', '「吹雪の日に着いたら、謝るのはこっちのほうだった」ってさ。']];
+        if (f.dorjeWaits) return [['npc', 'normal', '雲が晴れたら行く。荷は逃げない。']];
+        if (f.stonesSeen) { f.dorjeWaits = true;
+          return [['npc', 'normal', '案内人は、黙ってたろう？ 黙ってるのは、行けってことさ。'], ['me', '', '峠の雲を指さして、石を三つ積んでいました。'], ['npc', 'normal', '……三つ？'], ['npc', 'normal', 'この村じゃ、石三つは「待て」だ。子どものころ、親父に教わった。'], ['npc', 'normal', '……忘れてたよ。急いでると、知ってることまで見えなくなる。今日は、待つ。'], ['insight', '', '言葉がなくても、指さす先を見れば、わかることがある。']]; }
+        return [['npc', 'normal', '今日のうちに峠を越える。向こうで、荷を待ってる人がいるんだ。'], ['npc', 'normal', '案内人？ 黙ってたなら、行けってことさ。']];
+      }
+    }
+  });
+
+  // ---------------------------------------------------------------- 15 人ちがい（名人だと思われた旅人）
+  C.push({
+    id: 'budou', name: 'イタリカ', sub: 'ぶどうの丘', time: 'morning', screens: 6, far: 'vineyard_morning',
+    hill: '#3a4a30', ground: ['#7a9a4a', '#5a5a3a', '#9a8460'], tint: 'rgba(255,220,180,.04)', bscale: 1.0,
+    props: [['tree_olive', 400, 280], ['bush_berry', 1700, 90], ['tree_olive', 3600, 300], ['stump', 4800, 70]],
+    buildings: [['it_tuscan', 600], ['it_townhouse', 1300, 0.9], ['it_tuscan', 4100, 0.85]],
+    npcs: [
+      { id: 'host', name: '祭りの世話役', actor: 'tanurio', x: 1000, face: -1 },
+      { id: 'lucia', name: 'ルチア', actor: 'akane', x: 2300, face: -1 },
+      { id: 'master', name: '道ばたの老人', actor: 'elder', x: 5100, face: -1 }
+    ],
+    places: [{ id: 'vat', name: 'ぶどうの桶', x: 2900, verb: '踏む' }],
+    weather: { clear: 6, drizzle: 2, wind: 1 },
+    talk: {
+      host(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'joy', '聞いたよ、人ちがいだったって！ はっはっは！'], ['npc', 'joy', 'でもな、去年の名人より、あんたのほうが楽しそうに踏んでたぞ。来年も来い。']];
+        if (f.hostMet) return [['npc', 'joy', '桶はルチアの家の前だ。名人の足、楽しみにしてるよ！']];
+        f.hostMet = true;
+        return [['npc', 'joy', '来たか、名人！ 赤いマントの旅人が来ると、手紙にあった！'], ['me', '', 'え、ちがいます。ぼくは、ただの……'], ['npc', 'joy', '謙遜するな！ 今年のぶどう踏み祭り、あんたが一番手だ。'], ['npc', 'joy', '桶はルチアの家の前。さあ、さあ！']];
+      },
+      lucia(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '本物の名人に教わったわ。……でも、あなたの踏み方のほうが、みんな笑ってた。']];
+        if (f.stomped) return [['npc', 'normal', '名人の踏み方って、ずいぶん……自由なのね。来年、まねしてみる。']];
+        if (f.luciaMet) return [['npc', 'normal', 'さあ、桶へ。名人の足、見せて。']];
+        f.luciaMet = true;
+        return [['npc', 'normal', 'あなたが名人？ 想像より、ずっと若いのね。'], ['npc', 'normal', '踏み方を教えて。ぶどうの皮だけつぶして、種はつぶさないのがこつなんでしょう？'], ['me', '', '（……知らない）']];
+      },
+      vat(S) {
+        const f = S.f;
+        if (!f.hostMet) return [['me', '', '（大きな木の桶に、ぶどうが山盛りになっている）']];
+        if (f.stomped) return [['me', '', '（足の裏が、まだ少し紫色だ）']];
+        f.stomped = true;
+        return [['me', '', '（はだしで桶に入って、とにかく足ぶみしてみた）'], ['me', '', '（ぶどうが足の指のあいだで、ぷちぷちつぶれる。……くすぐったい）'], ['me', '', '（笑ったら、まわりの人たちも笑いだした。みんな桶に入ってきた）'], ['insight', '', '人ちがいでも、いっしょに踏んだぶどうは、本物の味がした。']];
+      },
+      master(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'しまった、寝過ごした！ わしがぶどう踏みの名人じゃ。'], ['npc', 'joy', '赤いマント？ わしは手紙に「赤い頭巾」と書いたんじゃが……'], ['npc', 'joy', 'まあよい。祭りは、だれが踏んでも祭りじゃ。']];
+        return [['me', '', '（赤い頭巾の老人が、道ばたで気持ちよさそうに眠っている）']];
+      }
+    }
+  });
+
+  // ---------------------------------------------------------------- 16 立ち位置（返ってこないあいさつの正体）
+  C.push({
+    id: 'asahi', name: 'ケニアラ', sub: '朝日の草原', time: 'morning', screens: 6, far: 'savanna_morning',
+    hill: '#4a3a24', ground: ['#a09a5a', '#6a5a3a', '#a88a60'], tint: 'rgba(255,200,140,.05)', bscale: 1.0,
+    props: [['bush', 700, 80], ['tree_dead', 2100, 240], ['rock', 3300, 90], ['bush', 4700, 80]],
+    buildings: [['thatched_farm', 300, 0.8], ['adobe', 4900, 0.8]],
+    npcs: [
+      { id: 'west', name: '西の村のムワンギ', actor: 'craftsman', x: 1000, face: 1 },
+      { id: 'east', name: '東の村のオティエノ', actor: 'kogane', x: 4400, face: -1 }
+    ],
+    places: [{ id: 'sun', name: '東の空', x: 2700, verb: '見る' }],
+    weather: { clear: 7, wind: 2, drizzle: 1 },
+    talk: {
+      west(S) {
+        const f = S.f;
+        if (S.back) return f.eastKnows
+          ? [['npc', 'normal', '夕方、オティエノのやつが手を振ってた！ ちゃんと見えたぞ！'], ['npc', 'normal', '十年、すれちがってたんだな。朝日のせいで。']]
+          : [['npc', 'normal', '今朝も、返事はなかった。']];
+        if (f.westTold) return [['npc', 'normal', '毎朝、日の出に向かって手を振る。返事はない。']];
+        f.westTold = true;
+        return [['npc', 'normal', '旅の人、東の村へ行くのかい。オティエノに会ったら、言ってやってくれ。'], ['npc', 'normal', 'おれは十年、毎朝、日の出のころに手を振ってる。あいつは一度も返さない。'], ['npc', 'normal', '昔は仲がよかったんだがな。']];
+      },
+      sun(S) {
+        const f = S.f;
+        if (f.sunSeen) return [['me', '', '（東は、朝日でまぶしい。西を振り返ると、草原がよく見える）']];
+        f.sunSeen = true;
+        return [['me', '', '（東を見ると、朝日がまぶしくて、何も見えない）'], ['me', '', '（ふり返って西を見ると、ムワンギさんの小さな姿が、日に照らされてよく見える）'], ['me', '', '（……東から西は見える。でも、西から東は、見えないんだ）']];
+      },
+      east(S) {
+        const f = S.f;
+        if (S.back) return f.eastKnows ? [['npc', 'normal', '夕方に振った。こんどはこっちがまぶしかったが、跳びはねてる影は見えた。'], ['npc', 'normal', '……十年分、跳んでたな。']] : [['npc', 'normal', 'ムワンギは、今朝も手を振ってた。']];
+        if (f.eastKnows) return [['npc', 'normal', '今日の夕方、振ってみる。日が西に沈むころなら、こっちが照らされる。']];
+        if (f.sunSeen) { f.eastKnows = true;
+          return [['me', '', 'ムワンギさんが、毎朝あいさつしても返事がないって。'], ['npc', 'normal', 'ムワンギが、怒ってる？ おれは毎朝、手を振り返してるぞ。'], ['me', '', '西からだと、朝日がまぶしくて、こっちが見えないんです。'], ['npc', 'normal', '……朝日の中にいたのは、おれのほうだったのか。'], ['npc', 'normal', 'あいつがなんで怒ってるのか、ずっとわからなかった。'], ['insight', '', 'あいさつが返ってこないのは、まぶしくて見えないだけのこともある。']]; }
+        return [['npc', 'normal', 'ムワンギに会ったか？ あいつ、毎朝手を振ってくる。'], ['npc', 'normal', 'おれも振り返してるのに、最近は怒ってるみたいでな。わけがわからん。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
