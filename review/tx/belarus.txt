@@ -1,7 +1,7 @@
 == 国: ベラルシア（コウノトリの沼）
 〔38番目の国／広さ 5 画面／夕暮れ／遠景 marsh〕
 〔天候：晴れ 50%、小雨 30%、霧 20%〕
-〔建物：thatched_farm、house_small／小物：reeds、reeds2、reeds、haystack〕
+〔建物：thatched_farm、house_small／小物：reeds、reeds2、stork_tangled、reeds、haystack、stork_nest1、stork_nest2〕
 〔住人（西から）：ハンナばあちゃん @400、ハンナばあちゃん @600、ミーシャ @1050、ハンナばあちゃん @2700〕
 
 〔行き〕

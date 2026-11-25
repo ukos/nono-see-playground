@@ -2134,5 +2134,114 @@
     }
   });
 
+// ---------------------------------------------------------------- 39 年越しの最初の客（新年の真夜中、最初に戸をくぐる「縁起の客」を頼まれる）
+  C.push({
+    id: 'scotia', shape: '旅人が縁起の役を頼まれる', name: 'スコッティア', sub: '年越しの村', time: 'night', screens: 5, far: 'misty_pines_dawn', timeBack: 'morning', map: [57.2, -4.4],
+    hill: '#1a2420', ground: ['#4a5a44', '#2e3a2e', '#5a6a54'], tint: 'rgba(80,100,140,.08)', bscale: 1.0,
+    props: [['pine_snow', 350, 300], ['stone_lantern', 1300, 160], ['tree_snow', 2500, 280], ['rock_moss', 3400, 80], ['pine_snow', 4500, 320]],
+    buildings: [['uk_terrace', 700, 0.9], ['bakery', 1800, 0.9], ['uk_tudor', 3000, 0.9], ['house_small', 4000, 1.3]],
+    npcs: [
+      { id: 'robbie', name: 'ロビー', actor: 'greenboy', x: 1000, face: 1 },
+      { id: 'moira', name: 'パン屋のモイラ', actor: 'farmgirl', x: 2050, face: -1 },
+      { id: 'angus', name: 'アンガスじいさん', actor: 'oldsmith', x: 3750, face: -1, when: (f, back) => !back || !f.footed },
+      { id: 'angus2', name: 'アンガスじいさん', actor: 'oldsmith', x: 1500, face: 1, when: (f, back) => back && f.footed }
+    ],
+    places: [
+      { id: 'coal', name: '石炭の山', x: 2700, verb: '拾う' },
+      { id: 'door', name: 'アンガスじいさんの戸', x: 3950, verb: 'たたく', when: f => f.bread && f.coal }
+    ],
+    weather: { snow: 5, clear: 3, fog: 2 },
+    animals: [['dog_bulldog', 1300], ['sheep', 4500]],
+    talk: {
+      robbie(S) {
+        const f = S.f;
+        if (S.back && f.footed) return [['npc', 'normal', 'アンガスじいさん、けさから村じゅうの戸をたたいて回ってるよ。石炭を配って。'], ['npc', 'normal', '……背が高くて、黒い髪じゃないのに。いいのかな。']];
+        if (S.back) return [['npc', 'normal', 'アンガスじいさんの戸、ことしも開かなかった。']];
+        if (f.footed) return [['npc', 'normal', '戸、開いた？ ……開いたんだ！']];
+        if (f.robbieTold) return [['npc', 'normal', 'パンと、塩と、石炭。三つそろえて、真夜中すぎに戸をたたくんだよ。']];
+        f.robbieTold = true;
+        return [['me', '', '（真夜中の鐘が鳴り終わるころ、雪の中で男の子が、こちらをじっと見ている）'], ['npc', 'normal', '旅の人！ ……村の人じゃないよね？ よかった！'], ['npc', 'normal', '新年の最初の客は、知らない人がいいの。その人が、その家の一年の運を連れてくるんだ。'], ['npc', 'normal', '東のアンガスじいさんの家、もう五年、だれも最初の客が来てない。じいさん、戸を開けないから。']];
+      },
+      moira(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'あの人、パンのお代を払いに来たのよ。五年分だって、多すぎるくらい置いていった。']];
+        if (f.bread) return [['npc', 'normal', '塩は、パンの中に入れておいたわ。……アンガスさんに、よろしくね。']];
+        if (!f.robbieTold) return [['npc', 'normal', '新年おめでとう、旅の人。……真夜中に店を開けてるのは、うちくらいよ。']];
+        f.bread = true;
+        return [['npc', 'normal', 'アンガスさんの最初の客に？ ……まあ。じゃあ、これを。'], ['me', '', '（丸いパンを一つ、手渡された。まだあたたかい）'], ['npc', 'normal', '塩も、中に入れておいたわ。……あの人はね、四十年、この村の最初の客だったの。'], ['npc', 'normal', '背が高くて、髪が黒くて。毎年、村じゅうの戸を回ってた。……でも、あの人の家には、だれも来なかった。']];
+      },
+      coal(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（石炭の山が、少し低くなっている。雪の上に、黒い粉がこぼれている）']];
+        if (f.coal) return [['me', '', '（ポケットの石炭が、まだほんのりあたたかい）']];
+        f.coal = true;
+        return [['me', '', '（鍛冶場の裏の石炭の山から、小さなかたまりを一つ拾う）'], ['me', '', '（手が真っ黒になった。……縁起の客というのは、手が汚れるものらしい）']];
+      },
+      door(S) {
+        const f = S.f;
+        if (f.footed) return [['me', '', '（戸のすきまから、暖炉の火の色がもれている）']];
+        f.footed = true;
+        return [['me', '', '（とん、とん、とん）'], ['me', '', '（……しばらくして、重い戸が、細く開いた）'], ['npc', 'normal', '……だれだ。この家には、最初の客など、もう来ん。'], ['me', '', '（パンと、石炭を差しだした）'], ['me', '', '（白い眉が、ゆっくり上がった。……戸が、大きく開いた）']];
+      },
+      angus(S) {
+        const f = S.f;
+        if (f.footed) return [['npc', 'normal', '……四十年、わしは人の家の最初の客だった。'], ['npc', 'normal', 'わしの家の戸をたたく者は、おらなんだ。最初の客が来ない家だと、思われていたらしい。'], ['npc', 'normal', '五年前、妻が死んで、戸を開けるのをやめた。……開けても、だれも来んと思っておった。'], ['npc', 'normal', '入れ。火にあたっていけ。……ことしの運は、あんたが連れてきた。']];
+        return [['me', '', '（窓のむこうで、白い髪の大きな老人が、暖炉の火を見つめている）']];
+      },
+      angus2(S) {
+        return [['npc', 'normal', 'けさは、わしが回っておる。村じゅうの戸を。……五年ぶりだ。'], ['npc', 'normal', '髪は、もう白いがな。それでも、戸を開けてくれる家がある。'], ['insight', '', '四十年、人の家に運を運んだ人の戸を、最後にたたいたのは、通りすがりの旅人だった。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 40 夜明けの石の顔（目の弱った番人と、一年に一度だけ光が届く瞬間を待つ）
+  C.push({
+    id: 'egypta', shape: 'いっしょに夜明けを待つ', name: 'エジプタ', sub: '砂の神殿', time: 'night', screens: 5, far: 'desert', timeBack: 'morning', map: [25.7, 32.6],
+    hill: '#3a2a1e', ground: ['#c0a070', '#8a6a48', '#d0b080'], tint: 'rgba(80,70,140,.08)', bscale: 1.0,
+    props: [['palm', 300, 300], ['obelisk', 1400, 260], ['stone_tablet', 2300, 110], ['desert_temple', 3300, 300], ['palm', 4500, 300]],
+    buildings: [['adobe', 700, 0.9]],
+    npcs: [
+      { id: 'sara', name: 'サラ', actor: 'tribekid', x: 950, face: 1 },
+      { id: 'hassan', name: '番人のハッサン', actor: 'na_elder', x: 3000, face: -1 }
+    ],
+    places: [
+      { id: 'face', name: '神殿の奥の石の顔', x: 3500, verb: '見る' },
+      { id: 'wait', name: 'ハッサンのとなり', x: 2850, verb: '座る', when: f => f.hassanAsk }
+    ],
+    weather: { clear: 8, wind: 2 },
+    animals: [['camel', 600, { mode: 'stay' }], ['dog_brown', 1700], ['owl', 2200, { mode: 'stay', back: 'not' }]],
+    talk: {
+      sara(S) {
+        const f = S.f;
+        if (S.back && f.dawn) return [['npc', 'normal', 'おじいちゃん、けさは「来年も見る」って言ったの。……「見る」って。'], ['npc', 'normal', 'わたし、来年はとなりに座る。目じゃなくて、ほっぺたで覚えるんだ。']];
+        if (S.back) return [['npc', 'normal', 'おじいちゃん、ひとりで朝を待ったんだって。……光が来たか、わからなかったって。']];
+        if (f.saraTold) return [['npc', 'normal', 'おじいちゃんは、神殿のまんなかにいるよ。']];
+        f.saraTold = true;
+        return [['me', '', '（夜の砂の上で、女の子が毛布を二枚かかえて、こちらを見ている）'], ['npc', 'normal', '旅の人、今夜は、神殿でいちばん大事な夜なの。一年に一度、朝日が奥の石の顔にとどくの。'], ['npc', 'normal', 'おじいちゃんは五十年、毎年それを見てきた。……でも、ことしは目がよく見えないの。'], ['npc', 'normal', 'わたしは、子どもは夜ふかしだめって、帰されちゃった。……これ、おじいちゃんに。']];
+      },
+      face(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（朝の光が、石の顔から、ゆっくり離れていく。……また一年後）']];
+        if (f.dawn) return [['me', '', '（石の顔は、また影の中。……ほんの数分だけの光だった）']];
+        return [['me', '', '（神殿のいちばん奥。暗がりに、大きな石の顔が三つ並んでいる）'], ['me', '', '（入口から、まっすぐ一本、光の通り道があいている）']];
+      },
+      hassan(S) {
+        const f = S.f;
+        if (S.back && f.dawn) return [['npc', 'normal', '来年も、見るよ。この頬でな。……サラが、となりに座ると言うとる。']];
+        if (S.back) return [['npc', 'normal', '……来たのかどうか、わからなんだ。五十年で、はじめてだ。']];
+        if (f.dawn) return [['npc', 'normal', '……あたたかかったろう。'], ['npc', 'normal', '五十年、わしはここに座っておった。光は、石の顔にとどく少し前に、わしの右の頬にとどく。'], ['npc', 'normal', 'ことしは目が見えんでも、頬は覚えておった。……あんたに見てもらう必要は、なかったのかもしれん。'], ['npc', 'normal', 'だが、となりに人がおると、夜は短いな。']];
+        f.hassanAsk = true;
+        return [['npc', 'normal', f.saraTold ? '旅の人か。……サラの毛布だな。ありがとう。' : '旅の人か。こんな夜ふけに、神殿へ。'], ['npc', 'normal', '夜明けまで、ここに座っておる。朝日が、奥の石の顔にとどく、そのときまで。'], ['npc', 'normal', '……目がな、もう光と影しかわからん。とどいた瞬間を、わしのかわりに見てくれんか。']];
+      },
+      wait(S) {
+        const f = S.f;
+        if (f.dawn) return [['me', '', '（ハッサンのとなりの砂は、まだ少しあたたかい）']];
+        f.dawn = true;
+        return [['me', '', '（ハッサンのとなりに座って、毛布をかぶる。砂漠の夜は、思ったより寒い）'], ['me', '', '（ハッサンは、五十年分の夜明けの話をしてくれた。砂嵐の年、月食の年、サラが生まれた年）'], ['me', '', '（東の空が白くなる。光が、神殿の入口から、まっすぐに入ってくる）'], ['me', '', '（……あ、と言うより先に、ハッサンが、右の頬に手を当てた）'], ['me', '', '（光が、奥の石の顔にとどいた。三つの顔が、金色になった）'], ['insight', '', 'わたしが見るより先に、夜明けは、五十年座りつづけた人の頬にとどいていた。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
