@@ -1578,5 +1578,124 @@
     }
   });
 
+// ---------------------------------------------------------------- 29 けちな柵（いちご畑を囲う意地悪じいさん。柵の中は、地面の鳥の巣だらけだった）
+  C.push({
+    id: 'polonia', shape: '意地悪に見えた人の本当の理由', name: 'ポロニア', sub: '白樺の野', time: 'noon', screens: 5, far: 'birch_noon', map: [52.2, 21],
+    hill: '#3a4a2a', ground: ['#6a8a44', '#44582e', '#8a8458'], tint: 'rgba(255,250,220,.03)', bscale: 1.0,
+    props: [['bush_berry', 500, 90], ['bush', 1700, 90], ['haystack', 2200, 130], ['bush_berry', 3300, 100], ['well', 4300, 150]],
+    buildings: [['house_small', 700, 1.3], ['nordic_red', 3800, 0.9]],
+    npcs: [
+      { id: 'kuba', name: 'クバ', actor: 'greenboy', x: 900, face: 1 },
+      { id: 'zosia', name: 'ゾーシャ（クバの姉）', actor: 'scout', x: 1500, face: -1 },
+      { id: 'jan', name: 'ヤンじいさん', actor: 'mechanic', x: 3600, face: -1 }
+    ],
+    places: [
+      { id: 'fence', name: '「入るな」の柵', x: 2650, verb: 'のぞく' },
+      { id: 'basket', name: 'じいさんの家の前のかご', x: 4050, verb: '見る' }
+    ],
+    weather: { clear: 6, wind: 2, drizzle: 2 },
+    animals: [['crow', 1900], ['dog_akita', 3300], ['hen', 4500]],
+    talk: {
+      kuba(S) {
+        const f = S.f;
+        if (S.back && f.nestKnown) return [['npc', 'normal', 'きょうから、ぼくも柵の番！ ヤンじいさんの助手なんだ。'], ['npc', 'normal', 'ひなが三羽、かえったよ。……大きい声を出すと、じいさんに怒られるけど。']];
+        if (S.back) return [['npc', 'normal', 'ヤンじいさんのけち。……ばあちゃんのケーキ、いちごなしで焼いたよ。']];
+        if (f.nestKnown) return [['npc', 'normal', '鳥の巣？ ……ほんと？ じいさん、そんなこと一言も言わなかった。']];
+        if (f.kubaTold) return [['npc', 'normal', 'いちごは、柵の向こうにいっぱいあるのに！']];
+        f.kubaTold = true;
+        return [['me', '', '（からのかごを振り回しながら、男の子が地面をけっている）'], ['npc', 'normal', 'ヤンじいさんのけち！ いちご畑に柵をして、だれも入れないんだ。'], ['npc', 'normal', 'きょうは、ばあちゃんの誕生日なのに。いちごのケーキ、約束したのに。']];
+      },
+      zosia(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'クバったら、毎朝じいさんのところへ行ってるの。……「けち」って言ってたくせに。']];
+        if (f.zosiaTold) return [['npc', 'normal', '去年までは、あの野原、だれでも入れたのよ。']];
+        f.zosiaTold = true;
+        return [['npc', 'normal', '弟が、ヤンじいさんの柵をこっそり越えようとしたの。そしたら、ものすごい声でどなられて。'], ['npc', 'normal', '去年までは、あの野原、だれでも入れたのよ。この春から急に、柵。'], ['npc', 'normal', '……理由を聞いても、「入るな」としか言わないの。']];
+      },
+      fence(S) {
+        const f = S.f;
+        if (S.back && f.nestKnown) return [['me', '', '（柵の札が、書きかえられている。子どもの字で「しずかに　とりのす」）'], ['me', '', '（草の中から、小さなひなの声がする）']];
+        if (S.back) return [['me', '', '（「入るな」の札。柵の向こうで、ひばりが一羽、高く上がっていく）']];
+        f.nestSeen = true;
+        return [['me', '', '（柵の向こうに、赤いいちごが点々と見える。……その先の草の中で、何かが動いた）'], ['me', '', '（茶色い鳥が、地面から飛び立った。地面に、小さな卵が四つ、草で囲んである）'], ['me', '', '（よく見ると、少し離れたところにも、また一つ。……草の中は、巣だらけだ）']];
+      },
+      jan(S) {
+        const f = S.f;
+        if (S.back && f.nestKnown) return [['npc', 'normal', 'あの坊主、毎朝来る。うるさくてかなわん。'], ['npc', 'normal', '……だが、卵を数えるのは、わしより早い。'], ['insight', '', 'けちに見えた柵は、足もとの小さな巣を、だれにも言わずに守っていた。']];
+        if (S.back) return [['npc', 'normal', '……入るなと言うたら、入るな。']];
+        if (f.nestKnown) return [['npc', 'normal', '畑の端のいちごなら、わしが摘んでおいた。家の前のかごだ。……坊主にやれ。']];
+        if (!f.nestSeen) return [['npc', 'normal', '……なんだ。いちごなら、やらんぞ。'], ['npc', 'normal', '柵の中には、だれも入れん。旅の者もだ。']];
+        f.nestKnown = true;
+        return [['me', '', '柵の中、草のあいだに巣がありました。卵がたくさん。'], ['npc', 'normal', '……見たのか。踏まなかったろうな。'], ['npc', 'normal', 'ひばりだ。春に、急に野原じゅうに巣をかけおった。いちご摘みの子らが走り回れば、ひとつ残らず踏みつぶされる。'], ['npc', 'normal', '子どもに言えば、見に来たがる。見に来れば、踏む。だから、「入るな」としか言わなんだ。']];
+      },
+      basket(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（かごは、からっぽ。底に、いちごの赤いしみだけが残っている）']];
+        if (f.nestKnown) return [['me', '', '（かごいっぱいの、赤いいちご。上に、紙きれが一枚。「坊主へ。巣を踏むな」）']];
+        return [['me', '', '（家の前に、からのかごが一つ。いちごの葉っぱが、少しだけ入っている）']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 30 茶の審判（向かいあう二軒の茶店に、どちらがうまいか決めてくれと頼まれる）
+  C.push({
+    id: 'formosa', shape: '旅人が審判を頼まれる', name: 'フォルモサ', sub: '茶店の坂道', time: 'dusk', screens: 5, far: 'bamboo', timeBack: 'morning', map: [24.8, 121.5],
+    hill: '#24382a', ground: ['#7a7a4a', '#4a4a30', '#8a7a58'], tint: 'rgba(255,190,120,.05)', bscale: 1.0,
+    props: [['stone_lantern', 300, 170], ['bush', 1400, 90], ['stone_lantern', 2700, 170], ['bush', 4200, 100]],
+    buildings: [['cn_paifang', 500, 0.9], ['cn_teahouse', 1350, 0.85], ['cn_teahouse', 2250, 0.85], ['cn_house', 3700, 0.9]],
+    npcs: [
+      { id: 'lin', name: '林じいさん（老舗の茶店）', actor: 'cn_elder', x: 1250, face: 1 },
+      { id: 'meilin', name: 'メイリン（向かいの茶店）', actor: 'qipao', x: 2100, face: -1 },
+      { id: 'hao', name: '書生のハオ', actor: 'boyscholar', x: 3200, face: -1 }
+    ],
+    places: [
+      { id: 'cups', name: '二つの茶碗', x: 1700, verb: '飲む', when: f => f.linAsk && f.meilinAsk },
+      { id: 'bush', name: '坂の上の古い茶の木', x: 4300, verb: '見る' }
+    ],
+    weather: { clear: 5, drizzle: 3, fog: 2 },
+    animals: [['cat_siamese', 1700], ['crow', 3500]],
+    talk: {
+      lin(S) {
+        const f = S.f;
+        if (S.back && f.judged) return [['npc', 'normal', '提灯は、坂の真ん中に一つだけ吊るした。二軒のあいだにな。'], ['npc', 'normal', '……あの子の店の湯は、わしの店の湯より、少しぬるい。それが、わしより上手なところだ。']];
+        if (S.back) return [['npc', 'normal', '提灯は、どちらの店にも吊るさなんだ。……来年も、同じことをするだろうな。']];
+        if (f.judged) return [['npc', 'normal', '……同じ味、か。'], ['npc', 'normal', '三年、口をきかなんだのに。木だけは、ふたりで分けておったわけだ。']];
+        if (f.linAsk) return [['npc', 'normal', '飲みくらべてくれ。あんたは、この坂のだれとも親戚じゃない。']];
+        f.linAsk = true;
+        return [['npc', 'normal', '旅の人、ちょうどいい。この茶を飲んでくれ。うちは、この坂で百年の店だ。'], ['npc', 'normal', '今夜の灯籠祭りでな、坂でいちばんの茶店に、赤い提灯を一つだけ吊るす。'], ['npc', 'normal', '向かいの店と、どちらがうまいか。……あんたに決めてもらいたい。']];
+      },
+      meilin(S) {
+        const f = S.f;
+        if (S.back && f.judged) return [['npc', 'normal', '父さんの店で、朝のお茶をいれてきたの。三年ぶり。'], ['npc', 'normal', '……湯が熱すぎるって、また言われた。言われて、ちょっとうれしかった。']];
+        if (S.back) return [['npc', 'normal', '提灯、どちらにも吊るされなかったの。……それで、よかったのかも。']];
+        if (f.judged) return [['npc', 'normal', '同じ……？ ……そう。そうよね。']];
+        if (f.meilinAsk) return [['npc', 'normal', 'あっちの店の茶より、うちのほうが、香りが立つはずよ。']];
+        f.meilinAsk = true;
+        return [['npc', 'normal', '旅の人、うちのお茶も飲んで。向かいの古い店より、ずっと香りがいいから。'], ['npc', 'normal', '……向かいは、父の店。三年前に、けんかして出てきたの。それきり、口をきいてない。'], ['npc', 'normal', '提灯をもらえたら、父も、わたしの茶を認めるでしょう。']];
+      },
+      hao(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'けさは、坂の上の茶の木の下に、林さんとメイリンさんが並んでいましたよ。'], ['npc', 'normal', '……摘む場所で、また言いあっていましたけどね。']];
+        if (f.haoTold) return [['npc', 'normal', '坂の上の古い木を、見ていくといいですよ。']];
+        f.haoTold = true;
+        return [['npc', 'normal', '二軒の茶比べですか。毎年、だれも決められないんです。'], ['npc', 'normal', 'ぼくは、坂の上で詩を書いていますが……おもしろいことに気づきました。'], ['npc', 'normal', '坂の上の古い茶の木に、朝はメイリンさん、夕方は林さんが来るんです。おたがい、時間をずらして。']];
+      },
+      bush(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（古い茶の木の根もとに、湯のみが二つ並べて置いてある）']];
+        f.bushSeen = true;
+        return [['me', '', '（坂の上に、太い幹の茶の木が一本。百年は立っていそうだ）'], ['me', '', '（東側の枝には、朝露の残る若い芽。西側の枝は、ていねいに摘んだあと）'], ['me', '', '（一本の木の、右と左から、二人がそれぞれ摘んでいるらしい）']];
+      },
+      cups(S) {
+        const f = S.f;
+        if (f.judged) return [['me', '', '（茶碗は、二つとも、からになっている）']];
+        if (!f.bushSeen) return [['me', '', '（二つの茶碗から、湯気が立っている。……どちらも、いい香りだ）'], ['me', '', '（飲みくらべてみる。……どちらも、おいしい。でも、ちがいが、よく分からない）'], ['me', '', '（もう少し、坂の上のほうも見てこようか）']];
+        f.judged = true;
+        return [['me', '', '（二つの茶碗を、もう一度、ゆっくり飲みくらべる）'], ['me', '', 'どちらも、同じ味がします。坂の上の、あの古い木の味です。'], ['me', '', '（林じいさんとメイリンが、同時に顔を上げた。……そして、同時に目をそらした）'], ['insight', '', '勝ち負けを決めに来た舌は、同じ一本の木の味しか見つけられなかった。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
