@@ -2352,5 +2352,98 @@
     }
   });
 
+// ---------------------------------------------------------------- 43 いたずらのイッカク（子どものうそを見に行ったら、本当に来ていた）
+  C.push({
+    id: 'kalaal', shape: 'いたずらが本当になる', name: 'グリーンラナ', sub: '流氷の入り江', time: 'noon', screens: 5, far: 'drift_ice_morning', timeBack: 'morning', map: [64.2, -51.7],
+    hill: '#3a4450', ground: ['#c8d0d4', '#9aa4aa', '#dce2e6'], tint: 'rgba(200,220,240,.06)', bscale: 1.0,
+    props: [['igloo_shell', 400, 120], ['ship_boat', 1600, 70], ['rock', 2600, 60], ['pine_snow', 4400, 260]],
+    buildings: [['nordic_red', 800, 0.85], ['nordic_red', 2000, 0.8]],
+    npcs: [
+      { id: 'naja', name: 'ナヤ', actor: 'eskimo', x: 1100, face: 1 },
+      { id: 'pita', name: 'ピタ', actor: 'parka', x: 1400, face: -1 },
+      { id: 'tuku', name: 'トゥク老人', actor: 'bearhunter', x: 2350, face: -1 }
+    ],
+    places: [{ id: 'crack', name: '東の氷の割れ目', x: 3800, verb: 'のぞく' }],
+    weather: { clear: 5, wind: 3, snow: 2 },
+    animals: [['dog_husky', 600], ['dog_samoyed', 1800], ['crow', 3000]],
+    talk: {
+      naja(S) {
+        const f = S.f;
+        if (S.back && f.sawIt) return [['npc', 'normal', '……ほんとに、来てたの？ うそでしょ。'], ['npc', 'normal', 'え、トゥクじいちゃんも見たの？ ……じゃあ、ほんとなんだ。'], ['npc', 'normal', 'ずるい。うそついたの、わたしたちなのに。']];
+        if (S.back) return [['npc', 'normal', '旅の人、ほんとに東まで行ったの？ あはは、イッカクなんて、いなかったでしょ。']];
+        if (f.crackSeen) return [['npc', 'normal', 'え、見えなかった？ あはは！ ……ひっかかった！']];
+        if (f.najaTold) return [['npc', 'normal', '早く早く！ 東の割れ目！ 角が、すぐ引っこんじゃうから！']];
+        f.najaTold = true;
+        return [['me', '', '（毛皮の服の女の子が、息を切らして走ってきた）'], ['npc', 'normal', '旅の人！ 東の氷の割れ目に、イッカクがいる！ 長い角が、氷から出てるの！'], ['npc', 'normal', '……ほんとだよ。ほんとにほんと。早く行かないと、もぐっちゃう！']];
+      },
+      pita(S) {
+        const f = S.f;
+        if (S.back && f.sawIt) return [['npc', 'normal', 'つぎの旅の人には、何てうそつこう……。ほんとのことしか、思いつかなくなっちゃった。']];
+        if (S.back) return [['npc', 'normal', 'ナヤのうそ、旅の人はみんなひっかかるんだ。これで十一人目！']];
+        if (f.crackSeen) return [['npc', 'normal', 'ごめんね。……ナヤのいたずら。旅の人が来るたび、やるの。']];
+        return [['npc', 'normal', '……（男の子が、口をおさえて、笑いをこらえている）']];
+      },
+      tuku(S) {
+        const f = S.f;
+        if (S.back && f.sawIt) return [['npc', 'normal', '……見たよ。けさ、割れ目で。二頭だ。角を、空に向けてな。'], ['npc', 'normal', '荷造りしたものは、ほどいた。……海は、まだ死んでおらんかった。'], ['insight', '', 'うそだと分かっていても見に行ったから、十年ぶりの本当に、最初に会えた。']];
+        if (S.back) return [['npc', 'normal', 'あさって、町へ移る。荷物は、ほとんどまとめた。']];
+        if (f.sawIt) return [['npc', 'normal', '……いたのか？ 本当に？'], ['npc', 'normal', '旅の人まで、子どもらのまねをするようになったか。……いや、その目は、うそじゃないな。'], ['npc', 'normal', 'あしたの朝、自分の目で見に行く。……十年ぶりにな。']];
+        if (f.crackSeen) return [['npc', 'normal', 'いなかったろう。……あの子らのいつものいたずらだ。']];
+        return [['npc', 'normal', 'イッカク？ ふふ、ナヤにやられたな。'], ['npc', 'normal', 'この入り江に、イッカクはもう十年来ておらん。氷がうすくなって、海が変わった。'], ['npc', 'normal', 'わしも、あさって町へ移る。猟師が、獲るものもない海にしがみついても、しかたない。']];
+      },
+      crack(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（朝の割れ目は、静かだ。……でも、水の上に、小さな泡が残っている）']];
+        if (f.sawIt) return [['me', '', '（割れ目の水面は、静かだ。……さっきの角は、夢じゃない）']];
+        if (!f.crackSeen) { f.crackSeen = true;
+          return [['me', '', '（東の氷の割れ目。黒い水が、ゆっくり揺れている）'], ['me', '', '（しばらく待つ。……何も出てこない）'], ['me', '', '（……ひっかかったらしい）']]; }
+        f.sawIt = true;
+        return [['me', '', '（もう一度、割れ目をのぞく。……水が、ふくらんだ）'], ['me', '', '（ぷしゅっと、白い息が上がる。その横に、ねじれた長い角が一本、空を向いた）'], ['me', '', '（すぐ横に、もう一本。……二頭いる）'], ['me', '', '（角は、ゆっくり水にもどっていった）']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 44 昼に歩くな（暑さで足が止まった旅人を、牧場の犬が見つける）
+  C.push({
+    id: 'ozlana', shape: '旅人が助けられる', name: 'オーストラナ', sub: '赤い大地の牧場', time: 'noon', screens: 5, far: 'red_rocks_noon', timeBack: 'dusk', map: [-23.7, 133.9],
+    hill: '#5a2a1a', ground: ['#c0704a', '#8a4a30', '#d08a5a'], tint: 'rgba(255,150,80,.08)', bscale: 1.0,
+    props: [['tree_dead', 400, 260], ['rock', 2000, 70], ['tree_dead', 3100, 240], ['stone_well', 3900, 100], ['barn_open', 4400, 200]],
+    buildings: [['ar_estancia', 800, 0.85]],
+    npcs: [
+      { id: 'jess', name: 'ジェス', actor: 'flagkid', x: 1050, face: 1 },
+      { id: 'betty', name: 'ベティばあさん', actor: 'herbgranny', x: 4100, face: -1 }
+    ],
+    places: [{ id: 'heat', name: '赤い道のまんなか', x: 2600, verb: '休む' }],
+    weather: { clear: 9, wind: 1 },
+    animals: [['dog_brown', 3700, { mode: 'stay', back: 'not', face: -1 }], ['dog_brown', 1300, { back: 'only' }], ['cow', 4600, { mode: 'stay' }], ['crow', 2200]],
+    talk: {
+      jess(S) {
+        const f = S.f;
+        if (S.back && f.rescued) return [['npc', 'normal', 'やっぱり、レッドに見つけてもらったんだ。……顔、まだ赤いよ。'], ['npc', 'normal', '帰りは夕方に歩いてきたんだね。それが正解。']];
+        if (S.back) return [['npc', 'normal', '帰りは、夕方に歩くといいよ。昼の赤い道は、人を食べちゃうから。']];
+        if (f.jessTold) return [['npc', 'normal', '水、ちゃんと持ってる？ 昼の道は、思ったより長いよ。']];
+        f.jessTold = true;
+        return [['me', '', '（牧場の柵に座った女の子が、帽子のつばを上げて、こちらを見た）'], ['npc', 'normal', '旅の人、まさか、いまから東へ歩くの？ お昼だよ？'], ['npc', 'normal', 'ここの昼は、歩くもんじゃないよ。牧場の人はみんな、夕方まで日陰で寝てる。'], ['npc', 'normal', '……まあ、行くなら止めないけど。東のベティばあさんちまで、水場はないからね。']];
+      },
+      heat(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（夕方の赤い道は、昼とはちがう。風が、少しだけ冷たい）'], ['me', '', '（道ばたの石に、小さな犬の足あとが、行き帰りの二本ついている）']];
+        if (f.rescued) return [['me', '', '（さっき倒れかけた場所。……石が、まだ熱い）']];
+        f.dizzy = true;
+        return [['me', '', '（日ざしが、まっすぐ上から落ちてくる。自分の影が、足の下に丸く縮んでいる）'], ['me', '', '（水筒をかたむける。……一滴も出てこない）'], ['me', '', '（足が、重い。地面が、ゆらゆらと波打って見える）'], ['me', '', '（……石の陰にしゃがんだ。立ち上がれない）'], ['me', '', '（遠くから、ワン、と一声。赤茶色の犬が、まっすぐ走ってくる）']];
+      },
+      betty(S) {
+        const f = S.f;
+        if (S.back && f.rescued) return [['npc', 'normal', 'レッドは、けさも柵のところで西の道を見張ってたよ。……つぎの、昼に歩くおばかさんをね。'], ['insight', '', '歩くことしか知らなかったわたしを、昼の道で見つけたのは、歩く人を待つ犬だった。']];
+        if (S.back) return [['npc', 'normal', '夕方に来たね。正解だよ。……レッドは、昼は柵の陰で、西の道ばかり見てる。']];
+        if (f.rescued) return [['npc', 'normal', 'もう一杯飲みな。……水は、のどが渇く前に飲むもんだよ。']];
+        if (f.dizzy) { f.rescued = true;
+          return [['me', '', '（犬に、マントのすそをくわえられて、引っぱられるように歩いた。……気がつくと、井戸の横の日陰に座っていた）'], ['npc', 'normal', 'ほら、水。ゆっくりね。……昼の赤い道を、ひとりで歩いてきたのかい。'], ['npc', 'normal', 'レッドが吠えたんで、また来たなと思ったよ。この夏で三人目だ。'], ['npc', 'normal', 'あの子は、子犬のときに、昼の道で倒れてたのを、わたしが拾ったんだ。……だから、昼の道を見張ってるのさ。']]; }
+        return [['npc', 'normal', '……旅の人かい。昼のうちに、よくここまで来たね。'], ['npc', 'normal', '水場は、うちの井戸だけだよ。好きなだけ飲んでいきな。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
