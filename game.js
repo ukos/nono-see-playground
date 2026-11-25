@@ -3,6 +3,8 @@
 // ================= 世界の組み立て =================
 const W = 960, H = 540, GROUND = 452, SPEED = 230, NONO_H = 128;
 const FIG_H = NONO_H * 193 / 224; // nonoの絵の、余白を除いた実際の背丈。住人はこれに合わせる
+// 頭の大きな絵柄の役者は、頭の大きさがnonoと同じになるよう体ごと縮める（nonoの頭は背丈の約0.37）
+const ACTOR_H = { courier: .71, girl: .74, greenboy: .69, kimono_girl: .8, okappa: .84, apprentice: .8, lanternman: .8, researcher: .71 };
 const C = window.SEE_WORLD.countries;
 let acc = 0;
 for (const [i, c] of C.entries()) {
@@ -469,7 +471,7 @@ function drawActor(n, cam) {
   const x = npcX(n) - cam; if (x < -160 || x > W + 160) return;
   if (n.sprite) {
     const im = img(`assets/actors/${spriteOf(n)}.webp`); if (!im) return;
-    const h = FIG_H * (n.h || 1), w = im.width * h / im.height;
+    const h = FIG_H * (n.h || ACTOR_H[n.actor] || 1), w = im.width * h / im.height;
     g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 28, 6, 0, 0, Math.PI * 2); g.fill();
     g.save(); g.translate(x, 0); g.scale(n.face || -1, 1); g.drawImage(im, -w / 2, GROUND + 6 - h + Math.sin(st.t * 1.6 + n.ax) * 1, w, h); g.restore();
     return;
@@ -484,7 +486,7 @@ function drawActor(n, cam) {
     g.drawImage(im, fr * S.fw, 0, S.fw, S.fh, -w / 2, GROUND + 6 - h, w, h); g.restore();
     return;
   }
-  const im = img(P.a(n.actor, 'normal')), h = FIG_H * (n.h || 1), w = im ? im.width * h / im.height : h * .6;
+  const im = img(P.a(n.actor, 'normal')), h = FIG_H * (n.h || ACTOR_H[n.actor] || 1), w = im ? im.width * h / im.height : h * .6;
   g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, Math.min(34, w * .45), 7, 0, 0, Math.PI * 2); g.fill();
   if (im) { g.save(); g.translate(x, 0); g.scale(n.off && !n.follow ? -(n.leaveDir || 1) : (n.face || -1), 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
 }
