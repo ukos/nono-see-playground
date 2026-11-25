@@ -10,8 +10,12 @@ for (const [i, c] of C.entries()) {
 }
 const WORLD = acc;
 const NPCS = C.flatMap(c => c.npcs);
-const present = n => (!n.when || n.when(st.flags)) && !st.flags[n.id + 'Gone'] && !(n.leaveWhen && n.leaveWhen(st.flags) && n.off);
+const present = n => (!n.when || n.when(st.flags, isBack(n.c))) && !st.flags[n.id + 'Gone'] && !(n.leaveWhen && n.leaveWhen(st.flags) && n.off);
 const npcX = n => n.ax + (n.off || 0);
+// 帰り道かどうか（いちばん東まで行ってから、この国へ戻ってきた）。帰り専用の遠景・天候・時間帯・住人に使う
+const isBack = c => st.maxX >= c.x1 - 2 && st.x < c.x1;
+const farOf = c => (isBack(c) && c.farBack) || c.far;
+const timeOf = c => (isBack(c) && c.timeBack) || c.time || 'dusk';
 const nameOf = n => typeof n.name === 'function' ? n.name(st.flags) : n.name;
 const spriteOf = n => typeof n.sprite === 'function' ? n.sprite(st.flags) : n.sprite;
 const countryAt = x => C.find(c => x < c.x1) || C[C.length - 1];
@@ -29,7 +33,7 @@ const P = {
 };
 function prefetch(c) {
   if (!c || c._pf) return; c._pf = true;
-  img(P.far(c.far)); c.buildings.forEach(b => img(P.b(b[0]))); c.npcs.forEach(n => n.sprite ? img(`assets/actors/${spriteOf(n)}.webp`) : img(P.a(n.actor, n.sheet ? 'sheet' : 'normal')));
+  img(P.far(farOf(c))); c.buildings.forEach(b => img(P.b(b[0]))); c.npcs.forEach(n => n.sprite ? img(`assets/actors/${spriteOf(n)}.webp`) : img(P.a(n.actor, n.sheet ? 'sheet' : 'normal')));
   if (c.gap) { img(P.b('rope_bridge_broken')); img(P.b('rope_bridge_fixed')); }
   (c.props || []).forEach(p => img(`assets/props/${p[0]}.webp`));
 }
@@ -83,7 +87,7 @@ const WX = {
 const wx = { type: 'clear', k: 1, next: null, timer: 30, flash: 0, dir: -1 };
 const rain = [], snow = [], leaves = [], streaks = [], splashes = [];
 function pickWeather(c) {
-  const w = c.weather || { clear: 1 }; let tot = 0; for (const k in w) tot += w[k];
+  const w = (isBack(c) && c.weatherBack) || c.weather || { clear: 1 }; let tot = 0; for (const k in w) tot += w[k];
   let r = Math.random() * tot; for (const k in w) { r -= w[k]; if (r <= 0) return k; } return 'clear';
 }
 function setWeather(t) { if (t !== wx.type || wx.next) wx.next = t; }
@@ -295,7 +299,7 @@ function nearTarget() {
   const c = countryAt(st.x), b = bridgeOf(c);
   if (b && st.x > b.gx - 220 && st.x < b.gx + 40) return { id: 'bridge', c, isPlace: true, verb: '見る' };
   for (const p of c.places || []) { // 見る・聞くだけの場所（足あと、窓、鈴の音など）
-    if ((!p.when || p.when(st.flags)) && Math.abs(c.x0 + p.x - st.x) < 90) return { id: p.id, c, isPlace: true, verb: p.verb || '見る', ax: c.x0 + p.x };
+    if ((!p.when || p.when(st.flags, isBack(c))) && Math.abs(c.x0 + p.x - st.x) < 90) return { id: p.id, c, isPlace: true, verb: p.verb || '見る', ax: c.x0 + p.x };
   }
   return null;
 }
@@ -361,10 +365,10 @@ function drawFarImage(im, cam, alpha) {
 function drawFar(cam) {
   g.fillStyle = '#2a2040'; g.fillRect(0, 0, W, H);
   const center = cam + W / 2, c = countryAt(center);
-  drawFarImage(img(P.far(c.far)), cam, 1);
+  drawFarImage(img(P.far(farOf(c))), cam, 1);
   const dR = c.x1 - center, dL = center - c.x0, nx = C[c.i + 1], pv = C[c.i - 1];
-  if (nx && dR < 480) drawFarImage(img(P.far(nx.far)), cam, (480 - dR) / 960);
-  else if (pv && dL < 480) drawFarImage(img(P.far(pv.far)), cam, (480 - dL) / 960);
+  if (nx && dR < 480) drawFarImage(img(P.far(farOf(nx))), cam, (480 - dR) / 960);
+  else if (pv && dL < 480) drawFarImage(img(P.far(farOf(pv))), cam, (480 - dL) / 960);
   g.fillStyle = '#151a1c'; g.fillRect(0, H * 0.92 - 2, W, H);
   return c;
 }
@@ -459,7 +463,7 @@ function drawBuildings(cam) {
   }
 }
 function drawActor(n, cam) {
-  if ((n.when && !n.when(st.flags)) || st.flags[n.id + 'Gone']) return;
+  if ((n.when && !n.when(st.flags, isBack(n.c))) || st.flags[n.id + 'Gone']) return;
   const x = npcX(n) - cam; if (x < -160 || x > W + 160) return;
   if (n.sprite) {
     const im = img(`assets/actors/${spriteOf(n)}.webp`); if (!im) return;
@@ -585,7 +589,7 @@ function drawPlaces(cam) {
   for (const c of C) {
     if (!c.places || c.x1 < cam || c.x0 > cam + W) continue;
     for (const p of c.places) {
-      if (p.when && !p.when(st.flags)) continue;
+      if (p.when && !p.when(st.flags, isBack(c))) continue;
       const x = c.x0 + p.x - cam; if (x < -20 || x > W + 20) continue;
       const a = .35 + .25 * Math.sin(st.t * 3 + p.x);
       g.fillStyle = `rgba(255,236,180,${a})`; g.beginPath(); g.ellipse(x, GROUND + 6, 18, 4, 0, 0, Math.PI * 2); g.fill();
@@ -600,7 +604,7 @@ function drawPrompt(cam) {
   g.fillStyle = '#f6eee6'; g.fillText('▼' + label, x, y);
 }
 function drawHUD(c) {
-  const label = `${c.name}　${TIME[c.time || 'dusk'].name}・${WN[wx.next || wx.type]}`;
+  const label = `${c.name}　${TIME[timeOf(c)].name}・${WN[wx.next || wx.type]}`;
   g.font = '15px "DotGothic16",monospace'; g.textAlign = 'left';
   const tw = Math.max(220, g.measureText(label).width + 24);
   g.fillStyle = 'rgba(18,13,31,.6)'; g.fillRect(16, 14, tw, 50);
@@ -670,7 +674,7 @@ function frame(ts) {
   drawPlaces(cam); drawRabbit(cam); drawNono(cam); drawFore(cam);
   if (sk > 0) g.restore();
   g.fillStyle = cc.tint || 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);
-  const tl = TIME[cc.time || 'dusk']; if (tl.fill) { g.fillStyle = tl.fill; g.fillRect(0, 0, W, H); }
+  const tl = TIME[timeOf(cc)]; if (tl.fill) { g.fillStyle = tl.fill; g.fillRect(0, 0, W, H); }
   drawWeather(cam, st.x - cam);
   drawPrompt(cam); drawHUD(cc);
   requestAnimationFrame(frame);

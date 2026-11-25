@@ -22,7 +22,7 @@ function simulate(world) {
   const log = []; // {c, phase, npc, name, lines, x}
   const last = {};
   const nameOf = n => typeof n.name === 'function' ? n.name(st.flags) : n.name;
-  const present = n => (!n.when || n.when(st.flags)) && !st.flags[n.id + 'Gone'];
+  const present = (n, c) => (!n.when || n.when(st.flags, st.maxX >= c.x1 - 2 && st.x < c.x1)) && !st.flags[n.id + 'Gone'];
   const ctx = c => ({
     f: st.flags, back: st.maxX >= c.x1 - 2 && st.x < c.x1,
     ev: k => { if (!st.evidence.includes(k)) st.evidence.push(k); },
@@ -35,9 +35,9 @@ function simulate(world) {
     return t;
   };
   function talk(c, t, phase, onlyChanged) {
-    if (!present(t.n)) return false;
     const fn = c.talk[t.id]; if (!fn) return false;
-    st.x = c.x0 + t.x;
+    const px = st.x; st.x = c.x0 + t.x;
+    if (!present(t.n, c)) { st.x = px; return false; }
     const snapshot = JSON.stringify([st.flags, st.evidence]);
     const ls = fn(ctx(c)) || [];
     const key = c.id + '/' + t.id, sig = JSON.stringify(ls);

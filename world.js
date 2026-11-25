@@ -21,6 +21,8 @@
 //                     種類と大きさ・ふるまいは game.js の ANIM。絵は assets/animals/<種類>_<コマ>.webp
 //   map             : 世界地図に印をつける位置 [緯度, 経度]（もじった実在の国のあたり）
 //   sea             : true なら船旅の国（地図の道のりを点線の航路で描く）
+//   farBack/timeBack/weatherBack : 帰り道だけの遠景・時間帯・天候（嵐の夜の船が、帰りは朝の凪になる等）
+//   when(f, back)   : 住人・場所の when には帰り道かどうかも渡る
 //   weather         : 起こりやすい天候と重み { clear, drizzle, squall, typhoon, wind, fog, densefog, snow }
 //   talk            : 住人ごとの会話。S を受け取り行の配列を返す
 //                     行＝[話し手, 表情, 文]。話し手は 'npc'（話している相手）/ 'me'（nono）/ 'insight'（気づき）
@@ -1118,6 +1120,115 @@
         const f = S.f;
         if (S.back) return [['npc', 'normal', 'パンを焼いたの。花嫁のパン。……焼いてるあいだだけ、泣いてもいいことにした。']];
         return [['npc', 'normal', 'あしたの婚礼のパンを、これから焼くの。編みこみの、大きな輪のパン。'], ['npc', 'normal', '母が刺しゅう、わたしがパン。……あの子が持っていけるものは、それくらいだから。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 21 嵐を見届ける（四十年この海を避けてきた元船長と、甲板に立つ）
+  C.push({
+    id: 'pelican', name: 'ペリカン号', sub: '船の上・黒い海', time: 'night', screens: 5, far: 'storm_sea', fore: false,
+    farBack: 'sea_morning', timeBack: 'morning', weatherBack: { clear: 6, wind: 2 },
+    ship: true, sea: true, map: [43, 33],
+    hill: '#1a2030', ground: ['#7a5e44', '#4e3a2a', '#8a6e50'], tint: 'rgba(30,40,70,.10)', bscale: 1.0,
+    props: [['ship_crates', 450, 100], ['ship_mast', 1500, 430], ['ship_rope', 2100, 50], ['ship_wheel', 2950, 130], ['ship_mast', 3900, 440], ['ship_lantern', 4400, 150]],
+    buildings: [],
+    npcs: [
+      { id: 'kolya', name: '甲板員のコーリャ', actor: 'sailor_boy', x: 700, face: -1 },
+      { id: 'irina', name: 'イリーナ船長', actor: 'navylantern', x: 1800, face: -1 },
+      { id: 'sergei', name: '白ひげの乗客', actor: 'hermit', x: 3600, face: -1,
+        leaveWhen: f => f.sergeiDown, leaveDir: -1 },
+      { id: 'sergei2', name: 'セルゲイ', actor: 'hermit', x: 3000, face: -1, when: (f, back) => back && f.sergeiGone }
+    ],
+    places: [{ id: 'rail', name: '船べり', x: 2550, verb: 'つかまる' }],
+    weather: { squall: 5, typhoon: 3, wind: 2 },
+    animals: [],
+    talk: {
+      kolya(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'セルゲイじいさんに、ロープの結び方を教わってる。四十年前のやり方。'], ['npc', 'normal', '……今のより、ずっとほどけない。くやしいけど。']];
+        if (f.sergeiGone) return [['npc', 'normal', 'じいさん、自分から下りてきた！ 船長が何を言っても、だめだったのに。']];
+        if (f.kolyaTold) return [['npc', 'normal', 'へさきまで行くなら、手すりづたいに！']];
+        f.kolyaTold = true;
+        return [['me', '', '（ロープを抱えた少年が、甲板をすべりながら走ってくる）'], ['npc', 'normal', '旅の人、船室へ！ ……あ、だめだ。あのじいさんが、まだへさきにいる。'], ['npc', 'normal', '客は全員、船室へって決まりなんだ。ひとりでも甲板に残ったら、だれも下りられない。'], ['npc', 'normal', '船べりから手を離さないで。波は、来るとき音がしないんだ。']];
+      },
+      irina(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'セルゲイさんが、けさ、はじめて「いい船だ」と言ったの。'], ['npc', 'normal', '……四十年分の、ひとことね。']];
+        if (f.sergeiGone) return [['npc', 'normal', '下りてくれた……ありがとう。'], ['npc', 'normal', '……あの人が沈めた船の名前、知ってる？ ペリカン号。'], ['npc', 'normal', 'この船は、二代目。わたしが名前をもらったの。あの人には、言えずにいたけど。'], ['insight', '', '四十年避けてきた海を、あの人は同じ名前の船の上で見届けた。']];
+        if (f.irinaTold) return [['npc', 'normal', 'わたしの言うことは聞いてくれない。……わたしが、若いから。']];
+        f.irinaTold = true;
+        return [['npc', 'normal', '嵐は一晩で抜ける。船は大丈夫。……甲板の人が、大丈夫じゃない。'], ['npc', 'normal', 'へさきの白ひげの人、セルゲイさん。四十年前、この海で船を沈めた船長よ。'], ['npc', 'normal', '下りてと三度頼んだ。三度とも、首を横にふられた。']];
+      },
+      rail(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（船べりに、塩が白く乾いている。ゆうべの波のあとだ）'], ['me', '', '（朝の海は、ゆうべと同じ海だとは思えないほど、静かだ）']];
+        if (f.railHeld) return [['me', '', '（手すりが、雨と波でぬるりとすべる）']];
+        f.railHeld = true;
+        return [['me', '', '（船べりにつかまったとたん、甲板が大きく傾いた）'], ['me', '', '（ざあっと、横から波が来る。足もとを、海水が走りぬけていく）'], ['me', '', '（……音が、しなかった。コーリャの言ったとおりだ）']];
+      },
+      sergei(S) {
+        const f = S.f;
+        if (f.sergeiDown) return [['npc', 'normal', '……行こう。']];
+        if (f.railHeld && f.sergeiTold) { f.sergeiDown = true;
+          return [['me', '', '（へさきの手すりに、セルゲイさんとならんでつかまった）'], ['me', '', '（稲光のたびに、波の壁が白く浮かぶ。どちらも、何も言わない）'], ['npc', 'normal', '……あの夜も、こういう波だった。わしは、ひとりで舵を握っておった。'], ['npc', 'normal', '見届けるとは、ひとりで立っていることだと思っておった。'], ['npc', 'normal', '……下りよう。となりに人がいても、海はちゃんと見えた。']]; }
+        if (f.sergeiTold) return [['npc', 'normal', '下りろと言うなら、言わんでいい。……となりに立つのは、かまわん。']];
+        f.sergeiTold = true;
+        return [['npc', 'normal', '……船室へ行け、と言いに来たのか。'], ['npc', 'normal', '四十年前、この海で船を沈めた。乗組員は全員助かった。船だけが、沈んだ。'], ['npc', 'normal', 'それから一度も、この海を渡らなかった。今夜は、目をそらさずに見届けると決めた。']];
+      },
+      sergei2(S) {
+        return [['npc', 'normal', '帰りの船も、これにした。……二代目の舵は、軽いな。'], ['npc', 'normal', '船長に頼まれて、少しだけ握らせてもらった。手が、まだ覚えておった。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 22 名前の多い猫（町じゅうに名前のある猫を、引っこす子が連れていきたい）
+  C.push({
+    id: 'bosporia', name: 'ボスポリア', sub: '海峡の町', time: 'morning', screens: 5, far: 'harbor_morning', map: [41, 29],
+    hill: '#3a3040', ground: ['#9a8a74', '#6a5a4a', '#aa9a80'], tint: 'rgba(255,200,190,.04)', bscale: 1.0,
+    props: [['ship_barrels', 1250, 100], ['bollard', 3150, 60], ['pier', 3600, 110], ['ship_boat', 4300, 90]],
+    buildings: [['med_white', 450, 0.95], ['it_townhouse', 1100, 0.9], ['pk_mosque', 2000, 0.9], ['sea_shop', 2700, 0.95]],
+    npcs: [
+      { id: 'elif', name: '籠を持った女の子', actor: 'girl', x: 650, face: 1, when: (f, back) => !back },
+      { id: 'hasan', name: '古本屋のハサン', actor: 'bookmerchant', x: 1600, face: -1 },
+      { id: 'mehmet', name: '桟橋番のメフメト', actor: 'stationmaster', x: 3350, face: -1 }
+    ],
+    places: [{ id: 'dishes', name: '戸口の餌皿', x: 2350, verb: '見る' }],
+    weather: { clear: 6, fog: 2, drizzle: 2 },
+    animals: [['cat_persian', 760, { mode: 'stay', back: 'not', face: -1 }], ['cat_persian', 3550, { mode: 'stay', back: 'only', face: -1 }]],
+    talk: {
+      elif(S) {
+        const f = S.f;
+        const names = (f.namePasha ? 1 : 0) + (f.nameFerry ? 1 : 0) + (f.dishesSeen ? 1 : 0);
+        if (f.catChoose) return [['npc', 'normal', 'あしたの朝、桟橋で。……この子に決めてもらう。']];
+        if (f.elifTold && names >= 2) { f.catChoose = true;
+          return [['me', '', '本屋さんは「パシャ」、桟橋の人は「フェリー」と呼んでいました。'], ...(f.dishesSeen ? [['me', '', '戸口ごとに、名前の書いた餌皿がありました。'], ['npc', 'normal', '……全部、この子のお皿？']] : []), ['npc', 'normal', 'わたしだけの、ボンジュクじゃなかったんだ。'], ['npc', 'normal', '……籠には入れない。あした、桟橋まで一緒に歩いて、この子に決めてもらう。']]; }
+        if (f.elifTold) return [['npc', 'normal', '入って、ボンジュク。……入ってくれない。']];
+        f.elifTold = true;
+        return [['me', '', '（女の子が、空っぽの籠のふたを開けて、猫に見せている。猫は、そっぽを向いている）'], ['npc', 'normal', '入って、ボンジュク。あした、船で向こう岸へ引っこすんだから。'], ['npc', 'normal', '……旅の人、猫を籠に入れるこつ、知らない？'], ['npc', 'normal', '本屋のおじさんは「連れていくな」って言うの。……わたしの猫なのに。']];
+      },
+      hasan(S) {
+        const f = S.f;
+        if (S.back && f.catChoose) return [['npc', 'normal', 'けさから、餌皿が一枚増えた。「エリフ」と書いてある。'], ['npc', 'normal', '猫の名前か、あの子の名前か、わからんがね。……両方だろうさ。'], ['insight', '', '名前がいくつもある猫は、どこへも行かずに、町じゅうの猫のままでいた。']];
+        if (S.back) return [['npc', 'normal', 'あの子は、籠を抱えて船に乗ったそうだ。……籠は、ずいぶん軽そうだったとさ。']];
+        if (f.namePasha) return [['npc', 'normal', 'パシャは、売り物の詩集の上でしか寝ない。猫にも、好みがある。']];
+        f.namePasha = true;
+        return [['npc', 'normal', 'ボンジュク？ ……ああ、パシャのことか。'], ['npc', 'normal', 'あいつは、毎日昼すぎにわしの店へ来て、いちばん高い本の上で寝る。だから、パシャ。'], ['npc', 'normal', 'エリフの猫？ あの子だけの猫じゃない。……だが、それを言うのは、わしの役じゃないな。']];
+      },
+      dishes(S) {
+        const f = S.f;
+        if (S.back && f.catChoose) return [['me', '', '（戸口の餌皿が、一枚増えている。新しい皿に、「エリフ」と書いてある）']];
+        if (S.back) return [['me', '', '（戸口の餌皿は、どれもからっぽのまま。きょうは、だれも食べに来ていない）']];
+        f.dishesSeen = true;
+        return [['me', '', '（坂の戸口ごとに、小さな餌皿が置いてある）'], ['me', '', '（皿の名前は、パシャ、フェリー、ボンジュク、ゼイティン……）'], ['me', '', '（どの皿のふちにも、同じ白くて長い毛がついている）']];
+      },
+      mehmet(S) {
+        const f = S.f;
+        if (S.back && f.catChoose) return [['npc', 'normal', 'あの子は、けさの船で向こう岸へ行った。'], ['npc', 'normal', '猫は渡り板の手前まで歩いてきて、すわりこんだ。あの子は、笑って手をふったよ。'], ['npc', 'normal', '「週末に会いに来る」だとさ。……ほら、まだあそこで、船のほうを見てる。']];
+        if (S.back) return [['npc', 'normal', '船が出たあと、フェリーが桟橋で鳴いておった。……乗りそびれた、という顔じゃなかったがね。']];
+        if (f.nameFerry) return [['npc', 'normal', '船が来る前に、フェリーはかならずここに座る。時計より正確だ。']];
+        f.nameFerry = true;
+        return [['npc', 'normal', '白い長毛の猫？ フェリーのことだな。'], ['npc', 'normal', '毎朝、一番の船を、この桟橋で出むかえる。三年、一日も休まずにだ。'], ['npc', 'normal', '……だが、一度も船に乗ったことはない。この桟橋が、あいつの持ち場なんだろう。']];
       }
     }
   });
