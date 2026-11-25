@@ -2573,5 +2573,122 @@
     }
   });
 
+// ---------------------------------------------------------------- 47 百歳の内緒（村じゅうで隠すお祝いを、本人はとっくに知っていた）
+  C.push({
+    id: 'suomi', shape: 'サプライズの裏のサプライズ', name: 'フィンランダ', sub: '雪の湖の村', time: 'noon', screens: 5, far: 'snow', timeBack: 'dusk', map: [62.2, 25.7],
+    hill: '#3a4450', ground: ['#d8dce0', '#a8b0b8', '#e8ecf0'], tint: 'rgba(200,210,240,.05)', bscale: 1.0,
+    props: [['pine_snow', 300, 300], ['tree_snow', 1400, 260], ['ship_boat', 2700, 60], ['pine_snow', 3400, 320], ['iso_cabin_snow', 4300, 200]],
+    buildings: [['nordic_red', 700, 0.9], ['house_small', 1900, 1.3]],
+    npcs: [
+      { id: 'liisa', name: 'リーサ（ひ孫）', actor: 'braidgirl', x: 900, face: 1 },
+      { id: 'aino', name: 'アイノばあちゃん', actor: 'es_granny', x: 2300, face: -1, when: (f, back) => !f.walking || back },
+      { id: 'aino2', name: 'アイノばあちゃん', actor: 'es_granny', x: 3100, face: -1, when: (f, back) => f.walking && !back },
+      { id: 'matti', name: 'となりのマッティ', actor: 'hunter', x: 1600, face: -1 }
+    ],
+    places: [{ id: 'hole', name: '湖の氷の穴', x: 3300, verb: '見る', when: f => f.walking }],
+    weather: { snow: 5, clear: 4, wind: 1 },
+    animals: [['dog_samoyed', 1200], ['crow', 2900]],
+    talk: {
+      liisa(S) {
+        const f = S.f;
+        if (S.back && f.cake) return [['npc', 'normal', 'ひいおばあちゃん、知ってたんだって！ ……ずるい！'], ['npc', 'normal', '来年は、もっとうまく隠す。……百一歳のは、ぜったい。']];
+        if (S.back) return [['npc', 'normal', 'ひいおばあちゃん、家から出てくれなかったの。……ケーキ、台所で見られちゃった。']];
+        if (f.walking) return [['npc', 'normal', '（小声で）……いいよ、その調子！ 夕方まで、湖のほうにお願い！']];
+        if (f.liisaTold) return [['npc', 'normal', '（小声で）……夕方まで！ 湖のほう！ ひみつだよ！']];
+        f.liisaTold = true;
+        return [['me', '', '（女の子が、雪だるまのかげから、手まねきしている）'], ['npc', 'normal', '（小声で）旅の人、おねがい！ きょう、ひいおばあちゃんが百歳になるの。'], ['npc', 'normal', '村じゅうで、ないしょのお祝いを準備してるの。でも、ひいおばあちゃん、ずっと窓から外を見てて。'], ['npc', 'normal', '夕方まで、どこかへ連れ出して！ ……でも、ひみつだって、ぜったい言っちゃだめ！']];
+      },
+      matti(S) {
+        const f = S.f;
+        if (S.back && f.cake) return [['npc', 'normal', 'アイノさんの「おどろいたふり」、あれは百年ものだな。村じゅうがだまされた。']];
+        if (S.back) return [['npc', 'normal', 'ケーキは、けっきょく窓から丸見えだった。……まあ、おいしかったらしいが。']];
+        return [['me', '', '（男の人が、両手いっぱいの旗を、あわてて背中に隠した）'], ['npc', 'normal', '……や、やあ、旅の人。なんでもないよ。'], ['npc', 'normal', '……アイノさんは、この村でいちばん勘がいい。百年、何ひとつ見のがしたことがない。気をつけな。']];
+      },
+      aino(S) {
+        const f = S.f;
+        if (S.back && f.cake) return [['npc', 'normal', '……おどろいたよ。ええ、ほんとうに、おどろいた。'], ['me', '', '（ばあちゃんが、片目をつぶった）'], ['npc', 'normal', '九十九回、だまされたふりをしてきたんだ。百回目も、ちゃんとだまされてやらなきゃね。'], ['insight', '', '隠されていたお祝いより、気づかないふりをする百年のほうが、ずっと大きな贈り物だった。']];
+        if (S.back) return [['npc', 'normal', 'きょうは、家でゆっくりしておったよ。……台所のほうが、やけににぎやかだったがね。']];
+        if (f.ainoTold) { f.walking = true;
+          return [['me', '', '……湖を、見に行きませんか。氷の上を、歩いてみたくて。'], ['npc', 'normal', '湖？ 夕方まで？ ……ほう。'], ['me', '', '（ばあちゃんは、窓の外の、旗を隠したマッティを、ちらっと見た）'], ['npc', 'normal', 'いいとも。氷の穴の釣り方を、教えてあげよう。……ゆっくり、ゆっくりね。']]; }
+        f.ainoTold = true;
+        return [['me', '', '（窓辺の小さなおばあさんが、編み物の手を止めて、外の雪を見ている）'], ['npc', 'normal', '旅の人かい。……きょうは、村がやけに静かだね。'], ['npc', 'normal', 'みんな、わしの顔を見ると、急に用事を思い出すんだ。……ふしぎな日だよ。']];
+      },
+      aino2(S) {
+        const f = S.f;
+        if (f.cake) return [['npc', 'normal', 'そろそろ、暗くなってきたね。……帰ろうか。ゆっくり、ゆっくりね。']];
+        if (f.fished) { f.cake = true;
+          return [['npc', 'normal', '……旅の人。ケーキは、苺かね、それとも木の実かね。'], ['me', '', '……えっ。'], ['me', '', '（ばあちゃんは、くすくす笑った）'], ['npc', 'normal', '……言わんでいい。どちらでもうれしいよ。'], ['npc', 'normal', 'さあ、帰ろう。わしは、ちゃんとおどろく練習をしておくから。']]; }
+        return [['npc', 'normal', '穴のそばにお座り。糸をたらして、待つんだよ。……釣りは、待つのがいちばんの仕事さ。']];
+      },
+      hole(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（夕方の氷の穴に、もう薄い氷が張っている）']];
+        if (f.fished) return [['me', '', '（氷の穴の水が、静かに揺れている）']];
+        f.fished = true;
+        return [['me', '', '（氷にあいた丸い穴に、糸をたらす。……寒い。指先の感覚がなくなっていく）'], ['me', '', '（ばあちゃんは、百年分の冬の話をしながら、小さな魚を三匹釣った。わたしは、ゼロ）'], ['me', '', '（村のほうから、ときどき、どすん、とか、しーっ、とか聞こえる）']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 48 いわしから弦へ（市場の物々交換を一周して、ギターの弦を手に入れる）
+  C.push({
+    id: 'lisboa', shape: '交換の連鎖', name: 'ポルトガーナ', sub: 'タイルの坂の港', time: 'dusk', screens: 5, far: 'sea_dusk', timeBack: 'night', map: [38.7, -9.1],
+    hill: '#3a2a30', ground: ['#a08870', '#6a5848', '#b09880'], tint: 'rgba(255,170,130,.06)', bscale: 1.0,
+    props: [['ship_barrels', 400, 90], ['wall_flowers', 1300, 110], ['flatbread_table', 2300, 60], ['easel', 3100, 130], ['bollard', 4400, 60]],
+    buildings: [['med_white', 700, 0.95], ['it_townhouse', 1700, 0.9], ['es_white', 2700, 0.9], ['sea_shop', 3700, 0.95]],
+    npcs: [
+      { id: 'zeca', name: 'ゼカ', actor: 'flower_boy', x: 600, face: 1 },
+      { id: 'rosa_f', name: '魚売りのロザ', actor: 'ranchwife', x: 1450, face: -1 },
+      { id: 'tiago', name: '果物屋のチアゴ', actor: 'grocer', x: 2250, face: -1 },
+      { id: 'ines', name: 'タイル絵描きのイネス', actor: 'scarfwoman', x: 3250, face: -1 },
+      { id: 'avo', name: 'アヴォ・ジョアキン', actor: 'oldman', x: 4100, face: -1 }
+    ],
+    weather: { clear: 6, wind: 2, drizzle: 2 },
+    animals: [['cat_orange', 1100], ['cat_white', 2600], ['crow', 3500]],
+    talk: {
+      zeca(S) {
+        const f = S.f;
+        if (S.back && f.str) return [['npc', 'normal', 'じいちゃん、ゆうべ、港で歌ったんだ！ ……いわし一匹が、歌になったんだよ。']];
+        if (S.back) return [['npc', 'normal', 'じいちゃんのギター、きょうも弦が五本。……五本の歌は、ちょっとさびしい。']];
+        if (f.sardine) return [['npc', 'normal', '弦は、タイル絵描きのイネスさんが持ってるって。でも、お金じゃ売ってくれないんだ。']];
+        f.sardine = true;
+        return [['me', '', '（男の子が、いわしを一匹、両手でささげ持って、困った顔で立っている）'], ['npc', 'normal', 'じいちゃんのギター、弦が一本切れちゃったの。今夜、港の祭りで歌う約束なのに。'], ['npc', 'normal', 'この坂の市場は、お金より交換なんだ。……ぼくが持ってるのは、このいわし一匹だけ。'], ['npc', 'normal', '旅の人、これで弦まで、たどりつける？']];
+      },
+      rosa_f(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'いわしが一周して、うちに戻ってきたの？ ……笑っちゃう。']];
+        if (f.lemon) return [['npc', 'normal', 'いわしにはレモン。……あたりまえのことよ。']];
+        if (!f.sardine) return [['npc', 'normal', 'いわし、いらんかね！ ……って、いわし売りがいわしを欲しがるわけないか。']];
+        return [['npc', 'normal', 'いわしと交換？ うちはいわし屋よ。……でも、チアゴがレモンを持て余してたわね。']];
+      },
+      tiago(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'あのいわし、焼いて食べたよ。……レモンを、たっぷりしぼってね。']];
+        if (f.lemon) return [['npc', 'normal', 'レモンは、きっとだれかの役に立つよ。たぶんね。']];
+        if (!f.sardine) return [['npc', 'normal', 'レモン、いらないかい。ことしはなりすぎてね。']];
+        f.lemon = true;
+        return [['npc', 'normal', 'いわし！ ……ちょうど、晩ごはんのおかずを考えてたんだ。'], ['me', '', '（いわし一匹が、レモン三つになった）'], ['npc', 'normal', 'イネスのところへ持っていきな。あの人、絵の具を溶くのに、レモン汁を使うんだ。']];
+      },
+      ines(S) {
+        const f = S.f;
+        if (S.back && f.str) return [['npc', 'normal', '黄色、ちゃんと出たわ。……レモンの黄色。港の絵の、夕日のところに使ったの。']];
+        if (S.back) return [['npc', 'normal', '黄色が出ないの。……港の絵、夕日だけ白いまま。']];
+        if (f.str) return [['npc', 'normal', 'ジョアキンさんに、よろしく。……昔、あの人の歌で、わたし、タイルを描きはじめたのよ。']];
+        if (!f.lemon) return [['npc', 'normal', 'ギターの弦？ ……亡くなった父のが一本あるけど。絵の具の黄色が出なくて、それどころじゃないの。']];
+        f.str = true;
+        return [['npc', 'normal', 'レモン！ ……これで、黄色が出せる。'], ['npc', 'normal', '弦がほしいの？ 父の形見だけど……いいわ。ジョアキンさんのギターなら、父も喜ぶ。'], ['me', '', '（レモン三つが、銀色の弦一本になった）']];
+      },
+      avo(S) {
+        const f = S.f;
+        if (S.back && f.str) return [['npc', 'normal', 'ゆうべの歌は、いわしの歌、と呼ばれておる。……港の連中が、そう名づけた。'], ['insight', '', 'いわし一匹は、坂の市場を一周するあいだに、いくつもの晩ごはんと一枚の絵と、一つの歌になった。']];
+        if (S.back) return [['npc', 'normal', '五本でも、歌えんことはない。……ただ、低いところが、少しさびしい。']];
+        if (f.str) { f.strDone = true;
+          return [['me', '', '（弦を渡すと、老人は、ふるえる指で、ゆっくりと張りかえた）'], ['npc', 'normal', '……この弦は、イネスの父さんのものだな。音で、わかる。'], ['me', '', '（ぽろん、と低い音。港の夕暮れに、しみていく）'], ['npc', 'normal', 'ゼカ、行くぞ。……今夜は、六本で歌える。']]; }
+        return [['npc', 'normal', '……ゼカのやつ、弦を探しに行ったか。'], ['npc', 'normal', '五十年、この港で歌ってきた。弦が切れたのは、三度目だ。……三度とも、だれかが届けてくれた。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
