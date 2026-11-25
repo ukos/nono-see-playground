@@ -437,16 +437,17 @@ function shipAmount(cam) { // 画面の真ん中が船の上なら 1、岸に近
   const center = cam + W / 2, c = countryAt(center); if (!c.ship) return 0;
   return Math.max(0, Math.min(1, (center - c.x0) / 400, (c.x1 - center) / 400));
 }
-function drawProps(cam) {
+function drawProps(cam, front) {
   for (const c of C) {
     if (!c.props || c.x1 < cam - 800 || c.x0 > cam + W + 800) continue;
     const back = st.maxX >= c.x1 - 2 && st.x < c.x1;
-    for (const [name, rx, ph, when] of c.props) {
+    for (const [name, rx, ph, when, lift] of c.props) {
+      if (!!lift !== !!front) continue; // lift（持ち上げ）つきの小物は建物の手前、屋根の上などに描く
       if (when && !when(st.flags, back)) continue; // 条件つきの小物（帰り道だけ現れる絵など）
       const im = img(`assets/props/${name}.webp`); if (!im) continue;
       const h = ph, w = im.width * h / im.height, x = c.x0 + rx - cam;
       if (x > W + 20 || x + w < -20) continue;
-      g.drawImage(im, x, GROUND + 8 - h, w, h);
+      g.drawImage(im, x, GROUND + 8 - h - (lift || 0), w, h);
     }
   }
 }
@@ -500,7 +501,8 @@ const ANIM = {
   cat_calico: [34, 2, 'cat'], cat_black: [34, 2, 'cat'], cat_orange: [34, 2, 'cat'], cat_white: [34, 2, 'cat'], cat_persian: [38, 2, 'cat'], cat_siamese: [36, 2, 'cat'],
   owl: [42, 2, 'bird'], duck: [36, 2, 'bird'], chicks: [26, 2, 'bird'], crow: [34, 2, 'bird'], rooster: [34, 1, 'bird'], hen: [30, 1, 'bird'],
   sheep: [50, 2, 'big'], horse: [118, 1, 'big'], horse_bay: [120, 2, 'big'], cow: [92, 1, 'big'], donkey: [88, 1, 'big'], camel: [128, 1, 'big'],
-  yak: [92, 1, 'big'], llama: [110, 1, 'big'], turtle: [28, 1, 'big'], hawk: [40, 1, 'fly']
+  yak: [92, 1, 'big'], llama: [110, 1, 'big'], turtle: [28, 1, 'big'], hawk: [40, 1, 'fly'],
+  stork: [70, 1, 'big'], stork_fly: [56, 1, 'fly']
 };
 const ANIMALS = [];
 C.forEach(c => (c.animals || []).forEach(([k, x, o = {}], j) => {
@@ -667,7 +669,7 @@ function frame(ts) {
   const first = C[0]; drawSign(first.x0 + 430 - cam, first.name);
   for (const c of C.slice(1)) drawSign(c.x0 - cam, `← ${C[c.i - 1].name} ｜ ${c.name} →`);
   drawSign(WORLD - 260 - cam, 'この先は、まだ見ぬ国（試作はここまで）');
-  drawProps(cam); drawBuildings(cam); drawBridge(cam);
+  drawProps(cam); drawBuildings(cam); drawProps(cam, true); drawBridge(cam);
   drawAnimals(cam, busy ? 0 : dt);
   for (const n of NPCS) drawActor(n, cam);
   drawPlaces(cam); drawRabbit(cam); drawNono(cam); drawFore(cam);

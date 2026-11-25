@@ -2079,7 +2079,8 @@
   C.push({
     id: 'belarus', shape: '渡り鳥の帰りを待つ', name: 'ベラルシア', sub: 'コウノトリの沼', time: 'dusk', screens: 5, far: 'marsh', timeBack: 'morning', map: [52.1, 27],
     hill: '#2a3424', ground: ['#5a6a40', '#3a4430', '#6a7050'], tint: 'rgba(255,180,120,.05)', bscale: 1.0,
-    props: [['reeds', 1300, 120], ['reeds2', 2500, 130], ['reeds', 3200, 120], ['haystack', 4300, 110]],
+    props: [['reeds', 1300, 120], ['reeds2', 2500, 130], ['stork_tangled', 2860, 80, f => !f.freed], ['reeds', 3200, 120], ['haystack', 4300, 110],
+      ['stork_nest1', 790, 130, (f, back) => !(back && f.freed), 205], ['stork_nest2', 790, 130, (f, back) => back && f.freed, 205]],
     buildings: [['thatched_farm', 700, 0.95], ['house_small', 4000, 1.3]],
     npcs: [
       { id: 'misha', name: 'ミーシャ', actor: 'scout', x: 1050, face: 1 },
@@ -2092,7 +2093,7 @@
       { id: 'reedbird', name: '葦の中の白い鳥', x: 2900, verb: '見る' }
     ],
     weather: { clear: 5, drizzle: 3, fog: 2 },
-    animals: [['duck', 1600], ['crow', 3600], ['cow', 4500, { mode: 'stay', face: -1 }]],
+    animals: [['duck', 1600], ['crow', 3600], ['cow', 4500, { mode: 'stay', face: -1 }], ['stork_fly', 1500, { mode: 'fly', when: f => f.freed, back: 'not' }], ['stork', 3700, { mode: 'stay', face: -1, back: 'only' }]],
     talk: {
       misha(S) {
         const f = S.f;
