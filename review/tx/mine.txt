@@ -1,5 +1,5 @@
 == 国: ネパラ（雪の峰）
-〔14番目の国／広さ 6 画面／昼／遠景 snow_peaks_noon〕
+〔15番目の国／広さ 6 画面／昼／遠景 snow_peaks_noon〕
 〔天候：晴れ 40%、強風 20%、霧 20%、雪 20%〕
 〔建物：pk_mountain、pk_mountain／小物：pine_snow、rune_stone、rock_moss、pine_snow〕
 〔住人（西から）：茶屋のラクパ @1200、黙った案内人 @2500、ラクパの兄 @4300〕

@@ -397,7 +397,78 @@
     }
   });
 
-  // ---------------------------------------------------------------- 8 霧（追っている者が、追われていた）
+  // ---------------------------------------------------------------- 船旅 灯台の数え方（グレシアで覚えた「七つ」が、夜の海の道しるべになる）
+  C.push({
+    id: 'kamome', name: 'カモメ号', sub: '船の上・霧の島へ', time: 'night', screens: 5, far: 'sea_night', fore: false,
+    ship: true, sea: true,
+    map: [40, -13], // 地図の位置（グレシアから霧の島への航路のなかほど）
+    hill: '#1a2440', ground: ['#8a6a48', '#5a4330', '#9a7a58'], tint: 'rgba(40,60,120,.06)', bscale: 1.0,
+    props: [['ship_barrels', 500, 110], ['ship_rope', 1250, 50], ['ship_lifebuoy', 1500, 70], ['ship_cabin', 1650, 190], ['ship_mast', 2450, 420], ['ship_crates', 3300, 100],
+      ['ship_anchor', 3550, 80], ['ship_mast', 4050, 440], ['ship_bell', 4300, 120], ['ship_lantern', 4620, 150]],
+    buildings: [],
+    npcs: [
+      { id: 'holm', name: 'ホルム船長', actor: 'old_fisher', x: 800, face: -1 },
+      { id: 'ben', name: 'コックのベン', actor: 'sailor', x: 2050, face: -1 },
+      { id: 'yui_ship', name: YUI('マントの娘'), sprite: 'yui_cape', x: 2900, face: -1 },
+      { id: 'mina', name: '見張りのミナ', actor: 'sailorgirl', x: 3800, face: -1 }
+    ],
+    places: [{ id: 'bow', name: 'へさき', x: 4500, verb: '見る' }],
+    weather: { clear: 6, wind: 3, fog: 1 },
+    animals: [['cat_black', 1100, { range: 300 }]],
+    talk: {
+      holm(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ミナは今夜も夜番だ。コーヒーなしで起きていられる、と言いはっとる。'], ['npc', 'normal', '……起きていられるかどうかは、明日の朝わかる。']];
+        if (f.bellRung) return [['npc', 'normal', '鐘が一度。……いい鐘だった。'], ['npc', 'normal', '北の灯りへ向かっていたら、いまごろ岩場だ。舵は、東へ切った。'], ['insight', '', '眠るために七つ数える灯りが、ここでは夜の海の道しるべになった。']];
+        if (f.holmTold) return [['npc', 'normal', '鐘は一度だけ。鳴らしすぎると、船じゅうが起きて文句を言う。']];
+        f.holmTold = true;
+        return [['npc', 'normal', '旅の人、夜の海でいちばん怖いものは何だと思う？'], ['me', '', '……暗さ、ですか。'], ['npc', 'normal', '眠気だ。見張りが眠れば、船は岩にぶつかる。'], ['npc', 'normal', '今夜は、ミナの初めての夜番だ。霧の島の灯台が見えたら、鐘を一度だけ鳴らす。'], ['npc', 'normal', 'わしは舵の横で、少し目をつぶる。……あの子を信じることにした。']];
+      },
+      ben(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ミナのコーヒー、砂糖を三つから二つに減らした。大人になったもんだ。']];
+        if (f.coffee) return [['npc', 'normal', '冷めないうちに、へさきのほうへ。']];
+        f.coffee = true;
+        return [['npc', 'normal', '船長から聞いたかい、見張りの子のこと。'], ['npc', 'normal', 'これを持っていってくれ。苦いコーヒーに、砂糖三つ。あの子は苦いのが飲めん。'], ['me', '', '（湯気の立つカップを受け取った。船が揺れるたび、こぼれそうになる）']];
+      },
+      yui_ship(S) {
+        const f = S.f;
+        if (S.back) return [['npc', '', '夜会は終わったわ。剣より、ダンスのほうがずっと疲れた。'], ['npc', '', '……帰りの船は、もう揺れても平気。たぶん。']];
+        if (f.minaAsk && !f.yuiCount) { f.yuiCount = true;
+          return [['me', '', '霧の島の灯台は、何回光るか知っていますか？'], ['npc', '', '知ってる。七つ光って、少し休むの。'], ['npc', '', '白壁の港の灯台と、同じ数え方。……眠れない夜に、数えたばかりだから。']]; }
+        if (f.yuiCount) return [['npc', '', '七つよ。七つで、ちゃんと眠れる灯台。']];
+        return f.yuiKnown
+          ? [['npc', '', 'nono！ 霧の島の夜会へ行くの。……船って、もっと揺れないものだと思ってた。'], ['npc', '', '使者どのは別の船。同じ灯台を目指してるけど。']]
+          : [['npc', '', '……話しかけないで。いま、揺れと戦ってるの。剣では勝てない相手と。']];
+      },
+      mina(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'きのうの夜番、船長にほめられた！ ……昼間は、ちょっと眠いけど。']];
+        if (f.bellRung) return [['npc', 'normal', '鐘、一回だけ鳴らせた。……手が、まだ震えてる。']];
+        if (f.lightSeen && f.yuiCount) { f.bellRung = true;
+          return [['me', '', '東の灯りが、七つ光って休んでいます。霧の島の灯台は、七つだそうです。'], ['npc', 'normal', '七つ……東だ！'], ['me', '', '（カーン、と鐘が一度だけ、夜の海に響いた）'], ['npc', 'normal', '……鳴らせた。一回だけ。ちゃんと、一回だけ。']]; }
+        if (f.lightSeen) return [['npc', 'normal', '灯りが二つ……どっちだろう。まちがえて鳴らしたら、船が岩場へ行っちゃう。']];
+        if (f.minaAsk) {
+          const out = [['npc', 'normal', '……寝てない。寝てないです。']];
+          if (f.coffee && !f.coffeeGiven) { f.coffeeGiven = true; out.push(['npc', 'normal', 'コーヒー！ 砂糖、三つ入ってる？ ……ベンさん、覚えてた。']); }
+          return out;
+        }
+        f.minaAsk = true; if (f.coffee) f.coffeeGiven = true;
+        return [['npc', 'normal', '見張りのミナです。……起きてます！ 起きてます。'], ...(f.coffee ? [['npc', 'normal', 'それ、コーヒー？ 砂糖三つ？ ……ありがとう、ベンさん。']] : []), ['npc', 'normal', '灯台は、光る回数で見分けるの。霧の島の灯台は……ええと、何回だっけ。'], ['npc', 'normal', '船長に聞きなおすの、恥ずかしくて。初めての夜番なのに。']];
+      },
+      bow(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（へさきの向こうに、来た道の海が、暗く続いている）']];
+        if (f.bellRung) return [['me', '', '（船は東の灯りへ向かっている。七つ光って、少し休む）']];
+        if (!f.minaAsk) return [['me', '', '（暗い海の向こうに、小さな灯りがまたたいている）']];
+        f.lightSeen = true;
+        return [['me', '', '（遠くに、灯りが二つ見える。北の灯りと、東の灯り）'], ['me', '', '（北の灯りは三つ光って休む。東の灯りは……一、二、三……七つ光って、休む）']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 8 霧（追っている者が、追われていた）
   C.push({
     id: 'kiri', name: 'ブリテニア', sub: '霧の島', time: 'morning', screens: 7, far: 'cliffs_morning', mid: 'trees',
     map: [54, -2], // 世界地図の位置（緯度, 経度）

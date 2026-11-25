@@ -1,5 +1,5 @@
 == 国: チリーノ（坂の港）
-〔10番目の国／広さ 7 画面／夕暮れ／遠景 volcano〕
+〔11番目の国／広さ 7 画面／夕暮れ／遠景 volcano〕
 〔天候：晴れ 50%、スコール 20%、強風 20%、小雨 10%〕
 〔建物：mx_house、mx_church、br_townhouse、br_hillside、cl_hill_house、ar_boca、cl_stilt、ar_estancia／小物：palm、step_pyramid、cactus〕
 〔住人（西から）：セカンド（WATCH） @1300、ミラ（絵描き） @2600、ティト（港の子） @4000〕

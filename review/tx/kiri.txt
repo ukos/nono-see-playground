@@ -1,5 +1,5 @@
 == 国: ブリテニア（霧の島）
-〔8番目の国／広さ 7 画面／朝／遠景 cliffs_morning〕
+〔9番目の国／広さ 7 画面／朝／遠景 cliffs_morning〕
 〔天候：霧 40%、濃霧 30%、小雨 20%、晴れ 10%〕
 〔建物：uk_tudor、uk_terrace、uk_terrace、city_building、white_mansion、castle_gate、treehouse／小物：tower_ivy、rune_stone、tree_dead、stone_chapel〕
 〔住人（西から）：黒いスーツの娘 @1300、赤いマフラーの女 @2300、霧の森の薬草とり @3800、黒い服の少年 @4900〕

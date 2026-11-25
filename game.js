@@ -406,6 +406,33 @@ function drawSign(x, label) {
   g.fillStyle = '#8a6a48'; g.fillRect(x - tw / 2, GROUND - 78, tw, 28);
   g.fillStyle = '#f6eee6'; g.textAlign = 'center'; g.fillText(label, x, GROUND - 58);
 }
+// 船の上：甲板の板目と、奥の手すり
+function drawDeck(cam) {
+  for (const c of C) {
+    if (!c.ship || c.x1 < cam || c.x0 > cam + W) continue;
+    const a = Math.max(0, c.x0 - cam), z = Math.min(W, c.x1 - cam);
+    g.fillStyle = 'rgba(40,25,15,.35)';
+    for (let y = GROUND + 10; y < H; y += 14) g.fillRect(a, y, z - a, 2);
+    for (let x = c.x0 + 40; x < c.x1; x += 120) { const sx = x - cam; if (sx > -10 && sx < W + 10) for (let y = GROUND + 10, k = 0; y < H; y += 14, k++) g.fillRect(sx + (k % 2) * 60, y, 2, 12); }
+    const rail = img('assets/props/ship_rail.webp'); if (!rail) continue;
+    const h = 52, w = rail.width * h / rail.height;
+    for (let x = c.x0; x < c.x1; x += w - 4) { const sx = x - cam; if (sx > -w && sx < W) g.drawImage(rail, sx, GROUND + 6 - h, Math.min(w, c.x1 - x), h); }
+  }
+}
+// 船の上のカモメ
+function drawGulls(cam, k) {
+  if (k <= 0) return;
+  g.save(); g.globalAlpha = k; g.strokeStyle = '#f4f1ea'; g.lineWidth = 2.2;
+  for (let i = 0; i < 4; i++) {
+    const x = ((st.t * (18 + i * 5) + i * 260 - cam * 0.15) % (W + 200) + W + 200) % (W + 200) - 100, y = 70 + i * 28 + Math.sin(st.t * 0.8 + i) * 12, f = Math.sin(st.t * 7 + i * 2) * 6;
+    g.beginPath(); g.moveTo(x - 11, y - f); g.quadraticCurveTo(x - 5, y - 4, x, y); g.quadraticCurveTo(x + 5, y - 4, x + 11, y - f); g.stroke();
+  }
+  g.restore();
+}
+function shipAmount(cam) { // 画面の真ん中が船の上なら 1、岸に近づくと 0 へ
+  const center = cam + W / 2, c = countryAt(center); if (!c.ship) return 0;
+  return Math.max(0, Math.min(1, (center - c.x0) / 400, (c.x1 - center) / 400));
+}
 function drawProps(cam) {
   for (const c of C) {
     if (!c.props || c.x1 < cam - 800 || c.x0 > cam + W + 800) continue;
@@ -622,7 +649,12 @@ function frame(ts) {
   saveT += dt; if (saveT > 4) { saveT = 0; save(); }
 
   g.setTransform(cv.width / W, 0, 0, cv.height / H, 0, 0); g.imageSmoothingQuality = 'high';
-  const cc = drawFar(cam); drawMid(cam, cc); drawGround(cam);
+  const sk = shipAmount(cam);
+  if (sk > 0) { // 船の上は、ゆっくり揺れる
+    g.save(); g.translate(W / 2, H / 2); g.rotate(Math.sin(st.t * 0.9) * 0.012 * sk); g.scale(1 + 0.04 * sk, 1 + 0.04 * sk);
+    g.translate(-W / 2, -H / 2 + Math.sin(st.t * 1.3) * 3 * sk);
+  }
+  const cc = drawFar(cam); drawMid(cam, cc); drawGround(cam); drawDeck(cam); drawGulls(cam, sk);
   const first = C[0]; drawSign(first.x0 + 430 - cam, first.name);
   for (const c of C.slice(1)) drawSign(c.x0 - cam, `← ${C[c.i - 1].name} ｜ ${c.name} →`);
   drawSign(WORLD - 260 - cam, 'この先は、まだ見ぬ国（試作はここまで）');
@@ -630,6 +662,7 @@ function frame(ts) {
   drawAnimals(cam, busy ? 0 : dt);
   for (const n of NPCS) drawActor(n, cam);
   drawPlaces(cam); drawRabbit(cam); drawNono(cam); drawFore(cam);
+  if (sk > 0) g.restore();
   g.fillStyle = cc.tint || 'rgba(80,40,90,.10)'; g.fillRect(0, 0, W, H);
   const tl = TIME[cc.time || 'dusk']; if (tl.fill) { g.fillStyle = tl.fill; g.fillRect(0, 0, W, H); }
   drawWeather(cam, st.x - cam);

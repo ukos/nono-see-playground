@@ -1,5 +1,5 @@
 == 国: ノルヴィーク（雪の村）
-〔9番目の国／広さ 5 画面／夜／遠景 aurora_night〕
+〔10番目の国／広さ 5 画面／夜／遠景 aurora_night〕
 〔天候：雪 60%、晴れ 20%、濃霧 10%、強風 10%〕
 〔建物：nordic_red、nordic_red、lumber_hut、nordic_red／小物：pine_snow、tree_snow、pine_snow〕
 〔住人（西から）：ソルヴェイ @900、火守りのオーラヴ @2000〕

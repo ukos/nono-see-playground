@@ -1,5 +1,5 @@
 == 国: ケニアラ（朝日の草原）
-〔16番目の国／広さ 6 画面／朝／遠景 savanna_morning〕
+〔17番目の国／広さ 6 画面／朝／遠景 savanna_morning〕
 〔天候：晴れ 70%、強風 20%、小雨 10%〕
 〔建物：thatched_farm、adobe／小物：bush、tree_dead、rock、bush〕
 〔住人（西から）：西の村のムワンギ @1000、東の村のオティエノ @4400〕

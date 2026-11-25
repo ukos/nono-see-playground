@@ -1,5 +1,5 @@
 == 国: ネーデラ（風車の低地）
-〔12番目の国／広さ 6 画面／朝／遠景 windmills_morning〕
+〔13番目の国／広さ 6 画面／朝／遠景 windmills_morning〕
 〔天候：強風 100%〕
 〔建物：thatched_farm、uk_terrace、nordic_red、house_small／小物：reeds、tree_green、bush、reeds2〕
 〔住人（西から）：ピム（少年） @700、粉屋のゴロ @2300、堤防番のアンナ @4500〕
