@@ -2898,5 +2898,96 @@
     }
   });
 
+// ---------------------------------------------------------------- 53 八十歳の自転車（となり村の妹に会うため、おばあさんが自転車を習う）
+  C.push({
+    id: 'danmarka', shape: '年寄りがはじめて挑戦する', name: 'デンマルカ', sub: '花畑の自転車道', time: 'noon', screens: 5, far: 'flower', timeBack: 'dusk', map: [55.7, 10.2],
+    hill: '#3a4a30', ground: ['#7a9a5a', '#4a6038', '#8aa068'], tint: 'rgba(255,240,210,.03)', bscale: 1.0,
+    props: [['bush_berry', 300, 90], ['sunflowers', 1300, 130], ['signboard', 2100, 110], ['bush', 3200, 90], ['well', 4300, 150]],
+    buildings: [['house_small', 700, 1.3], ['bakery', 1700, 0.9], ['nordic_red', 3800, 0.9]],
+    npcs: [
+      { id: 'karen', name: 'カーレンおばあさん', actor: 'granny_apron', x: 1000, face: 1 },
+      { id: 'mads', name: '自転車屋のマス', actor: 'bikeman', x: 1500, face: -1 },
+      { id: 'freja', name: 'フレデリク', actor: 'boy_sled', x: 2600, face: -1 }
+    ],
+    places: [{ id: 'lane', name: '花畑のまっすぐな道', x: 2900, verb: '支える', when: f => f.karenTold && f.madsTold }],
+    weather: { clear: 6, wind: 3, drizzle: 1 },
+    animals: [['cow', 3600, { mode: 'stay' }], ['duck', 2300], ['dog_pug', 1200]],
+    talk: {
+      karen(S) {
+        const f = S.f;
+        if (S.back && f.rode) return [['me', '', '（夕方の道の向こうから、自転車がよろよろと近づいてくる。……カーレンおばあさんだ）'], ['npc', 'normal', 'どいてー！ 止まり方を、まだ習ってないのー！'], ['me', '', '（おばあさんは、わたしの横を通りすぎて、垣根に、ふわっと突っこんだ）'], ['npc', 'normal', '……ふふ。妹の家まで、行ってきたよ。六十年ぶりにね。']];
+        if (S.back) return [['npc', 'normal', '……やっぱり、八十で自転車は、むりだったね。バスを待つよ。日に一本だけど。']];
+        if (f.rode) return [['npc', 'normal', '……手を、離してたのかい？ いつから？ ……言わないでおくれ、こわくなるから。']];
+        if (f.karenTold) return [['npc', 'normal', 'マスの店で、いちばん低い自転車を借りたよ。……足が、地面にとどく。それだけが、救いだね。']];
+        f.karenTold = true;
+        return [['me', '', '（エプロン姿の小さなおばあさんが、料理のおたまを握ったまま、自転車屋の店先をにらんでいる）'], ['npc', 'normal', '旅の人、うしろを持っててくれないかい。……八十年、自転車に乗ったことがないんだ。'], ['npc', 'normal', 'となり村の妹が、寝こんでてね。バスは日に一本、それも行ってしまった。'], ['npc', 'normal', 'この国の人は、みんな自転車で行く。……わしだけ、こわくて、一度も乗らなかった。']];
+      },
+      mads(S) {
+        const f = S.f;
+        if (S.back && f.rode) return [['npc', 'normal', 'カーレンさんが、ブレーキの使い方を習いに来たよ。……順番が、ふつうと逆だね。']];
+        if (S.back) return [['npc', 'normal', '自転車、返しに来たよ。乗らないまま。……来週、また貸すって言っといた。']];
+        if (f.madsTold) return [['npc', 'normal', 'うしろの荷台を持って、走って、そっと手を離す。……それが、この国で百年続いてる教え方さ。']];
+        f.madsTold = true;
+        return [['npc', 'normal', 'カーレンさんに自転車を？ ……ああ、貸したよ。子ども用の、いちばん低いのを。'], ['npc', 'normal', '教え方かい？ うしろの荷台を持って、いっしょに走る。そして、本人に言わずに、そっと手を離す。'], ['npc', 'normal', '……みんな、そうやって乗れるようになった。おれも、うちの父さんに、そうされた。']];
+      },
+      freja(S) {
+        const f = S.f;
+        if (S.back && f.rode) return [['npc', 'normal', 'カーレンおばあちゃんが、ぼくより先に、となり村まで行ったんだよ！ ……ぼく、まだ補助輪なのに。']];
+        if (S.back) return [['npc', 'normal', 'おばあちゃん、バス停で、ずっと座ってた。']];
+        return [['npc', 'normal', 'カーレンおばあちゃん、自転車に乗るの？ ……ほんとに？'], ['npc', 'normal', 'ぼくはね、手を離されたとき、気づかなかったんだ。気づいたら、乗れてた。']];
+      },
+      lane(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（夕方の花畑の道に、細いタイヤのあとが、くねくねと東へ続いている）']];
+        if (f.rode) return [['me', '', '（道の先に、小さな背中が、よろよろと遠ざかっていく）']];
+        f.rode = true;
+        return [['me', '', '（荷台をしっかり持って、いっしょに走る）'], ['npc', 'normal', 'は、離さないでおくれよ！ ぜったいだよ！'], ['me', '', '（十歩、二十歩。……ペダルが、少しずつ、まっすぐに回りはじめた）'], ['me', '', '（そっと、手を離す。……おばあさんは、気づかない）'], ['me', '', '（花畑のまっすぐな道を、小さな背中が、ひとりで遠ざかっていった）'], ['insight', '', '八十年のこわさは、うしろの手がいつ離れたか知らないまま、花畑の道に置いていかれた。']].map(l => l[0] === 'npc' ? ['me', '', '（「' + l[2] + '」）'] : l);
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 54 島を出る言葉（帰るために覚えた島の言葉は、「また来て」という意味だった）
+  C.push({
+    id: 'samoana', shape: '帰るための言葉を覚える', name: 'サモアナ', sub: '珊瑚の島', time: 'noon', screens: 5, far: 'sea_noon', timeBack: 'dusk', map: [-13.8, -172.1],
+    hill: '#2a4a3a', ground: ['#e0d0a0', '#b8a478', '#ecdcb0'], tint: 'rgba(255,240,200,.03)', bscale: 1.0,
+    props: [['palm', 300, 320], ['ship_boat', 1300, 70], ['palm', 2300, 300], ['leaf_boats', 3100, 40], ['palm', 4300, 320]],
+    buildings: [['stilt_house', 800, 0.85], ['sea_stall', 2700, 0.9], ['stilt_house', 3900, 0.85]],
+    npcs: [
+      { id: 'sione', name: 'シオネおじさん', actor: 'islander', x: 1000, face: 1 },
+      { id: 'kids', name: '浜の子どもたち', actor: 'boy_frog', x: 2000, face: -1 },
+      { id: 'anna_n', name: '看護師のアンナ', actor: 'nurse', x: 3500, face: -1 }
+    ],
+    weather: { clear: 7, squall: 2, wind: 1 },
+    animals: [['dog_brown', 1500], ['hen', 2400], ['turtle', 3200]],
+    talk: {
+      sione(S) {
+        const f = S.f;
+        if (S.back && f.wordOk) return [['me', '', '……ファアレ・マイ。'], ['npc', 'normal', '（シオネおじさんが、ウクレレを止めて、大きく笑った）'], ['npc', 'normal', 'ちゃんと言えたな！ ……それは、「また来るね」って意味だ。島を出る人が、島に言う約束さ。'], ['insight', '', '島を出るために覚えた言葉は、また来るという約束だった。']].map(l => l[2].startsWith('（シオネ') ? ['me', '', l[2]] : l);
+        if (S.back) return [['npc', 'normal', '言葉、覚えたかい？ ……覚えてなくても、通っていい。ただ、島がちょっとさびしがるだけさ。']];
+        if (f.sioneTold) return [['npc', 'normal', 'ファアレ・マイ。……口をまるくして、「ファ」。']];
+        f.sioneTold = true;
+        return [['me', '', '（花の首飾りのおじさんが、ウクレレを弾きながら、こちらに手をふっている）'], ['npc', 'normal', 'ようこそ！ この島の決まりを、教えてあげよう。'], ['npc', 'normal', '島から帰るときは、島の言葉をひとつ、言っていかなきゃいけない。「ファアレ・マイ」。'], ['npc', 'normal', '……言えなかったら？ ふふ、ずっと島にいることになるかもな。冗談だよ。半分はね。']];
+      },
+      kids(S) {
+        const f = S.f;
+        if (S.back && f.wordOk) return [['npc', 'normal', 'ファアレ・マイ！ ……旅の人、もう笑わないよ。上手になったもん。']];
+        if (S.back) return [['npc', 'normal', 'ファーレ……マ……あはは！ 旅の人、まだ言えないの？']];
+        if (f.practiced) { f.wordOk = true;
+          return [['me', '', '……ファアレ・マイ。'], ['npc', 'normal', '……あ。言えた。'], ['npc', 'normal', '（子どもたちが、ぱちぱちと手をたたいた）'], ['npc', 'normal', 'アンナ先生より上手！ 先生、十年いるのに、まだ「ファーレ」って言うんだよ。']].map(l => l[2].startsWith('（子ども') ? ['me', '', l[2]] : l); }
+        f.kidsLaugh = true;
+        return [['me', '', '……ファーレ・マイ？'], ['npc', 'normal', 'あはははは！ ちがうちがう、それ「ぼくのお尻」って意味！'], ['me', '', '（子どもたちが、砂の上を転げまわって笑っている）'], ['npc', 'normal', '口をまるくして、「ファ」！ それから、ちょっと止まって、「アレ」！']];
+      },
+      anna_n(S) {
+        const f = S.f;
+        if (S.back && f.wordOk) return [['npc', 'normal', '言えたの？ ……いいなあ。わたし、十年いて、まだ言えない。'], ['npc', 'normal', '……でもね、言えないから、まだここにいるのかもしれないわ。']];
+        if (S.back) return [['npc', 'normal', '言えなくても、だいじょうぶ。わたしなんて、十年、言えないままここにいるもの。']];
+        if (!f.kidsLaugh) return [['npc', 'normal', '島の看護師のアンナよ。十年前に、海の向こうから来たの。……ケガをしたら、言ってね。']];
+        f.practiced = true;
+        return [['npc', 'normal', '子どもたちに笑われた？ ……わたしもよ。十年、ずっと。'], ['npc', 'normal', 'こつはね、「ファ」のあとで、息をひとつ止めるの。……わたしは、それができないんだけど。'], ['npc', 'normal', '……島の人たちは、わたしが言えないのを、ちょっと喜んでる気がするの。言えたら、帰っちゃうと思ってるのかしら。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
