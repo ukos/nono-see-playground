@@ -1523,62 +1523,6 @@
   });
 
   
-// ---------------------------------------------------------------- 28 まっすぐ漕ぐ（渡し舟が休みの湖を、旅人が自分で渡る）
-  C.push({
-    id: 'kanadia', ride: 'self', shape: '旅人が教わって自分で渡る', name: 'カナディア', sub: '湖の渡し', time: 'morning', screens: 5, far: 'lake_reeds_morning', map: [46.5, -80],
-    hill: '#24382e', ground: ['#5a7a4a', '#3a4a34', '#7a7058'], tint: 'rgba(180,200,220,.05)', bscale: 1.0,
-    props: [['pine', 300, 300], ['reeds', 1300, 120], ['pier', 1700, 110], ['canoe', 1950, 60, (f, back) => !f.crossed || back], ['signboard', 620, 120], ['reeds2', 3000, 120], ['pine', 4500, 320]],
-    buildings: [['lumber_hut', 700, 1.3], ['lumber_hut', 3900, 1.2]],
-    npcs: [
-      { id: 'aiyana', name: '舟づくりのアヤナ', actor: 'forager', x: 1150, face: 1 },
-      { id: 'gord', name: '向こう岸のゴード', actor: 'wrench', x: 3600, face: -1 }
-    ],
-    places: [
-      { id: 'notice', name: '渡し場の札', x: 600, verb: '読む' },
-      { id: 'canoe', name: '桟橋のカヌー', x: 1900, verb: '漕ぐ' },
-      { id: 'pine1', name: '岸の一本杉', x: 4400, verb: '見る' }
-    ],
-    weather: { clear: 5, fog: 3, drizzle: 2 },
-    animals: [['duck', 1400], ['duck', 2700], ['dog_husky', 3300], ['hawk', 2200, { mode: 'fly' }]],
-    talk: {
-      notice(S) {
-        if (S.back) return [['me', '', '（「渡し舟　休み」の札の下に、新しい紙。「カヌー、貸します。漕ぎ方は、アヤナに」）']];
-        return [['me', '', '（「渡し舟　休み。船頭、腰痛のため」）'], ['me', '', '（湖の向こうに、道の続きが見える。……ぐるりと回れば、三日はかかりそうだ）']];
-      },
-      aiyana(S) {
-        const f = S.f;
-        if (S.back) return [['npc', 'normal', '帰りは、だれにも教わらずに、まっすぐ来たね。'], ['npc', 'normal', '……札に、わたしの名前を書いておいた。漕ぎ方は、アヤナにって。教えるの、けっこう好きみたい。']];
-        if (f.crossed) return [['npc', 'normal', '渡れたね。帰りも、同じように。']];
-        if (f.spun) { f.tip = true;
-          return [['npc', 'normal', 'ぐるぐる回ってたね。見てたよ。'], ['npc', 'normal', '初めての人は、みんなパドルを見るの。水をかく手もとばかり。'], ['npc', 'normal', '向こう岸の、一本杉を見て。目を離さずに漕げば、舟はそっちへ行く。']]; }
-        if (f.aiyanaTold) return [['npc', 'normal', 'カヌーは桟橋。だいじょうぶ、ひっくり返っても、この湖は浅いから。……たぶん。']];
-        f.aiyanaTold = true;
-        return [['npc', 'normal', '向こうへ渡りたいの？ 渡し舟は、船頭さんの腰が治るまで休み。'], ['npc', 'normal', 'わたしの作ったカヌーなら、貸してあげる。漕ぐのは、あなた。'], ['npc', 'normal', '……教える？ うーん、まずは、自分でやってみて。']];
-      },
-      canoe(S) {
-        const f = S.f;
-        if (S.back) return [['me', '', '（カヌーで、西の岸へ戻る。一本杉の代わりに、アヤナの小屋の煙を見て漕ぐ）'], ['me', '', '（舟は、まっすぐ進んだ）'], ['insight', '', '手もとを見るのをやめたら、舟はまっすぐ進んだ。']];
-        if (!f.aiyanaTold) return [['me', '', '（細長い木のカヌーが、桟橋につないである。パドルが一本）']];
-        if (f.crossed) return [['me', '', '（カヌーは、向こう岸の桟橋に、ちゃんとつないである）']];
-        if (!f.tip) { f.spun = true;
-          return [['me', '', '（カヌーに乗って、右、左と漕ぐ。……舟が、くるりと回った）'], ['me', '', '（もう一度。……また回った。三回まわって、桟橋に戻ってきてしまった）']]; }
-        f.crossed = true;
-        return [['me', '', '（向こう岸の一本杉を見る。手もとは見ない）'], ['me', '', '（ひとかき、ひとかき。……舟が、杉のほうへ、すうっと進んでいく）'], ['me', '', '（気づくと、向こう岸の桟橋に着いていた）']];
-      },
-      gord(S) {
-        const f = S.f;
-        if (S.back) return [['npc', 'normal', 'また漕いでいくのかい。渡し舟より、そっちのほうが早いんじゃないか。']];
-        if (f.crossed) return [['npc', 'normal', 'おや、カヌーで来たのかい。アヤナの舟だな。'], ['npc', 'normal', 'あの子、自分の舟に人を乗せるのは、これが初めてだよ。'], ['npc', 'normal', '「人に教えるのは苦手」って言ってたが。……ちゃんと渡ってきたじゃないか。']];
-        return [['npc', 'normal', 'おや、歩いて回ってきたのかい？ 三日の道を？ ……顔が、ちっとも疲れておらんな。']];
-      },
-      pine1(S) {
-        const f = S.f;
-        if (S.back) return [['me', '', '（一本杉の根もとに、カヌーの形の小さな彫り物が置いてある。だれかの目印らしい）']];
-        return [['me', '', '（湖から見えた一本杉。近くで見ると、ずいぶん曲がっている）'], ['me', '', '（……遠くからだと、まっすぐに見えたのに）']];
-      }
-    }
-  });
-
 // ---------------------------------------------------------------- 29 けちな柵（いちご畑を囲う意地悪じいさん。柵の中は、地面の鳥の巣だらけだった）
   C.push({
     id: 'polonia', shape: '意地悪に見えた人の本当の理由', name: 'ポロニア', sub: '白樺の野', time: 'noon', screens: 5, far: 'birch_noon', map: [52.2, 21],
@@ -1639,6 +1583,62 @@
   });
 
   
+// ---------------------------------------------------------------- 28 まっすぐ漕ぐ（渡し舟が休みの湖を、旅人が自分で渡る）
+  C.push({
+    id: 'kanadia', ride: 'self', shape: '旅人が教わって自分で渡る', name: 'カナディア', sub: '湖の渡し', time: 'morning', screens: 5, far: 'lake_reeds_morning', map: [46.5, -80],
+    hill: '#24382e', ground: ['#5a7a4a', '#3a4a34', '#7a7058'], tint: 'rgba(180,200,220,.05)', bscale: 1.0,
+    props: [['pine', 300, 300], ['reeds', 1300, 120], ['pier', 1700, 110], ['canoe', 1950, 60, (f, back) => !f.crossed || back], ['signboard', 620, 120], ['reeds2', 3000, 120], ['pine', 4500, 320]],
+    buildings: [['lumber_hut', 700, 1.3], ['lumber_hut', 3900, 1.2]],
+    npcs: [
+      { id: 'aiyana', name: '舟づくりのアヤナ', actor: 'forager', x: 1150, face: 1 },
+      { id: 'gord', name: '向こう岸のゴード', actor: 'wrench', x: 3600, face: -1 }
+    ],
+    places: [
+      { id: 'notice', name: '渡し場の札', x: 600, verb: '読む' },
+      { id: 'canoe', name: '桟橋のカヌー', x: 1900, verb: '漕ぐ' },
+      { id: 'pine1', name: '岸の一本杉', x: 4400, verb: '見る' }
+    ],
+    weather: { clear: 5, fog: 3, drizzle: 2 },
+    animals: [['duck', 1400], ['duck', 2700], ['dog_husky', 3300], ['hawk', 2200, { mode: 'fly' }]],
+    talk: {
+      notice(S) {
+        if (S.back) return [['me', '', '（「渡し舟　休み」の札の下に、新しい紙。「カヌー、貸します。漕ぎ方は、アヤナに」）']];
+        return [['me', '', '（「渡し舟　休み。船頭、腰痛のため」）'], ['me', '', '（湖の向こうに、道の続きが見える。……ぐるりと回れば、三日はかかりそうだ）']];
+      },
+      aiyana(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '帰りは、だれにも教わらずに、まっすぐ来たね。'], ['npc', 'normal', '……札に、わたしの名前を書いておいた。漕ぎ方は、アヤナにって。教えるの、けっこう好きみたい。']];
+        if (f.crossed) return [['npc', 'normal', '渡れたね。帰りも、同じように。']];
+        if (f.spun) { f.tip = true;
+          return [['npc', 'normal', 'ぐるぐる回ってたね。見てたよ。'], ['npc', 'normal', '初めての人は、みんなパドルを見るの。水をかく手もとばかり。'], ['npc', 'normal', '向こう岸の、一本杉を見て。目を離さずに漕げば、舟はそっちへ行く。']]; }
+        if (f.aiyanaTold) return [['npc', 'normal', 'カヌーは桟橋。だいじょうぶ、ひっくり返っても、この湖は浅いから。……たぶん。']];
+        f.aiyanaTold = true;
+        return [['npc', 'normal', '向こうへ渡りたいの？ 渡し舟は、船頭さんの腰が治るまで休み。'], ['npc', 'normal', 'わたしの作ったカヌーなら、貸してあげる。漕ぐのは、あなた。'], ['npc', 'normal', '……教える？ うーん、まずは、自分でやってみて。']];
+      },
+      canoe(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（カヌーで、西の岸へ戻る。一本杉の代わりに、アヤナの小屋の煙を見て漕ぐ）'], ['me', '', '（舟は、まっすぐ進んだ）'], ['insight', '', '手もとを見るのをやめたら、舟はまっすぐ進んだ。']];
+        if (!f.aiyanaTold) return [['me', '', '（細長い木のカヌーが、桟橋につないである。パドルが一本）']];
+        if (f.crossed) return [['me', '', '（カヌーは、向こう岸の桟橋に、ちゃんとつないである）']];
+        if (!f.tip) { f.spun = true;
+          return [['me', '', '（カヌーに乗って、右、左と漕ぐ。……舟が、くるりと回った）'], ['me', '', '（もう一度。……また回った。三回まわって、桟橋に戻ってきてしまった）']]; }
+        f.crossed = true;
+        return [['me', '', '（向こう岸の一本杉を見る。手もとは見ない）'], ['me', '', '（ひとかき、ひとかき。……舟が、杉のほうへ、すうっと進んでいく）'], ['me', '', '（気づくと、向こう岸の桟橋に着いていた）']];
+      },
+      gord(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'また漕いでいくのかい。渡し舟より、そっちのほうが早いんじゃないか。']];
+        if (f.crossed) return [['npc', 'normal', 'おや、カヌーで来たのかい。アヤナの舟だな。'], ['npc', 'normal', 'あの子、自分の舟に人を乗せるのは、これが初めてだよ。'], ['npc', 'normal', '「人に教えるのは苦手」って言ってたが。……ちゃんと渡ってきたじゃないか。']];
+        return [['npc', 'normal', 'おや、歩いて回ってきたのかい？ 三日の道を？ ……顔が、ちっとも疲れておらんな。']];
+      },
+      pine1(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（一本杉の根もとに、カヌーの形の小さな彫り物が置いてある。だれかの目印らしい）']];
+        return [['me', '', '（湖から見えた一本杉。近くで見ると、ずいぶん曲がっている）'], ['me', '', '（……遠くからだと、まっすぐに見えたのに）']];
+      }
+    }
+  });
+
 // ---------------------------------------------------------------- 30 茶の審判（向かいあう二軒の茶店に、どちらがうまいか決めてくれと頼まれる）
   C.push({
     id: 'formosa', shape: '旅人が審判を頼まれる', name: 'フォルモサ', sub: '茶店の坂道', time: 'dusk', screens: 5, far: 'bamboo', timeBack: 'morning', map: [24.8, 121.5],
@@ -1800,6 +1800,108 @@
         if (!f.leavesRead) return [['npc', 'normal', 'まずは、ほかの人の葉っぱを読んでごらん。願いの大きさは、だいたいみんな同じよ。']];
         f.wished = true;
         return [['npc', 'normal', '書けたかい？ ……まだ？ そう。'], ['npc', 'normal', 'あなた、この川に来るまで、何をしてたの？'], ['me', '', '……歩いてました。ずっと。'], ['npc', 'normal', 'それで、あしたは？'], ['me', '', '……あしたも、歩きたい。帰り道も、この川を通りたい。'], ['npc', 'normal', 'ほら、あるじゃない。願い。'], ['me', '', '（葉っぱに「帰り道も、ここを通れますように」と書いて、川に流した）'], ['insight', '', '願いがないと思っていたのは、歩きつづけたい気持ちに、名前をつけていなかっただけだった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 33 ベンチの本（落とし物だと思って持ち歩いた本は、一年続いた文通の、最初の「会いましょう」だった）
+  C.push({
+    id: 'yorka', shape: '旅人の勘違いで起きた騒ぎ', name: 'ニューヨルカ', sub: '夜の摩天楼', time: 'night', screens: 5, far: 'city_lights_night', timeBack: 'morning', map: [40.7, -74],
+    hill: '#1a1a2a', ground: ['#5a5a60', '#3a3a40', '#6a6a70'], tint: 'rgba(80,80,140,.06)', bscale: 1.0,
+    props: [['stool2', 800, 40], ['ship_lantern', 1000, 150], ['tree_green', 2300, 260], ['ship_lantern', 3700, 150]],
+    buildings: [['city_building', 450, 0.9], ['uk_terrace', 1500, 0.9], ['inn', 3100, 0.9], ['city_building', 4300, 0.85]],
+    npcs: [
+      { id: 'nick', name: '新聞売りのニック', actor: 'courier', x: 1250, face: -1 },
+      { id: 'ruth', name: 'ルース', actor: 'researcher', x: 2700, face: -1 },
+      { id: 'arthur', name: 'アーサーじいさん', actor: 'scholar', x: 4000, face: -1 }
+    ],
+    places: [
+      { id: 'bench', name: '街灯の下のベンチ', x: 850, verb: '見る', when: f => !(f.bookTaken && f.ruthTold && !f.bookBack) },
+      { id: 'bench2', name: '街灯の下のベンチ', x: 850, verb: '本を戻す', when: f => f.bookTaken && f.ruthTold && !f.bookBack }
+    ],
+    weather: { clear: 6, drizzle: 3, fog: 1 },
+    animals: [['dog_pug', 1700], ['crow', 3500], ['cat_black', 4400]],
+    talk: {
+      bench(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（ベンチには、だれもいない。座面に、二冊の本が並べて置いてある）'], ['me', '', '（一冊ずつ、しおりが一本ずつ。……きょうは、二人で読んでいるらしい）']];
+        if (f.bookBack) return [['me', '', '（ベンチの上に、本が一冊。押し花の紙が、少しだけはみ出している）']];
+        if (f.bookTaken) return [['me', '', '（ベンチの上は、からっぽ）']];
+        f.bookTaken = true;
+        return [['me', '', '（街灯の下のベンチに、本が一冊、置き忘れてある）'], ['me', '', '（ページのあいだに、押し花と、小さな紙。「あしたの朝、ここで」）'], ['me', '', '（……大事なものかもしれない。持ち主を探そう）']];
+      },
+      bench2(S) {
+        const f = S.f;
+        f.bookBack = true;
+        return [['me', '', '（本を、もとの場所に、もとの向きで置く。しおりの紙も、そのまま）'], ['me', '', '（街灯が、ちかちかと一度だけまたたいた）']];
+      },
+      nick(S) {
+        const f = S.f;
+        if (S.back && f.bookBack) return [['npc', 'normal', 'けさ、ベンチに二人座ってたよ。白い髪のじいさんと、眼鏡のおばさん。'], ['npc', 'normal', '……一年、毎晩すれちがってたのにさ。話しはじめたら、新聞が売れないくらい長かった。']];
+        if (S.back) return [['npc', 'normal', 'けさ、眼鏡のおばさんが、ベンチでずっと待ってたよ。……だれも来なかったけど。']];
+        if (f.bookTaken) return [['npc', 'normal', 'その本？ ベンチの？ ……あーあ、持ってきちゃったのか。'], ['npc', 'normal', 'あれは落とし物じゃない。この街の「置き本」だよ。読んだら置いて、次の人が持っていく。'], ['npc', 'normal', 'でもあのベンチのは、ちょっと特別でね。……同じ二人が、一年も交換してるんだ。']];
+        return [['npc', 'normal', '夕刊だよ！ ……旅の人、この街は初めて？ 夜はベンチに座ると、星より街灯がよく見えるよ。']];
+      },
+      ruth(S) {
+        const f = S.f;
+        if (S.back && f.bookBack) return [['npc', 'normal', '会えたの。けさ。……思ってたより、ずっとおじいさんだった。'], ['npc', 'normal', '向こうも、「思ってたより、ずっと口が悪い」って。……一年分、本の余白で話してたのにね。'], ['insight', '', '落とし物だと思って持ち歩いた一冊は、一年かけてやっと書けた「会いましょう」だった。']];
+        if (S.back) return [['npc', 'normal', 'けさ、ベンチで待ってたの。……来なかった。'], ['npc', 'normal', 'きっと、わたしの返事を読まなかったのね。本が、なかったもの。']];
+        if (f.ruthTold) return [['npc', 'normal', 'その本、ベンチに戻してくれる？ ……もとの向きで。向きにも、意味があるの。']];
+        if (!f.bookTaken) return [['npc', 'normal', 'こんばんは。……ベンチの本、もう読んだ？ いいえ、なんでもないの。']];
+        f.ruthTold = true;
+        return [['npc', 'normal', 'あっ……その本！'], ['npc', 'normal', '……ごめんなさい。それ、わたしが置いたの。一年前から、あのベンチで、だれかと本を交換してる。'], ['npc', 'normal', '顔は知らないの。余白に感想を書いて、置いていくだけ。'], ['npc', 'normal', '今夜はじめて、「あしたの朝、ここで」って書いたのに。……相手がまだ読んでいなかったのね。']];
+      },
+      arthur(S) {
+        const f = S.f;
+        if (S.back && f.bookBack) return [['npc', 'normal', '会ったよ。……一年、余白の字だけで、若い娘さんだと思っておった。'], ['npc', 'normal', '向こうも、同じように思っておったそうだ。……ふたりで、ずいぶん笑った。']];
+        if (S.back) return [['npc', 'normal', 'ゆうべ、ベンチの本がなかった。一年で、初めてだ。……向こうが、やめたのかもしれん。']];
+        if (f.bookBack) return [['npc', 'normal', 'さて、夜の散歩だ。……ベンチの本を、読みにな。']];
+        return [['npc', 'normal', 'わしは毎晩、この時間にベンチへ行く。本を一冊読みにな。'], ['npc', 'normal', 'だれが置いていくのかは、知らん。知らんほうが、いい本もある。'], ['npc', 'normal', '……今夜は、少し遅れた。まだ、あるといいんだが。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 34 昔話の続き（行きに途中まで聞いた昔話の終わりを、帰りに聞く。それは本当の話だった）
+  C.push({
+    id: 'sakha', shape: '昔話の続きが本当だった', name: 'シベリカ', sub: '凍土の村', time: 'dusk', screens: 5, far: 'tundra_noon', map: [62, 129.7],
+    hill: '#2a2a34', ground: ['#a8aca8', '#7a7e7a', '#c0c4c0'], tint: 'rgba(200,210,240,.06)', bscale: 1.0,
+    props: [['pine', 400, 280], ['haystack', 1500, 110], ['pine', 3200, 300], ['rock', 4300, 70]],
+    buildings: [['yurt_smoke', 800], ['stable', 2000, 0.9], ['yurt', 4000, 0.9]],
+    npcs: [
+      { id: 'tuyara', name: '語りのトゥヤーラ', actor: 'eskimo', x: 1050, face: 1 },
+      { id: 'erel', name: 'エレル', actor: 'chullo', x: 1350, face: -1 },
+      { id: 'aikhal', name: '馬飼いのアイハル', actor: 'herdboy', x: 2450, face: -1 }
+    ],
+    places: [{ id: 'westhorse', name: '西へ歩く白い馬', x: 3600, verb: '見る' }],
+    weather: { clear: 4, snow: 4, wind: 2 },
+    animals: [['horse', 3700, { mode: 'stay', face: -1, back: 'not' }], ['horse', 1250, { mode: 'stay', back: 'only' }], ['horse_bay', 2200, { mode: 'stay' }], ['dog_husky', 1600]],
+    talk: {
+      tuyara(S) {
+        const f = S.f;
+        if (S.back && f.westSeen) { f.taleEnd = true;
+          return [['npc', 'normal', '旅の人、帰ってきたね。……約束だ、続きを話そう。'], ['npc', 'normal', '白い馬は、西へ西へ歩いた。主人が最後に火をたいた、川べりの古い野営地まで。'], ['npc', 'normal', '主人はもういない。それでも馬は、毎晩そこで夜を明かして、朝になると村へ帰ってきた。'], ['npc', 'normal', '……その主人はね、わたしの夫。馬は、いまもいる。'], ['me', '', '（……ゆうべ、西へ歩いていった、あの白い馬だ）'], ['insight', '', '昔話だと思って聞いていた白い馬は、ゆうべ、わたしのそばを歩いていった。']]; }
+        if (S.back) return [['npc', 'normal', '帰ってきたね。続き？ ……西で、白い馬を見なかったかい。見ていないなら、まだ話せないね。']];
+        if (f.taleStart) return [['npc', 'normal', '続きは、帰ってきた人にだけ。それが、この村の昔話の決まり。']];
+        f.taleStart = true;
+        return [['me', '', '（ゆるい煙の立つ家の前で、女の人が、子どもたちに何か話している）'], ['npc', 'normal', '……そうして白い馬は、主人の帰りを待たずに、ひとりで西へ歩きだした。'], ['npc', 'normal', 'さあ、きょうは、ここまで。'], ['npc', 'normal', '旅の人も聞いていたね。続きは、帰りにここを通ったら話してあげる。昔話の続きは、帰ってきた人にしか話さないの。']];
+      },
+      erel(S) {
+        const f = S.f;
+        if (S.back && f.taleEnd) return [['npc', 'normal', '旅の人、ずるい！ ぼく、一年待っても続きを聞けなかったのに。'], ['npc', 'normal', '……ぼくも大きくなったら、西まで歩いて帰ってくる。そしたら、話してもらえる。']];
+        if (S.back) return [['npc', 'normal', '続き、聞いた？ ぼく、まだ聞いてない。']];
+        return [['npc', 'normal', 'トゥヤーラおばさんの昔話、いつも、いいところで終わるんだ。'], ['npc', 'normal', '続きを聞けるのは、旅に出て、帰ってきた人だけ。……ずるいよね。']];
+      },
+      aikhal(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '白いのは、けさも村へ帰ってきた。トゥヤーラおばさんの家の前で、鼻を鳴らしてた。']];
+        return [['npc', 'normal', '馬を見に来たのかい。……西に、白いのが一頭いただろう。'], ['npc', 'normal', 'あいつだけは、つないでも綱をほどく。夕方になると、決まって西へ歩いていく。'], ['npc', 'normal', '朝には戻ってくるから、だれも止めない。……どこへ行くのかは、おれも知らない。']];
+      },
+      westhorse(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（白い馬の足あとが、雪の上に、西から東へ続いている）']];
+        f.westSeen = true;
+        return [['me', '', '（年とった白い馬が、ひとりで、ゆっくり西へ歩いていく）'], ['me', '', '（夕日のほうへ。ふり返りもしない）'], ['me', '', '（……どこへ行くんだろう）']];
       }
     }
   });
