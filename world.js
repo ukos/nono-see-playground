@@ -1907,5 +1907,109 @@
     }
   });
 
+// ---------------------------------------------------------------- 35 ひと皿多い食卓（毎晩ひとり分多く用意する家に、二十年ぶりの客が来る）
+  C.push({
+    id: 'jawa', shape: '空けておいた席に座る', name: 'ジャワナ', sub: '火山のふもと', time: 'dusk', screens: 5, far: 'volcano', timeBack: 'morning', map: [-7.6, 110.4],
+    hill: '#2a2420', ground: ['#6a6a48', '#4a4434', '#7a7458'], tint: 'rgba(255,140,90,.06)', bscale: 1.0,
+    props: [['palm', 350, 300], ['rice_basket', 1250, 60], ['bush', 2200, 90], ['palm', 3300, 320], ['haystack', 4300, 110]],
+    buildings: [['stilt_house', 900, 0.9], ['sea_stall', 2700, 0.9], ['thatched_farm', 3900, 0.9]],
+    npcs: [
+      { id: 'budi', name: 'ブディ', actor: 'islandboy', x: 600, face: 1 },
+      { id: 'sari', name: 'サリ（ブディの母）', actor: 'wa_woman', x: 1450, face: -1 },
+      { id: 'nur', name: 'ヌルばあちゃん', actor: 'fisher_granny', x: 1900, face: -1 }
+    ],
+    places: [
+      { id: 'ash', name: '灰をかぶった田', x: 3200, verb: '見る' },
+      { id: 'table', name: '軒下の食卓', x: 1150, verb: '座る', when: f => f.sariTold }
+    ],
+    weather: { clear: 5, drizzle: 3, wind: 2 },
+    animals: [['rooster', 2300], ['hen', 2420], ['cat_calico', 3600], ['crow', 4100]],
+    talk: {
+      budi(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'けさ、母ちゃんが自分で、お皿を一枚多く出してた！ ……ばあちゃんより先に。']];
+        if (f.ate) return [['npc', 'normal', 'ほらね、来たでしょ。ばあちゃんの言ったとおり！']];
+        if (f.budiTold) return [['npc', 'normal', '旅の人、もうすぐ晩ごはん！ 食べていって！']];
+        f.budiTold = true;
+        return [['me', '', '（男の子が、道のまんなかで、こちらに向かって両手をふっている）'], ['npc', 'normal', '旅の人！ ほんものの旅の人だ！ ……来て、来て！'], ['npc', 'normal', 'うちはね、毎晩、お皿を一枚多く出すの。だれか来たときのために。'], ['npc', 'normal', '……でも、ぼくが生まれてから、だれも来たことないんだ。']];
+      },
+      sari(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'お皿、けさはわたしが出したの。……来ない夜のほうが多いのは、分かってる。'], ['npc', 'normal', 'でも、出しておくと、今夜はだれか来るかもしれないって、少しだけ思える。']];
+        if (f.ate) return [['npc', 'normal', 'ごはん、足りた？ ……今年は少ないの。灰のせいで。'], ['npc', 'normal', 'それでも、あなたの分が残ってて、よかった。']];
+        if (f.sariTold) return [['npc', 'normal', '座って。……今夜だけは、遠慮しないで。']];
+        if (!f.budiTold) return [['npc', 'normal', '晩ごはんの支度中なの。ごめんなさいね。']];
+        f.sariTold = true;
+        return [['npc', 'normal', 'ブディ、また旅の人を……あら、本当に旅の人。'], ['npc', 'normal', '……ちょうど、今夜でやめようと話していたの。そのお皿。'], ['npc', 'normal', '去年の噴火の灰で、お米が半分しかとれなかった。二十年、だれも来なかったお皿に、よそう余裕はないって。'], ['npc', 'normal', '……でも、来ちゃったわね。どうぞ、軒下の食卓へ。']];
+      },
+      nur(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '娘が、お皿を出しておった。……わしは、もう出さんでいいようだね。']];
+        if (f.ate) return [['npc', 'normal', '五十年前、わしの夫も、こうして来たんだよ。噴火から逃げてきた、行き場のない旅の人でね。'], ['npc', 'normal', 'あの晩、この家には、よそう皿が一枚も余っていなかった。母は、自分の分を半分にして出した。'], ['npc', 'normal', '……お皿は、客のために出すんじゃない。自分たちも、昔は客だったことを、忘れんために出すんだよ。'], ['insight', '', '二十年あいていた席は、わたしのためではなく、この家の昔の旅人のためにあった。']];
+        return [['npc', 'normal', '……娘が、お皿をやめると言うてね。わしは、やめんと言うた。'], ['npc', 'normal', 'どちらも、まちがってはおらん。今年は、お米が少ない。']];
+      },
+      ash(S) {
+        if (S.back) return [['me', '', '（灰をかぶった田の端に、青い苗が少しだけ、植え直されている）']];
+        return [['me', '', '（田んぼが、灰色の粉をかぶっている。稲は、半分ほど倒れたままだ）'], ['me', '', '（遠くの山から、細い煙がまだ上がっている）']];
+      },
+      table(S) {
+        const f = S.f;
+        if (f.ate) return [['me', '', '（食卓の上に、きれいに空になったお皿が一枚）']];
+        f.ate = true;
+        return [['me', '', '（軒下の食卓に、お皿が五枚。……一枚だけ、ほかより古い。ふちが少し欠けている）'], ['me', '', '（そのお皿に、ご飯と、豆と、焼いた魚が少しずつ、よそわれた）'], ['me', '', '（ブディが、こっちをじっと見ている。ひと口食べると、満足そうにうなずいた）']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 36 広場の取り合い（小さい子と大きい子が、日曜の広場をサッカーで取り合う。旅人がキーパーにされる）
+  C.push({
+    id: 'boca', shape: '旅人が子どもの遊びに入る', name: 'アルゼンタ', sub: '色とりどりの港町', time: 'noon', screens: 5, far: 'harbor_morning', map: [-34.6, -58.4],
+    hill: '#3a3040', ground: ['#8a7a6a', '#5a4a40', '#9a8a78'], tint: 'rgba(255,220,180,.04)', bscale: 1.0,
+    props: [['stool2', 1200, 40], ['bollard', 2500, 60], ['wall_flowers', 3300, 110], ['ship_barrels', 4400, 100]],
+    buildings: [['ar_boca', 600], ['ar_boca', 1500, 0.95], ['ar_estancia', 3800, 0.9]],
+    npcs: [
+      { id: 'tomi', name: 'トミ（小さい子組）', actor: 'alpboy', x: 900, face: 1 },
+      { id: 'vale', name: 'バレ（大きい子組）', actor: 'goggles', x: 2700, face: -1 },
+      { id: 'dona', name: '二階のドーニャ・ペパ', actor: 'cholita', x: 1650, face: -1 }
+    ],
+    places: [{ id: 'goal', name: '広場のゴール', x: 2100, verb: '守る', when: f => f.tomiTold && f.valeTold }],
+    weather: { clear: 7, wind: 2, drizzle: 1 },
+    animals: [['dog_spot', 1300], ['cat_orange', 3200], ['crow', 4200]],
+    talk: {
+      tomi(S) {
+        const f = S.f;
+        if (S.back && !f.played) return [['npc', 'normal', 'キーパーなしで、ぼろ負けした。……一年、広場は大きい子たちのもの。']];
+        if (S.back) return [['npc', 'normal', '広場、まんなかに線を引いたんだ。でも、けっきょく毎週いっしょにやってる。'], ['npc', 'normal', '……キーパーは、もう旅の人じゃなくていいよ。ぼくがやる。']];
+        if (f.played) return [['npc', 'normal', '顔、だいじょうぶ？ ボール、まともに当たってたけど。']];
+        if (f.tomiTold) return [['npc', 'normal', 'キーパー、頼んだからね！ 手を使っていいのは、キーパーだけだよ！']];
+        f.tomiTold = true;
+        return [['me', '', '（男の子が、ボールを抱えて、こちらをじろじろ見上げている）'], ['npc', 'normal', '旅の人、背が高いね。……キーパー、できる？'], ['npc', 'normal', 'きょうの試合に勝ったほうが、日曜の広場を使えるの。負けたら、一年、大きい子たちのもの。'], ['npc', 'normal', 'こっちは四人しかいない。キーパーがいないんだ。']];
+      },
+      vale(S) {
+        const f = S.f;
+        if (S.back && !f.played) return [['npc', 'normal', 'ことしも勝った。……でも、相手が四人じゃ、勝った気がしないな。']];
+        if (S.back) return [['npc', 'normal', 'あの線、ペパばあさんが引いたんだって。……ひいばあちゃんの代から、あの広場は半分ずつだったらしい。'], ['npc', 'normal', '取り合うから、毎年もめるんだよな。']];
+        if (f.played) return [['npc', 'normal', '引き分け……！ あの一点、ずるくない？ 顔で止めたんだよ、顔で！']];
+        if (f.valeTold) return [['npc', 'normal', 'キーパー、その人？ ……まあ、いいけど。手加減しないよ。']];
+        f.valeTold = true;
+        return [['npc', 'normal', '小さい子組のキーパー？ ……旅の人が？'], ['npc', 'normal', 'いいよ。こっちは六人。去年も、おととしも、うちが勝った。'], ['npc', 'normal', '……日曜の広場は、町でいちばん平らな場所なんだ。ほかに、ボールを蹴れるところがない。']];
+      },
+      dona(S) {
+        const f = S.f;
+        if (S.back && f.played) return [['npc', 'normal', '線を引いてやったよ、広場のまんなかに。白いペンキでね。'], ['npc', 'normal', 'わたしが子どもだったころも、まんなかに線があったのさ。だれかが消して、忘れちまった。'], ['insight', '', '取り合っていた広場には、昔、まんなかに一本の線があっただけだった。']];
+        if (S.back) return [['npc', 'normal', 'ことしも大きい子たちの勝ちかい。……毎年同じだと、見てるほうも飽きるね。']];
+        if (f.played) return [['npc', 'normal', '見てたよ、二階から。……引き分けだって？ ふふ、それがいちばんさ。']];
+        return [['npc', 'normal', '広場の試合かい。毎年、うるさくてかなわないよ。'], ['npc', 'normal', '……わたしが子どものころは、もめなかったんだけどね。どうしてだったかね。']];
+      },
+      goal(S) {
+        const f = S.f;
+        if (f.played) return [['me', '', '（ゴールの柱に、ボールの跡が一つ。……わたしの顔の跡も、どこかにありそうだ）']];
+        f.played = true;
+        return [['me', '', '（両手を広げて、ゴールの前に立つ。……大きい子たちが、六人で走ってくる）'], ['me', '', '（一本目、右へ跳んだ。ボールは左を抜けていった。0対1）'], ['me', '', '（トミたちが、一点を返す。1対1。……最後の一本が、まっすぐ飛んでくる）'], ['me', '', '（よけようとした顔に、ボールが当たって、外へはねた）'], ['me', '', '（笛が鳴った。……引き分け。鼻が、じんじんする）']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
