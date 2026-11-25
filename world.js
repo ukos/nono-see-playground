@@ -4042,5 +4042,113 @@
     }
   });
 
+// ---------------------------------------------------------------- 75 寝言で手を貸す町（昼寝の町は、眠ったまま助けてくれた）
+  C.push({
+    id: 'mallorca', shape: '寝言で手を貸す町', name: 'マヨルカナ', sub: '昼寝の村', time: 'noon', screens: 5, far: 'beach_noon', timeBack: 'dusk', map: [39.6, 2.9],
+    hill: '#7a8a5a', ground: ['#d8c090', '#b0a070', '#e8d0a0'], tint: 'rgba(255,235,190,.06)', bscale: 1.0,
+    props: [['tree_olive', 400, 240], ['stool2', 1750, 40], ['tree_green', 2600, 280], ['stool', 3250, 50], ['wall_flowers', 4200, 110]],
+    buildings: [['es_white', 750, 0.9], ['bakery', 1500, 0.9], ['med_white', 3000, 0.9], ['es_white', 3900, 0.85]],
+    npcs: [
+      { id: 'pau', name: 'パウ', actor: 'boy_cap', x: 900, face: 1 },
+      { id: 'baker_mc', name: '昼寝中のパン屋', actor: 'baker_girl', x: 1800, face: -1 },
+      { id: 'tomeu', name: '昼寝中のトメウじいさん', actor: 'old_fisher', x: 3250, face: -1 }
+    ],
+    places: [{ id: 'fig', name: 'いちじくの木', x: 2600, verb: '実をとる' }, { id: 'donkey', name: '花壇の中のロバ', x: 3750, verb: '呼ぶ' }],
+    weather: { clear: 8, wind: 1 },
+    animals: [['donkey', 3700, { mode: 'stay' }], ['cat_orange', 1300], ['rooster', 2200]],
+    talk: {
+      pau(S) {
+        const f = S.f;
+        if (f.mc_home && !f.mc_done) {
+          f.mc_done = true;
+          return [['me', '', 'ロバのペペは、小屋にもどりました。門も、ちゃんと閉めておきました。'], ['npc', 'normal', '……ほんと？ だれも起こさずに？'], ['me', '', 'パン屋さんと、トメウじいさんが、寝言で教えてくれたんです。いちじくと、口笛三回。'], ['npc', 'normal', '……寝てる大人って、起きてる大人より、やさしいね。'], ['insight', '', '昼寝の町は、眠ったまま、寝言でちゃんと手を貸してくれた。']];
+        }
+        if (S.back && f.mc_done) return [['npc', 'normal', 'トメウじいさん、起きてきて、「ゆめの中で口笛を吹いた」って。……ぼく、ずっと内緒にする。']];
+        if (S.back) return [['npc', 'normal', '……昼寝が終わる。トメウじいさんが起きたら、ぼく、おしまいだ。']];
+        if (f.mc_done) return [['npc', 'normal', '（ひそひそ）……あとは、ぼくが起きてたことも、内緒ね。']];
+        if (f.mc_pau) return [['npc', 'normal', 'しーっ。……大人が起きる前に、ペペを小屋にもどさなきゃ。']];
+        f.mc_pau = true;
+        return [['me', '', '（男の子が、通りのまん中で、つま先立ちのまま固まっている）'], ['npc', 'normal', '（ひそひそ）旅の人。いま、村じゅう昼寝の時間なんだ。'], ['npc', 'normal', 'ぼく、トメウじいさんのロバ小屋の門、開けっぱなしにしちゃった。ロバのペペが逃げたの。'], ['npc', 'normal', 'じいさんが起きる前に、もどさなきゃ。……でも、ペペ、ぼくの言うこと、ぜんぜん聞かないの。']];
+      },
+      baker_mc(S) {
+        const f = S.f;
+        if (S.back && f.mc_done) return [['npc', 'normal', 'ふぁあ。……いちじくが、ふたつ、へってる。ゆめの中で、だれかにあげた気がするわ。']];
+        if (S.back) return [['npc', 'normal', 'ふぁあ……よく寝た。さ、夕方のパンを焼かなきゃ。']];
+        f.mc_fighint = true;
+        return [['me', '', '（パン屋のおかみさんが、店先の椅子で、口をあけて眠っている）'], ['npc', 'normal', '……むにゃ。ペペは……いちじくが……好き……ほら、ほら……むにゃ。'], ['me', '', '（……寝言だ）']];
+      },
+      fig(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（夕方のいちじくの木。実がふたつぶん、すき間があいている）']];
+        if (f.mc_fig) return [['me', '', '（いちじくは、もうポケットにふたつ入っている）']];
+        f.mc_fig = true;
+        return [['me', '', '（熟れたいちじくを、ふたつもいだ。甘いにおいがする）']];
+      },
+      tomeu(S) {
+        const f = S.f;
+        if (S.back && f.mc_done) return [['npc', 'normal', 'ゆめの中で、ペペに口笛を吹いた。……起きたら、ペペが小屋で、いちじくくさい息をしとった。']];
+        if (S.back) return [['npc', 'normal', 'ん？ 門が開いとる。……ペペは、どこ行った。']];
+        f.mc_whistle = true;
+        return [['me', '', '（おじいさんが、木かげの椅子で、帽子を顔にのせて眠っている）'], ['npc', 'normal', '……ぴ、ぴ、ぴゅう……。ペペ……帰るぞ……ぴ、ぴ、ぴゅう……。'], ['me', '', '（寝言で、口笛を三回。……これが、ロバを呼ぶ合図らしい）']];
+      },
+      donkey(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（花壇には、ロバのひづめのあとと、いちじくの皮がひとつ）']];
+        if (f.mc_home) return [['me', '', '（ペペは、小屋の中で、しっぽをふっている）']];
+        if (!(f.mc_fig && f.mc_whistle)) return [['me', '', '（ロバが、花壇の花を、むしゃむしゃ食べている。呼んでも、知らん顔だ）']];
+        f.mc_home = true;
+        return [['me', '', '（いちじくを見せて、口笛を三回。ぴ、ぴ、ぴゅう）'], ['me', '', '（ロバが顔を上げた。いちじくにつられて、とことこ、小屋までついてくる）'], ['me', '', '（門を、そっと閉めた。……村は、まだ眠っている）']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 76 うるさい音が子守歌だった（止めた音を、もういちど頼みに行く）
+  C.push({
+    id: 'sverige', shape: 'うるさい音が子守歌だった', name: 'スヴェリア', sub: '鍛冶の谷', time: 'morning', screens: 5, far: 'birch_noon', timeBack: 'dusk', map: [60.6, 15.6],
+    hill: '#3a5a4a', ground: ['#7a8a6a', '#5a6a4a', '#8a9a7a'], tint: 'rgba(220,240,255,.04)', bscale: 1.0,
+    props: [['pine', 400, 300], ['bucket', 1300, 40], ['pine', 2200, 300], ['stump', 3000, 60], ['pine', 4300, 300]],
+    buildings: [['nordic_red', 800, 0.85], ['nordic_red', 1900, 0.85], ['lumber_hut', 3300, 0.85]],
+    npcs: [
+      { id: 'lina', name: '赤ちゃんを抱いたリーナ', actor: 'mother', x: 900, face: 1 },
+      { id: 'britt', name: 'となりのブリットおばあさん', actor: 'granny_broom', x: 2000, face: -1 },
+      { id: 'olle', name: '鍛冶屋のオッレ', actor: 'smith', x: 3600, face: -1 }
+    ],
+    places: [{ id: 'forge', name: '火の消えた鍛冶場', x: 3100, verb: '見る' }],
+    weather: { clear: 4, drizzle: 3, fog: 2 },
+    animals: [['cat_black', 1400], ['crow', 2600], ['dog_husky', 4000]],
+    talk: {
+      lina(S) {
+        const f = S.f;
+        if (S.back && f.sv_done) return [['npc', 'normal', '……寝たわ。鎚の音が三つ鳴ったら、すうっと。三日ぶりよ。'], ['npc', 'normal', 'あした、オッレさんに、パンを焼いて持っていく。……ゆっくり三つずつ、ありがとうって。']];
+        if (S.back) return [['npc', 'normal', '……今夜も、寝てくれないのかしら。わたしが先に、たおれそう。']];
+        if (f.sv_lina) return [['npc', 'normal', 'ミルクも飲んだ、おむつもかえた、熱もない。……なのに、ぜんぜん寝ないの。']];
+        f.sv_lina = true;
+        return [['me', '', '（若いお母さんが、赤ちゃんをゆすりながら、目の下にくまをつくっている）'], ['npc', 'normal', '旅の人。この子、三日前から、ぜんぜん寝ないの。夜も、昼も。'], ['npc', 'normal', 'この谷に越してきて、ひと月。それまでは、よく寝る子だったのに。'], ['npc', 'normal', '何が変わったのか、わからないの。……わたし、もう、ふらふら。']];
+      },
+      britt(S) {
+        const f = S.f;
+        if (S.back && f.sv_done) return [['npc', 'normal', 'ほら、鎚の音。……やっと、谷が谷らしくなった。']];
+        if (S.back) return [['npc', 'normal', '静かすぎる谷は、なんだか、落ち着かないねえ。']];
+        f.sv_britt = true;
+        return [['npc', 'normal', 'リーナの赤ちゃん？ ……三日前からって、オッレの鍛冶場が止まった日じゃないか。'], ['npc', 'normal', 'あの子、越してきた日から、鎚の音が鳴るたびに、すとんと寝てたよ。窓から見てた。'], ['npc', 'normal', 'リーナが熱の日に、「きょうは静かに」って頼んだんだ。……オッレは、気にしいだからね。']];
+      },
+      forge(S) {
+        const f = S.f;
+        if (S.back && f.sv_done) return [['me', '', '（鍛冶場に、また火が入っている。トン、トン、トン。……三つずつ、ゆっくり）']];
+        if (S.back) return [['me', '', '（冷えた炉。戸口の札は「休業」のまま）']];
+        return [['me', '', '（炉の火は消えて、灰が白い。戸口に、手書きの札。「しばらく休業」）'], ['me', '', '（作業台の上で、鎚が三本、きちんと並べて置いてある）']];
+      },
+      olle(S) {
+        const f = S.f;
+        if (S.back && f.sv_done) return [['npc', 'normal', '三つずつ、ゆっくり。……母さんの子守歌の拍子だ。打つほうも、眠くなる。']];
+        if (S.back) return [['npc', 'normal', '……あしたから、谷の外れの小屋で打つ。ここは、静かなほうがいい。']];
+        if (f.sv_done) return [['npc', 'normal', 'トン、トン、トン。……赤ん坊に聞こえる強さで、な。']];
+        if (!f.sv_britt) return [['me', '', '（大きな男の人が、冷えた炉の前で、腕を組んで座っている）'], ['npc', 'normal', '……鍛冶場は休みだ。うるさいと、迷惑だからな。']];
+        f.sv_done = true;
+        return [['me', '', '（大きな男の人が、冷えた炉の前で、腕を組んで座っている）'], ['me', '', 'リーナさんの赤ちゃん、鎚の音が止まった日から、眠れなくなったそうです。'], ['npc', 'normal', '……おれの鎚で、寝てた？ ……うるさいと言われたから、止めたのに。'], ['npc', 'normal', 'おれは、ずっと三つずつ打つ。母さんの子守歌の拍子だ。……赤ん坊にも、わかったのか。'], ['npc', 'normal', '火を入れる。……ゆっくり、三つずつ、な。'], ['insight', '', 'うるさいと思われていた音は、聞く人によっては、子守歌だった。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
