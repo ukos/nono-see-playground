@@ -1,7 +1,7 @@
 == 国: アイスラ（霧の高原）
 〔31番目の国／広さ 5 画面／昼／遠景 highland〕
 〔天候：晴れ 40%、強風 30%、霧 30%〕
-〔建物：nordic_red／小物：rock_moss、rune_stone、rock、rock2、rock_moss、stone_chapel〕
+〔建物：nordic_red／小物：rock_moss、rune_stone、rock、rock2、rock_moss、stone_chapel、cairn_broken、cairn_built、cairn_broken、cairn_built〕
 〔住人（西から）：道守りのヴァルディス @950、シッガ @1700、郵便馬のビョルン @4100〕
 
 〔行き〕

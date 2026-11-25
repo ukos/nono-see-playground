@@ -1,7 +1,7 @@
 == 国: キャセイ（紅灯の都）
 〔3番目の国／広さ 6 画面／夜／遠景 mystic_night〕
 〔天候：晴れ 50%、小雨 20%、霧 20%、スコール 10%〕
-〔建物：cn_paifang、cn_house、cn_teahouse、cn_nagaya、cn_mansion、cn_tower／小物：tree_old_roots、pine、stone_lantern〕
+〔建物：cn_paifang、cn_house、cn_teahouse、cn_nagaya、cn_mansion、cn_tower／小物：tree_old_roots、pine、stone_lantern、river_steps〕
 〔住人（西から）：茶館の女将 @1100、赤い服の娘 @2600、魚屋の亭主 @3700〕
 
 〔行き〕

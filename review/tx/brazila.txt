@@ -1,7 +1,7 @@
 == 国: ブラジーラ（砂の城の浜）
 〔27番目の国／広さ 5 画面／昼／遠景 beach_noon〕
 〔天候：晴れ 70%、強風 20%、スコール 10%〕
-〔建物：br_townhouse、sea_barrack／小物：palm、ship_boat、palm、boat_wreck、ship_rope〕
+〔建物：br_townhouse、sea_barrack／小物：palm、ship_boat、palm、boat_wreck、ship_rope、castle_noflag、castle_flag、castle_noflag、castle_flag〕
 〔住人（西から）：審判のリア @650、テオ @1700、ビア @2000、網元のジョアン @4300〕
 
 〔行き〕

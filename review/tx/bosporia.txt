@@ -1,7 +1,7 @@
 == 国: ボスポリア（海峡の町）
 〔22番目の国／広さ 5 画面／朝／遠景 harbor_morning〕
 〔天候：晴れ 60%、霧 20%、小雨 20%〕
-〔建物：med_white、it_townhouse、pk_mosque、sea_shop／小物：ship_barrels、bollard、pier、ship_boat〕
+〔建物：med_white、it_townhouse、pk_mosque、sea_shop／小物：ship_barrels、bollard、pier、ship_boat、cat_bowls〕
 〔住人（西から）：籠を持った女の子 @650、古本屋のハサン @1600、桟橋番のメフメト @3350〕
 
 〔行き〕

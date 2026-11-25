@@ -1,7 +1,7 @@
 == 国: ボリビアナ（塩の湖）
 〔14番目の国／広さ 6 画面／昼／遠景 salt_lake_noon〕
 〔天候：晴れ 60%、小雨 30%、強風 10%〕
-〔建物：adobe、adobe／小物：cactus、rock、rock2〕
+〔建物：adobe、adobe／小物：cactus、rock、rock2、salt_pile〕
 〔住人（西から）：写真屋のカルロ @1300、塩掘りのタパ @3500〕
 
 〔行き〕

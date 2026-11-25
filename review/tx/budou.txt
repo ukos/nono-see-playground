@@ -1,7 +1,7 @@
 == 国: イタリカ（ぶどうの丘）
 〔16番目の国／広さ 6 画面／朝／遠景 vineyard_morning〕
 〔天候：晴れ 67%、小雨 22%、強風 11%〕
-〔建物：it_tuscan、it_townhouse、it_tuscan／小物：tree_olive、bush_berry、tree_olive、stump〕
+〔建物：it_tuscan、it_townhouse、it_tuscan／小物：tree_olive、bush_berry、tree_olive、stump、grape_vat〕
 〔住人（西から）：祭りの世話役 @1000、ルチア @2300、道ばたの老人 @5100〕
 
 〔行き〕

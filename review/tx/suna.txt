@@ -1,7 +1,7 @@
 == 国: サハリア（砂の国）
 〔6番目の国／広さ 5 画面／夜／遠景 oasis_night〕
 〔天候：晴れ 60%、強風 30%、霧 10%〕
-〔建物：adobe、mideast_white、adobe、mideast_white／小物：cactus、palm、pyramid、desert_temple〕
+〔建物：adobe、mideast_white、adobe、mideast_white／小物：cactus、palm、pyramid、desert_temple、stone_well〕
 〔住人（西から）：ファースト（WATCH） @800、ハミド（水売り） @1900、旅の魔法使い @2900〕
 
 〔行き〕

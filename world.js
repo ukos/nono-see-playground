@@ -171,7 +171,7 @@
     id: 'koutou', shape: '二重の秘密', name: 'キャセイ', sub: '紅灯の都', time: 'night', screens: 6, far: 'mystic_night',
     map: [30, 110], // 世界地図の位置（緯度, 経度）
     hill: '#2a1e26', ground: ['#6a7a4a', '#4a3e34', '#8a7258'], tint: 'rgba(40,20,80,.10)', bscale: 1.3,
-    props: [['tree_old_roots', 700, 260], ['pine', 2900, 280], ['stone_lantern', 4000, 150]],
+    props: [['tree_old_roots', 700, 260], ['pine', 2900, 280], ['stone_lantern', 4000, 150], ['river_steps', 2100, 170]],
     buildings: [['cn_paifang', 300], ['cn_house', 1000], ['cn_teahouse', 1650], ['cn_nagaya', 2450, 1.1], ['cn_mansion', 3550, 1.15], ['cn_tower', 4650, 1.2]],
     npcs: [
       { id: 'okami', name: '茶館の女将', actor: 'kimono_woman', x: 1100, face: -1 },
@@ -328,7 +328,7 @@
     id: 'suna', shape: '手がかりで謎を解く', name: 'サハリア', sub: '砂の国', time: 'night', screens: 5, far: 'oasis_night', fore: false,
     map: [24, 10], // 世界地図の位置（緯度, 経度）
     hill: '#3a2a20', ground: ['#c8a46a', '#a07a4a', '#b89064'], tint: 'rgba(30,30,90,.06)', bscale: 1.0,
-    props: [['cactus', 300, 140], ['palm', 900, 300], ['pyramid', 1780, 300], ['desert_temple', 4200, 320]],
+    props: [['cactus', 300, 140], ['palm', 900, 300], ['pyramid', 1780, 300], ['desert_temple', 4200, 320], ['stone_well', 4000, 100]],
     buildings: [['adobe', 500], ['mideast_white', 1300], ['adobe', 2700, 0.9], ['mideast_white', 3600, 0.95]],
     npcs: [
       { id: 'first', name: 'ファースト（WATCH）', actor: 'first', x: 800, face: 1, sheet: FIRST, pose: f => f.firstMet ? 'idle' : 'crouch' },
@@ -766,7 +766,7 @@
     id: 'shio', shape: '対立する二人を旅人がつなぐ', name: 'ボリビアナ', sub: '塩の湖', time: 'noon', screens: 6, far: 'salt_lake_noon', fore: false,
     map: [-20, -67], // 世界地図の位置（緯度, 経度）
     hill: '#b8b0a8', ground: ['#e8e4dc', '#d4cec4', '#c8beb0'], tint: 'rgba(200,220,255,.04)', bscale: 1.0,
-    props: [['cactus', 600, 150], ['rock', 2200, 80], ['rock2', 4600, 100]],
+    props: [['cactus', 600, 150], ['rock', 2200, 80], ['rock2', 4600, 100], ['salt_pile', 3950, 90, (f, back) => !back && !f.saltSaved]],
     buildings: [['adobe', 300, 0.8], ['adobe', 4500, 0.7]],
     npcs: [
       { id: 'kappa', name: '写真屋のカルロ', actor: 'tabletscout', x: 1300, face: -1 },
@@ -818,7 +818,7 @@
     id: 'mine', shape: '言葉のない合図を読む', name: 'ネパラ', sub: '雪の峰', time: 'noon', screens: 6, far: 'snow_peaks_noon',
     map: [28, 84], // 世界地図の位置（緯度, 経度）
     hill: '#3a4656', ground: ['#8a9a7a', '#5a5a4a', '#8a8070'], tint: 'rgba(160,190,230,.05)', bscale: 1.0,
-    props: [['pine_snow', 500, 280], ['rune_stone', 2900, 120], ['rock_moss', 4000, 110], ['pine_snow', 5200, 300]],
+    props: [['pine_snow', 500, 280], ['rune_stone', 2900, 120], ['rock_moss', 4000, 110], ['pine_snow', 5200, 300], ['prayer_flags', 3500, 230]],
     buildings: [['pk_mountain', 700, 0.95], ['pk_mountain', 3300, 0.8]],
     npcs: [
       { id: 'lhakpa', name: '茶屋のラクパ', actor: 'lanterngirl', x: 1200, face: -1 },
@@ -865,7 +865,7 @@
     id: 'budou', shape: '人ちがい', name: 'イタリカ', sub: 'ぶどうの丘', time: 'morning', screens: 6, far: 'vineyard_morning',
     map: [43, 12], // 世界地図の位置（緯度, 経度）
     hill: '#3a4a30', ground: ['#7a9a4a', '#5a5a3a', '#9a8460'], tint: 'rgba(255,220,180,.04)', bscale: 1.0,
-    props: [['tree_olive', 400, 280], ['bush_berry', 1700, 90], ['tree_olive', 3600, 300], ['stump', 4800, 70]],
+    props: [['tree_olive', 400, 280], ['bush_berry', 1700, 90], ['tree_olive', 3600, 300], ['stump', 4800, 70], ['grape_vat', 2900, 110]],
     buildings: [['it_tuscan', 600], ['it_townhouse', 1300, 0.9], ['it_tuscan', 4100, 0.85]],
     npcs: [
       { id: 'host', name: '祭りの世話役', actor: 'festival', x: 1000, face: -1 },
@@ -1188,7 +1188,7 @@
   C.push({
     id: 'bosporia', shape: '名前の多いもの', name: 'ボスポリア', sub: '海峡の町', time: 'morning', screens: 5, far: 'harbor_morning', map: [41, 29],
     hill: '#3a3040', ground: ['#9a8a74', '#6a5a4a', '#aa9a80'], tint: 'rgba(255,200,190,.04)', bscale: 1.0,
-    props: [['ship_barrels', 1250, 100], ['bollard', 3150, 60], ['pier', 3600, 110], ['ship_boat', 4300, 90]],
+    props: [['ship_barrels', 1250, 100], ['bollard', 3150, 60], ['pier', 3600, 110], ['ship_boat', 4300, 90], ['cat_bowls', 2350, 70]],
     buildings: [['med_white', 450, 0.95], ['it_townhouse', 1100, 0.9], ['pk_mosque', 2000, 0.9], ['sea_shop', 2700, 0.95]],
     npcs: [
       { id: 'elif', name: '籠を持った女の子', actor: 'girl', x: 650, face: 1, when: (f, back) => !back },
@@ -1349,7 +1349,7 @@
   C.push({
     id: 'laoria', shape: '止まった人を待つ姿で動かす', name: 'ラオリア', sub: '朝の托鉢の村', time: 'morning', screens: 5, far: 'karst_morning', map: [19.9, 102.1],
     hill: '#2a3a2e', ground: ['#7a8a50', '#4a4a30', '#8a7a58'], tint: 'rgba(255,210,150,.05)', bscale: 1.0,
-    props: [['palm', 350, 300], ['temple_gold', 900, 260], ['reeds', 3700, 120], ['palm', 4500, 320]],
+    props: [['palm', 350, 300], ['temple_gold', 900, 260], ['reeds', 3700, 120], ['palm', 4500, 320], ['rice_basket', 1880, 60, (f, back) => back && f.noiCame], ['burnt_pot', 3780, 70, (f, back) => !back]],
     buildings: [['sea_stilt', 1500, 0.9], ['stilt_house', 2300, 0.9], ['sea_stall', 3000, 0.95]],
     npcs: [
       { id: 'novice', name: '若いお坊さん', actor: 'almsmonk', x: 1650, face: 1 },
@@ -1462,7 +1462,7 @@
   C.push({
     id: 'brazila', shape: '騒動の犯人に理由がある', name: 'ブラジーラ', sub: '砂の城の浜', time: 'noon', screens: 5, far: 'beach_noon', map: [-13, -38.5],
     hill: '#3a5a4a', ground: ['#e0cc98', '#c0a878', '#ead8a8'], tint: 'rgba(255,230,160,.04)', bscale: 1.0,
-    props: [['palm', 300, 320], ['ship_boat', 1400, 80], ['palm', 2400, 300], ['boat_wreck', 3300, 120], ['ship_rope', 3950, 50]],
+    props: [['palm', 300, 320], ['ship_boat', 1400, 80], ['palm', 2400, 300], ['boat_wreck', 3300, 120], ['ship_rope', 3950, 50], ['castle_noflag', 1550, 90, f => !f.flagsBack], ['castle_flag', 1550, 110, f => f.flagsBack], ['castle_noflag', 2150, 95], ['castle_flag', 2150, 115, f => f.flagsBack]],
     buildings: [['br_townhouse', 700, 0.9], ['sea_barrack', 4100, 0.9]],
     npcs: [
       { id: 'lia', name: '審判のリア', actor: 'flagkid', x: 650, face: 1 },
@@ -1527,7 +1527,7 @@
   C.push({
     id: 'kanadia', ride: 'self', shape: '旅人が教わって自分で渡る', name: 'カナディア', sub: '湖の渡し', time: 'morning', screens: 5, far: 'lake_reeds_morning', map: [46.5, -80],
     hill: '#24382e', ground: ['#5a7a4a', '#3a4a34', '#7a7058'], tint: 'rgba(180,200,220,.05)', bscale: 1.0,
-    props: [['pine', 300, 300], ['reeds', 1300, 120], ['pier', 1700, 110], ['ship_boat', 2300, 80], ['reeds2', 3000, 120], ['pine', 4500, 320]],
+    props: [['pine', 300, 300], ['reeds', 1300, 120], ['pier', 1700, 110], ['canoe', 1950, 60, (f, back) => !f.crossed || back], ['signboard', 620, 120], ['reeds2', 3000, 120], ['pine', 4500, 320]],
     buildings: [['lumber_hut', 700, 1.3], ['lumber_hut', 3900, 1.2]],
     npcs: [
       { id: 'aiyana', name: '舟づくりのアヤナ', actor: 'forager', x: 1150, face: 1 },
@@ -1583,7 +1583,7 @@
   C.push({
     id: 'polonia', shape: '意地悪に見えた人の本当の理由', name: 'ポロニア', sub: '白樺の野', time: 'noon', screens: 5, far: 'birch_noon', map: [52.2, 21],
     hill: '#3a4a2a', ground: ['#6a8a44', '#44582e', '#8a8458'], tint: 'rgba(255,250,220,.03)', bscale: 1.0,
-    props: [['bush_berry', 500, 90], ['bush', 1700, 90], ['haystack', 2200, 130], ['bush_berry', 3300, 100], ['well', 4300, 150]],
+    props: [['bush_berry', 500, 90], ['bush', 1700, 90], ['haystack', 2200, 130], ['bush_berry', 3300, 100], ['well', 4300, 150], ['nofence', 2650, 110], ['berry_basket', 4050, 70, (f, back) => !back && f.nestKnown]],
     buildings: [['house_small', 700, 1.3], ['nordic_red', 3800, 0.9]],
     npcs: [
       { id: 'kuba', name: 'クバ', actor: 'greenboy', x: 900, face: 1 },
@@ -1643,7 +1643,7 @@
   C.push({
     id: 'formosa', shape: '旅人が審判を頼まれる', name: 'フォルモサ', sub: '茶店の坂道', time: 'dusk', screens: 5, far: 'bamboo', timeBack: 'morning', map: [24.8, 121.5],
     hill: '#24382a', ground: ['#7a7a4a', '#4a4a30', '#8a7a58'], tint: 'rgba(255,190,120,.05)', bscale: 1.0,
-    props: [['stone_lantern', 300, 170], ['bush', 1400, 90], ['stone_lantern', 2700, 170], ['bush', 4200, 100]],
+    props: [['stone_lantern', 300, 170], ['bush', 1400, 90], ['stone_lantern', 2700, 170], ['bush', 4200, 100], ['tea_table', 1700, 70], ['tea_tree', 4300, 210], ['lantern_pole', 1800, 230, (f, back) => back && f.judged]],
     buildings: [['cn_paifang', 500, 0.9], ['cn_teahouse', 1350, 0.85], ['cn_teahouse', 2250, 0.85], ['cn_house', 3700, 0.9]],
     npcs: [
       { id: 'lin', name: '林じいさん（老舗の茶店）', actor: 'cn_elder', x: 1250, face: 1 },
@@ -1704,7 +1704,7 @@
     id: 'islanda', shape: 'みんなで道しるべを作る', name: 'アイスラ', sub: '霧の高原', time: 'noon', screens: 5, far: 'highland', map: [64.6, -19],
     weatherBack: { fog: 6, densefog: 2 },
     hill: '#2e3a34', ground: ['#5a6a50', '#3a443a', '#6a6a58'], tint: 'rgba(210,220,230,.06)', bscale: 1.0,
-    props: [['rock_moss', 400, 90], ['rune_stone', 1350, 120], ['rock', 2200, 70], ['rock2', 3000, 90], ['rock_moss', 3950, 100], ['stone_chapel', 4600, 230]],
+    props: [['rock_moss', 400, 90], ['rune_stone', 1350, 120], ['rock', 2200, 70], ['rock2', 3000, 90], ['rock_moss', 3950, 100], ['stone_chapel', 4600, 230], ['cairn_broken', 2500, 70, f => !f.cairn1], ['cairn_built', 2500, 120, f => f.cairn1], ['cairn_broken', 3600, 70, f => !f.cairn2], ['cairn_built', 3600, 130, f => f.cairn2]],
     buildings: [['nordic_red', 700, 0.9]],
     npcs: [
       { id: 'valdis', name: '道守りのヴァルディス', actor: 'smith', x: 950, face: 1 },
@@ -1760,7 +1760,7 @@
   C.push({
     id: 'malaya', shape: '旅人が自分の願いに気づく', name: 'マラヤナ', sub: 'ほたるの川', time: 'night', screens: 5, far: 'firefly_forest_night', map: [3.4, 101.3],
     hill: '#14241a', ground: ['#3a5a3a', '#243424', '#4a5a40'], tint: 'rgba(60,120,80,.08)', bscale: 1.0,
-    props: [['palm', 400, 300], ['reeds', 1600, 120], ['ship_boat', 2300, 80], ['reeds2', 3200, 120], ['palm', 4400, 320]],
+    props: [['palm', 400, 300], ['reeds', 1600, 120], ['ship_boat', 2300, 80], ['reeds2', 3200, 120], ['palm', 4400, 320], ['leaf_boats', 1900, 45]],
     buildings: [['stilt_house', 800, 0.9], ['sea_stilt', 3800, 0.9]],
     npcs: [
       { id: 'aisha', name: 'アイシャ', actor: 'tribekid', x: 1100, face: 1 },
@@ -1778,7 +1778,7 @@
         if (f.wished) return [['npc', 'normal', '流れたね！ ほたるが、葉っぱのまわりに集まってた。']];
         if (f.aishaTold) return [['npc', 'normal', '願いがない人なんて、いないよ。言わないだけ。']];
         f.aishaTold = true;
-        return [['npc', 'normal', '旅の人！ 願いの葉っぱ、まだでしょ？'], ['npc', 'normal', 'この川ではね、旅の人は、葉っぱに願いを一つ書いて流すの。ほたるが、海まで運んでくれる。'], ['me', '', '……願い、ないかも。'], ['npc', 'normal', 'ええっ。……それ、ここの川では、いちばん困ること。']];
+        return [['npc', 'normal', '旅の人！ 願いの葉っぱ、まだでしょ？'], ['npc', 'normal', 'この川ではね、旅の人は、葉っぱに願いを一つ書いて流すの。ほたるが、海まで運んでくれる。'], ['me', '', '……願い、ないかも。'], ['npc', 'normal', 'ええっ。……それ、ここの川では、いちばん困ること。'], ['npc', 'normal', '葉っぱを流さずに行った旅人は、ほたるに顔を覚えてもらえないの。帰り道で、この川が見つからなくなるんだって。']];
       },
       leaves(S) {
         const f = S.f;

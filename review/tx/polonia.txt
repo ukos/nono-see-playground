@@ -1,7 +1,7 @@
 == 国: ポロニア（白樺の野）
 〔29番目の国／広さ 5 画面／昼／遠景 birch_noon〕
 〔天候：晴れ 60%、強風 20%、小雨 20%〕
-〔建物：house_small、nordic_red／小物：bush_berry、bush、haystack、bush_berry、well〕
+〔建物：house_small、nordic_red／小物：bush_berry、bush、haystack、bush_berry、well、nofence、berry_basket〕
 〔住人（西から）：クバ @900、ゾーシャ（クバの姉） @1500、ヤンじいさん @3600〕
 
 〔行き〕

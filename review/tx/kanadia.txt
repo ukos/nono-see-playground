@@ -1,7 +1,7 @@
 == 国: カナディア（湖の渡し）
 〔28番目の国／広さ 5 画面／朝／遠景 lake_reeds_morning〕
 〔天候：晴れ 50%、霧 30%、小雨 20%〕
-〔建物：lumber_hut、lumber_hut／小物：pine、reeds、pier、ship_boat、reeds2、pine〕
+〔建物：lumber_hut、lumber_hut／小物：pine、reeds、pier、canoe、signboard、reeds2、pine〕
 〔住人（西から）：舟づくりのアヤナ @1150、向こう岸のゴード @3600〕
 
 〔行き〕

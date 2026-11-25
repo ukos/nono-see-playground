@@ -1,7 +1,7 @@
 == 国: フォルモサ（茶店の坂道）
 〔30番目の国／広さ 5 画面／夕暮れ／遠景 bamboo〕
 〔天候：晴れ 50%、小雨 30%、霧 20%〕
-〔建物：cn_paifang、cn_teahouse、cn_teahouse、cn_house／小物：stone_lantern、bush、stone_lantern、bush〕
+〔建物：cn_paifang、cn_teahouse、cn_teahouse、cn_house／小物：stone_lantern、bush、stone_lantern、bush、tea_table、tea_tree、lantern_pole〕
 〔住人（西から）：林じいさん（老舗の茶店） @1250、メイリン（向かいの茶店） @2100、書生のハオ @3200〕
 
 〔行き〕
