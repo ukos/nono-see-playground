@@ -4652,5 +4652,106 @@
     }
   });
 
+// ---------------------------------------------------------------- 87 涙のわけを聞き違える（泣いて見えたのは、上手に泣く練習）
+  C.push({
+    id: 'bulgara', shape: '涙のわけを聞き違える', name: 'ブルガリナ', sub: 'バラの谷', time: 'morning', screens: 5, far: 'flower', timeBack: 'dusk', map: [42.6, 25.4],
+    hill: '#6a7a4a', ground: ['#8a9a5a', '#6a7a40', '#9aaa6a'], tint: 'rgba(255,215,225,.06)', bscale: 1.0,
+    props: [['wall_flowers', 500, 110], ['wall_flowers', 1300, 110], ['bush_berry', 2200, 80], ['wall_flowers', 2900, 110], ['tree_green', 4300, 280]],
+    buildings: [['house_small', 800, 0.9], ['house_large', 3800, 0.85]],
+    npcs: [
+      { id: 'stoyan', name: '花婿のストヤン', actor: 'alpboy', x: 900, face: 1 },
+      { id: 'vela', name: 'ストヤンの母さんヴェラ', actor: 'mother', x: 1900, face: -1 },
+      { id: 'rada', name: '花嫁のラダ', actor: 'farmgirl', x: 3000, face: -1 },
+      { id: 'baba', name: 'バラ摘みのババ・ツヴェタ', actor: 'granny_apron', x: 3650, face: -1 }
+    ],
+    places: [],
+    weather: { clear: 6, fog: 2, drizzle: 1 },
+    animals: [['hen', 1400], ['sheep', 2500], ['dog_spot', 4100]],
+    talk: {
+      stoyan(S) {
+        const f = S.f;
+        if (S.back && f.bg2_done) return [['npc', 'normal', 'ラダが、泣く歌を教えてくれた。……ぼくが歌ったら、ラダが笑いころげた。']];
+        if (S.back) return [['npc', 'normal', '……あした、ほんとうに来てくれるのかな。']];
+        if (f.bg2_done) return [['npc', 'normal', '練習？ ……泣く歌の？ ぼく、泣かれてると思って、三日、眠れなかった。']];
+        if (f.bg2_sto) return [['npc', 'normal', '毎朝、バラ畑で泣いてるんだ。……ぼくに、言えないことがあるのかな。']];
+        f.bg2_sto = true;
+        return [['me', '', '（若い男の人が、花かんむりを手に、うろうろしている）'], ['npc', 'normal', '旅の人。ぼく、あした結婚するんだ。相手は、バラ摘みのラダ。'], ['npc', 'normal', 'でも、ラダが毎朝、バラ畑で泣いてるって、村じゅうのうわさなんだ。'], ['npc', 'normal', '……ほんとは、ぼくと結婚したくないのかな。きょうのうちに、知りたい。']];
+      },
+      vela(S) {
+        const f = S.f;
+        if (S.back && f.bg2_done) return [['npc', 'normal', 'わたしの泣き歌も、ひどかったのよ。……ストヤンには、内緒にしといてね。']];
+        if (S.back) return [['npc', 'normal', '……あしたの婚礼、ほんとうに、やっていいのかしら。']];
+        return [['npc', 'normal', 'わたしも、ラダが泣いてるのを見たわ。……息子に、何か、いけないところがあるのかしら。'], ['npc', 'normal', 'わたしの嫁入りの朝は、泣くどころじゃなかった。……泣かなきゃいけないのに、緊張で、笑っちゃって。']];
+      },
+      rada(S) {
+        const f = S.f;
+        if (f.bg2_baba && !f.bg2_done) {
+          f.bg2_done = true;
+          return [['me', '', '（娘さんが、バラの茂みの中で、目をこすりながら、何か節をつけてつぶやいている）'], ['me', '', 'ババ・ツヴェタさんから聞きました。嫁入りの朝の、泣き歌の練習ですか？'], ['npc', 'normal', '……ばれた。そう。母さんの家を出るとき、泣きながら歌うの。この谷の決まり。'], ['npc', 'normal', 'でも、わたし、歌ってると、とちゅうで笑っちゃうの。うれしいから。……だから、毎朝、練習してた。'], ['npc', 'normal', '……ストヤン、心配してた？ ばかね。うれしくて泣けないなんて、言えなかっただけ。'], ['insight', '', '泣いているように見えたのは、うれしすぎて泣けない人の、泣く練習だった。']];
+        }
+        if (S.back && f.bg2_done) return [['npc', 'normal', 'あしたは、ちゃんと泣けそう。……ストヤンの顔を見たら、笑っちゃうかもだけど。']];
+        if (S.back) return [['npc', 'normal', '♪……ああ、また、とちゅうで笑っちゃった。']];
+        if (f.bg2_done) return [['npc', 'normal', 'ストヤンに、言っちゃったの？ ……はずかしい。でも、よかった。']];
+        return [['me', '', '（娘さんが、バラの茂みの中で、目をこすりながら、何か節をつけてつぶやいている）'], ['npc', 'normal', '……あっ。み、見ないで。いま、だめなの。']];
+      },
+      baba(S) {
+        const f = S.f;
+        if (S.back && f.bg2_done) return [['npc', 'normal', 'あしたの朝は、谷じゅうで泣き歌を聞くよ。……笑い声まじりのね。']];
+        if (S.back) return [['npc', 'normal', '夕方のバラは、においがやさしい。……あの子の歌も、もう少しだね。']];
+        f.bg2_baba = true;
+        return [['npc', 'normal', 'ラダが泣いてる？ ははは。あれは、泣き歌の練習さ。嫁入りの朝に、母親の家を出ながら歌うんだ。'], ['npc', 'normal', '節は、わたしが教えた。……でもね、あの子、とちゅうで、どうしても笑っちまうんだよ。'], ['npc', 'normal', 'うれしい嫁入りほど、泣き歌は難しい。……村の連中は、勘違いしてるがね。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 88 迷子は大人のほう（道を知っていたのは、地図を持たない子ども）
+  C.push({
+    id: 'botswa', shape: '迷子は大人のほう', name: 'ボツワナ', sub: '塩の平原', time: 'noon', screens: 5, far: 'salt_lake_noon', timeBack: 'dusk', map: [-20.7, 25.9],
+    hill: '#a09070', ground: ['#e8e0d0', '#c8c0b0', '#f0ece0'], tint: 'rgba(255,240,220,.06)', bscale: 1.0,
+    props: [['big_tree2', 600, 330], ['salt_pile', 1600, 70], ['rock', 2400, 60], ['big_tree2', 3100, 340], ['salt_pile', 4200, 70]],
+    buildings: [['thatched_farm', 900, 0.85]],
+    npcs: [
+      { id: 'kago', name: 'カゴ', actor: 'tribekid', x: 950, face: 1 },
+      { id: 'neo', name: '塩運びのネオおばさん', actor: 'levant_woman', x: 2000, face: -1 },
+      { id: 'thabo', name: 'カゴの父さんタボ', actor: 'ranchhand', x: 3600, face: -1 }
+    ],
+    places: [{ id: 'tracks', name: 'ぐるりと回る足あと', x: 2700, verb: '見る' }],
+    weather: { clear: 9, wind: 1 },
+    animals: [['hen', 1200], ['donkey', 2200], ['hawk', 3300, { mode: 'fly' }]],
+    talk: {
+      kago(S) {
+        const f = S.f;
+        if (S.back && f.bw_done) return [['npc', 'normal', '父ちゃん、ぼくのうしろを歩いて帰ってきた。……「近道は、おまえにまかせる」だって。']];
+        if (S.back) return [['npc', 'normal', '……父ちゃん、まだ帰ってこない。日が沈んだら、塩原は真っ暗だよ。']];
+        if (f.bw_done) return [['npc', 'normal', '父ちゃんが迷子？ ……ばあちゃんの歌、教えてあげればよかった。']];
+        if (f.bw_kago) return [['npc', 'normal', '父ちゃんは、「近道を知ってる」って、ひとりで行っちゃったの。……地図、逆さに持ってた。']];
+        f.bw_kago = true;
+        return [['me', '', '（男の子が、白い塩の平原のふちで、つま先立ちで遠くを見ている）'], ['npc', 'normal', '旅の人。父ちゃんが、塩の市場への近道を見つけたって、けさ、ひとりで出かけたの。'], ['npc', 'normal', '昼には帰るって言ったのに、まだ帰ってこない。……日が沈んだら、塩原は真っ暗。'], ['npc', 'normal', 'ぼくは道、知ってるよ。ばあちゃんの歌で覚えたの。「曲がった腕の木を、左に見て」……']];
+      },
+      neo(S) {
+        const f = S.f;
+        if (S.back && f.bw_done) return [['npc', 'normal', 'タボが、息子のうしろを歩いてた。……あんな顔のタボ、はじめて見たよ。']];
+        if (S.back) return [['npc', 'normal', '日が沈む。……タボのやつ、まだ、ぐるぐる回ってるのかね。']];
+        return [['npc', 'normal', 'タボ？ けさ、地図を広げて、得意そうに歩いてったよ。……二回、同じところを通った。'], ['npc', 'normal', 'わたしは三十年、塩を運んでるけど、地図なんか見たことない。'], ['npc', 'normal', '子どものころ、母さんの歌で覚えたのさ。「曲がった腕の木を、左に見て」ってね。']];
+      },
+      tracks(S) {
+        const f = S.f;
+        if (S.back && f.bw_done) return [['me', '', '（ぐるりと回る大きな足あとの外に、小さな足あとと大きな足あとが、まっすぐ並んでいる）']];
+        if (S.back) return [['me', '', '（夕日で、足あとの輪が、長い影になっている）']];
+        f.bw_tr = true;
+        return [['me', '', '（白い塩の上に、大人の足あとが、大きな輪をかいている。……三周している）'], ['me', '', '（輪のまん中に、地図の切れはしが落ちている。……北の矢印が、下を向いている）']];
+      },
+      thabo(S) {
+        const f = S.f;
+        if (S.back && f.bw_done) return [['npc', 'normal', '……息子に道を教わるのは、悪くない。地図より、ずっとわかりやすい。']];
+        if (S.back) return [['npc', 'normal', '……休んでるだけだ。道は、わかってる。……たぶん。']];
+        if (f.bw_done) return [['npc', 'normal', '「曲がった腕の木を、左に見て」……。母さんの歌だ。忘れてたよ。']];
+        if (!f.bw_tr) return [['me', '', '（男の人が、木かげで、地図をくるくる回しながら座っている）'], ['npc', 'normal', '……休んでるだけだ。道は、わかっとる。']];
+        f.bw_done = true;
+        return [['me', '', '（男の人が、木かげで、地図をくるくる回しながら座っている）'], ['me', '', '向こうに、輪になった足あとがありました。……地図、逆さみたいです。'], ['npc', 'normal', '……逆さ？ ……そうか。三回、同じ岩を見たわけだ。'], ['me', '', 'カゴくんは、おばあさんの歌で道を覚えているそうです。「曲がった腕の木を、左に見て」。'], ['npc', 'normal', '……母さんの歌だ。わしも子どものころ、歌ってた。息子のほうが、覚えてたのか。'], ['insight', '', '道を知っていたのは、地図を持たない子どものほうだった。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
