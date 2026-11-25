@@ -21,6 +21,7 @@ function simulate(world) {
   const st = { flags: {}, evidence: [], met: {}, maxX: 0, x: 0 };
   const log = []; // {c, phase, npc, name, lines, x}
   const last = {};
+  const pre = {}; // 国ごと：気づきが出る直前の flags
   const nameOf = n => typeof n.name === 'function' ? n.name(st.flags) : n.name;
   const present = (n, c) => (!n.when || n.when(st.flags, st.maxX >= c.x1 - 2 && st.x < c.x1)) && !st.flags[n.id + 'Gone'];
   const ctx = c => ({
@@ -48,6 +49,7 @@ function simulate(world) {
     if (!t.place) st.met[t.id] = true;
     if (t.n.leaveWhen && t.n.leaveWhen(st.flags)) st.flags[t.id + 'Gone'] = true;
     log.push({ c: c.id, phase, npc: t.id, name: t.place ? t.n.name : nameOf(t.n), lines: ls, x: t.x });
+    if (phase === '行き' && !pre[c.id] && ls.some(l => l[0] === 'insight')) pre[c.id] = JSON.parse(snapshot)[0]; // 解決直前の状態
     return true;
   }
   for (const c of C) {
@@ -67,7 +69,7 @@ function simulate(world) {
     const ts = targets(c).sort((a, b) => b.x - a.x);
     for (const t of ts) talk(c, t, '帰り', false);
   }
-  return { log, st };
+  return { log, st, pre };
 }
 
 module.exports = { loadWorld, simulate };

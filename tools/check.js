@@ -7,7 +7,7 @@ const { loadWorld, simulate } = require('./sim');
 
 const ROOT = path.join(__dirname, '..');
 const world = loadWorld();
-const { log } = simulate(world);
+const { log, pre } = simulate(world);
 const only = process.argv.slice(2);
 const has = p => fs.existsSync(path.join(ROOT, p));
 const rep = {}; // id -> {E:[], W:[]}
@@ -185,6 +185,19 @@ for (const c of world.C) {
   const insights = log.flatMap(e => e.lines.filter(l => l[0] === 'insight').map(l => [e.c, l[2]]));
   const aph = insights.filter(([, t]) => /^[^、。]{2,14}[はが]、/.test(t));
   if (aph.length >= Math.ceil(insights.length / 2)) R('_world', 'W', `気づきの半分以上が同じ格言の文型（「〜は、〜。」）: ${aph.map(a => a[0]).join('、')}`);
+}
+
+// ---- 解決後に、解決前の台詞が残っていないか（行きの再訪）
+for (const c of world.C) {
+  if (!pre[c.id]) continue;
+  const go = log.filter(e => e.c === c.id && e.phase === '行き');
+  const k = go.findIndex(e => e.lines.some(l => l[0] === 'insight'));
+  for (const e of go.slice(k + 1)) {
+    const fn = c.talk[e.npc]; if (!fn) continue;
+    const f = JSON.parse(JSON.stringify(pre[c.id]));
+    let ls; try { ls = fn({ f, back: false, ev() {}, has() { return false; }, met() { return true; } }) || []; } catch (er) { continue; }
+    if (JSON.stringify(ls) === JSON.stringify(e.lines)) R(c.id, 'W', `解決後も、解決前と同じ台詞: ${e.name}「${(e.lines[0] || [])[2] || ''}」`);
+  }
 }
 
 // ---- 出力

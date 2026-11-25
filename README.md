@@ -44,7 +44,7 @@ nono が広い世界をただ歩いて旅する、戦わないRPG（企画No.10�
 
 ```
 node tools/tx.js                                  # 台本を review/tx/ に書き出す（行きと帰りを実際に歩いた順）
-node tools/check.js                               # 機械チェック（素材・ID・フラグ・60字・骨組みの使い回し・帰り道の差）
+node tools/check.js                               # 機械チェック（素材・ID・フラグ・60字・骨組みの使い回し・帰り道の差・解決後に残った解決前の台詞）
 node tools/review_check.js review/results/03.jsonl # レビューの引用が台本にあるか照合
 ```
 
