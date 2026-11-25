@@ -3309,5 +3309,112 @@
     }
   });
 
+// ---------------------------------------------------------------- 61 探し物を隠したのは本人（針の飛ぶところを、生の音で埋める）
+  C.push({
+    id: 'kubana', shape: '探し物を隠したのは本人', name: 'キューバナ', sub: '色の港町', time: 'noon', screens: 5, far: 'beach_noon', timeBack: 'dusk', map: [23.1, -82.4],
+    hill: '#5a7a8a', ground: ['#c8a878', '#a08058', '#d8b888'], tint: 'rgba(255,220,170,.05)', bscale: 1.0,
+    props: [['palm', 400, 300], ['stool2', 1300, 40], ['palm', 2400, 320], ['wall_painting', 3100, 120], ['palm', 4300, 290]],
+    buildings: [['br_townhouse', 800, 0.9], ['mx_house', 1800, 0.9], ['sea_twostory', 2800, 0.9], ['br_townhouse', 3800, 0.9]],
+    npcs: [
+      { id: 'pepe', name: 'ペペ', actor: 'boy_kite', x: 900, face: 1 },
+      { id: 'chucho', name: '太鼓のチューチョ', actor: 'drummer', x: 2100, face: -1 },
+      { id: 'rosacu', name: 'ロサばあちゃん', actor: 'es_granny', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'hatbox', name: '窓ぎわの帽子箱', x: 3300, verb: '見る', when: f => f.cu_chuchoTold }],
+    weather: { clear: 6, wind: 2, squall: 1 },
+    animals: [['cat_orange', 1500], ['rooster', 2700], ['dog_brown', 4000]],
+    talk: {
+      pepe(S) {
+        const f = S.f;
+        if (f.cu_liveFill && !f.cu_gave) {
+          f.cu_gave = true;
+          return [['me', '', '（レコードを渡す。……どこにあったかは、言わずに）'], ['npc', 'normal', 'あった！ ……どこに？ いいや、聞かない。楽団のとこへ走る！']];
+        }
+        if (S.back && f.cu_liveFill) return [['npc', 'normal', 'チューチョたち、もう練習してる。針が飛ぶところで、ぴたっと入るんだ。'], ['npc', 'normal', '……じいちゃんの歌と、いまの太鼓が、つながって聞こえた。']];
+        if (S.back) return [['npc', 'normal', '……レコード、どこにもない。今夜のパーティー、じいちゃんの歌なしで始まっちゃう。']];
+        if (f.cu_liveFill) return [['npc', 'normal', '楽団、二番の頭だけ、何回もやりなおしてる。……なんでそこだけ？']];
+        if (f.cu_pepeTold) return [['npc', 'normal', '楽団は、夕方までに曲を覚えなきゃいけないんだ。……時間がない！']];
+        f.cu_pepeTold = true;
+        return [['me', '', '（男の子が、家じゅうの引き出しを開けっぱなしにして、通りに座りこんでいる）'], ['npc', 'normal', '旅の人！ 今夜、ばあちゃんの八十のお祝いなんだ。'], ['npc', 'normal', 'じいちゃんが若いころ、ばあちゃんのために歌って、レコードにした曲がある。世界に一枚だけ。'], ['npc', 'normal', '楽団がそれを聞いて、今夜、生で演奏するはずだった。……なのに、レコードが消えた。'], ['npc', 'normal', '夕方までに見つけないと、楽団が曲を覚えられない！']];
+      },
+      chucho(S) {
+        const f = S.f;
+        if (S.back && f.cu_liveFill) return [['npc', 'normal', '二番の頭、四小節だけ、針が飛ぶ。……そこは、おれたちが叩く。じいさんの声の続きを。']];
+        if (S.back) return [['npc', 'normal', '曲なしでも、なにか叩くさ。……でも、あの曲じゃなきゃ、ロサは踊らない。']];
+        if (f.cu_liveFill) return [['npc', 'normal', 'ロサが、二番の頭を練習しとけって？ ……六十年ぶりの注文だ。叩いてやるさ。']];
+        if (f.cu_chuchoTold) return [['npc', 'normal', '帽子箱は、ロサの家の窓ぎわさ。……あそこだけ、日が当たらない。']];
+        f.cu_chuchoTold = true;
+        return [['npc', 'normal', 'あのレコード？ 一度だけ、ロサの家で聞いたことがある。'], ['npc', 'normal', '……二番に入るところで、針が飛ぶんだ。傷がある。じいさんの、いちばんいいところで。'], ['npc', 'normal', 'ロサは、あのとき、すぐ針を上げた。……それきり、だれにも聞かせなくなった。'], ['npc', 'normal', '帽子箱を探してみな。ロサの大事なものは、昔から、ぜんぶそこだ。']];
+      },
+      hatbox(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（帽子箱は、ふたを開けたまま。中には、薄紙だけが、レコードの形にへこんで残っている）']];
+        f.cu_boxSeen = true;
+        return [['me', '', '（開いた窓の奥に、色あせた帽子箱。薄紙に包んで、レコードが一枚）'], ['me', '', '（紙に、ふるえた字で「わたしの歌」。……隠したのは、ロサばあちゃん本人だ）']];
+      },
+      rosacu(S) {
+        const f = S.f;
+        if (S.back && f.cu_liveFill) return [['npc', 'normal', '……あの人の声の、飛んだところに、いまの太鼓が入るのね。'], ['npc', 'normal', '六十年、そこだけ聞けなかった。今夜は、そこで踊るわ。'], ['insight', '', '傷のある歌は、隠さなくていい。飛んだところは、いま生きている音で埋められる。']];
+        if (S.back) return [['npc', 'normal', 'パーティー？ ……ええ、行くわよ。歌がなくても、ケーキはあるもの。']];
+        if (f.cu_liveFill) return [['npc', 'normal', '……チューチョに、二番の頭を練習しておけって、伝えてちょうだい。']];
+        if (!f.cu_boxSeen) return [['npc', 'normal', 'あら、旅の人。ペペが騒いでるでしょう。……あの子には、悪いことをしてるの。']];
+        f.cu_liveFill = true;
+        return [['npc', 'normal', '……見つけちゃったのね。そう、隠したのは、わたし。'], ['npc', 'normal', 'あの人の歌の、いちばんいいところで、針が飛ぶの。……みんなの前で、あれを聞くのがこわかった。'], ['me', '', 'チューチョさんが言っていました。……飛ぶところは、楽団が叩けるって。'], ['npc', 'normal', '……あの人の声の続きを、いまの人が？ ……それなら、聞ける気がする。'], ['npc', 'normal', 'レコードは、ペペに持っていって。わたしから、だなんて言わないで。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 62 数え歌の数が合わない（消えた一頭は、孫の行く先で数えられていた）
+  C.push({
+    id: 'namibia', shape: '数え歌の数が合わない', name: 'ナミビナ', sub: '赤い砂の村', time: 'noon', screens: 5, far: 'red_rocks_noon', timeBack: 'dusk', map: [-19.5, 13.5],
+    hill: '#8a4a30', ground: ['#c87a50', '#a05a38', '#d88a60'], tint: 'rgba(255,190,140,.06)', bscale: 1.0,
+    props: [['tree_dead', 400, 260], ['rock2', 1400, 80], ['cactus', 2300, 150], ['rock', 3200, 70], ['tree_dead', 4300, 280]],
+    buildings: [['adobe', 700, 0.85], ['thatched_farm', 1700, 0.85], ['kr_school', 3600, 0.85]],
+    npcs: [
+      { id: 'tuli', name: 'トゥリ', actor: 'tribekid', x: 900, face: 1 },
+      { id: 'meme', name: 'メメばあちゃん', actor: 'granny_andes', x: 2000, face: -1 },
+      { id: 'mwalimu', name: '寄宿学校の先生', actor: 'teacher', x: 3400, face: -1 }
+    ],
+    places: [{ id: 'hoof', name: '東へのびる足あと', x: 2700, verb: '見る' }],
+    weather: { clear: 7, wind: 3 },
+    animals: [['cow', 1300], ['cow', 1450], ['hawk', 2600], ['cow', 3800]],
+    talk: {
+      tuli(S) {
+        const f = S.f;
+        if (f.nmTeacher && !f.nmVerse) {
+          f.nmVerse = true;
+          return [['me', '', 'ナンガは、学校にいました。……あした入る子みんなに、毎朝ミルクを出すそうです。'], ['npc', 'normal', '……ぼくの学校？ ばあちゃん、ナンガで、ぼくの学校代を……。'], ['npc', 'normal', 'だから十二番、歌えなかったんだ。……歌ったら、泣くから。'], ['npc', 'normal', 'じゃあ、十二番、つくりなおす。「学校のナンガ、白いしっぽ」。'], ['npc', 'normal', 'ぼくが、あっちで数える。……そしたら、数え歌は、ちゃんと十二になる。'], ['insight', '', '数え歌から消えた一頭は、孫の行く先で、まだ数えられていた。']];
+        }
+        if (S.back && f.nmVerse) return [['npc', 'normal', '十一番まで歌って、それから、十二番。「学校のナンガ、白いしっぽ」。'], ['npc', 'normal', '……あしたから、ぼくが毎朝、ナンガを数える番なんだ。']];
+        if (S.back) return [['npc', 'normal', '……もうすぐ日が沈む。夜は、ハイエナが出る。ナンガ、どこ行ったんだ。']];
+        if (f.nmVerse) return [['npc', 'normal', '十二番、つくりなおす！ ……「学校のナンガ」。ばあちゃんに、教えてやるんだ。']];
+        if (f.nmTuli) return [['npc', 'normal', '足あと、東へ続いてる。……ぼくは、牛囲いを見てなきゃ。']];
+        f.nmTuli = true;
+        return [['me', '', '（男の子が、牛囲いの柵に足をかけて、牛の背中を指で数えている）'], ['npc', 'normal', '旅の人。ばあちゃんは毎晩、数え歌で牛を数えるんだ。一番から十二番まで。'], ['npc', 'normal', '十二番は「白いしっぽのナンガ」。……けさ、ばあちゃん、十二番を飛ばして、歌い終わった。'], ['npc', 'normal', 'いま数えたら、十一頭。ナンガがいない。……日が沈む前に見つけないと。'], ['npc', 'normal', 'ぼく、あしたから、遠くの学校に行くんだ。その前に、ちゃんと十二頭にしておきたい。']];
+      },
+      meme(S) {
+        const f = S.f;
+        if (S.back && f.nmVerse) return [['npc', 'normal', '……トゥリが、十二番を、つくりなおしたって？ あの子の声で、聞かせてもらおうかね。']];
+        if (S.back && f.nmTeacher) return [['npc', 'normal', '学校の先生に、会ったのかい。……あの子には、あしたの朝、わたしから言うつもりだったのよ。']];
+        if (S.back) return [['npc', 'normal', '……十二番はね、もう歌わないの。歌わなくていい番なのよ。']];
+        if (!f.nmTuli) return [['npc', 'normal', '暑いだろう。日陰に入りな。……牛は、日が傾いたら帰ってくる。']];
+        return [['npc', 'normal', 'ナンガ？ ……あの子は、いい牛だったよ。よく乳の出る、白いしっぽの。'], ['npc', 'normal', '……「だった」なんて言っちゃったね。孫には、言わないでおくれ。']];
+      },
+      hoof(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（東への足あとの上に、学校へ向かう、小さな靴のあとが重なっている）']];
+        return [['me', '', '（ひづめのあとが一頭ぶん、東へ。……となりに、大人のサンダルのあとが並んでいる）'], ['me', '', '（迷った牛の足あとじゃない。だれかが、つないで連れていった）']];
+      },
+      mwalimu(S) {
+        const f = S.f;
+        if (S.back && f.nmTeacher) return [['npc', 'normal', '白いしっぽの牛は、名前を変えずに飼います。「ナンガ」のまま。……そう、伝えてください。']];
+        if (S.back) return [['npc', 'normal', 'あしたの朝は、新入生が来ます。……ミルクの用意は、もうできていますよ。']];
+        if (f.nmTeacher) return [['npc', 'normal', '入学の名簿に、トゥリの名前があります。……学費は、牛一頭で払われました。']];
+        f.nmTeacher = true;
+        return [['me', '', '（学校の庭で、白いしっぽの牛が一頭、のんびり草をはんでいる）'], ['npc', 'normal', 'ああ、その牛ですか。けさ、メメさんが連れてきました。孫の学費だと言って。'], ['npc', 'normal', '寄宿の子どもたちに、毎朝ミルクを出してもらいます。……あしたから、その孫の分も。'], ['npc', 'normal', 'メメさんは、孫には言わないでくれと。……でも、旅の人は、孫じゃありませんね。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
