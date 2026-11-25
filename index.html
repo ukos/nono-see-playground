@@ -38,15 +38,19 @@ button:focus-visible{outline:3px solid var(--akane);outline-offset:2px}
 button:active,button.hold{background:rgba(243,160,122,.28)}
 .note{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:13px;color:#e6cfe0;opacity:.8;white-space:nowrap}
 /* ---- ゲーム ---- */
-#game{justify-content:flex-start;background:#0b0816}
-#stage{position:relative;width:100vw;max-width:calc((100dvh - 76px) * 16 / 9);aspect-ratio:16/9;margin-top:auto;overflow:hidden;background:#000}
+#game{justify-content:center;background:#0b0816;touch-action:none;-webkit-user-select:none;user-select:none}
+#stage{position:relative;width:100vw;max-width:calc(100dvh * 16 / 9);aspect-ratio:16/9;overflow:hidden;background:#000}
 #cv{position:absolute;inset:0;width:100%;height:100%;display:block}
-#pad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;width:100%;max-width:calc((100dvh - 76px) * 16 / 9);padding:10px 10px max(10px,env(safe-area-inset-bottom));margin-bottom:auto}
-#pad button{height:56px;font-size:15px}
+/* 画面に重ねるボタン：旅日誌は右上、話すは右下の丸 */
+#bj{position:absolute;top:2.5%;right:1.6%;width:auto;height:auto;padding:6px 12px;font-size:clamp(11px,1.7vw,15px);border-radius:999px;z-index:3}
+#bt{position:absolute;right:2%;bottom:5%;width:clamp(52px,11%,96px);height:auto;aspect-ratio:1;border-radius:50%;padding:0;text-align:center;font-size:clamp(12px,2vw,18px);z-index:3;transition:opacity .2s,transform .2s}
+#bt.near{background:rgba(243,160,122,.55);transform:scale(1.08)}
+#bt.hide,#bj.hide{opacity:0;pointer-events:none}
+#hint{position:absolute;left:0;right:0;bottom:4%;text-align:center;font-size:clamp(11px,1.8vw,15px);color:#f3e8f0;text-shadow:0 1px 3px #000;pointer-events:none;transition:opacity 1s;z-index:2}
 /* 会話窓 */
 #talk{position:absolute;left:2%;right:2%;bottom:3%;display:none;gap:12px;align-items:flex-end;background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:10px 14px 12px;cursor:pointer}
 #talk.on{display:flex}
-#talk img{width:clamp(64px,12%,108px);aspect-ratio:3/4;object-fit:cover;object-position:top;border-radius:8px;background:#2a2046;flex:none}
+#talk img{width:clamp(44px,8%,84px);aspect-ratio:1/2;object-fit:contain;object-position:bottom;border-radius:8px;background:#2a2046;flex:none}
 #talk .who{font-family:"DotGothic16",monospace;color:var(--akane);font-size:clamp(13px,1.9vw,17px);white-space:nowrap}
 #talk .say{font-size:clamp(14px,2.3vw,20px);line-height:1.55;min-height:3.1em}
 #talk .more{position:absolute;right:12px;bottom:6px;color:var(--akane);font-size:12px;animation:blink 1s steps(2) infinite}
@@ -98,6 +102,9 @@ button:active,button.hold{background:rgba(243,160,122,.28)}
     <canvas id="cv" width="960" height="540"></canvas>
     <div id="banner"></div>
     <div id="talk"><img id="tpic" alt=""><div style="flex:1"><div class="who" id="twho"></div><div class="say" id="tsay"></div></div><span class="more">▼</span></div>
+    <div id="hint">左右にスワイプで歩く・もう一度で走る・タップで止まる</div>
+    <button id="bj">旅日誌</button>
+    <button id="bt">話す</button>
     <div id="insight"><div class="h">nono の気づき</div><div class="b" id="ibody"></div></div>
     <div id="journal">
       <h2>旅日誌</h2>
@@ -106,12 +113,6 @@ button:active,button.hold{background:rgba(243,160,122,.28)}
       <h3>歩いた国</h3><div id="jv" class="visited"></div>
       <div class="close"><button id="jclose">日誌を閉じる</button></div>
     </div>
-  </div>
-  <div id="pad">
-    <button id="bl">◀ 左へ</button>
-    <button id="br">右へ ▶</button>
-    <button id="bt">話す</button>
-    <button id="bj">旅日誌</button>
   </div>
 </section>
 

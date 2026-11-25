@@ -287,8 +287,25 @@ function holdBtn(el, k) {
   const off = () => { st[k] = false; el.classList.remove('hold'); };
   el.addEventListener('pointerdown', on); ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => el.addEventListener(t, off));
 }
-holdBtn($('bl'), 'keyL'); holdBtn($('br'), 'keyR');
-$('bt').addEventListener('click', act); $('bj').addEventListener('click', () => toggleJournal());
+// スワイプで歩く：左右にはらうと、その向きへ歩きつづける。同じ向きにもう一度で走る。タップで止まる
+st.auto = 0; st.run = false;
+try { if (localStorage.getItem('see-swiped')) $('hint').style.opacity = 0; } catch (_) {}
+{
+  let sx = 0, sy = 0, down = false;
+  const game = $('game'), ui = e => e.target.closest('button,#talk,#insight,#journal');
+  game.addEventListener('pointerdown', e => { if (ui(e)) return; down = true; sx = e.clientX; sy = e.clientY; });
+  game.addEventListener('pointerup', e => {
+    if (!down) return; down = false;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      const d = Math.sign(dx);
+      if (st.auto === d) st.run = true; else { st.auto = d; st.run = false; }
+      $('hint').style.opacity = 0; try { localStorage.setItem('see-swiped', '1'); } catch (_) {}
+    } else if (st.auto) { st.auto = 0; st.run = false; }
+  });
+  game.addEventListener('pointercancel', () => { down = false; });
+}
+$('bt').addEventListener('click', e => { e.stopPropagation(); st.auto = 0; st.run = false; act(); }); $('bj').addEventListener('click', () => toggleJournal());
 $('jclose').addEventListener('click', () => toggleJournal(false));
 talk.addEventListener('click', advance); ins.addEventListener('click', advance);
 
@@ -541,10 +558,19 @@ let last = 0, lastCam = null, saveT = 0;
 function frame(ts) {
   const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts; st.t += dt;
   const busy = st.talking || st.journal || ins.classList.contains('on');
-  const v = busy ? 0 : (st.keyR ? 1 : 0) - (st.keyL ? 1 : 0);
+  if (busy) { st.auto = 0; st.run = false; }
+  if (st.keyL || st.keyR) st.auto = 0;
+  const v = busy ? 0 : ((st.keyR ? 1 : 0) - (st.keyL ? 1 : 0)) || st.auto;
+  const runK = st.auto && st.run ? 1.9 : 1;
   st.moving = v !== 0; if (v) st.dir = v;
-  st.x = Math.max(60, Math.min(WORLD - 60, st.x + v * SPEED * windSpeedFactor() * dt));
-  if (st.moving) st.phase += dt * 6.2;
+  const nx = st.x + v * SPEED * runK * windSpeedFactor() * dt;
+  st.x = Math.max(60, Math.min(WORLD - 60, nx));
+  if (st.x !== nx) { st.auto = 0; st.run = false; } // 世界の端で止まる
+  if (st.moving) st.phase += dt * 6.2 * runK;
+  { const t = busy ? null : nearTarget(), bt = $('bt'), lab = t && t.isPlace ? t.verb : '話す';
+    bt.classList.toggle('near', !!t); bt.classList.toggle('hide', !!busy);
+    if (bt.textContent !== lab) bt.textContent = lab;
+    $('bj').classList.toggle('hide', !!st.journal); }
   st.maxX = Math.max(st.maxX, st.x);
   const here = countryAt(st.x);
   if (here !== st.cur) {
