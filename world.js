@@ -4150,5 +4150,108 @@
     }
   });
 
+// ---------------------------------------------------------------- 77 誕生日をあげる（生まれた日を知らない人に、来た日を）
+  C.push({
+    id: 'senegal', shape: '誕生日をあげる', name: 'セネガラ', sub: 'バオバブの港', time: 'morning', screens: 5, far: 'savanna_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [14.7, -17.4],
+    hill: '#8a6a40', ground: ['#c8a070', '#a07850', '#d8b080'], tint: 'rgba(255,220,170,.06)', bscale: 1.0,
+    props: [['big_tree2', 500, 340], ['textile_stall', 1500, 140], ['canoe', 2600, 60], ['pier', 3300, 90], ['palm', 4300, 290]],
+    buildings: [['adobe', 900, 0.85], ['sea_shop', 2100, 0.85], ['sea_barrack', 3800, 0.85]],
+    npcs: [
+      { id: 'aminata', name: 'アミナタ', actor: 'schoolgirl', x: 950, face: 1 },
+      { id: 'awa', name: '布売りのアワ', actor: 'wa_woman', x: 1700, face: -1 },
+      { id: 'harbor', name: '港番のディウフ', actor: 'navylantern', x: 2900, face: -1 },
+      { id: 'ousmane', name: 'ウスマンじいさん', actor: 'oldman', x: 3600, face: -1 }
+    ],
+    places: [],
+    weather: { clear: 7, wind: 3 },
+    animals: [['hen', 1300], ['cat_orange', 2400], ['crow', 4000]],
+    talk: {
+      aminata(S) {
+        const f = S.f;
+        if (f.sn_day && !f.sn_done) {
+          f.sn_done = true;
+          return [['me', '', '六十年前のきょう、ウスマンさんは、ひとりで、この港に着いたそうです。バオバブが咲いた朝に。'], ['npc', 'normal', '……きょう？ 六十年前の、きょう？'], ['npc', 'normal', 'じゃあ、きょうが、ウスマンじいさんの誕生日だ！ この町に、生まれた日！'], ['npc', 'normal', '名前の札、書きなおす！ 「ウスマン、この町で六十さい」って！'], ['insight', '', '生まれた日を知らない人には、この町に来た日を、誕生日にすればよかった。']];
+        }
+        if (S.back && f.sn_done) return [['npc', 'normal', 'じいさん、札を首にかけたまま、ずっと港を見てる。……ちょっと泣いてた。']];
+        if (S.back) return [['npc', 'normal', '……お祝いの札、じいさんのだけ、白いまま。']];
+        if (f.sn_ami) return [['npc', 'normal', '誕生日がわからない人なんて、いるの？ ……でも、だれにでも、何かの日はあるよね。']];
+        f.sn_ami = true;
+        return [['me', '', '（女の子が、色紙の札を何枚も抱えて、バオバブの下に並べている）'], ['npc', 'normal', '旅の人。きょうは、町のお年寄りのお祝いの日。今年の誕生日の人に、札をかけるの。'], ['npc', 'normal', 'でもね、ウスマンじいさんの札だけ、書けないの。……じいさん、誕生日を知らないんだって。'], ['npc', 'normal', '子どものとき、ひとりで舟で来たから。……日が沈むまでに、なんとかしたいの。']];
+      },
+      awa(S) {
+        const f = S.f;
+        if (S.back && f.sn_day) return [['npc', 'normal', '六十年前のきょう？ ……お祝いの布、いちばんいいのを出しておこうかね。']];
+        if (S.back) return [['npc', 'normal', '……ウスマンの札、白いままかい。かわいそうにねえ。']];
+        return [['npc', 'normal', 'ウスマン？ あの子が来た朝のことなら、母さんから聞いたよ。'], ['npc', 'normal', '港のバオバブが、いっせいに白い花をつけた朝だったって。年にいちど、ひと晩だけ咲く花さ。'], ['npc', 'normal', '……そういえば、ゆうべ、咲いてたね。']];
+      },
+      harbor(S) {
+        const f = S.f;
+        if (S.back && f.sn_day) return [['npc', 'normal', '帳面のあのページに、しおりをはさんでおいた。……おやじも、喜ぶだろう。']];
+        if (S.back) return [['npc', 'normal', '日が沈む。港の帳面を、しまう時間だ。']];
+        f.sn_log = true;
+        return [['npc', 'normal', '港の帳面なら、六十年ぶんある。……おやじの代のは、字がひどいがね。'], ['me', '', '（古い帳面をめくる。六十年前の、ちょうど、きょうの日付）'], ['me', '', '（「小舟一そう、漂着。乗っていた男の子、ひとり。名はウスマンと言う。バオバブ満開」）']];
+      },
+      ousmane(S) {
+        const f = S.f;
+        if (S.back && f.sn_day) return [['npc', 'normal', '来た日を、帳面に書いてくれた人がおったとはな。……六十年か。'], ['npc', 'normal', 'あの朝の水の味は、覚えとる。……誕生日の味なんて、知らんが。']];
+        if (S.back) return [['npc', 'normal', '……わしの札は、いらんよ。祝う日が、ないんだから。']];
+        if (f.sn_day) return [['npc', 'normal', 'バオバブの花か。……あの朝、木の下で、だれかに水をもらった。それだけは、覚えとる。']];
+        if (!f.sn_log) return [['me', '', '（おじいさんが、桟橋に座って、網をつくろっている）'], ['npc', 'normal', '誕生日？ ……知らんのだよ。舟に乗る前のことは、なんにも。']];
+        f.sn_day = true;
+        return [['me', '', '（おじいさんが、桟橋に座って、網をつくろっている）'], ['me', '', '港の帳面に、ウスマンさんが着いた日が書いてありました。六十年前の、きょうです。'], ['npc', 'normal', '……きょう？ バオバブが咲いた朝か。'], ['npc', 'normal', 'あの朝、木の下で、だれかに水をもらった。……あれが、この町での、最初の日だった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 78 失敗作がだれかにはちょうどいい（ゆがみが、その人の手の形だった）
+  C.push({
+    id: 'romania', shape: '失敗作がだれかにはちょうどいい', name: 'ルマーニア', sub: '焼きものの村', time: 'morning', screens: 5, far: 'autumn_morning', timeBack: 'dusk', map: [45.8, 24.9],
+    hill: '#5a5a3a', ground: ['#9a8a60', '#7a6a40', '#aa9a70'], tint: 'rgba(255,225,180,.05)', bscale: 1.0,
+    props: [['tree_autumn', 400, 290], ['clay_oven', 1300, 110], ['burnt_pot', 1500, 40], ['tree_autumn', 2700, 300], ['stool2', 3600, 40]],
+    buildings: [['house_small', 800, 0.9], ['thatched_farm', 2200, 0.85], ['house_large', 3800, 0.85]],
+    npcs: [
+      { id: 'ana', name: '見習いのアナ', actor: 'farmgirl', x: 950, face: 1 },
+      { id: 'mihai', name: '親方のミハイ', actor: 'oldsmith', x: 2000, face: -1 },
+      { id: 'ileana', name: 'イレアナおばあさん', actor: 'ru_granny', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'shelf', name: 'イレアナの台所の棚', x: 3250, verb: '見る', when: f => f.rm_ilea }],
+    weather: { clear: 5, wind: 3, drizzle: 2 },
+    animals: [['hen', 1200], ['dog_brown', 2600], ['cat_white', 3900]],
+    talk: {
+      ana(S) {
+        const f = S.f;
+        if (f.rm_shelf && !f.rm_done) {
+          f.rm_done = true;
+          return [['me', '', 'イレアナさんの棚、アナさんのゆがんだ器ばかりでした。……へこみに、親指がぴったり入るそうです。'], ['npc', 'normal', '……わたしの失敗作が？ 指が痛い人の、ちょうどいい形？'], ['npc', 'normal', 'まんまるには、まだ作れない。……でも、へこみなら、だれよりうまく作れる。'], ['npc', 'normal', '親方に言う。へこみを、わざと作らせてくださいって。村じゅうの、手の痛い人のぶん。'], ['insight', '', 'ゆがみは、だれかの手には、ちょうどいい形だった。']];
+        }
+        if (S.back && f.rm_done) return [['npc', 'normal', '親方が、「へこみの係」って札をくれた。……まんまるの練習も、ちゃんと続けるよ。']];
+        if (S.back) return [['npc', 'normal', '……夕方の窯出し。まんまるは、またひとつも、できなかった。']];
+        if (f.rm_ana) return [['npc', 'normal', '手が、勝手に、ここで力を入れちゃうの。……親指のところ。']];
+        f.rm_ana = true;
+        return [['me', '', '（女の子が、ろくろの前で、ゆがんだ器を両手で持ち上げている）'], ['npc', 'normal', '旅の人。わたし、見習い三年目。……でも、まんまるの器が、ひとつも作れないの。'], ['npc', 'normal', '親方が、きょうの窯出しまでに、まんまるを作れなかったら、見習いは、おしまいだって。'], ['npc', 'normal', '……ふしぎなの。ゆがんだのばっかり、市場で、ひとりのおばあさんが、ぜんぶ買っていくの。']];
+      },
+      mihai(S) {
+        const f = S.f;
+        if (S.back && f.rm_shelf) return [['npc', 'normal', 'イレアナばあさんの棚を見た？ ……あの人は、昔から、器を見る目だけはある。']];
+        if (S.back) return [['npc', 'normal', '……まんまるは、焼きものの基本だ。基本ができんものに、窯はまかせられん。']];
+        return [['npc', 'normal', 'アナの器か。どれも、同じところが、ぽこんとへこむ。……右の親指のところだ。'], ['npc', 'normal', '癖は、なおらん。……なおらんなら、焼きもの屋は向かん。きびしいが、そういうものだ。']];
+      },
+      shelf(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（棚に、新しいへこみの器が、ひとつ増えている）']];
+        f.rm_shelf = true;
+        return [['me', '', '（台所の棚に、ゆがんだ器が、ずらりと並んでいる。……どれも、同じところがへこんでいる）'], ['me', '', '（まんまるの器は、棚のいちばん奥で、ほこりをかぶっている）']];
+      },
+      ileana(S) {
+        const f = S.f;
+        if (S.back && f.rm_shelf) return [['npc', 'normal', 'あの子に伝えて。……へこみの器、来週も、ひとつ取っておいてって。']];
+        if (S.back) return [['npc', 'normal', 'あの子の器が、もう市場に出ないの？ ……困るわ。ほんとうに、困る。']];
+        if (f.rm_ilea) return [['npc', 'normal', '棚を見ていって。……わたしの台所は、あの子の器で、できてるのよ。']];
+        f.rm_ilea = true;
+        return [['me', '', '（おばあさんが、指の節の太い手で、器を両手で包むように持っている）'], ['npc', 'normal', 'アナの器？ ええ、ぜんぶ買ってるわ。……わたし、指が痛くてね。まるい器は、つるっとすべるの。'], ['npc', 'normal', 'あの子のは、へこみに親指がぴったり入る。……落とさないの。何年ぶりかしら、自分でスープを飲めるの。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
