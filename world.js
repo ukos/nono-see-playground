@@ -4447,5 +4447,103 @@
     }
   });
 
+// ---------------------------------------------------------------- 83 遊び方を忘れた大人（あべこべの日、足が覚えていた）
+  C.push({
+    id: 'trinida', shape: '遊び方を忘れた大人', name: 'トリニダ', sub: 'あべこべ祭りの島', time: 'noon', screens: 5, far: 'beach_noon', timeBack: 'dusk', map: [10.7, -61.5],
+    hill: '#3a7a5a', ground: ['#d8c090', '#b0a070', '#e8d0a0'], tint: 'rgba(255,230,190,.05)', bscale: 1.0,
+    props: [['palm', 400, 310], ['wall_flowers', 1300, 110], ['stool2', 2100, 40], ['palm', 3100, 300], ['palm', 4300, 290]],
+    buildings: [['br_townhouse', 800, 0.9], ['sea_shop', 1900, 0.85], ['mx_house', 3800, 0.9]],
+    npcs: [
+      { id: 'keisha', name: 'ケイシャ', actor: 'festival', x: 900, face: 1 },
+      { id: 'merle', name: '果物売りのマールおばさん', actor: 'fruitseller', x: 2100, face: -1 },
+      { id: 'winston', name: 'ウィンストンじいさん', actor: 'mustache', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'stilts', name: '物置の古い竹馬', x: 2800, verb: '見る', when: f => f.tr_merle }],
+    weather: { clear: 7, wind: 2 },
+    animals: [['rooster', 1500], ['dog_brown', 2600], ['cat_orange', 4000]],
+    talk: {
+      keisha(S) {
+        const f = S.f;
+        if (S.back && f.tr_done) return [['npc', 'normal', 'じいちゃん、ちっちゃい竹馬で、ぼくらより上手だった。……あしたも、あべこべの日にしたい。']];
+        if (S.back) return [['npc', 'normal', '……日が沈む。あべこべの日、おしまい。じいちゃん、最後まで、つっ立ってた。']];
+        if (f.tr_done) return [['npc', 'normal', 'じいちゃんが竹馬？ ……うそ、見に行く！ 大人のくせに、ずるい！']];
+        if (f.tr_kei) return [['npc', 'normal', '子ども役は、だれかを遊びにさそわなきゃいけないの。それが決まり。']];
+        f.tr_kei = true;
+        return [['me', '', '（女の子が、大きなネクタイをしめて、腕組みをしている。……大人のまねらしい）'], ['npc', 'normal', '旅の人！ きょうは、あべこべの日。子どもが大人の役、大人が子どもの役をするの。'], ['npc', 'normal', '子ども役の大人は、だれかを遊びにさそう決まり。……なのに、うちのじいちゃん、つっ立ってるだけ。'], ['npc', 'normal', '「遊び方なんて、忘れた」って。……日が沈んだら、あべこべの日は、おしまいなのに。']];
+      },
+      merle(S) {
+        const f = S.f;
+        if (S.back && f.tr_done) return [['npc', 'normal', 'ウィンストンの竹馬、六十年ぶりに見た。……腰は曲がっても、足は、あのころのまま。']];
+        if (S.back) return [['npc', 'normal', 'ウィンストンは、昔から、意地っぱりでね。……子ども役なんて、照れくさいのさ。']];
+        f.tr_merle = true;
+        return [['npc', 'normal', 'ウィンストンが遊び方を忘れた？ ……あの子は、島でいちばんの竹馬乗りだったよ。'], ['npc', 'normal', '祭りの日には、家の屋根より高い竹馬で歩いてた。……わたしは、いつも下で見上げてた。'], ['npc', 'normal', 'あの家の物置に、まだ、ちっちゃい竹馬があるはずさ。あの子が、はじめて乗ったやつ。']];
+      },
+      stilts(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（物置の戸が開いたまま。竹馬が一組、なくなっている）']];
+        f.tr_stilt = true;
+        return [['me', '', '（物置の奥に、子ども用の小さな竹馬が一組。足をのせる台が、すり減ってつるつるだ）'], ['me', '', '（台の裏に、子どもの字で「ウィンストン 7さい」）']];
+      },
+      winston(S) {
+        const f = S.f;
+        if (S.back && f.tr_done) return [['npc', 'normal', '子ども役は、くたびれる。……だが、あしたの腰の痛みも、悪くない気がする。']];
+        if (S.back) return [['npc', 'normal', '……遊び方なんて、もう忘れた。わしは、ここで日が沈むのを待つよ。']];
+        if (f.tr_done) return [['npc', 'normal', 'ほれ、孫を呼んでこい。……竹馬の乗り方くらいは、教えてやる。']];
+        if (!f.tr_stilt) return [['me', '', '（おじいさんが、子ども用の紙の帽子をかぶったまま、むっつり立っている）'], ['npc', 'normal', '……子ども役だと。遊び方なんぞ、とっくに忘れたわい。']];
+        f.tr_done = true;
+        return [['me', '', '（おじいさんが、子ども用の紙の帽子をかぶったまま、むっつり立っている）'], ['me', '', '物置に、小さな竹馬がありました。台の裏に「ウィンストン 7さい」と。'], ['npc', 'normal', '……あれが、まだ、あったのか。'], ['me', '', '（おじいさんが、竹馬を受け取る。足をのせると、ぐらりともせず、一歩、二歩）'], ['npc', 'normal', '……頭は忘れとったが、足が覚えとった。おい、だれか、いっしょに遊ばんか。'], ['insight', '', '遊び方を忘れた大人も、足が、ちゃんと覚えていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 84 こわがりの耳が役に立つ（だれより先に、氷の声を聞いていた）
+  C.push({
+    id: 'latvia', shape: 'こわがりの耳が役に立つ', name: 'ラトヴィナ', sub: '凍った湖', time: 'morning', screens: 5, far: 'snow', timeBack: 'dusk', map: [56.9, 24.1],
+    hill: '#6a7a8a', ground: ['#e8eef2', '#c8d0d8', '#f0f4f8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
+    props: [['pine_snow', 400, 300], ['reeds', 1500, 90], ['reeds2', 2600, 90], ['iso_cabin_snow', 3300, 140], ['tree_snow', 4300, 290]],
+    buildings: [['nordic_red', 800, 0.85], ['lumber_hut', 3900, 0.85]],
+    npcs: [
+      { id: 'janis', name: 'ヤーニス', actor: 'boy_sled', x: 900, face: 1 },
+      { id: 'ilze', name: 'ヤーニスの母さん', actor: 'parka', x: 1800, face: -1 },
+      { id: 'ojars', name: '漁師のオヤールスじいさん', actor: 'old_fisher', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'reedice', name: '葦の近くの氷', x: 2600, verb: '耳をすます', when: f => f.lv_jan }],
+    weather: { snow: 5, clear: 3, wind: 2 },
+    animals: [['crow', 1300], ['dog_samoyed', 2200], ['owl', 4100]],
+    talk: {
+      janis(S) {
+        const f = S.f;
+        if (S.back && f.lv_done) return [['npc', 'normal', 'ぼく、湖のまん中で、スケートしたよ。……ピンって言わない氷は、すべすべだった。']];
+        if (S.back) return [['npc', 'normal', '……みんな、葦の近くで、まだ穴を掘ってる。ぼく、見てられない。']];
+        if (f.lv_done) return [['npc', 'normal', 'ほんと？ ぼくの言ったこと、信じてもらえたの？ ……こわがりでも、役に立つの？']];
+        if (f.lv_jan) return [['npc', 'normal', '葦のあたりだよ。耳をすませば、聞こえる。……みんな、気のせいだって言うけど。']];
+        f.lv_jan = true;
+        return [['me', '', '（男の子が、湖の岸で、そりの綱をにぎったまま、氷に足をのせられずにいる）'], ['npc', 'normal', '旅の人。きょうは、氷の上で、魚つりの大会なの。お昼から、村じゅう湖に出る。'], ['npc', 'normal', 'ぼく、こわくて、氷にのれない。……みんな、こわがりだって笑う。'], ['npc', 'normal', 'でも、ほんとは、こわいんじゃないの。……葦の近くの氷が、「ピン」って言うんだ。ずっと。']];
+      },
+      ilze(S) {
+        const f = S.f;
+        if (S.back && f.lv_done) return [['npc', 'normal', '大会の場所、湖のまん中にうつしたの。……あの子、胸をはって、いちばん先に歩いてったわ。']];
+        if (S.back) return [['npc', 'normal', '大会は、もう始まってる。……あの子、岸から一歩も動かない。']];
+        return [['npc', 'normal', 'ヤーニスの「ピン」？ ……あの子、耳がよすぎるの。夜中の雪の音でも、起きるくらい。'], ['npc', 'normal', '大会の穴は、毎年、葦の近くに掘るのよ。魚が、いちばん集まるから。']];
+      },
+      reedice(S) {
+        const f = S.f;
+        if (S.back && f.lv_done) return [['me', '', '（葦のまわりに、赤い旗が立てられている。「ここから先、入るな」）']];
+        if (S.back) return [['me', '', '（葦の近くの氷の上に、大会の穴が、いくつも並んでいる）']];
+        f.lv_hear = true;
+        return [['me', '', '（しゃがんで、耳をすます。……ピン。……ピン。高く、細い音）'], ['me', '', '（雪を手ではらうと、氷の下が、そこだけ黒っぽい。まわりより、ずっと薄そうだ）']];
+      },
+      ojars(S) {
+        const f = S.f;
+        if (S.back && f.lv_done) return [['npc', 'normal', 'わしの耳は、もう遠い。……あの子の耳が、湖の番をしてくれた。']];
+        if (S.back) return [['npc', 'normal', '……葦のあたりで、穴を掘っとる連中がおるな。今年の冬は、あたたかかったが。']];
+        if (f.lv_done) return [['npc', 'normal', '赤い旗を立ててくる。……こわがりの耳は、宝だ。']];
+        if (!f.lv_hear) return [['me', '', '（おじいさんが、氷に穴をあける道具を、念入りに研いでいる）'], ['npc', 'normal', '大会か。……わしは、湖のまん中でつる。年寄りは、人ごみがきらいでな。']];
+        f.lv_done = true;
+        return [['me', '', '（おじいさんが、氷に穴をあける道具を、念入りに研いでいる）'], ['me', '', '葦の近くの氷が、「ピン」と鳴っていました。ヤーニスくんが、ずっと聞いていた音です。'], ['npc', 'normal', '……あそこは、湧き水が出る。あたたかい冬の年は、氷が薄くなるんだ。'], ['npc', 'normal', 'わしの耳には、もう聞こえん。……大会は、まん中へうつそう。その子に、礼を言っといてくれ。'], ['insight', '', 'こわがりの耳は、だれより先に、氷の声を聞いていた。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
