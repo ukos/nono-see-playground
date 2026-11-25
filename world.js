@@ -48,9 +48,9 @@
     buildings: [['house_small', 560], ['bakery', 1100], ['house_large', 1640], ['elder_house', 2260], ['lumber_hut', 3080]],
     npcs: [
       { id: 'villager', name: 'ゴンジ（村人）', actor: 'villager', x: 940, face: -1 },
-      { id: 'elder', name: '長老', actor: 'elder', x: 2420, face: -1 },
-      { id: 'lumber', name: 'ダイ（木こり）', actor: 'lumber', x: 3360, face: -1 },
-      { id: 'porter', name: 'ミツ（運び屋）', actor: 'porter', x: 4020, face: 1, when: f => !f.boardsSent }
+      { id: 'elder', name: '長老', actor: 'scholar', x: 2420, face: -1 },
+      { id: 'lumber', name: 'ダイ（木こり）', actor: 'bearhunter', x: 3360, face: -1 },
+      { id: 'porter', name: 'ミツ（運び屋）', actor: 'courier', x: 4020, face: 1, when: f => !f.boardsSent }
     ],
     rabbit: 2000,
     gap: { x: 5180, kind: 'rope' }, // 谷と吊り橋
@@ -331,7 +331,7 @@
     npcs: [
       { id: 'first', name: 'ファースト（WATCH）', actor: 'first', x: 800, face: 1, sheet: FIRST, pose: f => f.firstMet ? 'idle' : 'crouch' },
       { id: 'iwao', name: 'ハミド（水売り）', actor: 'veiled', x: 1900, face: -1 },
-      { id: 'wizard', name: '旅の魔法使い', actor: 'wizard', x: 2900, face: -1 }
+      { id: 'wizard', name: '旅の魔法使い', actor: 'sage', x: 2900, face: -1 }
     ],
     places: [{ id: 'well', name: '古い井戸', x: 4000, verb: '見る' }],
     weather: { clear: 6, wind: 3, fog: 1 },
@@ -377,7 +377,7 @@
     buildings: [['gr_chapel', 350], ['es_white', 900], ['it_townhouse', 1550], ['med_white', 2100, 0.9], ['es_gate', 2900], ['it_tuscan', 3500], ['gr_temple', 4400]],
     npcs: [
       { id: 'yui', name: YUI('剣を帯びた娘'), sprite: f => f.yuiKnown ? 'yui_queen' : 'yui_uniform', x: 1300, face: -1 },
-      { id: 'mermaid', name: '人魚', actor: 'mermaid', x: 3000, face: -1, special: 'legend' },
+      { id: 'mermaid', name: '人魚', actor: 'mermaid2', x: 3000, face: -1, special: 'legend' },
       { id: 'envoy', name: '海の向こうの使者', actor: 'knight', x: 4700, face: -1, when: f => !f.envoyMoved },
       { id: 'envoy2', name: '海の向こうの使者', actor: 'knight', x: 1650, face: -1, when: f => f.envoyMoved }
     ],
@@ -646,7 +646,7 @@
     props: [['reeds', 3300, 120], ['palm', 4100, 320], ['jungle_temple_tree', 6000, 400]],
     buildings: [['sea_barrack', 400], ['sea_twostory', 950], ['sea_stall', 1550], ['sea_shop', 2150], ['sea_tall', 2750], ['sea_stilt', 3500], ['stilt_house', 4400], ['sea_barrack', 5300, 0.9]],
     npcs: [
-      { id: 'mitsu2', name: 'ミツ（運び屋）', actor: 'porter', x: 600, face: 1 },
+      { id: 'mitsu2', name: 'ミツ（運び屋）', actor: 'courier', x: 600, face: 1 },
       { id: 'gou', name: 'ソム（屋台）', actor: 'grocer', x: 1500, face: -1 },
       { id: 'yui_mizu', name: YUI('水着の娘'), sprite: 'yui_swim', x: 2400, face: -1 },
       { id: 'second2', name: 'セカンド（WATCH）', actor: 'second', x: 3600, face: 1, sheet: SECOND, pose: () => 'carry', when: f => f.secondDone },
@@ -721,7 +721,7 @@
     npcs: [
       { id: 'pim', name: 'ピム（少年）', actor: 'graykid', x: 700, face: 1 },
       { id: 'miller', name: '粉屋のゴロ', actor: 'oldsmith', x: 2300, face: -1 },
-      { id: 'keeper', name: '堤防番のアンナ', actor: 'archer', x: 4500, face: -1 }
+      { id: 'keeper', name: '堤防番のアンナ', actor: 'kasuri', x: 4500, face: -1 }
     ],
     places: [{ id: 'leak', name: '堤防の手形', x: 450, verb: '見る', when: f => f.dikeFixed }],
     weather: { wind: 1 }, // 風車が排水に回るので、この国はいつも強風
@@ -868,7 +868,7 @@
     npcs: [
       { id: 'host', name: '祭りの世話役', actor: 'festival', x: 1000, face: -1 },
       { id: 'lucia', name: 'ルチア', actor: 'farmgirl', x: 2300, face: -1 },
-      { id: 'master', name: '道ばたの老人', actor: 'elder', x: 5100, face: -1 }
+      { id: 'master', name: '道ばたの老人', actor: 'lanternhood', x: 5100, face: -1 }
     ],
     places: [{ id: 'vat', name: 'ぶどうの桶', x: 2900, verb: '踏む' }],
     weather: { clear: 6, drizzle: 2, wind: 1 },
@@ -880,7 +880,7 @@
         if (f.stomped) return [['npc', 'normal', 'いやあ、見たことのない踏み方だった！ 名人の技は、奥が深い。']];
         if (f.hostMet) return [['npc', 'normal', '桶はルチアの家の前だ。名人の足、楽しみにしてるよ！']];
         f.hostMet = true;
-        return [['npc', 'normal', '来たか、名人！ 赤いマントの旅人が来ると、手紙にあった！'], ['me', '', 'え、ちがいます。ぼくは、ただの……'], ['npc', 'normal', '謙遜するな！ 名人が最初の一歩を踏まないと、祭りが始まらんのだ。'], ['npc', 'normal', '昼の暑さが来たら、桶のぶどうが傷む。さあ、桶はルチアの家の前だ！']];
+        return [['npc', 'normal', '来たか、名人！ マントの旅人が来ると、手紙にあった！'], ['me', '', 'え、ちがいます。ぼくは、ただの……'], ['npc', 'normal', '謙遜するな！ 名人が最初の一歩を踏まないと、祭りが始まらんのだ。'], ['npc', 'normal', '昼の暑さが来たら、桶のぶどうが傷む。さあ、桶はルチアの家の前だ！']];
       },
       lucia(S) {
         const f = S.f;
@@ -901,8 +901,8 @@
       },
       master(S) {
         const f = S.f;
-        if (S.back) return [['npc', 'normal', 'しまった、寝過ごした！ わしがぶどう踏みの名人じゃ。'], ['npc', 'normal', '赤いマント？ わしは手紙に「赤い頭巾」と書いたんじゃが……'], ['npc', 'normal', '……まあよい。祭りは、だれが踏んでも祭りじゃ。']];
-        return [['me', '', '（赤い頭巾の老人が、道ばたで気持ちよさそうに眠っている）']];
+        if (S.back) return [['npc', 'normal', 'しまった、寝過ごした！ わしがぶどう踏みの名人じゃ。'], ['npc', 'normal', 'マントの旅人？ ……手紙のマントは、わしのこの青いマントのことじゃが。'], ['npc', 'normal', '……まあよい。祭りは、だれが踏んでも祭りじゃ。']];
+        return [['me', '', '（青いマントの老人が、道ばたで気持ちよさそうに眠っている）']];
       }
     }
   });
@@ -915,7 +915,7 @@
     props: [['bush', 700, 80], ['tree_dead', 2100, 240], ['rock', 3300, 90], ['bush', 4700, 80]],
     buildings: [['thatched_farm', 300, 0.8], ['adobe', 4900, 0.8]],
     npcs: [
-      { id: 'west', name: '西の村のムワンギ', actor: 'craftsman', x: 1000, face: 1 },
+      { id: 'west', name: '西の村のムワンギ', actor: 'drummer', x: 1000, face: 1 },
       { id: 'east', name: '東の村のオティエノ', actor: 'tribewarrior', x: 4400, face: -1 }
     ],
     places: [{ id: 'sun', name: '東の空', x: 2700, verb: '見る' }],
@@ -1339,6 +1339,118 @@
         if (!f.halmoniTold) return [['npc', 'normal', 'ここは夜学です。昼は、ただの物置ですがね。']];
         f.teacherTold = true;
         return [['me', '', 'スンジャさんが、お孫さんの手紙を、自分で読みたいそうです。あしたの朝までに。'], ['npc', 'normal', '……あしたの朝まで。一晩で、手紙一通ぶんの字。'], ['npc', 'normal', '無理です、と言うのが先生の仕事かもしれません。でも、あの人は名前を三百回書いた人だ。'], ['npc', 'normal', '今夜は、特別授業にしましょう。手紙に出てくる字だけ、教えます。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 25 托鉢の戸口（言葉を交わせない僧と、閉じたままの戸）
+  C.push({
+    id: 'laoria', name: 'ラオリア', sub: '朝の托鉢の村', time: 'morning', screens: 5, far: 'karst_morning', map: [19.9, 102.1],
+    hill: '#2a3a2e', ground: ['#7a8a50', '#4a4a30', '#8a7a58'], tint: 'rgba(255,210,150,.05)', bscale: 1.0,
+    props: [['palm', 350, 300], ['temple_gold', 900, 260], ['reeds', 3700, 120], ['palm', 4500, 320]],
+    buildings: [['sea_stilt', 1500, 0.9], ['stilt_house', 2300, 0.9], ['sea_stall', 3000, 0.95]],
+    npcs: [
+      { id: 'novice', name: '若いお坊さん', actor: 'almsmonk', x: 1650, face: 1 },
+      { id: 'pha', name: '果物売りのパー', actor: 'fruitseller', x: 2650, face: -1 },
+      { id: 'noi', name: 'ノイ', actor: 'aodai', x: 3900, face: -1, when: (f, back) => !back && !f.noiCame },
+      { id: 'noi2', name: 'ノイ', actor: 'aodai', x: 2150, face: -1, when: (f, back) => back && f.noiCame }
+    ],
+    places: [
+      { id: 'door', name: '閉じた戸口', x: 1850, verb: '見る' },
+      { id: 'river', name: '川の洗い場', x: 3750, verb: '見る' }
+    ],
+    weather: { clear: 5, fog: 3, drizzle: 2 },
+    animals: [['rooster', 600], ['hen', 720], ['dog_spot', 2900], ['duck', 3500]],
+    talk: {
+      novice(S) {
+        const f = S.f;
+        if (S.back && f.noiCame) return [['me', '', '（お坊さんは、口をきかない。ただ、鉢のふたを少しだけ開けて見せてくれた）'], ['me', '', '（白いもち米の上に、黒く焦げたかたまりが一つ、いちばん大事そうに置いてある）']];
+        if (S.back) return [['me', '', '（お坊さんは、きょうも閉じた戸の前で、少しだけ立ち止まってから、歩いていった）']];
+        if (f.noiCame) return [['me', '', '（お坊さんは、鉢を胸に抱いて、深く頭を下げた。そして、列のほうへ小走りで戻っていった）']];
+        if (f.noviceSeen) return [['me', '', '（お坊さんは、戸の前から動かない。目だけで、こちらを見ている）']];
+        f.noviceSeen = true;
+        return [['me', '', '（托鉢の列が通りすぎたあと、若いお坊さんがひとりだけ、閉じた戸の前に立っている）'], ['me', '', '（からの鉢を胸に抱いたまま、何も言わない）'], ['me', '', '（……言わないのではなく、言えないのかもしれない）']];
+      },
+      door(S) {
+        const f = S.f;
+        if (S.back && f.noiCame) return [['me', '', '（戸口に、もち米のかごが出してある。ふたの上に、小さな花が一輪）']];
+        if (S.back) return [['me', '', '（戸は、きょうも閉じたまま）']];
+        return [['me', '', '（戸は閉じている。戸口に、からのかごが伏せてある）'], ['me', '', '（かごの竹は黒ずんでいる。何十年も、毎朝ここに置かれてきたのだろう）']];
+      },
+      pha(S) {
+        const f = S.f;
+        if (S.back && f.noiCame) return [['npc', 'normal', 'ノイの焦げごはん、あの若いお坊さんの大好物になったんだって。'], ['npc', 'normal', '……ほかのお坊さんたちに、「あれはないのか」って聞かれて、困ってるそうよ。']];
+        if (S.back) return [['npc', 'normal', 'ノイの戸、きょうも閉まってた。……お母さんの代から、四十年、一日も休まなかったのに。']];
+        if (f.phaTold) return [['npc', 'normal', 'ノイなら、川の洗い場のほうへ行くのを見たよ。']];
+        f.phaTold = true;
+        return [['npc', 'normal', 'あの若いお坊さん？ ノイの戸の前だね。'], ['npc', 'normal', 'お坊さんはね、自分から頼んだり、たずねたりしちゃいけないの。黙って立って、待つだけ。'], ['npc', 'normal', 'ノイのお母さんが、春に亡くなってね。ノイが、ひとりでもち米を炊くのは、きょうが初めてのはずなんだけど。'], ['npc', 'normal', '……川の洗い場のほうへ行くのを見たよ。']];
+      },
+      river(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（洗い場に、ぴかぴかに磨かれた蒸し器が干してある）']];
+        if (f.noiCame) return [['me', '', '（洗い場には、だれもいない。川の水が、朝日にひかっている）']];
+        return [['me', '', '（川べりで、女の人が、黒く焦げた蒸し器を、力いっぱいこすっている）']];
+      },
+      noi(S) {
+        const f = S.f;
+        if (f.noiCame) return [['npc', 'normal', '……行ってくる。']];
+        if (!f.phaTold) return [['npc', 'normal', '……ごめんなさい、いま、手が離せないの。']];
+        if (f.noiTold && f.noviceSeen) { f.noiCame = true;
+          return [['me', '', 'お坊さんが、まだ戸の前で待っています。からの鉢を抱いて。'], ['npc', 'normal', '……まだ？ 列は、とっくに行ったのに。'], ['npc', 'normal', 'あの子、お母さんがいちばんかわいがってた見習いさんなの。'], ['npc', 'normal', '……焦げたのでも、いいのかな。'], ['me', '', '（ノイは、焦げたところを、いちばん上にのせた。隠さずに）']]; }
+        f.noiTold = true;
+        return [['npc', 'normal', '見ないで。……焦がしたの。母さんのやり方のとおりに炊いたのに、ぜんぶ。'], ['npc', 'normal', '母さんは四十年、一度も焦がさなかった。わたしは、一日目で焦がした。'], ['npc', 'normal', 'こんなもの、お坊さんの鉢に入れられない。今朝は、戸を開けないことにしたの。']];
+      },
+      noi2(S) {
+        return [['npc', 'normal', 'けさは、焦がさずに炊けたの。……少しだけ、わざと底を焦がしたけど。'], ['npc', 'normal', 'あの子が、鉢をのぞいて、ほんの少し笑ったのよ。お坊さんなのに。'], ['insight', '', '口をきけない人の待つ姿が、閉じた戸を、もう一度開けさせた。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 26 声のないセレナーデ（金婚式の夜、声をなくした夫が窓の下で歌う）
+  C.push({
+    id: 'mehikana', name: 'メヒカーナ', sub: 'サボテンの町', time: 'dusk', screens: 5, far: 'mesa_noon', timeBack: 'morning', map: [20.7, -103.3],
+    hill: '#5a3424', ground: ['#b08a5a', '#7a5a3a', '#c09a6a'], tint: 'rgba(255,140,80,.07)', bscale: 1.0,
+    props: [['cactus', 300, 150], ['wall_flowers', 1500, 110], ['cactus', 2900, 170], ['stool2', 3700, 40]],
+    buildings: [['mx_house', 600], ['mx_church', 1900], ['adobe', 3050, 0.9], ['mx_house', 4100, 0.95]],
+    npcs: [
+      { id: 'ramon', name: 'ラモンじいさん', actor: 'oldman', x: 750, face: 1 },
+      { id: 'hector', name: '楽師のエクトル', actor: 'mariachi', x: 2300, face: -1 },
+      { id: 'carmen', name: '窓辺のカルメン', actor: 'ranchwife', x: 4300, face: -1 }
+    ],
+    places: [{ id: 'balcony', name: 'カルメンの窓の下', x: 4150, verb: '見上げる' }],
+    weather: { clear: 7, wind: 2, drizzle: 1 },
+    animals: [['dog_spot', 1200], ['donkey', 3300, { mode: 'stay' }], ['rooster', 3800]],
+    talk: {
+      ramon(S) {
+        const f = S.f;
+        if (S.back && f.ramonSings) return [['me', '', '（ラモンじいさんは、まだ声が出ない。指で、口もとを指して、片目をつぶってみせた）'], ['me', '', '（……「ちゃんと、歌えた」と言っている）']];
+        if (S.back) return [['me', '', '（ラモンじいさんは、しおれたバラを抱いて、ベンチに座っている）']];
+        if (f.ramonSings) return [['me', '', '（ラモンじいさんは、バラの束を抱え直した。口だけで、何度も歌の出だしをなぞっている）']];
+        if (f.lipsKnown && f.ramonTold) { f.ramonSings = true;
+          return [['me', '', 'カルメンさんは、口もとを見て、話を聞いていました。後ろから呼んでも、ふり向かないって。'], ['me', '', '（ラモンじいさんの目が、大きくなった）'], ['me', '', '（それから、ゆっくりうなずいて、バラの束を抱え直した）']]; }
+        if (f.ramonTold) return [['me', '', '（ラモンじいさんは、首をふって、口だけを動かす。声は、かすれた息にしかならない）']];
+        f.ramonTold = true;
+        return [['me', '', '（白ひげの老人が、バラの束を抱えて、ベンチで口だけを動かしている）'], ['me', '', '（声が出ていない。のどに、白い布が巻いてある）'], ['me', '', '（老人は、紙に書いて見せてくれた。「今夜、金婚式。五十年前と同じ歌を、窓の下で歌う約束」）'], ['me', '', '（「風邪で声が出ない。声のないセレナーデなど、笑いものだ。取りやめる」）']];
+      },
+      hector(S) {
+        const f = S.f;
+        if (S.back && f.ramonSings) return [['npc', 'normal', 'ゆうべは、楽団を三十年やって、いちばん静かなセレナーデだった。'], ['npc', 'normal', 'じいさんは口だけ、おれたちは小さく弾いた。……窓が、ちゃんと開いたよ。']];
+        if (S.back) return [['npc', 'normal', 'ゆうべは、楽団だけで一曲弾いた。窓は、開かなかった。']];
+        if (f.ramonSings) return [['npc', 'normal', 'じいさん、やるってか！ ……なら、今夜は小さく弾く。歌が、見えるようにな。']];
+        return [['npc', 'normal', 'ラモンの金婚式のセレナーデ？ 楽団は弾けるさ。だが、歌うのは本人でなきゃ意味がない。'], ['npc', 'normal', 'それにしても、カルメンさんは変わってる。'], ['npc', 'normal', '後ろから呼んでも、ぜったいにふり向かない。おれが子どものころから、ずっとだ。……前に回ると、にこっとする。']];
+      },
+      balcony(S) {
+        const f = S.f;
+        if (S.back && f.ramonSings) return [['me', '', '（窓辺の植木鉢に、ゆうべのバラが一本、さしてある）']];
+        return [['me', '', '（窓辺の女の人が、通りを歩く人たちを、じっと見ている。耳ではなく、目で）']];
+      },
+      carmen(S) {
+        const f = S.f;
+        if (S.back && f.ramonSings) return [['npc', 'normal', '聞こえたわよ。五十年前と、同じ歌。'], ['npc', 'normal', '……あの人、二番の歌詞をまちがえたの。五十年前も、同じところで。'], ['insight', '', '声が出なくても、口もとを見る人には、歌はちゃんと窓まで届いた。']];
+        if (S.back) return [['npc', 'normal', 'ゆうべは、楽団だけ来てくれたの。……あの人、風邪ですって。']];
+        f.lipsKnown = true;
+        return [['me', '', '（女の人は、わたしの口もとをじっと見てから、答えた）'], ['npc', 'normal', '旅の人ね。ごめんなさい、わたし、耳がほとんど聞こえないの。口を見て、話を聞くのよ。'], ['npc', 'normal', '今夜は、主人が窓の下で歌ってくれるはずなの。'], ['npc', 'normal', '……五十年前も、声なんか、聞こえてなかったのよ。口の形で、ぜんぶ覚えてるの。']];
       }
     }
   });

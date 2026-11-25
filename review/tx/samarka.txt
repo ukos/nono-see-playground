@@ -1,7 +1,7 @@
 == 国: サマルカ（隊商宿の町）
 〔23番目の国／広さ 5 画面／夜／遠景 steppe_night〕
 〔天候：晴れ 70%、強風 30%〕
-〔建物：es_gate、adobe、mideast_white、in_haveli、adobe／小物：palm、ship_barrels、stool、rock〕
+〔建物：caravan_gate、adobe、mideast_white、caravan_wall、adobe／小物：palm、ship_barrels、stool、rock〕
 〔住人（西から）：鍵番のユスフ @600、アジズじいさん @1400、楽師のラフマン @1900、アジズじいさん @2700〕
 
 〔行き〕

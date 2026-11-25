@@ -29,7 +29,7 @@ function img(src) {
 }
 const P = {
   far: k => `assets/far/${k}.webp`, b: k => `assets/buildings/${k}.webp`, a: (k, f) => `assets/actors/${k}_${f}.webp`,
-  nono: 'assets/nono_side.webp', face: 'assets/nono_face.webp', trees: 'assets/far_trees.webp', grass: 'assets/shore_grass.webp', rabbit: 'assets/rabbit.webp'
+  nono: 'assets/nono_side.webp', face: 'assets/nono_full.webp', trees: 'assets/far_trees.webp', grass: 'assets/shore_grass.webp', rabbit: 'assets/rabbit.webp'
 };
 function prefetch(c) {
   if (!c || c._pf) return; c._pf = true;
@@ -213,9 +213,9 @@ function showLine() {
     twho.textContent = nameOf(c.who); tpic.onerror = null; tpic.src = `assets/actors/${spriteOf(c.who)}.webp`;
   } else if (sp === 'npc' && c.who.actor) {
     twho.textContent = nameOf(c.who);
-    const normal = P.a(c.who.actor, 'normal');
+    const normal = P.a(c.who.actor, c.who.sheet ? 'full' : 'normal'); // 歩く絵のある役者は、その全身を会話の絵に
     tpic.onerror = () => { tpic.onerror = null; tpic.src = normal; };
-    tpic.src = face ? P.a(c.who.actor, face) : normal;
+    tpic.src = face && !c.who.sheet ? P.a(c.who.actor, face) : normal;
   } else { twho.textContent = 'nono'; tpic.onerror = null; tpic.src = P.face; }
   let n = 0; tsay.textContent = ''; clearInterval(typing);
   typing = setInterval(() => { n++; tsay.textContent = text.slice(0, n); if (n >= text.length) { clearInterval(typing); typing = null; } }, 32);
@@ -634,7 +634,7 @@ function frame(ts) {
   if (st.x !== nx) { st.auto = 0; st.run = false; } // 世界の端で止まる
   if (st.moving) st.phase += dt * 6.2 * runK;
   { const t = busy ? null : nearTarget(), bt = $('bt'), lab = t && t.isPlace ? t.verb : '話す';
-    bt.classList.toggle('near', !!t); bt.classList.toggle('hide', !!busy);
+    bt.classList.toggle('near', !!t); bt.classList.toggle('hide', !!busy); $('hint').style.visibility = busy ? 'hidden' : '';
     if (bt.textContent !== lab) bt.textContent = lab;
     $('bj').classList.toggle('hide', !!st.journal || !!st.map); $('bm').classList.toggle('hide', !!st.journal || !!st.map); }
   st.maxX = Math.max(st.maxX, st.x);
