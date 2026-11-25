@@ -671,7 +671,7 @@ function frame(ts) {
   const cc = drawFar(cam); drawMid(cam, cc); drawGround(cam); drawDeck(cam); drawGulls(cam, sk);
   const first = C[0]; drawSign(first.x0 + 430 - cam, first.name);
   for (const c of C.slice(1)) drawSign(c.x0 - cam, `← ${C[c.i - 1].name} ｜ ${c.name} →`);
-  drawSign(WORLD - 260 - cam, 'この先は、まだ見ぬ国（試作はここまで）');
+  drawSign(WORLD - 260 - cam, '← ここから先は、来た道');
   drawProps(cam); drawBuildings(cam); drawProps(cam, true); drawBridge(cam);
   drawAnimals(cam, busy ? 0 : dt);
   for (const n of NPCS) drawActor(n, cam);
