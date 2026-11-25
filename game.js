@@ -2,6 +2,7 @@
 {
 // ================= 世界の組み立て =================
 const W = 960, H = 540, GROUND = 452, SPEED = 230, NONO_H = 128;
+const FIG_H = NONO_H * 193 / 224; // nonoの絵の、余白を除いた実際の背丈。住人はこれに合わせる
 const C = window.SEE_WORLD.countries;
 let acc = 0;
 for (const [i, c] of C.entries()) {
@@ -468,7 +469,7 @@ function drawActor(n, cam) {
   const x = npcX(n) - cam; if (x < -160 || x > W + 160) return;
   if (n.sprite) {
     const im = img(`assets/actors/${spriteOf(n)}.webp`); if (!im) return;
-    const h = NONO_H * (n.h || 1.04), w = im.width * h / im.height;
+    const h = FIG_H * (n.h || 1), w = im.width * h / im.height;
     g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 28, 6, 0, 0, Math.PI * 2); g.fill();
     g.save(); g.translate(x, 0); g.scale(n.face || -1, 1); g.drawImage(im, -w / 2, GROUND + 6 - h + Math.sin(st.t * 1.6 + n.ax) * 1, w, h); g.restore();
     return;
@@ -477,13 +478,13 @@ function drawActor(n, cam) {
     const im = img(P.a(n.actor, 'sheet')); if (!im) return;
     const S = n.sheet, leaving = Math.abs(n.off || 0) > 0;
     const fr = leaving ? S.frames[Math.floor(st.t * 6) % 2 ? 'walk1' : 'walk2'] : (S.frames[(n.pose && n.pose(st.flags)) || 'idle'] ?? 0);
-    const s = NONO_H * (S.h || 1) / S.figure, w = S.fw * s, h = S.fh * s;
+    const s = FIG_H * (S.h || 1) / S.figure, w = S.fw * s, h = S.fh * s;
     g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 30, 6, 0, 0, Math.PI * 2); g.fill();
     g.save(); g.translate(x, 0); g.scale(leaving ? (n.leaveDir || 1) : (n.face || 1), 1);
     g.drawImage(im, fr * S.fw, 0, S.fw, S.fh, -w / 2, GROUND + 6 - h, w, h); g.restore();
     return;
   }
-  const im = img(P.a(n.actor, 'normal')), h = NONO_H * (n.h || 1), w = im ? im.width * h / im.height : h * .6;
+  const im = img(P.a(n.actor, 'normal')), h = FIG_H * (n.h || 1), w = im ? im.width * h / im.height : h * .6;
   g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, Math.min(34, w * .45), 7, 0, 0, Math.PI * 2); g.fill();
   if (im) { g.save(); g.translate(x, 0); g.scale(n.off && !n.follow ? -(n.leaveDir || 1) : (n.face || -1), 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
 }
@@ -574,7 +575,7 @@ function drawNono(cam) {
   const row = st.dir > 0 ? 0 : 1, col = st.moving ? [0, 1, 2, 1][Math.floor(st.phase) % 4] : 1;
   const bob = st.moving ? Math.abs(Math.sin(st.phase * Math.PI)) * 3 : 0;
   g.save(); g.translate(x, GROUND + 6 - h - bob + oy);
-  g.drawImage(im, col * 176, row * 224, 176, 224, -w / 2 * .92, 0, w * .92, h);
+  g.drawImage(im, col * 176, row * 224, 176, 224, -w / 2, 0, w, h);
   g.restore();
 }
 function drawFore(cam) {
