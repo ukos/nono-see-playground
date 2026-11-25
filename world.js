@@ -2692,5 +2692,106 @@
     }
   });
 
+// ---------------------------------------------------------------- 49 撮る人が写る（村の写真を五十年撮ってきた人は、一枚も写っていない）
+  C.push({
+    id: 'fjordia', shape: '撮る人が写る', name: 'ノルウェーナ', sub: 'フィヨルドの村', time: 'morning', screens: 5, far: 'fjord_morning2', map: [61.2, 6.9],
+    hill: '#2a3438', ground: ['#5a7050', '#3a4838', '#6a7a60'], tint: 'rgba(200,220,240,.04)', bscale: 1.0,
+    props: [['pine', 300, 300], ['pier', 1400, 110], ['ship_boat', 1700, 70], ['pine', 3100, 300], ['flatbread_table', 3900, 60]],
+    buildings: [['nordic_red', 700, 0.9], ['house_small', 2400, 1.3], ['nordic_red', 4300, 0.85]],
+    npcs: [
+      { id: 'tor', name: '写真屋のトール', actor: 'wheelchair', x: 2100, face: 1, h: 0.82 },
+      { id: 'ingrid', name: 'イングヴァル（孫）', actor: 'florist', x: 1100, face: 1 },
+      { id: 'twins', name: '双子のエッバとエルサ', actor: 'twins', x: 3300, face: -1, h: 0.62 },
+      { id: 'gudrun', name: 'グズルンばあちゃん', actor: 'granny_nordic', x: 3800, face: -1 }
+    ],
+    places: [{ id: 'camera', name: '三脚の上の写真機', x: 2550, verb: '撮る', when: f => f.ingridTold && f.gudrunTold }],
+    weather: { clear: 5, fog: 3, drizzle: 2 },
+    animals: [['sheep', 600], ['dog_samoyed', 3000], ['crow', 1700]],
+    talk: {
+      ingrid(S) {
+        const f = S.f;
+        if (S.back && f.shot) return [['npc', 'normal', 'じいちゃん、焼いた写真を見て、しばらく何も言わなかったの。'], ['npc', 'normal', '……それから、「わしは、こんな顔で笑うのか」って。']];
+        if (S.back) return [['npc', 'normal', 'ことしの写真も、じいちゃんだけいないの。……いつもどおり。']];
+        if (f.ingridTold) return [['npc', 'normal', 'じいちゃんの写真機、使い方は簡単だよ。ふたを取って、ひもを引くだけ。']];
+        f.ingridTold = true;
+        return [['me', '', '（青年が、桟橋の前で、村の人を一列に並べようとしている。……だれも並ばない）'], ['npc', 'normal', 'きょうは、年に一度の村の写真の日。じいちゃんが五十年、毎年撮ってきたんだ。'], ['npc', 'normal', '……で、気づいたの。五十枚の写真に、じいちゃん、一枚も写ってない。'], ['npc', 'normal', 'でも、じいちゃんは写真機をだれにも触らせない。「撮るのは、わしの仕事だ」って。']];
+      },
+      tor(S) {
+        const f = S.f;
+        if (S.back && f.shot) return [['npc', 'normal', '五十一枚目の写真は、少し傾いておる。……旅人の腕だな。'], ['npc', 'normal', 'だが、いちばんいい一枚だ。わしが、写っておる。'], ['insight', '', '村を五十年撮ってきた人は、一度レンズの前に座って、はじめて村の一人になった。']];
+        if (S.back) return [['npc', 'normal', '撮ったよ。ことしも、全員そろった。……わしのほかは、な。']];
+        if (f.shot) return [['npc', 'normal', '……ひもを引かれる側は、こんなに落ち着かんものか。']];
+        if (f.gudrunTold) return [['npc', 'normal', '……旅人に撮らせろと、グズルンが言うのか。'], ['npc', 'normal', 'あの人は、五十年前に写真機を買う金を貸してくれた。……あの人に言われては、断れん。'], ['npc', 'normal', 'ふたを取って、ひもを引け。それだけだ。……手は、震えてもかまわん。']];
+        return [['npc', 'normal', '旅人か。いい日に来た。年に一度の、村の写真の日だ。'], ['npc', 'normal', 'わしは脚が悪くて、もう写真機の後ろにしかおれん。……それで、いい。撮るのが、わしの仕事だ。']];
+      },
+      twins(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'わたしたち、写真の中で、トールおじいちゃんのひざの上にいるの！ ふたりとも！']];
+        return [['npc', 'normal', 'ねえねえ、旅の人。写真のとき、どっちがエッバで、どっちがエルサか、わかる？'], ['npc', 'normal', '……トールおじいちゃんは、ファインダーをのぞくと、いつも当てるの。でも、近くで見ると、まちがえるの！']];
+      },
+      gudrun(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '写真を一枚、もらったよ。トールのとなりに、わしが写っとる。……五十年待ったかいがあった。']];
+        if (f.gudrunTold) return [['npc', 'normal', 'トールの写真機は、重いよ。両手で、しっかりね。']];
+        f.gudrunTold = true;
+        return [['npc', 'normal', 'トールを撮るって？ ……ふふ、あの頑固者が。'], ['npc', 'normal', '旅人のあんたが頼めば、あの人は断れんよ。村の者には「撮るのはわしだ」と言えても、通りすがりには言えん。'], ['npc', 'normal', '……わしの名前を出しなさい。昔、ちょっとした貸しがあるんだ。']];
+      },
+      camera(S) {
+        const f = S.f;
+        if (f.shot) return [['me', '', '（写真機のふたを、もとに戻した）']];
+        f.shot = true;
+        return [['me', '', '（写真機の後ろに立つ。のぞくと、村の人たちが、さかさまに映っている）'], ['me', '', '（真ん中に、車いすのトールさん。そのひざに双子。となりに、グズルンばあちゃん）'], ['me', '', '（トールさんが、こちらを見て、困ったような顔をしている。……写る顔を、知らないのだ）'], ['me', '', 'はい、笑って。……五十年ぶんです。'], ['me', '', '（ふたを取って、ひもを引いた。ぱしゃり）']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 50 負けたいふたり（最後の鷹くらべで、祖父と孫がおたがいに勝ちをゆずろうとする）
+  C.push({
+    id: 'arabia', shape: 'おたがいに負けてあげる', name: 'アラビアナ', sub: '砂丘の鷹の村', time: 'dusk', screens: 5, far: 'desert', timeBack: 'morning', map: [23.4, 54.5],
+    hill: '#5a3a24', ground: ['#d0a870', '#a07848', '#e0b880'], tint: 'rgba(255,170,90,.07)', bscale: 1.0,
+    props: [['palm', 300, 300], ['tea_table', 1300, 70], ['palm', 2400, 320], ['rock', 3200, 70], ['palm', 4400, 300]],
+    buildings: [['mideast_white', 700, 0.9], ['adobe', 3800, 0.9]],
+    npcs: [
+      { id: 'saeed', name: '鷹匠のサイード', actor: 'falconer', x: 1000, face: 1 },
+      { id: 'omar', name: 'オマル（孫）', actor: 'boy_kite', x: 2700, face: -1 },
+      { id: 'layla', name: 'ライラ（オマルの母）', actor: 'levant_woman', x: 1650, face: -1 },
+      { id: 'judge', name: '審判の旅商人', actor: 'tuareg', x: 3500, face: -1 }
+    ],
+    weather: { clear: 7, wind: 3 },
+    animals: [['camel', 4000, { mode: 'stay' }], ['camel', 4250, { face: -1 }], ['hawk', 2200, { mode: 'fly' }]],
+    talk: {
+      saeed(S) {
+        const f = S.f;
+        if (S.back && f.race) return [['npc', 'normal', '同着、とはな。四十年で、はじめてだ。'], ['npc', 'normal', '……あの子も、わざと呼びもどしかけておった。わしの孫だ、考えることが同じだよ。'], ['insight', '', '勝ちをゆずりあった祖父と孫のあいだに、鷹は二羽並んで降りてきた。']];
+        if (S.back) return [['npc', 'normal', 'ことしも、わしの鷹が勝った。……勝ちたくない年に限って、よく飛ぶ。']];
+        if (f.saeedTold) return [['npc', 'normal', '指笛を、少し早く吹く。……それだけでいい。だれにも言うなよ。']];
+        f.saeedTold = true;
+        return [['me', '', '（白い衣の老人が、腕の鷹に、何かを小声で話しかけている）'], ['npc', 'normal', '旅人か。……ちょうどいい、聞いてくれ。だれかに言わずにおれん。'], ['npc', 'normal', '今夕の鷹くらべは、わしの最後の勝負だ。孫のオマルの鷹と、はじめて飛ぶ。'], ['npc', 'normal', 'わしは、負けるつもりだ。指笛を少し早く吹いて、鷹を呼びもどす。……孫に、一度勝たせてやりたい。']];
+      },
+      layla(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ふたりとも、ゆうべは同じ顔でふくれてたわ。……勝ちたかったのか、負けたかったのか。']];
+        return [['npc', 'normal', '父と息子、……いえ、父とわたしの息子ね。ふたりとも、朝から口をきかないの。'], ['npc', 'normal', '鷹くらべの前は、いつもこう。勝負の前に話すと、手の内がばれるんですって。']];
+      },
+      omar(S) {
+        const f = S.f;
+        if (S.back && f.race) return [['npc', 'normal', 'じいちゃんの鷹とぼくの鷹、同じ止まり木に、同時に降りたんだ！'], ['npc', 'normal', '……じいちゃん、知ってたのかな。ぼくが早く呼ぶつもりだったこと。']];
+        if (S.back) return [['npc', 'normal', 'じいちゃんの勝ち。……よかった。最後は、じいちゃんが勝たなきゃ。']];
+        if (f.omarTold) return [['npc', 'normal', 'しーっ。……じいちゃんには、ぜったいないしょ。']];
+        f.omarTold = true;
+        return [['npc', 'normal', '旅の人、ないしょの話があるんだ。'], ['npc', 'normal', 'きょうは、じいちゃんの最後の鷹くらべ。……ぼく、わざと負ける。指笛を早く吹いて、鷹を呼びもどすんだ。'], ['npc', 'normal', '四十年勝ちつづけたじいちゃんが、最後に負けるなんて、いやだもん。']];
+      },
+      judge(S) {
+        const f = S.f;
+        if (S.back && f.race) return [['npc', 'normal', '旅の人。ふたりが同時に指笛を吹いたのを、聞いたか？ ……そして、鷹がどちらも聞かなかったのを。'], ['npc', 'normal', '鷹は、人の小細工より、風を読む。']];
+        if (S.back) return [['npc', 'normal', 'いい勝負だった。……孫のほうの鷹は、来年が楽しみだ。']];
+        if (f.saeedTold && f.omarTold) { f.race = true;
+          return [['npc', 'normal', '……鷹くらべを始める。あの砂丘の先から、この止まり木まで。'], ['me', '', '（二羽の鷹が、夕焼けの空へ放たれる）'], ['me', '', '（ピイッ。……ピイッ。祖父と孫の指笛が、ほとんど同時に、早すぎるほど早く鳴った）'], ['me', '', '（鷹は、二羽とも、指笛を聞かなかった。風に乗ったまま、まっすぐ飛んで）'], ['me', '', '（同じ止まり木に、羽を並べて降りた）'], ['npc', 'normal', '……同着。四十年の審判で、はじめてだ。']]; }
+        return [['npc', 'normal', '鷹くらべの審判をしておる。……今夕の勝負は、見ものだぞ。'], ['npc', 'normal', '四十年負けなしの祖父と、はじめて鷹を持った孫だ。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
