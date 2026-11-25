@@ -1,7 +1,7 @@
 == 国: グリーンラナ（流氷の入り江）
 〔43番目の国／広さ 5 画面／昼／遠景 drift_ice_morning〕
 〔天候：晴れ 50%、強風 30%、雪 20%〕
-〔建物：nordic_red、nordic_red／小物：igloo_shell、ship_boat、rock、pine_snow〕
+〔建物：nordic_red、nordic_red／小物：igloo_shell、ship_boat、rock、pine_snow、crack_empty、crack_narwhal、crack_bubbles〕
 〔住人（西から）：ナヤ @1100、ピタ @1400、トゥク老人 @2350〕
 
 〔行き〕

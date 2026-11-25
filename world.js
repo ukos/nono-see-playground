@@ -2356,7 +2356,8 @@
   C.push({
     id: 'kalaal', shape: 'いたずらが本当になる', name: 'グリーンラナ', sub: '流氷の入り江', time: 'noon', screens: 5, far: 'drift_ice_morning', timeBack: 'morning', map: [64.2, -51.7],
     hill: '#3a4450', ground: ['#c8d0d4', '#9aa4aa', '#dce2e6'], tint: 'rgba(200,220,240,.06)', bscale: 1.0,
-    props: [['igloo_shell', 400, 120], ['ship_boat', 1600, 70], ['rock', 2600, 60], ['pine_snow', 4400, 260]],
+    props: [['igloo_shell', 400, 120], ['ship_boat', 1600, 70], ['rock', 2600, 60], ['pine_snow', 4400, 260],
+      ['crack_empty', 3700, 300, f => !f.sawIt, -215], ['crack_narwhal', 3700, 300, (f, back) => f.sawIt && !back, -215], ['crack_bubbles', 3700, 300, (f, back) => f.sawIt && back, -215]],
     buildings: [['nordic_red', 800, 0.85], ['nordic_red', 2000, 0.8]],
     npcs: [
       { id: 'naja', name: 'ナヤ', actor: 'eskimo', x: 1100, face: 1 },
@@ -2412,6 +2413,7 @@
     buildings: [['ar_estancia', 800, 0.85]],
     npcs: [
       { id: 'jess', name: 'ジェス', actor: 'flagkid', x: 1050, face: 1 },
+      { id: 'doug', name: '木陰のダグ', actor: 'cowboy', x: 1900, face: 1 },
       { id: 'betty', name: 'ベティばあさん', actor: 'herbgranny', x: 4100, face: -1 }
     ],
     places: [{ id: 'heat', name: '赤い道のまんなか', x: 2600, verb: '休む' }],
@@ -2424,7 +2426,15 @@
         if (S.back) return [['npc', 'normal', '帰りは、夕方に歩くといいよ。昼の赤い道は、人を食べちゃうから。']];
         if (f.jessTold) return [['npc', 'normal', '水、ちゃんと持ってる？ 昼の道は、思ったより長いよ。']];
         f.jessTold = true;
-        return [['me', '', '（牧場の柵に座った女の子が、帽子のつばを上げて、こちらを見た）'], ['npc', 'normal', '旅の人、まさか、いまから東へ歩くの？ お昼だよ？'], ['npc', 'normal', 'ここの昼は、歩くもんじゃないよ。牧場の人はみんな、夕方まで日陰で寝てる。'], ['npc', 'normal', '……まあ、行くなら止めないけど。東のベティばあさんちまで、水場はないからね。']];
+        return [['me', '', '（牧場の柵の上に、女の子が卵を一つ割って、じっと見ている）'], ['me', '', '（……じゅうっと、白身がふちから固まっていく）'], ['npc', 'normal', '見て、目玉焼き。……お昼の柵は、これくらい熱いの。'], ['npc', 'normal', '旅の人、まさか、いまから東へ歩くの？ この上を？'], ['npc', 'normal', 'ここの昼は、歩くもんじゃないよ。牧場の人はみんな、夕方まで日陰で寝てる。'], ['npc', 'normal', '……まあ、行くなら止めないけど。東のベティばあさんちまで、水場はないからね。']];
+      },
+      doug(S) {
+        const f = S.f;
+        if (S.back && f.rescued) return [['npc', 'normal', 'レッドが昼に吠えたって？ ……おれは寝てた。ベティに、こっぴどく怒られた。'], ['npc', 'normal', '牧童が、犬に仕事を取られちゃおしまいだな。']];
+        if (S.back) return [['npc', 'normal', '夕方は、牛を動かす時間だ。……昼は、生き物が動く時間じゃない。']];
+        if (f.dougTold) return [['npc', 'normal', '……ぐう。']];
+        f.dougTold = true;
+        return [['me', '', '（枯れ木の細い影の中で、帽子を顔にのせた男が寝ている）'], ['npc', 'normal', '……ん。昼に歩いてるのか。牛だって、昼は歩かんぞ。'], ['npc', 'normal', 'この先は、影ひとつない。……おれの水筒、半分残ってる。いや、だめだ、これはおれの昼寝の水だ。'], ['npc', 'normal', '……倒れたら、レッドが来る。レッドが吠えたら、おれが起きる。たぶんな。']];
       },
       heat(S) {
         const f = S.f;
