@@ -2244,5 +2244,113 @@
     }
   });
 
+// ---------------------------------------------------------------- 41 子守歌の最後の一節（西の母が忘れた歌を、東の羊飼いから覚えて帰り道に運ぶ）
+  C.push({
+    id: 'eire', shape: '歌を覚えて運ぶ', name: 'エールランダ', sub: '石垣の丘', time: 'dusk', screens: 5, far: 'mountains', timeBack: 'night', map: [53.3, -8.5],
+    hill: '#2a3a2a', ground: ['#5a7a44', '#3a4e30', '#6a8050'], tint: 'rgba(255,170,130,.05)', bscale: 1.0,
+    props: [['rock_moss', 300, 80], ['stone_chapel', 1400, 220], ['rock2', 2400, 90], ['rune_stone', 3300, 120], ['rock_moss', 4400, 90]],
+    buildings: [['thatched_farm', 600, 0.9], ['inn', 2000, 0.9], ['sheep_pen', 3900, 0.9]],
+    npcs: [
+      { id: 'siobhan', name: 'シボーン', actor: 'mother', x: 850, face: 1 },
+      { id: 'fiddler', name: '酒場のフィドル弾き', actor: 'minstrel', x: 2250, face: -1 },
+      { id: 'padraig', name: '羊飼いのパドリグ', actor: 'hermit', x: 3650, face: -1 }
+    ],
+    places: [{ id: 'wind', name: '丘の上の風', x: 3200, verb: '聞く' }],
+    weather: { wind: 4, drizzle: 4, clear: 2 },
+    animals: [['sheep', 3800], ['sheep', 3950], ['sheep', 4100], ['dog_spot', 3500], ['crow', 1600]],
+    talk: {
+      siobhan(S) {
+        const f = S.f;
+        if (S.back && f.learned) { f.sung = true;
+          return [['me', '', '（窓辺で、シボーンが泣く赤ん坊をゆすっている。……もう、三晩目だそうだ）'], ['me', '', '覚えてきました。最後の一節。……上手じゃないけど。'], ['me', '', '（小さな声で、ハミングする。丘の上で、羊飼いが歌っていたとおりに）'], ['npc', 'normal', '……それ。それよ。母さんの声と、同じところで下がる。'], ['me', '', '（赤ん坊が、ふっと泣きやんで、指をくわえた。……眠った）'], ['insight', '', '行きに覚えた歌は、帰り道になって、はじめて届け先に着いた。']];
+        }
+        if (S.back) return [['npc', 'normal', '……旅の人。この子、今夜も眠らないの。最後の一節さえ、思い出せたら。']];
+        if (f.sioTold) return [['npc', 'normal', '歌の終わりで、声が一つ下がるの。……そこまでは覚えてるのに。']];
+        f.sioTold = true;
+        return [['me', '', '（赤ん坊を抱いた女の人が、戸口で同じ節を、何度もくり返し口ずさんでいる。途中で止まって、また最初から）'], ['npc', 'normal', '……ごめんなさい、うるさいでしょう。この子、母さんの子守歌じゃないと眠らないの。'], ['npc', 'normal', '母さんは去年の冬に亡くなって。……最後の一節だけ、どうしても思い出せない。'], ['npc', 'normal', 'この子、三晩ほとんど眠ってないの。わたしも。']];
+      },
+      fiddler(S) {
+        const f = S.f;
+        if (S.back && f.sung) return [['npc', 'normal', 'シボーンの家から、ゆうべ、あの歌の終わりが聞こえたよ。……あんたの声だったのか。音程が、ちょっと旅してたな。']];
+        if (S.back) return [['npc', 'normal', '帰りかい。……この丘の歌は、来た道を戻ると、ちがう歌に聞こえるもんさ。']];
+        if (f.fiddleTold) return [['npc', 'normal', '東の丘の、パドリグじいさんだ。羊に聞かせて、四十年。']];
+        f.fiddleTold = true;
+        return [['npc', 'normal', 'シボーンの母さんの子守歌？ ……ああ、あれはこの谷の古い歌だ。'], ['npc', 'normal', '始めは弾けるが、終わりは、おれも知らん。終わりは、家ごとにちがうんだ。'], ['npc', 'normal', '……東の丘の羊飼い、パドリグじいさんなら。あの人は、シボーンの母さんの兄さんだからな。']];
+      },
+      wind(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（丘の上の風が、今夜は静かだ。羊の鈴だけが、遠くで鳴っている）']];
+        f.windHeard = true;
+        return [['me', '', '（丘の上で、風にのって、低い歌声が流れてくる）'], ['me', '', '（……シボーンが口ずさんでいた節だ。そして、その先がある。声が、一つ下がる）']];
+      },
+      padraig(S) {
+        const f = S.f;
+        if (S.back && f.sung) return [['npc', 'normal', 'シボーンの子が眠ったと、フィドル弾きが知らせに来た。'], ['npc', 'normal', '……妹の歌が、妹の孫を眠らせたか。わしは、羊にしか歌ったことがなかったが。']];
+        if (S.back) return [['npc', 'normal', '……羊は、ことしもこの歌で眠る。']];
+        if (f.learned) return [['npc', 'normal', '忘れんうちに、帰り道で歌ってやってくれ。……歌は、歩くと忘れるものだからな。']];
+        if (!f.windHeard) return [['npc', 'normal', '……羊を見に来たのかね。今は、寝かしつけの時間だ。']];
+        f.learned = true;
+        return [['me', '', 'さっきの歌の、最後の一節を教えてください。西の村の、シボーンさんの子が眠れなくて。'], ['npc', 'normal', '……シボーン？ わしの妹の娘か。'], ['npc', 'normal', '妹とは、四十年前にけんかしたきりでな。……あの歌は、ふたりで母から習ったんだ。'], ['me', '', '（パドリグじいさんが、ゆっくり、最後の一節を三度歌ってくれた。三度目に、いっしょに歌う）'], ['npc', 'normal', '歌は、歩くと忘れる。……忘れんうちに、帰り道で歌ってやってくれ。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 42 コーヒーの木の名前（子どもが生まれた家の木に、最初に通った旅人が名前をつける）
+  C.push({
+    id: 'ethiopa', shape: '旅人が名前をつける', name: 'エチオピナ', sub: 'コーヒーの高地', time: 'morning', screens: 5, far: 'rainforest_noon', map: [9, 38.7],
+    hill: '#24382a', ground: ['#6a6a40', '#4a4030', '#7a7050'], tint: 'rgba(255,220,170,.04)', bscale: 1.0,
+    props: [['bush', 500, 100], ['tea_table', 1250, 70], ['bush_berry', 2300, 100], ['tree_green', 3300, 280], ['bush', 4300, 110]],
+    buildings: [['thatched_farm', 900, 0.9], ['house_small', 2700, 1.3], ['thatched_farm', 4000, 0.85]],
+    npcs: [
+      { id: 'abebe', name: 'アベベ（父親）', actor: 'drummer', x: 650, face: 1 },
+      { id: 'tigist', name: 'ティギスト（コーヒーをいれる母）', actor: 'wa_woman', x: 1450, face: -1 },
+      { id: 'hana_mw', name: '産婆のハナ', actor: 'doctor', x: 2950, face: -1 },
+      { id: 'elder_e', name: '村の物知りアト・ケベデ', actor: 'sage', x: 3800, face: -1 }
+    ],
+    places: [{ id: 'sapling', name: '植えたばかりのコーヒーの苗', x: 1050, verb: '名づける', when: f => f.namesHeard >= 2 }],
+    weather: { clear: 5, drizzle: 3, fog: 2 },
+    animals: [['rooster', 700], ['hen', 820], ['donkey', 2200, { mode: 'stay' }], ['dog_brown', 3500]],
+    talk: {
+      abebe(S) {
+        const f = S.f;
+        if (S.back && f.named) return [['npc', 'normal', '苗の札、見たかい。……あんたの字は読めないけど、ハナが読んでくれた。'], ['npc', 'normal', '娘の名前も、同じにした。木と娘が、同じ年をとっていく。']];
+        if (S.back) return [['npc', 'normal', '苗には、まだ名前がない。……つぎの旅人を、待つことにするよ。']];
+        if (f.named) return [['npc', 'normal', 'いい名前だ。……どういう意味かは、ゆっくり考えることにするよ。']];
+        if (f.abebeTold) return [['npc', 'normal', '名前は、考えてくれた？ ……急がなくていい。日が沈むまでに、なら。']];
+        f.abebeTold = true; f.namesHeard = f.namesHeard || 0;
+        return [['me', '', '（若い男が、植えたばかりの苗の前で、こちらに大きく手をふっている）'], ['npc', 'normal', '来た！ 旅の人だ！ ……ゆうべ、娘が生まれたんだ。'], ['npc', 'normal', 'この村では、子どもが生まれたらコーヒーの木を植える。その木の名前は、最初に通った旅の人がつけるんだ。'], ['npc', 'normal', '……日が沈むまでに頼むよ。旅の人が名づけない木は、実をつけないって言われてるんだ。']];
+      },
+      tigist(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'コーヒー、三杯目まで飲んでいって。三杯目が、祝福の杯なの。']];
+        if (f.tigTold) return [['npc', 'normal', '名前は、村の人に聞いて回るといいわ。この村の名前は、みんな意味があるから。']];
+        f.tigTold = true; f.namesHeard = (f.namesHeard || 0) + 1;
+        return [['npc', 'normal', '名前？ ……わたしの名前は、ティギスト。「がまん」っていう意味よ。'], ['npc', 'normal', '母が、わたしを生むとき、三日かかったの。……そういうことを、名前にするの。']];
+      },
+      hana_mw(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'あの子は、よく飲んで、よく眠るよ。木のほうも、葉が一枚ふえた。']];
+        if (f.hanaTold) return [['npc', 'normal', 'あの子は、夜明けに生まれたの。泣き声で、鳥が起きたわ。']];
+        f.hanaTold = true; f.namesHeard = (f.namesHeard || 0) + 1;
+        return [['npc', 'normal', 'わたしはハナ。「贈り物」っていう意味。……産婆の名前としては、悪くないでしょう。'], ['npc', 'normal', 'ゆうべの子は、夜明けに生まれたの。泣き声で、鳥が起きたわ。']];
+      },
+      elder_e(S) {
+        const f = S.f;
+        if (S.back && f.named) return [['npc', 'normal', '旅人の名前は、意味がわからんほうが、いい木になる。……五十年、そう見てきた。']];
+        if (S.back) return [['npc', 'normal', '旅人が名づけなかった木も、ちゃんと実はなる。……言い伝えは、言い伝えだ。']];
+        if (f.elderTold) return [['npc', 'normal', '名前は、口に出して三回呼んでみるといい。三回目で、木のほうがうなずく。']];
+        f.namesHeard = (f.namesHeard || 0) + 1; f.elderTold = true;
+        return [['npc', 'normal', 'わしは、ケベデ。「豊か」という意味だが、見てのとおり、豊かなのはひげだけだ。'], ['npc', 'normal', '旅人のつける名前は、たいてい、その人が歩いてきた道の言葉だ。……あんたの道には、どんな言葉があった？']];
+      },
+      sapling(S) {
+        const f = S.f;
+        if (f.named) return [['me', '', '（苗の札に、わたしの書いた名前。風に、小さくゆれている）']];
+        f.named = true;
+        return [['me', '', '（苗の前に、しゃがむ。……歩いてきた道の言葉）'], ['me', '', '（花野の村、棚田、灯台、霧、白い坂、鈴の子羊……）'], ['me', '', '（夜明けに生まれて、泣き声で鳥が起きた子）'], ['me', '', '（札に、「ヨアケ」と書いた。わたしの国の言葉で、夜明け）'], ['insight', '', 'わたしが名づけた木は、わたしが帰り道を通るまで、ここで一緒に年をとって待っている。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
