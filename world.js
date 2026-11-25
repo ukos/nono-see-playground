@@ -2542,7 +2542,7 @@
       },
       kai(S) {
         const f = S.f;
-        if (S.back && f.kaiCrossed) return [['npc', 'normal', '旅の人の言うとおりだった。向こうの火床の灯りだけ見てたら、足が勝手に歩いた。'], ['npc', 'normal', '……旅の人は、だれに教わったの？']];
+        if (S.back && f.kaiCrossed) return [['npc', 'normal', '灯りが消えたとき、旅の人の声だけ聞いてた。……目をつぶってたのに、まっすぐ歩けた。'], ['npc', 'normal', '……旅の人は、だれに教わったの？']];
         if (S.back) return [['npc', 'normal', '……こわかった。下を見たら、足が動かなくなった。']];
         if (f.kaiCrossed) return [['npc', 'normal', '……渡れた！ 渡れたよ！']];
         if (f.kaiTold) return [['npc', 'normal', '……あの稜線、両側が真っ黒な崖なの。下を見たら、もうだめ。']];
