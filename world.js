@@ -2667,7 +2667,7 @@
       tiago(S) {
         const f = S.f;
         if (S.back) return [['npc', 'normal', 'あのいわし、焼いて食べたよ。……レモンを、たっぷりしぼってね。']];
-        if (f.lemon) return [['npc', 'normal', 'レモンは、きっとだれかの役に立つよ。たぶんね。']];
+        if (f.lemon) return [['npc', 'normal', 'いわし、焼く前に、ちょっとだけ眺めてるんだ。……弦になるかもしれなかったいわしだからね。']];
         if (!f.sardine) return [['npc', 'normal', 'レモン、いらないかい。ことしはなりすぎてね。']];
         f.lemon = true;
         return [['npc', 'normal', 'いわし！ ……ちょうど、晩ごはんのおかずを考えてたんだ。'], ['me', '', '（いわし一匹が、レモン三つになった）'], ['npc', 'normal', 'イネスのところへ持っていきな。あの人、絵の具を溶くのに、レモン汁を使うんだ。']];
