@@ -4255,5 +4255,96 @@
     }
   });
 
+// ---------------------------------------------------------------- 79 雨宿りの軒先で、困りごとを交換する（ひとりの困りごとが、となりの得意）
+  C.push({
+    id: 'ceylona', shape: '雨宿りの軒先で、困りごとを交換する', name: 'セイロナ', sub: '茶畑の町', time: 'noon', screens: 5, far: 'rainforest_noon', timeBack: 'dusk', map: [7.0, 80.8],
+    weather: { squall: 10 }, weatherBack: { clear: 6, wind: 2 },
+    hill: '#2a5a3a', ground: ['#6a7a4a', '#4a5a30', '#7a8a5a'], tint: 'rgba(200,230,210,.06)', bscale: 1.0,
+    props: [['tea_tree', 400, 120], ['tea_tree', 900, 120], ['tea_table', 2100, 70], ['tea_tree', 3600, 120], ['tea_tree', 4200, 120]],
+    buildings: [['in_market', 2150, 0.95], ['in_blue', 3900, 0.85]],
+    npcs: [
+      { id: 'nimal', name: '試験帰りのニマル', actor: 'boy_student', x: 1750, face: 1 },
+      { id: 'kumari', name: '茶摘みのクマリ', actor: 'sari', x: 2150, face: -1 },
+      { id: 'silva', name: '仕立て屋のシルバじいさん', actor: 'in_elder', x: 2550, face: -1 }
+    ],
+    places: [],
+    animals: [['cat_siamese', 2350, { mode: 'stay' }], ['crow', 3700]],
+    talk: {
+      nimal(S) {
+        const f = S.f;
+        if (S.back && f.sl_done) return [['npc', 'normal', '答案、ぬれなかった。……バナナの葉っぱ、先生に返さなくていいよね。']];
+        if (S.back) return [['npc', 'normal', '雨、やんだ。……答案、ちょっとにじんだけど、読めるかな。']];
+        f.sl_boy = true;
+        return [['me', '', '（男の子が、紙のたばを胸に押しつけて、軒先の奥で小さくなっている）'], ['npc', 'normal', '旅の人。きょうの試験の答案、先生の家に届けなきゃいけないの。日が暮れるまでに。'], ['npc', 'normal', 'でも、この雨じゃ、一歩出たら、ぜんぶにじむ。……包むものが、なんにもない。'], ['npc', 'normal', '……ぼく、目だけはいいんだけどな。こんなとき、なんの役にも立たない。']];
+      },
+      kumari(S) {
+        const f = S.f;
+        if (S.back && f.sl_done) return [['npc', 'normal', 'かごのひも、前より丈夫。……あの子の目と、じいさんの針のおかげね。']];
+        if (S.back) return [['npc', 'normal', '雨はやんだけど、ひもは切れたまま。……抱えて帰るしかないわね。']];
+        f.sl_tea = true;
+        return [['me', '', '（茶摘みの女の人が、背負いかごを下ろして、切れたひもを見つめている）'], ['npc', 'normal', 'ひもが切れちゃったの。摘んだ茶葉を、夕方までに工場へ持っていかなきゃいけないのに。'], ['npc', 'normal', '雨よけのバナナの葉なら、かごいっぱいあるのよ。……ひもだけ、どうにもならない。']];
+      },
+      silva(S) {
+        const f = S.f;
+        if (S.back && f.sl_done) return [['npc', 'normal', '雨宿りで、仕事がひとつ、できた。……針に糸を通してもらったのは、何十年ぶりかな。']];
+        if (S.back) return [['npc', 'normal', '雨がやんだな。……さて、針と糸を、しまうとするか。']];
+        if (f.sl_done) return [['npc', 'normal', 'ひと針、ふた針。……若い目は、ありがたい。']];
+        if (!(f.sl_boy && f.sl_tea)) return [['me', '', '（おじいさんが、針と糸を手に、軒先の明かりのほうへ目を細めている）'], ['npc', 'normal', '……雨宿りかね。わしは仕立て屋だが、針の穴が、もう見えんのだよ。']];
+        f.sl_done = true;
+        return [['me', '', '（おじいさんが、針と糸を手に、軒先の明かりのほうへ目を細めている）'], ['npc', 'normal', '……針の穴が、もう見えん。糸さえ通れば、ひもなんぞ、すぐ縫えるのにな。'], ['me', '', '（男の子は目がよくて、茶摘みの人はひもを縫ってほしくて、バナナの葉を持っている）'], ['me', '', '（三人に、それぞれの困りごとを伝えた。……男の子が針に糸を通し、じいさんが縫い、女の人が葉を分けた）'], ['npc', 'normal', 'ほれ、ひもは縫えた。坊主の答案は、バナナの葉で包め。……雨宿りも、悪くない。'], ['insight', '', '雨宿りの軒先では、ひとりの困りごとが、となりの人の得意だった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 80 いちばん遅い足に合わせる（ゆっくりの行列が、いちばんきれいな時間に着く）
+  C.push({
+    id: 'myanma', shape: 'いちばん遅い足に合わせる', name: 'ミャンマナ', sub: '金の塔の丘', time: 'noon', screens: 5, far: 'karst_morning', farBack: 'twilight', timeBack: 'dusk', map: [21.2, 94.9],
+    hill: '#6a5a3a', ground: ['#b09060', '#8a7040', '#c0a070'], tint: 'rgba(255,220,160,.06)', bscale: 1.0,
+    props: [['palm', 400, 300], ['prayer_flags', 1400, 200], ['tree_green', 2300, 280], ['temple_gold', 4100, 340], ['palm', 3200, 290]],
+    buildings: [['stilt_house', 800, 0.85], ['teahouse', 1900, 0.85]],
+    npcs: [
+      { id: 'min', name: '小僧になるミン', actor: 'almsmonk', x: 900, face: 1 },
+      { id: 'daw', name: 'ミンの母さん', actor: 'levant_woman', x: 1800, face: -1 },
+      { id: 'zaw', name: '太鼓のゾー', actor: 'drummer', x: 2700, face: -1 },
+      { id: 'utin', name: 'ひいじいさんのウー・ティン', actor: 'cn_elder', x: 3500, face: -1 }
+    ],
+    places: [],
+    weather: { clear: 7, wind: 2 },
+    animals: [['horse_bay', 1500], ['dog_brown', 2400], ['crow', 3800]],
+    talk: {
+      min(S) {
+        const f = S.f;
+        if (S.back && f.my_done) return [['npc', 'normal', '着いたら、塔がいちばん金色の時間だった。……ひいじいちゃん、ずっと、ぼくの手をにぎってた。']];
+        if (S.back) return [['npc', 'normal', '……ひいじいちゃん、やっぱり、家で待ってるって。ぼくだけ、先に着いちゃった。']];
+        if (f.my_done) return [['npc', 'normal', 'ゆっくり、ゆっくり。……太鼓より速く歩いたら、だめなんだって。']];
+        if (f.my_min) return [['npc', 'normal', '塔に着くのは、日が沈む前。……ひいじいちゃん、間に合うかな。']];
+        f.my_min = true;
+        return [['me', '', '（頭をそったばかりの男の子が、金の冠をのせて、丘のほうを見上げている）'], ['npc', 'normal', '旅の人。ぼく、きょう、お寺の小僧になるの。丘の上の塔まで、行列で歩くんだ。'], ['npc', 'normal', 'ひいじいちゃんと、いっしょに歩きたい。九十八さい。……でも、みんな、遅れるからだめだって。'], ['npc', 'normal', 'かごに乗せて運ぶって言っても、ひいじいちゃん、「歩く」って、きかないの。']];
+      },
+      daw(S) {
+        const f = S.f;
+        if (S.back && f.my_done) return [['npc', 'normal', '……行列が、あんなに長くなるなんて。村の人が、みんな、ゆっくりの足に合わせてついてきたの。']];
+        if (S.back) return [['npc', 'normal', '式は、ちゃんと終わったわ。……でも、ミン、塔の上で、ずっと下の道を見てた。']];
+        return [['npc', 'normal', '日が沈む前に、塔に着かないといけないの。お坊さまたちが、待っているから。'], ['npc', 'normal', 'おじいさんの足だと、日暮れに間に合わない。……先に行ってもらうしかないの。']];
+      },
+      zaw(S) {
+        const f = S.f;
+        if (S.back && f.my_done) return [['npc', 'normal', 'こんなに、ゆっくり叩いたの、はじめて。……手が、ゆっくりを覚えた。']];
+        if (S.back) return [['npc', 'normal', '行列の太鼓、速すぎたかな。……みんな、走るみたいに登ってった。']];
+        f.my_zaw = true;
+        return [['npc', 'normal', '行列の太鼓は、ぼく。……でもさ、なんでみんな、急ぐの？'], ['npc', 'normal', '太鼓を、ゆっくり叩けばいいじゃん。そしたら、みんな、ゆっくり歩くよ。']];
+      },
+      utin(S) {
+        const f = S.f;
+        if (S.back && f.my_done) return [['npc', 'normal', '……九十八年で、いちばん長い坂だった。いちばん、短かった気もする。']];
+        if (S.back) return [['npc', 'normal', '……わしの足に合わせたら、日が暮れる。先に行けと言ったのは、わしだ。']];
+        if (f.my_done) return [['npc', 'normal', '太鼓の音に、足を合わせる。……合わせてもらうのは、なんだか、くすぐったいのう。']];
+        if (!f.my_zaw) return [['me', '', '（おじいさんが、杖を二本ついて、丘の坂をにらんでいる）'], ['npc', 'normal', '……わしの足に合わせたら、日が暮れる。わかっとる。']];
+        f.my_done = true;
+        return [['me', '', '（おじいさんが、杖を二本ついて、丘の坂をにらんでいる）'], ['me', '', 'ミンくんが、いっしょに歩きたいそうです。……太鼓のゾーくんが、ゆっくり叩くと言っています。'], ['npc', 'normal', '……行列を、わしの足に合わせる？ 日暮れぎりぎりになるぞ。'], ['me', '', '（坂の上の金の塔が、日がかたむくにつれて、少しずつ色を変えていく）'], ['npc', 'normal', '……日暮れの塔が、いちばん金色だったな。ミンに見せてやりたかった。行こう。'], ['insight', '', 'いちばん遅い足に合わせた行列は、いちばんきれいな時間に着いた。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
