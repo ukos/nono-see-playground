@@ -176,7 +176,7 @@
     npcs: [
       { id: 'okami', name: '茶館の女将', actor: 'kimono_woman', x: 1100, face: -1 },
       { id: 'yui_koutou', name: YUI('赤い服の娘'), sprite: 'yui_red', x: 2600, face: -1 },
-      { id: 'teishu', name: '魚屋の亭主', actor: 'lanternman', x: 3700, face: -1 }
+      { id: 'teishu', name: '魚屋の亭主', actor: 'grocer', x: 3700, face: -1 }
     ],
     places: [{ id: 'steps', name: '川べりの石段', x: 2100, verb: '見る' }],
     weather: { clear: 5, drizzle: 2, fog: 2, squall: 1 },
@@ -1812,7 +1812,7 @@
     buildings: [['city_building', 450, 0.9], ['uk_terrace', 1500, 0.9], ['inn', 3100, 0.9], ['city_building', 4300, 0.85]],
     npcs: [
       { id: 'nick', name: '新聞売りのニック', actor: 'courier', x: 1250, face: -1 },
-      { id: 'ruth', name: 'ルース', actor: 'researcher', x: 2700, face: -1 },
+      { id: 'ruth', name: 'ルース', actor: 'doctor', x: 2700, face: -1 },
       { id: 'arthur', name: 'アーサーじいさん', actor: 'scholar', x: 4000, face: -1 }
     ],
     places: [
@@ -1837,8 +1837,8 @@
       },
       nick(S) {
         const f = S.f;
-        if (S.back && f.bookBack) return [['npc', 'normal', 'けさ、ベンチに二人座ってたよ。白い髪のじいさんと、眼鏡のおばさん。'], ['npc', 'normal', '……一年、毎晩すれちがってたのにさ。話しはじめたら、新聞が売れないくらい長かった。']];
-        if (S.back) return [['npc', 'normal', 'けさ、眼鏡のおばさんが、ベンチでずっと待ってたよ。……だれも来なかったけど。']];
+        if (S.back && f.bookBack) return [['npc', 'normal', 'けさ、ベンチに二人座ってたよ。白い髪のじいさんと、白いコートのおばさん。'], ['npc', 'normal', '……一年、毎晩すれちがってたのにさ。話しはじめたら、新聞が売れないくらい長かった。']];
+        if (S.back) return [['npc', 'normal', 'けさ、白いコートのおばさんが、ベンチでずっと待ってたよ。……だれも来なかったけど。']];
         if (f.bookTaken) return [['npc', 'normal', 'その本？ ベンチの？ ……あーあ、持ってきちゃったのか。'], ['npc', 'normal', 'あれは落とし物じゃない。この街の「置き本」だよ。読んだら置いて、次の人が持っていく。'], ['npc', 'normal', 'でもあのベンチのは、ちょっと特別でね。……同じ二人が、一年も交換してるんだ。']];
         return [['npc', 'normal', '夕刊だよ！ ……旅の人、この街は初めて？ 夜はベンチに座ると、星より街灯がよく見えるよ。']];
       },
