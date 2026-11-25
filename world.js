@@ -4545,5 +4545,112 @@
     }
   });
 
+// ---------------------------------------------------------------- 85 兄になる日（昔の兄も、同じ木の下でふてくされていた）
+  C.push({
+    id: 'madagasca', shape: '兄になる日', name: 'マダガスカ', sub: 'バオバブの並木', time: 'noon', screens: 5, far: 'savanna_morning', timeBack: 'dusk', map: [-20.3, 44.3],
+    hill: '#8a5a3a', ground: ['#c88a5a', '#a06a40', '#d89a68'], tint: 'rgba(255,215,170,.06)', bscale: 1.0,
+    props: [['big_tree2', 1500, 360], ['big_tree2', 2800, 380], ['rock', 2300, 60], ['big_tree2', 4000, 350]],
+    buildings: [['thatched_farm', 800, 0.85], ['adobe', 2000, 0.85]],
+    npcs: [
+      { id: 'rado', name: 'ヘリーの父さんラド', actor: 'islander', x: 900, face: 1 },
+      { id: 'bako', name: '取り上げ婆のバコ', actor: 'wa_woman', x: 2000, face: -1 },
+      { id: 'hery', name: 'ヘリー', actor: 'sailor_boy', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'baobab', name: 'いちばん太いバオバブ', x: 2850, verb: '見る' }],
+    weather: { clear: 7, wind: 2 },
+    animals: [['hen', 1200], ['cow', 2400], ['crow', 3900]],
+    talk: {
+      rado(S) {
+        const f = S.f;
+        if (S.back && f.mg_done) return [['npc', 'normal', '……ヘリーが、赤ん坊のほっぺを、指でつついてる。「ちっちゃ」だってさ。']];
+        if (S.back) return [['npc', 'normal', '日が沈む。……ヘリー、まだ帰ってこない。']];
+        if (f.mg_done) return [['npc', 'normal', '……バオバブの木に、おれの名前？ 弟が生まれた日の？ ……覚えてるよ。ばれたか。']];
+        if (f.mg_rado) return [['npc', 'normal', '並木の奥のほうへ行ったって、子どもたちが言ってた。……おれが行くと、もっと逃げる。']];
+        f.mg_rado = true;
+        return [['me', '', '（男の人が、生まれたての赤ん坊を片手に抱いて、並木道の奥を見つめている）'], ['npc', 'normal', '旅の人。けさ、娘が生まれた。……そしたら、上の子のヘリーが、家を飛び出しちまった。'], ['npc', 'normal', '「妹なんか、いらない」って。……日が沈む前に、つれ戻したいんだが。'], ['npc', 'normal', 'おれが行くと、よけいにすねる。……どうしたもんかな。']];
+      },
+      bako(S) {
+        const f = S.f;
+        if (S.back && f.mg_done) return [['npc', 'normal', '三代、取り上げてきたよ。ラドも、ヘリーも、けさの子も。……みんな、最初は、しわくちゃさ。']];
+        if (S.back) return [['npc', 'normal', '赤ん坊は、よく寝とる。……兄ちゃんのほうが、寝つけんらしいね。']];
+        return [['npc', 'normal', 'ヘリーが家出？ ……ふふ。わたしは、この村の子をみんな取り上げてきた。ラドもね。'], ['npc', 'normal', 'ラドの弟が生まれた日も、あの子、家を飛び出したんだよ。並木のいちばん太いバオバブの下で、ふてくされてた。'], ['npc', 'normal', 'わたしが迎えに行ったら、木に、なにか刻んでたっけ。……まだ、残ってるかねえ。']];
+      },
+      baobab(S) {
+        const f = S.f;
+        if (S.back && f.mg_done) return [['me', '', '（幹に、まだ白い、新しい刻み。「いもうと」。その横に、古い「おとうと」）']];
+        if (S.back) return [['me', '', '（夕日の中の、太いバオバブ。古い刻みが、影になって浮かんでいる）']];
+        f.mg_tree = true;
+        return [['me', '', '（太い幹の、子どもの背の高さに、古い刻み。……「ラド　おとうと　いらない」）'], ['me', '', '（その下に、別の日の、もっと下手な字。「やっぱり　いる」）']];
+      },
+      hery(S) {
+        const f = S.f;
+        if (S.back && f.mg_done) return [['npc', 'normal', '妹、ちっちゃかった。……ぼくの指、にぎって、はなさないの。']];
+        if (S.back) return [['npc', 'normal', '……帰らない。妹なんか、いらない。']];
+        if (f.mg_done) return [['npc', 'normal', 'ナイフ、かして。……ぼくも、刻むんだ。父ちゃんの、となりに。']];
+        if (!f.mg_tree) return [['me', '', '（男の子が、木の根に背中をあずけて、ひざを抱えている）'], ['npc', 'normal', '……なに。帰らないよ。妹なんか、いらない。']];
+        f.mg_done = true;
+        return [['me', '', '（男の子が、木の根に背中をあずけて、ひざを抱えている）'], ['me', '', 'すぐそこのバオバブに、お父さんの字がありました。「おとうと　いらない」。'], ['npc', 'normal', '……父ちゃんも？ ……ここで、すねてたの？'], ['me', '', 'その下に、もうひとつ。「やっぱり　いる」。'], ['npc', 'normal', '……やっぱり、いる、か。……ぼくも、刻んでから帰る。'], ['insight', '', '兄になる日、昔の兄も、同じ木の下でふてくされていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 86 ことばが通じなくても、手が覚えあう（祖母と孫の、同じ速さ）
+  C.push({
+    id: 'guatema', shape: 'ことばが通じなくても、手が覚えあう', name: 'グアテマナ', sub: '火山の湖の村', time: 'morning', screens: 5, far: 'volcano', timeBack: 'dusk', map: [14.7, -91.2],
+    hill: '#3a5a4a', ground: ['#8a8058', '#6a6040', '#9a9068'], tint: 'rgba(230,240,220,.05)', bscale: 1.0,
+    props: [['tree_green', 400, 280], ['textile_stall', 2800, 140], ['rice_basket', 1600, 60], ['tree_green', 4300, 290]],
+    buildings: [['adobe', 800, 0.85], ['mx_house', 2100, 0.85], ['adobe', 3800, 0.85]],
+    npcs: [
+      { id: 'sofi_gt', name: '都会から来たソフィ', actor: 'schoolgirl', x: 900, face: 1, leaveWhen: f => f.gu_go, leaveDir: 1 },
+      { id: 'tono', name: '通訳見習いのトニョ', actor: 'flower_boy', x: 1400, face: -1 },
+      { id: 'ixchel', name: 'イシュチェルおばあさん', actor: 'cholita', x: 3500, face: -1 },
+      { id: 'sofi_gt2', name: 'ソフィ', actor: 'schoolgirl', x: 3150, face: 1, when: f => f.gu_go }
+    ],
+    places: [{ id: 'loom', name: '軒先の機', x: 2850, verb: '見る' }],
+    weather: { clear: 5, drizzle: 2, fog: 2 },
+    animals: [['hen', 1100], ['dog_brown', 2300], ['crow', 4000]],
+    talk: {
+      sofi_gt(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '……あしたの朝、帰るの。何も、教われなかったな。']];
+        if (f.gu_done) return [['me', '', '（ソフィは、もう、おばあちゃんの機のところにいる）']];
+        if (f.sofi_gt) return [['npc', 'normal', 'ことばが通じないのに、どうやって教わればいいの。']];
+        f.sofi_gt = true;
+        return [['me', '', '（女の子が、色あせた布の切れはしを、指でなでている）'], ['npc', 'normal', '旅の人。わたし、都会から、はじめておばあちゃんに会いに来たの。……あしたの朝、帰る。'], ['npc', 'normal', 'この布、死んだママが、おばあちゃんに教わった模様なの。わたしも、織ってみたい。'], ['npc', 'normal', 'でも、おばあちゃんは、村のことばしか話さない。わたし、ひとことも、わからないの。']];
+      },
+      tono(S) {
+        const f = S.f;
+        if (S.back && f.gu_done) return [['npc', 'normal', '通訳、いらなかったね。……ぼくのいちばん楽な仕事だった。']];
+        if (S.back) return [['npc', 'normal', '……通訳、やればよかったかな。半分しか、伝えられなくても。']];
+        if (f.gu_done) return [['npc', 'normal', 'ふたりで織ってる？ ……ぼく、あとで、あの鳥の模様の名前、村のことばで教えてあげよう。']];
+        if (f.gu_go) return [['npc', 'normal', '機のところ、行ってみて。……ぼくの出番は、たぶん、ないよ。']];
+        if (!f.sofi_gt) return [['npc', 'normal', '観光の人？ 通訳しようか。……下手だけどね。']];
+        f.gu_go = true;
+        return [['npc', 'normal', '通訳？ ……ぼく、観光の人の通訳で、おこづかいかせいでるけど、うまくないんだ。'], ['npc', 'normal', '村のことばは、言いかえると、半分こぼれる。……大事な話ほど、こぼれる。'], ['npc', 'normal', 'でもさ、イシュチェルばあちゃんの機なら、ことば、いらないかも。……ソフィ、行ってみなよ！'], ['me', '', '（ソフィが、うなずいて、機のほうへ歩いていった）']];
+      },
+      loom(S) {
+        const f = S.f;
+        if (S.back && f.gu_done) return [['me', '', '（機の布が、ひと手ぶん、のびている。そこだけ、少し目がふぞろいだ）']];
+        if (S.back) return [['me', '', '（機は、織りかけのまま。夕方の風に、糸がゆれている）']];
+        return [['me', '', '（腰にまわして織る、細長い機。織りかけの布に、鳥の模様）'], ['me', '', '（ソフィの持っていた切れはしと、同じ鳥だ）']];
+      },
+      sofi_gt2(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '指が、まだ、おばあちゃんの手の速さを覚えてる。……帰っても、忘れない。']];
+        if (f.gu_done) return [['npc', 'normal', 'いま、ひと手ぶん、ふたりで織ったの。……ことば、ひとつもなしで。']];
+        return [['npc', 'normal', '来ちゃった。……でも、なんて言えばいいの。']];
+      },
+      ixchel(S) {
+        const f = S.f;
+        if (S.back && f.gu_done) return [['npc', 'normal', '「マティオシュ」。……（おばあさんが、旅人の手を、両手で包んだ）']];
+        if (S.back) return [['me', '', '（おばあさんが、機の前で、ひとりで糸をさばいている）']];
+        if (f.gu_done) return [['me', '', '（おばあさんが、孫の手の上に、自分の手を重ねたまま、ゆっくり糸を通している）']];
+        if (!f.gu_go) return [['me', '', '（おばあさんが、機の前で、こちらを見て、にっこりした。ことばは、わからない）']];
+        f.gu_done = true;
+        return [['me', '', '（ソフィが、切れはしを差し出す。おばあさんの目が、大きくなる）'], ['me', '', '（おばあさんが、機のひもを、ソフィの腰にまわした。自分の手を、ソフィの手に重ねる）'], ['me', '', '（糸を通す。打ちこむ。……ひと言もなく、手がおなじ速さで動いていく）'], ['me', '', '（おばあさんが、ソフィの手の甲を、とん、とん、とやさしくたたいた。……ほめているのが、わかる）'], ['insight', '', 'ことばが通じなくても、手は、同じ速さで覚えあえた。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
