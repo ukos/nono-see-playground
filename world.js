@@ -3097,5 +3097,110 @@
     }
   });
 
+// ---------------------------------------------------------------- 57 父の宝の地図（屋根裏の地図をたどると、子ども時代の父の手紙が埋まっていた）
+  C.push({
+    id: 'kiwia', shape: '宝の正体は親の子ども時代', name: 'ニュージーラ', sub: '羊の丘', time: 'noon', screens: 5, far: 'valley', timeBack: 'dusk', map: [-41.3, 174.8],
+    hill: '#2a4a2a', ground: ['#6a9a50', '#446a34', '#7aaa60'], tint: 'rgba(255,250,220,.03)', bscale: 1.0,
+    props: [['tree_green', 400, 280], ['rock_moss', 1600, 80], ['big_tree1', 2600, 330], ['rock2', 3400, 90], ['haystack', 4300, 120]],
+    buildings: [['thatched_farm', 800, 0.9], ['sheep_pen', 3800, 0.9]],
+    npcs: [
+      { id: 'jack', name: 'ジャック', actor: 'boy_cap', x: 1000, face: 1 },
+      { id: 'ruby', name: 'ルビー（ジャックの妹）', actor: 'schoolgirl', x: 1350, face: -1 },
+      { id: 'dad', name: 'ジャックの父さん', actor: 'ranchhand', x: 3600, face: -1 }
+    ],
+    places: [
+      { id: 'tree', name: '「巨人の木」', x: 2650, verb: '掘る', when: f => f.mapRead },
+      { id: 'map', name: '屋根裏の地図', x: 1180, verb: '読む', when: f => f.jackTold }
+    ],
+    weather: { clear: 6, wind: 2, drizzle: 2 },
+    animals: [['sheep', 3900], ['sheep', 4050], ['sheep', 4200], ['dog_spot', 3400], ['crow', 2000]],
+    talk: {
+      jack(S) {
+        const f = S.f;
+        if (S.back && f.dug) return [['npc', 'normal', '父さん、ゆうべ、箱の手紙を読んで、ずっと笑ってた。それから、ちょっと泣いてた。'], ['npc', 'normal', '……こんどは、ぼくたちの手紙を埋めるんだ。三十年後の、ぼくへ。']];
+        if (S.back) return [['npc', 'normal', '宝、見つからなかった。……地図、まちがってたのかな。']];
+        if (f.dug) return [['npc', 'normal', '金貨じゃなかった……。でも、なんか、父さんに見せたい。']];
+        if (f.jackTold) return [['npc', 'normal', '地図、読める？ ぼくらの字じゃないんだ。すごく下手な字。']];
+        f.jackTold = true;
+        return [['me', '', '（男の子と女の子が、古い紙を地面に広げて、額をくっつけている）'], ['npc', 'normal', '旅の人！ 宝の地図、見つけたんだ！ 屋根裏の、古いトランクの底で！'], ['npc', 'normal', '「巨人の木」から、西へ十歩、羊一頭ぶん下。……でも、巨人の木って、どれ？'], ['npc', 'normal', 'あしたは羊の毛刈りで、一日じゅう手伝いなんだ。きょうしか、探せない！']];
+      },
+      ruby(S) {
+        const f = S.f;
+        if (S.back && f.dug) return [['npc', 'normal', '父さん、九歳のとき、羊を百頭数えたかったんだって。いま、三百頭いるよ。']];
+        if (S.back) return [['npc', 'normal', '……あの地図、父さんに見せたら、変な顔してた。']];
+        return [['npc', 'normal', '地図のすみに、名前が書いてあるの。「トム、九さい」。……トムって、だれ？'], ['npc', 'normal', '……父さんの名前も、トムなんだけど。まさかね。']];
+      },
+      map(S) {
+        const f = S.f;
+        if (f.mapRead) return [['me', '', '（「巨人の木」の絵は、枝が一本だけ、ぐいっと横に突き出している）']];
+        f.mapRead = true;
+        return [['me', '', '（下手な字と、羊の絵がたくさん。丘の真ん中に、大きな木の絵）'], ['me', '', '（木の枝が一本だけ、ぐいっと横に突き出している。……丘の上の、あの大木に、そんな枝がある）']];
+      },
+      tree(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（大木の根もとに、掘りかえした跡。新しい土を、だれかがまた踏み固めてある）']];
+        if (f.dug) return [['me', '', '（根もとの穴は、ふたりが埋め戻した）']];
+        f.dug = true;
+        return [['me', '', '（横に突き出た枝の下から、西へ十歩。……羊一頭ぶんの深さを、三人で掘る）'], ['me', '', '（かちん。さびたクッキーの缶が出てきた）'], ['me', '', '（中には、ビー玉が三つと、羊の毛のかたまりと、折りたたんだ手紙）'], ['me', '', '（「大人になったぼくへ。羊は百頭になった？ まだ、ひとりで寝られる？ トム、九さい」）']];
+      },
+      dad(S) {
+        const f = S.f;
+        if (S.back && f.dug) return [['npc', 'normal', '……三十年、すっかり忘れてた。あの木の下に、ぼくが埋まってたなんて。'], ['npc', 'normal', '羊は、三百頭になったよ。……ひとりで寝られるかは、まあ、聞かないでくれ。'], ['insight', '', '子どもたちが掘りあてた宝は、三十年前の、九歳の父親そのものだった。']];
+        if (S.back) return [['npc', 'normal', 'あの地図？ ……どこかで見た気もするんだがな。思い出せない。']];
+        return [['npc', 'normal', '旅の人、ジャックたちを見なかったか。毛刈りの準備を、手伝わせたいんだが。'], ['npc', 'normal', '……宝の地図？ ははは、子どものころは、だれでも作るもんさ。おれも作った気がする。忘れたけど。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 58 掃くものを残す（引退する掃除夫のために、町は散らかさない。それが、いちばん困らせた）
+  C.push({
+    id: 'wiena', shape: '最後の仕事をとっておく', name: 'オーストリカ', sub: '石だたみの都', time: 'morning', screens: 5, far: 'twilight', timeBack: 'dusk', map: [48.2, 16.4],
+    hill: '#2a2a3a', ground: ['#9a9088', '#6a6058', '#aaa098'], tint: 'rgba(255,220,180,.04)', bscale: 1.0,
+    props: [['tree_autumn', 400, 280], ['stool2', 1300, 40], ['tree_autumn', 2300, 300], ['wall_flowers', 3200, 110], ['tree_autumn', 4300, 290]],
+    buildings: [['it_townhouse', 800, 0.9], ['bakery', 1800, 0.9], ['uk_terrace', 2800, 0.9], ['house_large', 3800, 0.9]],
+    npcs: [
+      { id: 'franz', name: '掃除夫のフランツ', actor: 'sweeper', x: 1000, face: 1 },
+      { id: 'mitzi', name: 'パン屋のミッツィ', actor: 'baker_girl', x: 2000, face: -1 },
+      { id: 'otto', name: 'オットー（郵便局の子）', actor: 'greenboy', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'leaves', name: '石だたみの通り', x: 2600, verb: '見る' }],
+    weather: { clear: 5, wind: 4, drizzle: 1 },
+    animals: [['dog_dane', 1500], ['crow', 2800], ['cat_white', 3900]],
+    talk: {
+      franz(S) {
+        const f = S.f;
+        if (S.back && f.leafPlan) return [['npc', 'normal', '……落ち葉が、一枚ずつ、手紙つきだった。「四十年ありがとう」「坂のところ、助かりました」。'], ['npc', 'normal', '町じゅうの戸口から一枚ずつ。……ぜんぶ掃いて、ぜんぶ持って帰った。'], ['insight', '', '掃除夫への最後の贈り物は、掃いて集められる、ひと通りぶんの落ち葉だった。']];
+        if (S.back) return [['npc', 'normal', '……最後の日に、掃くものがひとつもなかった。いい町だ。いい町だが。']];
+        if (f.franzTold) return [['me', '', '（フランツさんは、ほうきを持ったまま、きれいすぎる通りを、端から端まで見わたしている）']];
+        f.franzTold = true;
+        return [['me', '', '（ほうきとちり取りを持ったおじいさんが、石だたみの真ん中で、ぽつんと立っている）'], ['npc', 'normal', '……旅の人、この通りに、ごみが落ちていないかね。葉っぱ一枚でも。'], ['npc', 'normal', 'きょうで、四十年の掃除の仕事が終わりなんだ。……なのに、けさから、町に何も落ちていない。'], ['npc', 'normal', '最後の日くらい、ゆっくり掃いて終わりたかったんだがね。']];
+      },
+      mitzi(S) {
+        const f = S.f;
+        if (S.back && f.leafPlan) return [['npc', 'normal', 'うちの戸口からも、一枚出したの。「毎朝、店の前、ありがとう」って書いて。']];
+        if (S.back) return [['npc', 'normal', 'ぴかぴかの町でお別れ。……でもフランツさん、さびしそうだったわ。']];
+        if (f.leafPlan) return [['npc', 'normal', '落ち葉に手紙！ ……オットーが、町じゅうに知らせて回ってるわ。']];
+        if (!f.franzTold) return [['npc', 'normal', 'おはよう、旅の人。きょうは町じゅう、早起きして掃除したのよ。フランツさんの最後の日だから。']];
+        return [['npc', 'normal', 'フランツさんの最後の日でしょう。町じゅうで決めたの。ゆっくり休んでもらおうって。'], ['npc', 'normal', 'だから、ゆうべから、みんなで自分の家の前を掃いたのよ。……葉っぱ一枚、残さずに。']];
+      },
+      leaves(S) {
+        const f = S.f;
+        if (S.back && f.leafPlan) return [['me', '', '（夕方の通りは、やっぱりきれいだ。……ただ、ほうきの跡が、ていねいに一本ずつ残っている）']];
+        if (S.back) return [['me', '', '（通りは、朝と同じに、ぴかぴかのまま）']];
+        return [['me', '', '（並木は、こんなに葉を落としているのに、石だたみには一枚もない）'], ['me', '', '（……どの家の戸口にも、落ち葉を詰めた袋が、こっそり置いてある）']];
+      },
+      otto(S) {
+        const f = S.f;
+        if (S.back && f.leafPlan) return [['npc', 'normal', '三百枚くらい集まったよ。フランツさん、一枚ずつ、ゆっくり掃いてた。……ぜんぶ読みながら。']];
+        if (S.back) return [['npc', 'normal', 'フランツさん、ほうきを返しに来たよ。……一度も使ってない顔をしてた。']];
+        if (f.leafPlan) return [['npc', 'normal', '書けた人から、戸口の前に一枚ずつ！ ……ぼく、まだ十軒しか回れてない！']];
+        if (!f.franzTold) return [['npc', 'normal', 'フランツさん、きょうで終わりなんだって。……ぼく、毎朝、あの人のほうきの音で起きてたんだ。']];
+        f.leafPlan = true;
+        return [['me', '', 'フランツさん、掃くものがなくて、困っていました。……最後の日くらい、ゆっくり掃いて終わりたいって。'], ['npc', 'normal', '……え。きれいにしたら、喜ぶと思ってた。'], ['npc', 'normal', 'そうだ！ 落ち葉を、一枚ずつ置いてもらおう。葉っぱに、ありがとうって書いて。'], ['npc', 'normal', 'ぼく、町じゅうに知らせてくる！ 郵便局の子は、足が速いんだ！']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
