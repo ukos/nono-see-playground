@@ -572,7 +572,6 @@ function drawNono(cam) {
   const row = st.dir > 0 ? 0 : 1, col = st.moving ? [0, 1, 2, 1][Math.floor(st.phase) % 4] : 1;
   const bob = st.moving ? Math.abs(Math.sin(st.phase * Math.PI)) * 3 : 0;
   g.save(); g.translate(x, GROUND + 6 - h - bob + oy);
-  if (col === 0) g.scale(-1, 1); // 原画の横向き1コマ目は顔が逆向き（HD-2D Lite と同じ補正）
   g.drawImage(im, col * 176, row * 224, 176, 224, -w / 2 * .92, 0, w * .92, h);
   g.restore();
 }
