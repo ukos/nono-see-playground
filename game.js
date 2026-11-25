@@ -436,7 +436,9 @@ function shipAmount(cam) { // 画面の真ん中が船の上なら 1、岸に近
 function drawProps(cam) {
   for (const c of C) {
     if (!c.props || c.x1 < cam - 800 || c.x0 > cam + W + 800) continue;
-    for (const [name, rx, ph] of c.props) {
+    const back = st.maxX >= c.x1 - 2 && st.x < c.x1;
+    for (const [name, rx, ph, when] of c.props) {
+      if (when && !when(st.flags, back)) continue; // 条件つきの小物（帰り道だけ現れる絵など）
       const im = img(`assets/props/${name}.webp`); if (!im) continue;
       const h = ph, w = im.width * h / im.height, x = c.x0 + rx - cam;
       if (x > W + 20 || x + w < -20) continue;

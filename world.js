@@ -10,7 +10,7 @@
 //   time            : 時間帯 'morning' / 'noon' / 'dusk'（省略時）/ 'night'。画面の明るさが変わる
 //   tint            : 画面全体にかける色
 //   bscale          : 建物の倍率（素材の解像度差を吸収）
-//   props           : 木や岩などの小物 [画像名, x, 高さpx]（assets/props/）。建物より奥に描く
+//   props           : 木や岩などの小物 [画像名, x, 高さpx, 条件(f, back)?]（assets/props/）。建物より奥に描く。条件つきは真のときだけ描く
 //   buildings       : [画像名, 国の左端からのx, 倍率(省略可)]
 //   npcs            : { id, name, actor, x, face(1=右向き,-1=左向き), h(背の高さ), follow(f)(真のあいだ nono のうしろを歩く) }
 //                     1枚絵の住人は sprite（assets/actors/<sprite>.webp。f を受け取る関数でも可）、name も関数にできる。
@@ -914,10 +914,10 @@
 
 // ---------------------------------------------------------------- 18 匂いの道案内（地図のない旧市街で、迷子を家へ送る）
   C.push({
-    id: 'medina', name: 'マロッカ', sub: '迷路の旧市街', time: 'noon', screens: 5, far: 'red_rocks_noon',
+    id: 'medina', name: 'マロッカ', sub: '迷路の旧市街', time: 'noon', screens: 5, far: 'kasbah_noon',
     map: [32, -6],
     hill: '#5a3424', ground: ['#c08a5a', '#8a5a3a', '#d0a070'], tint: 'rgba(200,110,60,.05)', bscale: 1.0,
-    props: [['palm', 300, 300], ['stool', 1250, 40], ['cactus', 3300, 130], ['palm', 4500, 320]],
+    props: [['palm', 300, 300], ['stool', 1250, 40], ['clay_oven', 1820, 120], ['flatbread_table', 1990, 60], ['copper_cart', 3000, 120], ['mint_table', 3620, 70], ['textile_stall', 4450, 170]],
     buildings: [['mideast_white', 600], ['adobe', 1500, 0.9], ['es_gate', 2300], ['mideast_white', 3100, 0.9], ['adobe', 4000]],
     npcs: [
       { id: 'nadi', name: '迷子の女の子', actor: 'toddler', x: 700, face: 1, h: 0.62, when: f => !f.nadiHome, follow: f => f.nadiTaken && !f.nadiHome },
@@ -990,7 +990,7 @@
     id: 'blanco', name: 'イスパーニャ', sub: '白い坂の町', time: 'noon', screens: 5, far: 'sunflower_noon',
     map: [37, -4],
     hill: '#4a5a30', ground: ['#c8b890', '#9a8460', '#dccaa0'], tint: 'rgba(255,230,180,.04)', bscale: 1.0,
-    props: [['tree_olive', 350, 280], ['stool2', 1350, 40], ['tree_olive', 3200, 300], ['stump', 4300, 70]],
+    props: [['tree_olive', 350, 280], ['wall_flowers', 1150, 110], ['easel', 1830, 130], ['tree_olive', 3200, 300], ['wall_painting', 4120, 120, (f, back) => back && f.walked], ['stump', 4500, 70]],
     buildings: [['es_white', 600], ['med_white', 1500, 0.95], ['es_gate', 2300], ['es_white', 3000, 0.9], ['bakery', 3900, 0.95]],
     npcs: [
       { id: 'dolores', name: 'ドロレスばあさん', actor: 'es_granny', x: 900, face: -1 },
@@ -1044,7 +1044,7 @@
     id: 'vyshyva', name: 'ウクリーナ', sub: '麦の村', time: 'morning', screens: 5, far: 'wheat_noon',
     map: [49, 32],
     hill: '#5a5a2a', ground: ['#a8a050', '#6a6030', '#b8a868'], tint: 'rgba(255,230,140,.04)', bscale: 1.0,
-    props: [['tree_green', 400, 300], ['bucket', 1300, 50], ['bush_berry', 2900, 90], ['tree_green', 4500, 320]],
+    props: [['sunflowers', 300, 130], ['bride_dress', 1280, 150], ['well', 2750, 150], ['korovai_table', 3470, 80], ['haystack', 4150, 130], ['tree_green', 4600, 320]],
     buildings: [['thatched_farm', 700], ['house_small', 1600, 0.95], ['elder_house', 2500], ['bakery', 3600, 0.9]],
     npcs: [
       { id: 'oksana', name: 'オクサナばあちゃん', actor: 'ru_granny', x: 1000, face: -1 },
