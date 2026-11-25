@@ -3833,5 +3833,118 @@
     }
   });
 
+// ---------------------------------------------------------------- 71 みんなが自白する（かばうための嘘が、ひとつずつ持ち寄られる）
+  C.push({
+    id: 'ryukyu', shape: 'みんなが自白する', name: 'リュウキュア', sub: '赤瓦の島', time: 'noon', screens: 5, far: 'beach_noon', timeBack: 'dusk', map: [26.2, 127.7],
+    hill: '#3a7a5a', ground: ['#d8c8a0', '#b0a078', '#e8d8b0'], tint: 'rgba(255,240,200,.05)', bscale: 1.0,
+    props: [['palm', 400, 300], ['wall_flowers', 1250, 110], ['stool', 1700, 50], ['tree_green', 2700, 270], ['palm', 4300, 300]],
+    buildings: [['cn_house', 800, 0.85], ['machiya', 2200, 0.85], ['cn_house', 3400, 0.85]],
+    npcs: [
+      { id: 'kanta', name: 'カンタ', actor: 'boy_kite', x: 900, face: 1 },
+      { id: 'uncle_ok', name: 'カンタのじいちゃん', actor: 'oldman', x: 2050, face: -1 },
+      { id: 'uto', name: 'ウトおばあ', actor: 'granny_scarf', x: 3000, face: -1 },
+      { id: 'kamado', name: 'となりのカマドじい', actor: 'teaseller', x: 3700, face: -1 }
+    ],
+    places: [{ id: 'altar', name: '縁側の供え物の皿', x: 1600, verb: '見る' }],
+    weather: { clear: 5, wind: 3, squall: 2 },
+    animals: [['cat_calico', 3950, { mode: 'stay' }], ['rooster', 1400], ['dog_shiba', 2500]],
+    talk: {
+      kanta(S) {
+        const f = S.f;
+        if (f.ok_cat && !f.ok_done) {
+          f.ok_done = true;
+          return [['me', '', 'じいちゃんも、ウトおばあも、カマドじいも、「自分が食べた」と言っていました。'], ['npc', 'normal', '……え。三人とも？ ……おばあ、甘いの食べられないのに。'], ['me', '', 'それと、カマドじいの家の猫が、けさから砂糖まみれだそうです。'], ['npc', 'normal', '……みんな、ぼくのために、うそついたの？ ……ほんとは猫なのに？'], ['npc', 'normal', 'ぼく、ちゃんと言ってくる。食べたのは猫で、うそをついたのは、みんなだって！'], ['insight', '', 'かばうための嘘は、みんなが一つずつ持ち寄ったら、笑い話になった。']];
+        }
+        if (S.back && f.ok_done) return [['npc', 'normal', 'おばあが、もういちど揚げてくれてる。……味見係は、ぼく。猫はだめ。']];
+        if (S.back) return [['npc', 'normal', '……ぼく、食べてないのに。今夜のお盆に、ご先祖さまのお菓子がない。']];
+        if (f.ok_done) return [['npc', 'normal', '猫、どこ行った？ ……おしおきに、ひげを三本だけ、くすぐってやるんだ。']];
+        if (f.ok_kanta) return [['npc', 'normal', 'ほんとに食べてない！ ……縁側のお皿、見てきてよ。']];
+        f.ok_kanta = true;
+        return [['me', '', '（男の子が、縁側の柱にしがみついて、べそをかいている）'], ['npc', 'normal', '旅の人！ ご先祖さまに供えたお菓子が、ぜんぶなくなったの。'], ['npc', 'normal', '母ちゃんは、ぼくが食べたって。……食べてない！ でも、だれも信じてくれない。'], ['npc', 'normal', '今夜はお盆の迎え日。日が沈む前に、お菓子がないと、ご先祖さまが帰ってこれない。']];
+      },
+      altar(S) {
+        const f = S.f;
+        if (S.back && f.ok_done) return [['me', '', '（皿の上に、揚げたてのお菓子が山盛り。湯気の向こうに、香炉の煙）']];
+        if (S.back) return [['me', '', '（空っぽの皿の横で、線香だけが、細く燃えている）']];
+        f.ok_altar = true;
+        return [['me', '', '（縁側の小さな台に、からっぽの皿。まわりに、白い砂糖の粉が散っている）'], ['me', '', '（砂糖の上に、小さな丸い足あとが、点々と。……人の足ではなさそうだ）']];
+      },
+      uncle_ok(S) {
+        const f = S.f;
+        if (S.back && f.ok_done) return [['npc', 'normal', 'わしのうそは、いちばん下手だったそうだ。……甘いものは、医者に止められとるからな。']];
+        if (S.back) return [['npc', 'normal', '……カンタの顔が、まだ晴れん。わしが食べたと、言ったのにな。']];
+        f.ok_c1 = true;
+        return [['npc', 'normal', 'お菓子？ ……あれは、わしが食べた。うん、わしだ。'], ['npc', 'normal', '腹がへってな。ひとつのつもりが、ぜんぶ。……カンタは悪くない。そう伝えてくれ。']];
+      },
+      uto(S) {
+        const f = S.f;
+        if (S.back && f.ok_done) return [['npc', 'normal', 'また揚げるわよ。……三人ぶん、うその罰として、粉をこねてもらうからね。']];
+        if (S.back) return [['npc', 'normal', '揚げなおす粉は、ある。……でも、だれが食べたのか、はっきりしないとね。']];
+        f.ok_c2 = true;
+        return [['npc', 'normal', 'じいさんが食べた？ ……ちがうわ。食べたのは、わたし。'], ['npc', 'normal', '……甘いもの、ほんとは、そんなに好きじゃないけどね。カンタは、悪くないの。']];
+      },
+      kamado(S) {
+        const f = S.f;
+        if (S.back && f.ok_done) return [['npc', 'normal', 'うちの猫、今夜は、縁側の出入り禁止だ。……ご先祖さまに、あいさつだけさせてやる。']];
+        if (S.back) return [['npc', 'normal', '……猫が、まだ、ひげについた砂糖をなめとる。']];
+        if (!(f.ok_c1 && f.ok_c2)) return [['npc', 'normal', '旅の人。……お菓子のこと？ わしが食べたよ。たぶんな。']];
+        f.ok_cat = true;
+        return [['npc', 'normal', '……ふたりとも、自分が食べたと？ じゃあ、わしも食べた。三人で分けたことにしよう。'], ['me', '', '（足もとで、三毛猫が、ひげについた白い粉を、しきりになめている）'], ['npc', 'normal', '……うちの猫か。けさから、砂糖まみれでな。そういえば、縁側のほうから帰ってきた。'], ['npc', 'normal', 'カンタに伝えてくれ。……犯人は猫で、うそつきは、大人三人だと。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 72 上も下も見えないまま支え合う（人の塔は、見えない相手を信じて立つ）
+  C.push({
+    id: 'catalna', shape: '上も下も見えないまま支え合う', name: 'カタルナ', sub: '人の塔の広場', time: 'morning', screens: 5, far: 'valley', farBack: 'twilight', timeBack: 'dusk', map: [41.4, 2.2],
+    hill: '#6a5a4a', ground: ['#b0a080', '#8a7a60', '#c0b090'], tint: 'rgba(255,225,190,.05)', bscale: 1.0,
+    props: [['tree_olive', 400, 240], ['stool2', 1300, 40], ['castle_flag', 2700, 220], ['wall_flowers', 3300, 110], ['tree_olive', 4300, 250]],
+    buildings: [['es_white', 750, 0.9], ['mx_church', 2350, 0.9], ['it_townhouse', 3800, 0.9]],
+    npcs: [
+      { id: 'nuria', name: 'ヌリア', actor: 'braidgirl', x: 900, face: 1 },
+      { id: 'jordi', name: 'ヌリアの父ジョルディ', actor: 'builder', x: 2000, face: -1 },
+      { id: 'avi', name: '土台のアビじいさん', actor: 'mustache', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'bell', name: '教会の鐘', x: 2650, verb: '見上げる' }],
+    weather: { clear: 7, wind: 2 },
+    animals: [['dog_spot', 1500], ['crow', 2700], ['cat_orange', 4000]],
+    talk: {
+      nuria(S) {
+        const f = S.f;
+        if (f.ct_avi && !f.ct_yes) {
+          f.ct_yes = true;
+          return [['me', '', 'アビじいさんが言っていました。いちばん下からも、上は見えないそうです。'], ['me', '', '見えなくても、足の重さで、だれが乗ったかわかる。……五十年、そうやって立ってきたって。'], ['npc', 'normal', '……下からも、見えないの？ わたしだけじゃ、なかったんだ。'], ['npc', 'normal', 'じゃあ、登りながら、名前を呼ぶ。父さん、アビじい。……呼んだら、返事してもらう。'], ['npc', 'normal', 'てっぺんで手を上げたら、いちばん下まで、ちゃんと届くよね。'], ['insight', '', '見えない相手を信じて立つのは、塔の上も下も、同じだった。']];
+        }
+        if (S.back && f.ct_yes) return [['npc', 'normal', '名前を呼んだら、下から、ぜんぶ返事がきた。……アビじいの声が、いちばん大きかった。']];
+        if (S.back) return [['npc', 'normal', '……塔は、きょうは建たなかった。わたしが、登らなかったから。']];
+        if (f.ct_yes) return [['npc', 'normal', '鐘が鳴ったら、登る。……いまのうちに、みんなの名前、もういちど覚えとく。']];
+        if (f.ct_nuria) return [['npc', 'normal', 'てっぺんは、いちばん小さい子の役なの。……代わりは、いない。']];
+        f.ct_nuria = true;
+        return [['me', '', '（女の子が、頭の小さなヘルメットのひもを、何度もしめなおしている）'], ['npc', 'normal', '旅の人。きょうはお祭り。正午の鐘で、みんなで人の塔を建てるの。'], ['npc', 'normal', 'わたしは、いちばん上の役。てっぺんで、手を上げるの。……でも、先週の練習で、すべっちゃった。'], ['npc', 'normal', '上からは、下が見えないの。だれが支えてるのか、わからない。……こわいの。']];
+      },
+      jordi(S) {
+        const f = S.f;
+        if (S.back && f.ct_yes) return [['npc', 'normal', 'ヌリアが、てっぺんで、わしの名前を呼んだ。……肩の上の重さが、ふっと軽くなった。']];
+        if (S.back) return [['npc', 'normal', '……無理はさせられん。来年もある。……来年も、あるさ。']];
+        return [['npc', 'normal', 'ヌリアの父だ。わしは、二段目。あの子の足は、いつも、わしの肩の上を通っていく。'], ['npc', 'normal', '上が軽いと、下はみんな楽になる。……あの子は、自分が重荷だと思っとるらしい。']];
+      },
+      bell(S) {
+        const f = S.f;
+        if (S.back && f.ct_yes) return [['me', '', '（夕方の鐘が鳴る。広場の石だたみに、人の輪のあとが、まだ白く残っている）']];
+        if (S.back) return [['me', '', '（夕方の鐘が鳴る。広場は、もう片づけられている）']];
+        return [['me', '', '（教会の鐘楼。正午まで、あと少し。……鐘つきが、綱に手をかけて待っている）']];
+      },
+      avi(S) {
+        const f = S.f;
+        if (S.back && f.ct_yes) return [['npc', 'normal', '五十一年目の塔だった。……あの子の足、思ったより、どっしりしとったぞ。']];
+        if (S.back) return [['npc', 'normal', '……てっぺんの子がおらんと、塔は、ただの人の山さ。']];
+        if (f.ct_avi) return [['npc', 'normal', 'わしの肩は、もう若くない。……だが、てっぺんの子の足音だけは、ちゃんと聞こえる。']];
+        if (!f.ct_nuria) return [['npc', 'normal', 'おう、旅の人。わしは、塔の土台。五十年、いちばん下で立ってきた。']];
+        f.ct_avi = true;
+        return [['me', '', '（白い腰帯のおじいさんが、広場の石だたみの真ん中で、足をふんばっている）'], ['npc', 'normal', 'ヌリアが、こわがっとる？ ……下が見えんから、か。'], ['npc', 'normal', 'わしは五十年、いちばん下だ。下からも、上は見えん。肩と、人の背中しか見えん。'], ['npc', 'normal', 'それでも、てっぺんにだれが乗ったか、足の重さでわかる。……伝えてやってくれ。おたがい様だと。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
