@@ -2993,5 +2993,109 @@
     }
   });
 
+// ---------------------------------------------------------------- 55 台所の近道（スコールで足止めされた受験生を、郵便配達が家々の中を通して送る）
+  C.push({
+    id: 'vietna', shape: '人の家の中を通る近道', name: 'ベトナ', sub: 'スコールの街', time: 'morning', screens: 5, far: 'karst_morning', map: [21, 105.8],
+    weather: { squall: 8, drizzle: 2 }, weatherBack: { clear: 7, drizzle: 1 },
+    hill: '#24382a', ground: ['#6a7050', '#4a4a38', '#7a7a60'], tint: 'rgba(160,200,180,.05)', bscale: 1.0,
+    props: [['bucket2', 600, 50], ['stool2', 1300, 40], ['rice_basket', 2300, 60], ['bucket', 3300, 50], ['palm', 4400, 300]],
+    buildings: [['sea_twostory', 800, 0.9], ['sea_shop', 1700, 0.9], ['sea_tall', 2600, 0.9], ['sea_twostory', 3500, 0.9]],
+    npcs: [
+      { id: 'binh', name: '受験生のビン', actor: 'boy_student', x: 1000, face: 1 },
+      { id: 'ba', name: '軒先のバーおばあさん', actor: 'granny_broom', x: 1450, face: -1 },
+      { id: 'lan', name: '郵便配達のラン', actor: 'postwoman', x: 1900, face: -1 },
+      { id: 'school', name: '試験の門番', actor: 'stationmaster', x: 4300, face: -1 }
+    ],
+    places: [{ id: 'kitchens', name: '家々の台所', x: 2900, verb: '通り抜ける', when: f => f.lanLead }],
+    animals: [['chicks', 2200], ['cat_white', 3100], ['dog_spot', 3800]],
+    talk: {
+      binh(S) {
+        const f = S.f;
+        if (S.back && f.arrived) return [['npc', 'normal', '試験、受けられたよ。……答案のはしっこに、ちょっと魚醤のにおいがついてたけど。']];
+        if (S.back) return [['npc', 'normal', '……間に合わなかった。来年、また受ける。軒下で、一年分の雨を見た気がする。']];
+        if (f.arrived) return [['npc', 'normal', '……間に合った。人の家の台所を、五軒も通ってきた。']];
+        if (f.binhTold) return [['npc', 'normal', '大通りは川みたい。……走ったら、答案より先に、ぼくがびしょぬれになる。']];
+        f.binhTold = true;
+        return [['me', '', '（スコールの軒下に、学生服の男の子が、本の包みを胸に抱いて立ちつくしている）'], ['npc', 'normal', '……九時から、中学の入学試験なんです。あと二十分。'], ['npc', 'normal', '大通りは膝まで水。回り道をしたら、一時間かかる。……三年、この日のために勉強したのに。']];
+      },
+      ba(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'けさは、うちの台所を、ずいぶんたくさんの足が通ったね。……泥の掃除は、ランにやらせたよ。']];
+        return [['npc', 'normal', '雨宿りかい。ここの軒は広いから、遠慮しなさんな。'], ['me', '', '（おばあさんは、ほうきで、軒先に入ってくる水を、せっせと押しもどしている）'], ['npc', 'normal', 'この街のスコールは、一時間は止まないよ。……急ぐ人には、気の毒だがね。']];
+      },
+      lan(S) {
+        const f = S.f;
+        if (S.back && f.arrived) return [['npc', 'normal', '台所の道は、郵便配達だけのひみつだったんだけどね。……ま、一度くらいはいいか。']];
+        if (S.back) return [['npc', 'normal', '雨の日の手紙は、乾かしてから配るの。……きょうは、ちょっと配達がおそくなった。']];
+        if (f.lanLead) return [['npc', 'normal', 'ついてきて。靴は手に持って。……「失礼します」は、大きな声でね。']];
+        if (!f.binhTold) return [['npc', 'normal', 'ふう、ずぶぬれ。……手紙だけは、かばんの中で無事よ。']];
+        f.lanLead = true;
+        return [['npc', 'normal', '試験？ 学校まで二十分？ ……ふうん。'], ['npc', 'normal', '大通りを通るから、遠いのよ。郵便配達の道を教えてあげる。'], ['npc', 'normal', 'この街の家は、裏の台所どうしがつながってるの。手紙を届けるうちに、通らせてもらうようになった。'], ['npc', 'normal', '五軒抜ければ、学校の裏門。……さあ、ふたりとも、ついてきて！']];
+      },
+      kitchens(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（晴れた台所の窓から、朝ごはんの湯気が流れてくる）']];
+        if (f.arrived) return [['me', '', '（台所の戸の向こうから、まだ「がんばってね」の声が聞こえる）']];
+        f.arrived = true;
+        return [['me', '', '（ランのあとについて、裏戸をくぐる。……一軒目の台所では、おばさんがフォーを煮ていた）'], ['me', '', '（「失礼します！」「あら、ラン。試験の子？ がんばって！」）'], ['me', '', '（二軒目、三軒目。鍋をよけ、鶏をよけ、洗濯物の下をくぐる。だれもが、ひと言かけていく）'], ['me', '', '（五軒目の勝手口を出ると、学校の裏門だった。……鐘が、ちょうど鳴りはじめた）']];
+      },
+      school(S) {
+        const f = S.f;
+        if (S.back && f.arrived) return [['npc', 'normal', '台所から出てきた受験生は、四十年で初めてだ。……答案から、フォーのいいにおいがしたよ。'], ['insight', '', 'いちばんの近道は、道ではなく、街じゅうの台所の「がんばって」でできていた。']];
+        if (S.back) return [['npc', 'normal', 'けさの試験は、雨で来られなかった子が多かったな。']];
+        return [['npc', 'normal', '試験は九時。……門は、時間どおりに閉める。雨でも、晴れでもな。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 56 宿帳の帰りの欄（「帰りにまた泊まる」と書いた客を、宿は四十年待っていた）
+  C.push({
+    id: 'swissa', shape: '宿帳の帰りの欄', name: 'スイシア', sub: '峠の山小屋', time: 'dusk', screens: 5, far: 'snow_peaks_noon', timeBack: 'morning', map: [46.6, 8.2],
+    hill: '#2a3438', ground: ['#6a8058', '#445438', '#7a9068'], tint: 'rgba(255,190,150,.05)', bscale: 1.0,
+    props: [['pine', 300, 300], ['ship_bell', 1300, 130], ['haystack', 2300, 120], ['pine_snow', 3300, 320], ['rock_moss', 4400, 80]],
+    buildings: [['lumber_hut', 800, 1.3], ['inn', 1900, 0.95], ['nordic_red', 3700, 0.85]],
+    npcs: [
+      { id: 'hans', name: '宿の主人ハンス', actor: 'innkeeper', x: 2150, face: -1 },
+      { id: 'beat', name: '大工のベアト', actor: 'builder', x: 1100, face: 1 },
+      { id: 'heidi', name: 'ハイニ（主人の孫）', actor: 'alpboy', x: 3000, face: -1 }
+    ],
+    places: [{ id: 'book', name: '宿帳', x: 2400, verb: '書く', when: f => f.hansTold }],
+    weather: { clear: 5, snow: 3, fog: 2 },
+    animals: [['cow', 2700, { mode: 'stay' }], ['dog_mastiff', 1600, { mode: 'stay' }], ['crow', 3900]],
+    talk: {
+      beat(S) {
+        const f = S.f;
+        if (S.back && f.backSigned) return [['npc', 'normal', '取り壊しはやめだ。……屋根を直すことになった。ハンスさんが、「帰りの欄に、まだ空きがある」ってさ。']];
+        if (S.back) return [['npc', 'normal', '来月、宿をたたむそうだ。……おれは、壊す役だ。']];
+        return [['me', '', '（大工が、宿の古い屋根を見上げて、首をふっている）'], ['npc', 'normal', '旅の人、この宿に泊まるのかい。……たぶん、最後の客の一人になるよ。'], ['npc', 'normal', '屋根も柱も、限界だ。ハンスさんは、来月で宿をたたむと言ってる。直すより、壊すほうが安い。']];
+      },
+      hans(S) {
+        const f = S.f;
+        if (S.back && f.backSigned) return [['npc', 'normal', '……帰りの欄に、名前が書いてある。四十年で、はじめてだ。'], ['npc', 'normal', '「帰りにまた泊まる」と書いて、ほんとうに帰ってきた客は、あんたが最初だよ。'], ['npc', 'normal', 'あの人は、来なかった。……でも、あんたが来た。宿は、もう少し続けることにする。'], ['insight', '', '四十年空いていた帰りの欄は、わたしの名前で、はじめて閉じた。']];
+        if (S.back) return [['npc', 'normal', 'おかえり。……帰りの欄に、書いていくかね。いや、むりにとは言わん。']];
+        if (f.signed) return [['npc', 'normal', '帰りの欄は、空けておく。……あんたも、あの人みたいに、空けたままにならんでくれよ。']];
+        if (f.hansTold) return [['npc', 'normal', '宿帳は、そこの台の上だ。名前と、どこへ行くか。それから、帰りに寄るかどうか。']];
+        f.hansTold = true;
+        return [['npc', 'normal', 'いらっしゃい。……宿帳に、名前を書いてくれるかね。'], ['npc', 'normal', 'この宿の宿帳には、欄が二つある。「行き」と「帰り」。峠を越える人は、たいてい戻ってくるからね。'], ['npc', 'normal', '……四十年前、「東の端まで歩いて、帰りにまた泊まる」と書いた旅人がおった。'], ['npc', 'normal', 'その人の帰りの欄は、まだ空いておる。……部屋も、そのままにしてある。それも、来月までだが。']];
+      },
+      book(S) {
+        const f = S.f;
+        if (S.back && !f.backSigned) { f.backSigned = true;
+          return [['me', '', '（宿帳を開く。行きの欄に、自分の名前。そのとなりの帰りの欄は、空いている）'], ['me', '', '（ペンを取って、帰りの欄に、もう一度名前を書いた）'], ['me', '', '（ずっと前のページの、四十年空いたままの帰りの欄が、ふと目に入った）']]; }
+        if (S.back) return [['me', '', '（帰りの欄に、インクがまだ乾ききっていない）']];
+        if (f.signed) return [['me', '', '（行きの欄に、わたしの名前。帰りの欄は、空いている）']];
+        f.signed = true;
+        return [['me', '', '（古い宿帳。行きの欄は、びっしり。帰りの欄は、ところどころ空いている）'], ['me', '', '（行きの欄に、名前と「東の端まで」と書いた。……帰りの欄は、空けておく）']];
+      },
+      heidi(S) {
+        const f = S.f;
+        if (S.back && f.backSigned) return [['npc', 'normal', 'じいちゃん、ゆうべ、四十年前の客の部屋を開けて、窓をふいてたよ。……「また、だれか来るかもしれん」って。']];
+        if (S.back) return [['npc', 'normal', '来月から、ぼくら下の町に住むんだって。……牛は、連れていけるかな。']];
+        return [['npc', 'normal', 'じいちゃんの宿帳、見た？ ぼくが生まれた日も、書いてあるんだよ。「孫、来る」って。'], ['npc', 'normal', '……あの空いてる帰りの欄の人、どうして来なかったんだろう。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
