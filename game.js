@@ -391,17 +391,17 @@ function drawActor(n, cam) {
   }
   if (n.sheet) {
     const im = img(P.a(n.actor, 'sheet')); if (!im) return;
-    const S = n.sheet, leaving = n.off > 0;
+    const S = n.sheet, leaving = Math.abs(n.off || 0) > 0;
     const fr = leaving ? S.frames[Math.floor(st.t * 6) % 2 ? 'walk1' : 'walk2'] : (S.frames[(n.pose && n.pose(st.flags)) || 'idle'] ?? 0);
     const s = NONO_H * (S.h || 1) / S.figure, w = S.fw * s, h = S.fh * s;
     g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 30, 6, 0, 0, Math.PI * 2); g.fill();
-    g.save(); g.translate(x, 0); g.scale(leaving ? 1 : (n.face || 1), 1);
+    g.save(); g.translate(x, 0); g.scale(leaving ? (n.leaveDir || 1) : (n.face || 1), 1);
     g.drawImage(im, fr * S.fw, 0, S.fw, S.fh, -w / 2, GROUND + 6 - h, w, h); g.restore();
     return;
   }
-  const im = img(P.a(n.actor, 'normal')), h = NONO_H, w = h * .75;
-  g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, 34, 7, 0, 0, Math.PI * 2); g.fill();
-  if (im) { g.save(); g.translate(x, 0); g.scale(n.face || -1, 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
+  const im = img(P.a(n.actor, 'normal')), h = NONO_H * (n.h || 1), w = im ? im.width * h / im.height : h * .6;
+  g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, Math.min(34, w * .45), 7, 0, 0, Math.PI * 2); g.fill();
+  if (im) { g.save(); g.translate(x, 0); g.scale(n.off ? -(n.leaveDir || 1) : (n.face || -1), 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
 }
 // ---------------------------------------------------------------- 動物（ペット・家畜・鳥）
 // 国の animals: [[種類, x, {mode, range, when, back, face}]]
@@ -555,7 +555,7 @@ function frame(ts) {
   if (!busy) for (const n of NPCS) {
     if (!n.leaveWhen || !n.leaveWhen(st.flags) || st.flags[n.id + 'Gone']) continue;
     if (!n.wait) n.wait = st.t + 1.2; // 手を挙げてから歩き出す
-    if (st.t > n.wait) { n.off = (n.off || 0) + 120 * dt; if (n.off > 1400) st.flags[n.id + 'Gone'] = true; }
+    if (st.t > n.wait) { n.off = (n.off || 0) + 120 * dt * (n.leaveDir || 1); if (Math.abs(n.off) > 1400) st.flags[n.id + 'Gone'] = true; }
   }
   const cam = Math.max(0, Math.min(WORLD - W, st.x - W * 0.42));
   const camDx = lastCam == null ? 0 : cam - lastCam; lastCam = cam;
