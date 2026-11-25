@@ -52,6 +52,13 @@ for (const c of world.C) {
   }
 }
 
+// ---- 骨組みのラベル：同じ型の国が続かないように
+world.C.forEach((c, i) => {
+  if (!c.shape) { R(c.id, 'W', '骨組みのラベル（shape）がない'); return; }
+  const prev = world.C.slice(Math.max(0, i - 2), i).filter(d => d.shape === c.shape);
+  if (prev.length) R(c.id, 'W', `骨組みが直前の国と同じ「${c.shape}」: ${prev.map(d => d.id).join('、')}`);
+});
+
 // ---- 特別枠（伝説＝うわさの正体が本物だった／ゲスト＝ライバル本人）は、10か国に1か国まで
 {
   const sp = world.C.filter(c => c.npcs.some(n => n.special));

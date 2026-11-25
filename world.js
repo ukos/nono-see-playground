@@ -23,6 +23,7 @@
 //   sea             : true なら船旅の国（地図の道のりを点線の航路で描く）
 //   farBack/timeBack/weatherBack : 帰り道だけの遠景・時間帯・天候（嵐の夜の船が、帰りは朝の凪になる等）
 //   when(f, back)   : 住人・場所の when には帰り道かどうかも渡る
+//   shape           : 話の骨組みのラベル（直前の2か国と同じだと check.js が注意を出す）
 //   weather         : 起こりやすい天候と重み { clear, drizzle, squall, typhoon, wind, fog, densefog, snow }
 //   talk            : 住人ごとの会話。S を受け取り行の配列を返す
 //                     行＝[話し手, 表情, 文]。話し手は 'npc'（話している相手）/ 'me'（nono）/ 'insight'（気づき）
@@ -41,7 +42,7 @@
 
   // ---------------------------------------------------------------- 1 噂の確かめ（証言を集めて、自分の目で見る）
   C.push({
-    id: 'hanano', name: 'オランジェ', sub: '花野の村', screens: 7, far: 'flower', mid: 'trees',
+    id: 'hanano', shape: 'うわさを確かめに行く', name: 'オランジェ', sub: '花野の村', screens: 7, far: 'flower', mid: 'trees',
     map: [46, 2], // 世界地図の位置（緯度, 経度）
     hill: '#1e2a2a', ground: ['#5d8a55', '#3e5a3c', '#6b5a45'], tint: 'rgba(80,40,90,.10)', bscale: 1.6,
     props: [['tree_green', 450, 260], ['bush_berry', 1050, 90], ['tree_autumn', 1980, 250], ['stump', 2950, 70], ['rock_moss', 3700, 110], ['tree_green', 4300, 280], ['pine', 4700, 300]],
@@ -100,7 +101,7 @@
 
   // ---------------------------------------------------------------- 2 下手な手伝い（旅人の曲がった一列が、だれかの帰る口実になる）
   C.push({
-    id: 'take', name: 'ジャポネ', sub: '棚田の里', time: 'morning', screens: 5, far: 'rice_terraces_morning',
+    id: 'take', shape: '旅人の失敗が役に立つ', name: 'ジャポネ', sub: '棚田の里', time: 'morning', screens: 5, far: 'rice_terraces_morning',
     map: [36, 138], // 世界地図の位置（緯度, 経度）
     hill: '#1f2a22', ground: ['#5f8a4a', '#3a5034', '#7a6a50'], tint: 'rgba(40,60,40,.04)', bscale: 1.05,
     props: [['torii', 200, 250], ['stone_lantern', 1300, 170], ['pine', 2150, 300], ['stone_lantern', 3150, 170], ['jp_castle', 4300, 430]],
@@ -166,7 +167,7 @@
   
 // ---------------------------------------------------------------- 3 二重の秘密（うそをついている人と、気づかないふりの人）
   C.push({
-    id: 'koutou', name: 'キャセイ', sub: '紅灯の都', time: 'night', screens: 6, far: 'mystic_night',
+    id: 'koutou', shape: '二重の秘密', name: 'キャセイ', sub: '紅灯の都', time: 'night', screens: 6, far: 'mystic_night',
     map: [30, 110], // 世界地図の位置（緯度, 経度）
     hill: '#2a1e26', ground: ['#6a7a4a', '#4a3e34', '#8a7258'], tint: 'rgba(40,20,80,.10)', bscale: 1.3,
     props: [['tree_old_roots', 700, 260], ['pine', 2900, 280], ['stone_lantern', 4000, 150]],
@@ -213,7 +214,7 @@
 
   // ---------------------------------------------------------------- 4 歩くことが話になる（旅人が知らずに羊を連れて帰る）
   C.push({
-    id: 'kaze', name: 'モンゴーラ', sub: '風の草原', screens: 6, far: 'highland',
+    id: 'kaze', shape: '歩くこと自体が解決', name: 'モンゴーラ', sub: '風の草原', screens: 6, far: 'highland',
     map: [47, 104], // 世界地図の位置（緯度, 経度）
     hill: '#243024', ground: ['#7aa05a', '#4a6a3a', '#8a7a5a'], tint: 'rgba(60,80,40,.06)', bscale: 1.0,
     props: [['rock', 600, 90], ['bush', 2000, 80], ['watchtower', 3100, 300], ['rock2', 5200, 100]],
@@ -262,7 +263,7 @@
 
   // ---------------------------------------------------------------- 5 話が市場を一周する（旅人の話が、知らない話になって戻ってくる）
   C.push({
-    id: 'iro', name: 'インダスタン', sub: '色の都', screens: 6, far: 'twilight',
+    id: 'iro', shape: '話が育って戻る', name: 'インダスタン', sub: '色の都', screens: 6, far: 'twilight',
     map: [25, 78], // 世界地図の位置（緯度, 経度）
     hill: '#2e2018', ground: ['#8a8a4a', '#6a4a30', '#a08060'], tint: 'rgba(140,80,30,.08)', bscale: 1.0,
     props: [['palm', 300, 300], ['palm', 2250, 320], ['bush_berry', 4200, 90]],
@@ -323,7 +324,7 @@
   
 // ---------------------------------------------------------------- 6 水の行方を調べる（足あとで真相を見る）
   C.push({
-    id: 'suna', name: 'サハリア', sub: '砂の国', time: 'night', screens: 5, far: 'oasis_night', fore: false,
+    id: 'suna', shape: '手がかりで謎を解く', name: 'サハリア', sub: '砂の国', time: 'night', screens: 5, far: 'oasis_night', fore: false,
     map: [24, 10], // 世界地図の位置（緯度, 経度）
     hill: '#3a2a20', ground: ['#c8a46a', '#a07a4a', '#b89064'], tint: 'rgba(30,30,90,.06)', bscale: 1.0,
     props: [['cactus', 300, 140], ['palm', 900, 300], ['pyramid', 1780, 300], ['desert_temple', 4200, 320]],
@@ -370,7 +371,7 @@
 
   // ---------------------------------------------------------------- 7 橋渡し（同じ灯りを数える二人）
   C.push({
-    id: 'shirakabe', name: 'グレシア', sub: '白壁の港', time: 'night', screens: 6, far: 'river_bridge_night',
+    id: 'shirakabe', shape: '同じ習慣で他人がつながる', name: 'グレシア', sub: '白壁の港', time: 'night', screens: 6, far: 'river_bridge_night',
     map: [38, 23], // 世界地図の位置（緯度, 経度）
     hill: '#22303a', ground: ['#8aa06a', '#7a6a5a', '#c8b8a0'], tint: 'rgba(255,250,230,.0)', bscale: 1.1,
     props: [['tree_olive', 2600, 300], ['lighthouse', 5250, 420], ['boat_wreck', 5500, 200]],
@@ -414,7 +415,7 @@
 
   // ---------------------------------------------------------------- 船旅 灯台の数え方（グレシアで覚えた「七つ」が、夜の海の道しるべになる）
   C.push({
-    id: 'kamome', name: 'カモメ号', sub: '船の上・霧の島へ', time: 'night', screens: 5, far: 'sea_night', fore: false,
+    id: 'kamome', shape: '前の国の知識を使う', name: 'カモメ号', sub: '船の上・霧の島へ', time: 'night', screens: 5, far: 'sea_night', fore: false,
     ship: true, sea: true,
     map: [40, -13], // 地図の位置（グレシアから霧の島への航路のなかほど）
     hill: '#1a2440', ground: ['#8a6a48', '#5a4330', '#9a7a58'], tint: 'rgba(40,60,120,.06)', bscale: 1.0,
@@ -487,7 +488,7 @@
   
 // ---------------------------------------------------------------- 8 霧（追っている者が、追われていた）
   C.push({
-    id: 'kiri', name: 'ブリテニア', sub: '霧の島', time: 'morning', screens: 7, far: 'cliffs_morning', mid: 'trees',
+    id: 'kiri', shape: '追う者が追われていた', name: 'ブリテニア', sub: '霧の島', time: 'morning', screens: 7, far: 'cliffs_morning', mid: 'trees',
     map: [54, -2], // 世界地図の位置（緯度, 経度）
     hill: '#1c2430', ground: ['#4a6a4a', '#34443a', '#6a6a60'], tint: 'rgba(60,70,100,.08)', bscale: 1.0,
     props: [['tower_ivy', 3100, 380], ['rune_stone', 4100, 110], ['tree_dead', 4600, 260], ['stone_chapel', 6100, 360]],
@@ -541,7 +542,7 @@
 
   // ---------------------------------------------------------------- 9 火を分ける（頼まれて、最後の窓に灯りを届ける）
   C.push({
-    id: 'yuki', name: 'ノルヴィーク', sub: '雪の村', time: 'night', screens: 5, far: 'aurora_night', fore: false,
+    id: 'yuki', shape: '依頼の相手が依頼者本人', name: 'ノルヴィーク', sub: '雪の村', time: 'night', screens: 5, far: 'aurora_night', fore: false,
     map: [62, 10], // 世界地図の位置（緯度, 経度）
     hill: '#3a4458', ground: ['#e8eef4', '#c4ccd8', '#a8b0bc'], tint: 'rgba(120,140,190,.08)', bscale: 1.0,
     props: [['pine_snow', 300, 300], ['tree_snow', 2900, 300], ['pine_snow', 4400, 320]],
@@ -585,7 +586,7 @@
 
   // ---------------------------------------------------------------- 10 落とし物の持ち主探し（色の町で、色を手がかりに）
   C.push({
-    id: 'saka', name: 'チリーノ', sub: '坂の港', screens: 7, far: 'volcano',
+    id: 'saka', shape: '落とし物の持ち主探し', name: 'チリーノ', sub: '坂の港', screens: 7, far: 'volcano',
     map: [-33, -71], // 世界地図の位置（緯度, 経度）
     hill: '#2a2030', ground: ['#7a9a5a', '#5a4a3a', '#9a8a70'], tint: 'rgba(120,60,80,.06)', bscale: 1.05,
     props: [['palm', 2650, 300], ['step_pyramid', 5800, 360], ['cactus', 6300, 140]],
@@ -640,7 +641,7 @@
 
   // ---------------------------------------------------------------- 11 届いた荷（オランジェから同じ道を来たもの）
   C.push({
-    id: 'mizu', name: 'シャムラ', sub: '水上の町', time: 'noon', screens: 7, far: 'mangrove_noon',
+    id: 'mizu', shape: '遠い国からの荷が届く', name: 'シャムラ', sub: '水上の町', time: 'noon', screens: 7, far: 'mangrove_noon',
     map: [14, 100], // 世界地図の位置（緯度, 経度）
     hill: '#1e2a26', ground: ['#5a7a4a', '#4a3e30', '#7a6a54'], tint: 'rgba(40,90,80,.03)', bscale: 1.05,
     props: [['reeds', 3300, 120], ['palm', 4100, 320], ['jungle_temple_tree', 6000, 400]],
@@ -713,7 +714,7 @@
 
   // ---------------------------------------------------------------- 12 大事件（堤防のしみ。戦わずに、知らせて間に合わせる）
   C.push({
-    id: 'kazaguruma', name: 'ネーデラ', sub: '風車の低地', time: 'morning', screens: 6, far: 'windmills_morning',
+    id: 'kazaguruma', shape: '知らせて間に合わせる', name: 'ネーデラ', sub: '風車の低地', time: 'morning', screens: 6, far: 'windmills_morning',
     map: [52, 5], // 世界地図の位置（緯度, 経度）
     hill: '#2a3a34', ground: ['#6a9a5a', '#3e5a3c', '#7a6a54'], tint: 'rgba(120,140,170,.05)', bscale: 1.0,
     props: [['reeds', 500, 120], ['tree_green', 1700, 250], ['bush', 3000, 80], ['reeds2', 4900, 120]],
@@ -761,7 +762,7 @@
 
   // ---------------------------------------------------------------- 13 祈りがぶつかる（雨を待つ人が、降るなと願う人に雨を知らせる）
   C.push({
-    id: 'shio', name: 'ボリビアナ', sub: '塩の湖', time: 'noon', screens: 6, far: 'salt_lake_noon', fore: false,
+    id: 'shio', shape: '対立する二人を旅人がつなぐ', name: 'ボリビアナ', sub: '塩の湖', time: 'noon', screens: 6, far: 'salt_lake_noon', fore: false,
     map: [-20, -67], // 世界地図の位置（緯度, 経度）
     hill: '#b8b0a8', ground: ['#e8e4dc', '#d4cec4', '#c8beb0'], tint: 'rgba(200,220,255,.04)', bscale: 1.0,
     props: [['cactus', 600, 150], ['rock', 2200, 80], ['rock2', 4600, 100]],
@@ -813,7 +814,7 @@
   
 // ---------------------------------------------------------------- 14 言葉のない返事（黙った案内人の合図を読む）
   C.push({
-    id: 'mine', name: 'ネパラ', sub: '雪の峰', time: 'noon', screens: 6, far: 'snow_peaks_noon',
+    id: 'mine', shape: '言葉のない合図を読む', name: 'ネパラ', sub: '雪の峰', time: 'noon', screens: 6, far: 'snow_peaks_noon',
     map: [28, 84], // 世界地図の位置（緯度, 経度）
     hill: '#3a4656', ground: ['#8a9a7a', '#5a5a4a', '#8a8070'], tint: 'rgba(160,190,230,.05)', bscale: 1.0,
     props: [['pine_snow', 500, 280], ['rune_stone', 2900, 120], ['rock_moss', 4000, 110], ['pine_snow', 5200, 300]],
@@ -860,7 +861,7 @@
 
   // ---------------------------------------------------------------- 15 人ちがい（名人だと思われた旅人）
   C.push({
-    id: 'budou', name: 'イタリカ', sub: 'ぶどうの丘', time: 'morning', screens: 6, far: 'vineyard_morning',
+    id: 'budou', shape: '人ちがい', name: 'イタリカ', sub: 'ぶどうの丘', time: 'morning', screens: 6, far: 'vineyard_morning',
     map: [43, 12], // 世界地図の位置（緯度, 経度）
     hill: '#3a4a30', ground: ['#7a9a4a', '#5a5a3a', '#9a8460'], tint: 'rgba(255,220,180,.04)', bscale: 1.0,
     props: [['tree_olive', 400, 280], ['bush_berry', 1700, 90], ['tree_olive', 3600, 300], ['stump', 4800, 70]],
@@ -909,7 +910,7 @@
 
   // ---------------------------------------------------------------- 16 立ち位置（返ってこないあいさつの正体）
   C.push({
-    id: 'asahi', name: 'ケニアラ', sub: '朝日の草原', time: 'morning', screens: 6, far: 'savanna_morning',
+    id: 'asahi', shape: '見る向きのすれ違い', name: 'ケニアラ', sub: '朝日の草原', time: 'morning', screens: 6, far: 'savanna_morning',
     map: [0, 37], // 世界地図の位置（緯度, 経度）
     hill: '#4a3a24', ground: ['#a09a5a', '#6a5a3a', '#a88a60'], tint: 'rgba(255,200,140,.05)', bscale: 1.0,
     props: [['bush', 700, 80], ['tree_dead', 2100, 240], ['rock', 3300, 90], ['bush', 4700, 80]],
@@ -950,7 +951,7 @@
 
 // ---------------------------------------------------------------- 18 匂いの道案内（地図のない旧市街で、迷子を家へ送る）
   C.push({
-    id: 'medina', name: 'マロッカ', sub: '迷路の旧市街', time: 'noon', screens: 5, far: 'kasbah_noon',
+    id: 'medina', shape: '道案内', name: 'マロッカ', sub: '迷路の旧市街', time: 'noon', screens: 5, far: 'kasbah_noon',
     map: [32, -6],
     hill: '#5a3424', ground: ['#c08a5a', '#8a5a3a', '#d0a070'], tint: 'rgba(200,110,60,.05)', bscale: 1.0,
     props: [['palm', 300, 300], ['stool', 1250, 40], ['clay_oven', 1820, 120], ['flatbread_table', 1990, 60], ['copper_cart', 3000, 120], ['mint_table', 3620, 70], ['textile_stall', 4450, 170]],
@@ -1023,7 +1024,7 @@
   
 // ---------------------------------------------------------------- 19 絵の中の旅人（人を描けない画家の絵に、旅人が歩いて入る）
   C.push({
-    id: 'blanco', name: 'イスパーニャ', sub: '白い坂の町', time: 'noon', screens: 5, far: 'sunflower_noon',
+    id: 'blanco', shape: '旅人が作品の中に入る', name: 'イスパーニャ', sub: '白い坂の町', time: 'noon', screens: 5, far: 'sunflower_noon',
     map: [37, -4],
     hill: '#4a5a30', ground: ['#c8b890', '#9a8460', '#dccaa0'], tint: 'rgba(255,230,180,.04)', bscale: 1.0,
     props: [['tree_olive', 350, 280], ['wall_flowers', 1150, 110], ['easel', 1830, 130], ['tree_olive', 3200, 300], ['wall_painting', 4120, 120, (f, back) => back && f.walked], ['stump', 4500, 70]],
@@ -1077,7 +1078,7 @@
   
 // ---------------------------------------------------------------- 20 遠い道の模様（花嫁の服に、旅人の道のりを縫いこむ）
   C.push({
-    id: 'vyshyva', name: 'ウクリーナ', sub: '麦の村', time: 'morning', screens: 5, far: 'wheat_noon',
+    id: 'vyshyva', shape: '旅の道のりを贈る', name: 'ウクリーナ', sub: '麦の村', time: 'morning', screens: 5, far: 'wheat_noon',
     map: [49, 32],
     hill: '#5a5a2a', ground: ['#a8a050', '#6a6030', '#b8a868'], tint: 'rgba(255,230,140,.04)', bscale: 1.0,
     props: [['sunflowers', 300, 130], ['bride_dress', 1280, 150], ['well', 2750, 150], ['korovai_table', 3470, 80], ['haystack', 4150, 130], ['tree_green', 4600, 320]],
@@ -1126,7 +1127,7 @@
 
 // ---------------------------------------------------------------- 21 嵐を見届ける（四十年この海を避けてきた元船長と、甲板に立つ）
   C.push({
-    id: 'pelican', name: 'ペリカン号', sub: '船の上・黒い海', time: 'night', screens: 5, far: 'storm_sea', fore: false,
+    id: 'pelican', shape: '隣に立つ', name: 'ペリカン号', sub: '船の上・黒い海', time: 'night', screens: 5, far: 'storm_sea', fore: false,
     farBack: 'sea_morning', timeBack: 'morning', weatherBack: { clear: 6, wind: 2 },
     ship: true, sea: true, map: [43, 33],
     hill: '#1a2030', ground: ['#7a5e44', '#4e3a2a', '#8a6e50'], tint: 'rgba(30,40,70,.10)', bscale: 1.0,
@@ -1184,7 +1185,7 @@
   
 // ---------------------------------------------------------------- 22 名前の多い猫（町じゅうに名前のある猫を、引っこす子が連れていきたい）
   C.push({
-    id: 'bosporia', name: 'ボスポリア', sub: '海峡の町', time: 'morning', screens: 5, far: 'harbor_morning', map: [41, 29],
+    id: 'bosporia', shape: '名前の多いもの', name: 'ボスポリア', sub: '海峡の町', time: 'morning', screens: 5, far: 'harbor_morning', map: [41, 29],
     hill: '#3a3040', ground: ['#9a8a74', '#6a5a4a', '#aa9a80'], tint: 'rgba(255,200,190,.04)', bscale: 1.0,
     props: [['ship_barrels', 1250, 100], ['bollard', 3150, 60], ['pier', 3600, 110], ['ship_boat', 4300, 90]],
     buildings: [['med_white', 450, 0.95], ['it_townhouse', 1100, 0.9], ['pk_mosque', 2000, 0.9], ['sea_shop', 2700, 0.95]],
@@ -1235,7 +1236,7 @@
 
 // ---------------------------------------------------------------- 23 背の高さの印（取り壊される隊商宿の壁に、二十年前の息子の印を探す）
   C.push({
-    id: 'samarka', name: 'サマルカ', sub: '隊商宿の町', time: 'night', screens: 5, far: 'steppe_night', timeBack: 'morning', map: [39.6, 67],
+    id: 'samarka', shape: '失われる前に探す', name: 'サマルカ', sub: '隊商宿の町', time: 'night', screens: 5, far: 'steppe_night', timeBack: 'morning', map: [39.6, 67],
     hill: '#2a2438', ground: ['#a08a64', '#6a5640', '#b09a74'], tint: 'rgba(60,50,110,.08)', bscale: 1.0,
     props: [['palm', 350, 280], ['ship_barrels', 1250, 90], ['stool', 1900, 40], ['rock', 4500, 80]],
     buildings: [['caravan_gate', 450], ['adobe', 1500, 0.95], ['mideast_white', 2250, 0.9], ['caravan_wall', 3050], ['adobe', 4250, 0.85]],
@@ -1292,7 +1293,7 @@
   
 // ---------------------------------------------------------------- 24 はじめての手紙（夜学で字を習うハルモニが、孫の手紙を自分で読みたい）
   C.push({
-    id: 'golmok', name: 'コリアナ', sub: '秋の路地', time: 'morning', screens: 5, far: 'autumn_morning', map: [37.5, 127],
+    id: 'golmok', shape: '止まった人を待つ姿で動かす', name: 'コリアナ', sub: '秋の路地', time: 'morning', screens: 5, far: 'autumn_morning', map: [37.5, 127],
     hill: '#3a2a24', ground: ['#a07a50', '#6a4a34', '#b08a60'], tint: 'rgba(255,170,110,.05)', bscale: 1.0,
     props: [['tree_autumn', 400, 300], ['stool2', 1250, 40], ['tree_autumn', 2900, 320], ['bucket2', 3900, 50]],
     buildings: [['kr_gate', 450], ['kr_hanok', 950], ['kr_jars', 1900], ['kr_hanok', 2450, 0.9], ['kr_school', 3450]],
@@ -1345,7 +1346,7 @@
 
 // ---------------------------------------------------------------- 25 托鉢の戸口（言葉を交わせない僧と、閉じたままの戸）
   C.push({
-    id: 'laoria', name: 'ラオリア', sub: '朝の托鉢の村', time: 'morning', screens: 5, far: 'karst_morning', map: [19.9, 102.1],
+    id: 'laoria', shape: '止まった人を待つ姿で動かす', name: 'ラオリア', sub: '朝の托鉢の村', time: 'morning', screens: 5, far: 'karst_morning', map: [19.9, 102.1],
     hill: '#2a3a2e', ground: ['#7a8a50', '#4a4a30', '#8a7a58'], tint: 'rgba(255,210,150,.05)', bscale: 1.0,
     props: [['palm', 350, 300], ['temple_gold', 900, 260], ['reeds', 3700, 120], ['palm', 4500, 320]],
     buildings: [['sea_stilt', 1500, 0.9], ['stilt_house', 2300, 0.9], ['sea_stall', 3000, 0.95]],
@@ -1410,7 +1411,7 @@
   
 // ---------------------------------------------------------------- 26 声のないセレナーデ（金婚式の夜、声をなくした夫が窓の下で歌う）
   C.push({
-    id: 'mehikana', name: 'メヒカーナ', sub: 'サボテンの町', time: 'dusk', screens: 5, far: 'mesa_noon', timeBack: 'morning', map: [20.7, -103.3],
+    id: 'mehikana', shape: '止まった人を待つ姿で動かす', name: 'メヒカーナ', sub: 'サボテンの町', time: 'dusk', screens: 5, far: 'mesa_noon', timeBack: 'morning', map: [20.7, -103.3],
     hill: '#5a3424', ground: ['#b08a5a', '#7a5a3a', '#c09a6a'], tint: 'rgba(255,140,80,.07)', bscale: 1.0,
     props: [['cactus', 300, 150], ['wall_flowers', 1500, 110], ['cactus', 2900, 170], ['stool2', 3700, 40]],
     buildings: [['mx_house', 600], ['mx_church', 1900], ['adobe', 3050, 0.9], ['mx_house', 4100, 0.95]],
@@ -1452,6 +1453,127 @@
         if (S.back) return [['npc', 'normal', 'ゆうべは、楽団だけ来てくれたの。……あの人、風邪ですって。']];
         f.lipsKnown = true;
         return [['me', '', '（女の人は、わたしの口もとをじっと見てから、答えた）'], ['npc', 'normal', '旅の人ね。ごめんなさい、わたし、耳がほとんど聞こえないの。口を見て、話を聞くのよ。'], ['npc', 'normal', '今夜は、主人が窓の下で歌ってくれるはずなの。'], ['npc', 'normal', '……五十年前も、声なんか、聞こえてなかったのよ。口の形で、ぜんぶ覚えてるの。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 27 旗泥棒の騒ぎ（砂の城の大会の旗が消える。犯人は、昔の仕事を覚えていた犬）
+  C.push({
+    id: 'brazila', shape: '騒動の犯人に理由がある', name: 'ブラジーラ', sub: '砂の城の浜', time: 'noon', screens: 5, far: 'beach_noon', map: [-13, -38.5],
+    hill: '#3a5a4a', ground: ['#e0cc98', '#c0a878', '#ead8a8'], tint: 'rgba(255,230,160,.04)', bscale: 1.0,
+    props: [['palm', 300, 320], ['ship_boat', 1400, 80], ['palm', 2400, 300], ['boat_wreck', 3300, 120], ['ship_rope', 3950, 50]],
+    buildings: [['br_townhouse', 700, 0.9], ['sea_barrack', 4100, 0.9]],
+    npcs: [
+      { id: 'lia', name: '審判のリア', actor: 'flagkid', x: 650, face: 1 },
+      { id: 'teo', name: 'テオ', actor: 'islandboy', x: 1700, face: -1 },
+      { id: 'bia', name: 'ビア', actor: 'schoolgirl', x: 2000, face: -1 },
+      { id: 'joao', name: '網元のジョアン', actor: 'old_fisher', x: 4300, face: -1 }
+    ],
+    places: [
+      { id: 'prints', name: '砂の足あと', x: 2900, verb: '見る' },
+      { id: 'hut', name: '網小屋の前', x: 3800, verb: '見る' }
+    ],
+    weather: { clear: 7, wind: 2, squall: 1 },
+    animals: [['dog_dane', 3900, { mode: 'stay', back: 'not' }], ['dog_dane', 1100, { mode: 'stay', back: 'only' }], ['crow', 2600]],
+    talk: {
+      lia(S) {
+        const f = S.f;
+        if (S.back && f.flagsBack) return [['npc', 'normal', 'ボルトの旗わたし、大人気！ 来年から、毎年あの子の係ね。'], ['npc', 'normal', '……一等の旗、ボルトがくわえたまま、なかなか放さなかったけど。']];
+        if (S.back) return [['npc', 'normal', '大会、旗なしでやったの。だれが勝ったか、だれも覚えてない。']];
+        if (f.flagsBack) return [['npc', 'normal', 'ボルトが、旗を一本ずつ、勝った城の前に置いていくの！ 審判より正確！']];
+        if (f.liaTold) return [['npc', 'normal', 'お昼の笛までに旗がないと、大会はおしまい！']];
+        f.liaTold = true;
+        return [['npc', 'normal', '旗泥棒！ だれか、旗泥棒を見なかった？'], ['npc', 'normal', '砂の城の大会の旗が、また消えたの！ 立てると、すぐなくなる。これで十本目！'], ['npc', 'normal', 'テオとビアが、おたがいに「あいつが犯人だ」って言いあってる。……お昼の笛までに、なんとかしなきゃ。']];
+      },
+      teo(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ビアの城、ゆうべの波で流されたって。……おれのも。いっしょに、また作る。']];
+        if (f.flagsBack) return [['npc', 'normal', '犬かよ！ ……ビアに、あやまらなきゃ。いや、ビアもおれを疑ってたんだから、おあいこだ。']];
+        return [['npc', 'normal', '犯人はビアだ。あいつの城、旗が消えるたびに、ちょっとだけ大きくなってる。'], ['npc', 'normal', '……証拠？ ないけど、顔がそう言ってる。']];
+      },
+      bia(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'テオと、城を二つつなげて、橋をかけることにしたの。……流されないように、波の来ないところで。']];
+        if (f.flagsBack) return [['npc', 'normal', 'テオじゃなかったの？ ……あいつの顔、犯人っぽいのに。']];
+        return [['npc', 'normal', '犯人はテオよ。旗が消えるとき、いつもあいつ、こっちを見てないもの。'], ['npc', 'normal', '見てないってことは、何か隠してるってことでしょ。']];
+      },
+      prints(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（大きな足あとが、城から城へ、きちんと並んで続いている）']];
+        f.printsSeen = true;
+        return [['me', '', '（城のまわりに、子どもの足あとがたくさん。その中に、手のひらより大きな、犬の足あとがある）'], ['me', '', '（犬の足あとは、まっすぐ東の網小屋へ続いている。行きも帰りも、まっすぐ）']];
+      },
+      hut(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（網小屋の前には、網の浮きの旗だけが、きちんと干してある）']];
+        if (!f.printsSeen) return [['me', '', '（網小屋の前に、大きな犬が寝そべっている）']];
+        f.hutSeen = true;
+        return [['me', '', '（網小屋の前に、色とりどりの小旗が、十本、きれいに並べてある）'], ['me', '', '（そのとなりで、大きな犬が、しっぽをふって、こちらを見ている。……ほめてほしそうに）']];
+      },
+      joao(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ボルトは、けさも旗を十本くわえて、浜へ走っていった。'], ['npc', 'normal', '……もう網は張っておらんのに、仕事があるってのは、いいもんだ。']];
+        if (f.flagsBack) return [['npc', 'normal', 'ボルトに、まちがえた旗は持ってくるなと、言っておいた。……分かっとる顔はしておらんが。']];
+        if (!f.hutSeen) return [['npc', 'normal', 'ボルトかい？ わしの犬だ。昔は、いい相棒だった。']];
+        f.flagsBack = true;
+        return [['npc', 'normal', '……その旗、あんたのかい？ いや、浜の子らのか。'], ['npc', 'normal', 'ボルトの仕事はな、昼になったら、海に立てた網の旗を集めてくることだった。'], ['npc', 'normal', 'わしが網元をやめて、もう二年。……旗を見ると、まだ昼の仕事だと思うんだな。'], ['npc', 'normal', 'よし、こうしよう。旗は、ボルトに運ばせる。勝った城の前に、一本ずつ置いてこいってな。'], ['insight', '', '浜でいちばんの旗泥棒は、二年前の仕事を、まだまじめに続けていた。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 28 まっすぐ漕ぐ（渡し舟が休みの湖を、旅人が自分で渡る）
+  C.push({
+    id: 'kanadia', shape: '旅人が教わって自分で渡る', name: 'カナディア', sub: '湖の渡し', time: 'morning', screens: 5, far: 'lake_reeds_morning', map: [46.5, -80],
+    hill: '#24382e', ground: ['#5a7a4a', '#3a4a34', '#7a7058'], tint: 'rgba(180,200,220,.05)', bscale: 1.0,
+    props: [['pine', 300, 300], ['reeds', 1300, 120], ['pier', 1700, 110], ['ship_boat', 2300, 80], ['reeds2', 3000, 120], ['pine', 4500, 320]],
+    buildings: [['lumber_hut', 700, 1.3], ['lumber_hut', 3900, 1.2]],
+    npcs: [
+      { id: 'aiyana', name: '舟づくりのアヤナ', actor: 'forager', x: 1150, face: 1 },
+      { id: 'gord', name: '向こう岸のゴード', actor: 'wrench', x: 3600, face: -1 }
+    ],
+    places: [
+      { id: 'notice', name: '渡し場の札', x: 600, verb: '読む' },
+      { id: 'canoe', name: '桟橋のカヌー', x: 1900, verb: '漕ぐ' },
+      { id: 'pine1', name: '岸の一本杉', x: 4400, verb: '見る' }
+    ],
+    weather: { clear: 5, fog: 3, drizzle: 2 },
+    animals: [['duck', 1400], ['duck', 2700], ['dog_husky', 3300], ['hawk', 2200, { mode: 'fly' }]],
+    talk: {
+      notice(S) {
+        if (S.back) return [['me', '', '（「渡し舟　休み」の札の下に、新しい紙。「カヌー、貸します。漕ぎ方は、アヤナに」）']];
+        return [['me', '', '（「渡し舟　休み。船頭、腰痛のため」）'], ['me', '', '（湖の向こうに、道の続きが見える。……ぐるりと回れば、三日はかかりそうだ）']];
+      },
+      aiyana(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '帰りは、だれにも教わらずに、まっすぐ来たね。'], ['npc', 'normal', '……札に、わたしの名前を書いておいた。漕ぎ方は、アヤナにって。教えるの、けっこう好きみたい。']];
+        if (f.crossed) return [['npc', 'normal', '渡れたね。帰りも、同じように。']];
+        if (f.spun) { f.tip = true;
+          return [['npc', 'normal', 'ぐるぐる回ってたね。見てたよ。'], ['npc', 'normal', '初めての人は、みんなパドルを見るの。水をかく手もとばかり。'], ['npc', 'normal', '向こう岸の、一本杉を見て。目を離さずに漕げば、舟はそっちへ行く。']]; }
+        if (f.aiyanaTold) return [['npc', 'normal', 'カヌーは桟橋。だいじょうぶ、ひっくり返っても、この湖は浅いから。……たぶん。']];
+        f.aiyanaTold = true;
+        return [['npc', 'normal', '向こうへ渡りたいの？ 渡し舟は、船頭さんの腰が治るまで休み。'], ['npc', 'normal', 'わたしの作ったカヌーなら、貸してあげる。漕ぐのは、あなた。'], ['npc', 'normal', '……教える？ うーん、まずは、自分でやってみて。']];
+      },
+      canoe(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（カヌーで、西の岸へ戻る。一本杉の代わりに、アヤナの小屋の煙を見て漕ぐ）'], ['me', '', '（舟は、まっすぐ進んだ）'], ['insight', '', '手もとを見るのをやめたら、舟はまっすぐ進んだ。']];
+        if (!f.aiyanaTold) return [['me', '', '（細長い木のカヌーが、桟橋につないである。パドルが一本）']];
+        if (f.crossed) return [['me', '', '（カヌーは、向こう岸の桟橋に、ちゃんとつないである）']];
+        if (!f.tip) { f.spun = true;
+          return [['me', '', '（カヌーに乗って、右、左と漕ぐ。……舟が、くるりと回った）'], ['me', '', '（もう一度。……また回った。三回まわって、桟橋に戻ってきてしまった）']]; }
+        f.crossed = true;
+        return [['me', '', '（向こう岸の一本杉を見る。手もとは見ない）'], ['me', '', '（ひとかき、ひとかき。……舟が、杉のほうへ、すうっと進んでいく）'], ['me', '', '（気づくと、向こう岸の桟橋に着いていた）']];
+      },
+      gord(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'また漕いでいくのかい。渡し舟より、そっちのほうが早いんじゃないか。']];
+        if (f.crossed) return [['npc', 'normal', 'おや、カヌーで来たのかい。アヤナの舟だな。'], ['npc', 'normal', 'あの子、自分の舟に人を乗せるのは、これが初めてだよ。'], ['npc', 'normal', '「人に教えるのは苦手」って言ってたが。……ちゃんと渡ってきたじゃないか。']];
+        return [['npc', 'normal', 'おや、歩いて回ってきたのかい？ 三日の道を？ ……顔が、ちっとも疲れておらんな。']];
+      },
+      pine1(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（一本杉の根もとに、カヌーの形の小さな彫り物が置いてある。だれかの目印らしい）']];
+        return [['me', '', '（湖から見えた一本杉。近くで見ると、ずいぶん曲がっている）'], ['me', '', '（……遠くからだと、まっすぐに見えたのに）']];
       }
     }
   });
