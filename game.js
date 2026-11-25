@@ -242,6 +242,38 @@ function renderJournal() {
   const n = C.filter(c => st.visited[c.id]).length;
   $('jv').innerHTML = `<span>${n} / ${C.length}</span>` + C.map(c => st.visited[c.id] ? `<span>${esc(c.name)}</span>` : '<span class="no">？？？</span>').join('');
 }
+// ================= 地図（行った国に印。印か一覧から、その国へ移る） =================
+const LANDS = [ // おおまかな大陸の輪郭 [経度, 緯度]
+  [[-168,66],[-140,70],[-95,72],[-75,62],[-60,50],[-70,43],[-80,25],[-97,18],[-105,20],[-118,32],[-125,42],[-130,55],[-150,60]],
+  [[-97,18],[-83,9],[-77,8],[-80,0],[-81,-5],[-75,-15],[-71,-30],[-73,-50],[-68,-55],[-58,-38],[-48,-25],[-35,-8],[-50,0],[-60,10],[-77,11],[-88,15]],
+  [[-50,60],[-20,70],[-30,82],[-60,80],[-70,76]],
+  [[-10,36],[-9,43],[-2,47],[2,51],[8,55],[5,58],[10,63],[20,70],[40,68],[60,70],[80,73],[110,77],[140,72],[170,68],[180,65],[160,58],[140,52],[130,42],[122,30],[120,22],[108,18],[105,10],[100,2],[98,10],[92,20],[80,10],[77,8],[72,20],[60,25],[57,22],[55,17],[44,13],[38,22],[34,30],[28,36],[26,40],[20,40],[18,42],[12,44],[10,40],[3,42],[-5,36]],
+  [[-17,21],[-10,30],[-6,36],[10,37],[20,32],[32,31],[37,20],[43,12],[51,11],[40,-10],[35,-25],[20,-35],[15,-28],[12,-15],[9,4],[-8,5],[-17,14]],
+  [[-6,50],[1,51],[-2,58],[-6,57]], [[130,31],[141,36],[142,45],[140,41],[131,34]],
+  [[114,-22],[130,-12],[142,-11],[153,-27],[147,-38],[135,-35],[115,-34]], [[95,5],[105,-6],[120,-9],[140,-5],[118,2]]
+];
+const mxy = ([la, lo]) => [lo + 180, 80 - la];
+function renderMap() {
+  const svg = $('msvg'), here = st.cur;
+  let h = LANDS.map(l => `<polygon class="land" points="${l.map(([lo, la]) => mxy([la, lo]).join(',')).join(' ')}"/>`).join('');
+  for (const c of C) {
+    if (!c.map || !st.visited[c.id]) continue;
+    const [x, y] = mxy(c.map), me = c === here;
+    h += `<g class="mk${me ? ' here' : ''}" data-id="${c.id}"><circle cx="${x}" cy="${y}" r="${me ? 3.6 : 2.8}"/><text x="${x + 4}" y="${y + 2.4}">${c.name}</text></g>`;
+  }
+  svg.innerHTML = h;
+  $('mlist').innerHTML = C.filter(c => st.visited[c.id]).map(c =>
+    `<li class="${c === here ? 'here' : ''}"><button data-id="${c.id}">${c.i + 1}. ${c.name}<small>${c.sub}${c === here ? '・いまここ' : ''}</small></button></li>`).join('');
+}
+function toggleMap(on) { st.map = on ?? !st.map; $('map').classList.toggle('on', st.map); if (st.map) { st.auto = 0; renderMap(); } }
+function warpTo(id) {
+  const c = C.find(c => c.id === id); if (!c) return;
+  st.x = c.x0 + 160; st.dir = 1; st.auto = 0; st.run = false; toggleMap(false); save();
+}
+$('map').addEventListener('click', e => { const el = e.target.closest('[data-id]'); if (el) warpTo(el.dataset.id); });
+$('bm').addEventListener('click', e => { e.stopPropagation(); toggleJournal(false); toggleMap(); });
+$('mclose').addEventListener('click', () => toggleMap(false));
+
 function toggleJournal(on) { st.journal = on ?? !st.journal; $('journal').classList.toggle('on', st.journal); if (st.journal) renderJournal(); }
 
 // ================= 吊り橋（オランジェの谷） =================
@@ -270,6 +302,7 @@ function nearTarget() {
 }
 function act() {
   if (st.journal) return toggleJournal(false);
+  if (st.map) return toggleMap(false);
   if (ins.classList.contains('on') || st.talking) return advance();
   if (st.t < st.cool) return;
   const t = nearTarget(); if (t) startTalk(t);
@@ -280,6 +313,7 @@ addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === 'd') st.keyR = true;
   if (e.key === ' ' || e.key === 'Enter' || e.key === 'z') { e.preventDefault(); act(); }
   if (e.key === 'j' || e.key === 'J') toggleJournal();
+  if (e.key === 'm' || e.key === 'M') toggleMap();
 });
 addEventListener('keyup', e => { if (e.key === 'ArrowLeft' || e.key === 'a') st.keyL = false; if (e.key === 'ArrowRight' || e.key === 'd') st.keyR = false; });
 function holdBtn(el, k) {
@@ -292,7 +326,7 @@ st.auto = 0; st.run = false;
 try { if (localStorage.getItem('see-swiped')) $('hint').style.opacity = 0; } catch (_) {}
 {
   let sx = 0, sy = 0, down = false;
-  const game = $('game'), ui = e => e.target.closest('button,#talk,#insight,#journal');
+  const game = $('game'), ui = e => e.target.closest('button,#talk,#insight,#journal,#map');
   game.addEventListener('pointerdown', e => { if (ui(e)) return; down = true; sx = e.clientX; sy = e.clientY; });
   game.addEventListener('pointerup', e => {
     if (!down) return; down = false;
@@ -305,7 +339,7 @@ try { if (localStorage.getItem('see-swiped')) $('hint').style.opacity = 0; } cat
   });
   game.addEventListener('pointercancel', () => { down = false; });
 }
-$('bt').addEventListener('click', e => { e.stopPropagation(); st.auto = 0; st.run = false; act(); }); $('bj').addEventListener('click', () => toggleJournal());
+$('bt').addEventListener('click', e => { e.stopPropagation(); st.auto = 0; st.run = false; act(); }); $('bj').addEventListener('click', () => { toggleMap(false); toggleJournal(); });
 $('jclose').addEventListener('click', () => toggleJournal(false));
 talk.addEventListener('click', advance); ins.addEventListener('click', advance);
 
@@ -557,7 +591,7 @@ function showBanner(c) {
 let last = 0, lastCam = null, saveT = 0;
 function frame(ts) {
   const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts; st.t += dt;
-  const busy = st.talking || st.journal || ins.classList.contains('on');
+  const busy = st.talking || st.journal || st.map || ins.classList.contains('on');
   if (busy) { st.auto = 0; st.run = false; }
   if (st.keyL || st.keyR) st.auto = 0;
   const v = busy ? 0 : ((st.keyR ? 1 : 0) - (st.keyL ? 1 : 0)) || st.auto;
@@ -570,7 +604,7 @@ function frame(ts) {
   { const t = busy ? null : nearTarget(), bt = $('bt'), lab = t && t.isPlace ? t.verb : '話す';
     bt.classList.toggle('near', !!t); bt.classList.toggle('hide', !!busy);
     if (bt.textContent !== lab) bt.textContent = lab;
-    $('bj').classList.toggle('hide', !!st.journal); }
+    $('bj').classList.toggle('hide', !!st.journal || !!st.map); $('bm').classList.toggle('hide', !!st.journal || !!st.map); }
   st.maxX = Math.max(st.maxX, st.x);
   const here = countryAt(st.x);
   if (here !== st.cur) {

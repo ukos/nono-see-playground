@@ -19,6 +19,7 @@
 //   places          : 見る・聞くだけの場所 { id, name, x, verb('見る'/'聞く'), when(f) }。会話は talk[id]
 //   animals         : 動物 [種類, x, {mode('walk'/'stay'/'fly'), range, face, when(f), back('only'/'not'), h, shy, follow(f, back), moveTo:[条件, x]}]
 //                     種類と大きさ・ふるまいは game.js の ANIM。絵は assets/animals/<種類>_<コマ>.webp
+//   map             : 世界地図に印をつける位置 [緯度, 経度]（もじった実在の国のあたり）
 //   weather         : 起こりやすい天候と重み { clear, drizzle, squall, typhoon, wind, fog, densefog, snow }
 //   talk            : 住人ごとの会話。S を受け取り行の配列を返す
 //                     行＝[話し手, 表情, 文]。話し手は 'npc'（話している相手）/ 'me'（nono）/ 'insight'（気づき）
@@ -38,6 +39,7 @@
   // ---------------------------------------------------------------- 1 噂の確かめ（証言を集めて、自分の目で見る）
   C.push({
     id: 'hanano', name: 'オランジェ', sub: '花野の村', screens: 7, far: 'flower', mid: 'trees',
+    map: [46, 2], // 世界地図の位置（緯度, 経度）
     hill: '#1e2a2a', ground: ['#5d8a55', '#3e5a3c', '#6b5a45'], tint: 'rgba(80,40,90,.10)', bscale: 1.6,
     props: [['tree_green', 450, 260], ['bush_berry', 1050, 90], ['tree_autumn', 1980, 250], ['stump', 2950, 70], ['rock_moss', 3700, 110], ['tree_green', 4300, 280], ['pine', 4700, 300]],
     buildings: [['house_small', 560], ['bakery', 1100], ['house_large', 1640], ['elder_house', 2260], ['lumber_hut', 3080]],
@@ -96,6 +98,7 @@
   // ---------------------------------------------------------------- 2 下手な手伝い（旅人の曲がった一列が、だれかの帰る口実になる）
   C.push({
     id: 'take', name: 'ジャポネ', sub: '棚田の里', time: 'morning', screens: 5, far: 'rice_terraces_morning',
+    map: [36, 138], // 世界地図の位置（緯度, 経度）
     hill: '#1f2a22', ground: ['#5f8a4a', '#3a5034', '#7a6a50'], tint: 'rgba(40,60,40,.04)', bscale: 1.05,
     props: [['torii', 200, 250], ['stone_lantern', 1300, 170], ['pine', 2150, 300], ['stone_lantern', 3150, 170], ['jp_castle', 4300, 430]],
     buildings: [['machiya', 450], ['teahouse', 1150], ['nagaya', 3000], ['samurai_mansion', 3700, 0.95]],
@@ -161,6 +164,7 @@
 // ---------------------------------------------------------------- 3 二重の秘密（うそをついている人と、気づかないふりの人）
   C.push({
     id: 'koutou', name: 'キャセイ', sub: '紅灯の都', time: 'night', screens: 6, far: 'mystic_night',
+    map: [30, 110], // 世界地図の位置（緯度, 経度）
     hill: '#2a1e26', ground: ['#6a7a4a', '#4a3e34', '#8a7258'], tint: 'rgba(40,20,80,.10)', bscale: 1.3,
     props: [['tree_old_roots', 700, 260], ['pine', 2900, 280], ['stone_lantern', 4000, 150]],
     buildings: [['cn_paifang', 300], ['cn_house', 1000], ['cn_teahouse', 1650], ['cn_nagaya', 2450, 1.1], ['cn_mansion', 3550, 1.15], ['cn_tower', 4650, 1.2]],
@@ -200,6 +204,7 @@
   // ---------------------------------------------------------------- 4 歩くことが話になる（旅人が知らずに羊を連れて帰る）
   C.push({
     id: 'kaze', name: 'モンゴーラ', sub: '風の草原', screens: 6, far: 'highland',
+    map: [47, 104], // 世界地図の位置（緯度, 経度）
     hill: '#243024', ground: ['#7aa05a', '#4a6a3a', '#8a7a5a'], tint: 'rgba(60,80,40,.06)', bscale: 1.0,
     props: [['rock', 600, 90], ['bush', 2000, 80], ['watchtower', 3100, 300], ['rock2', 5200, 100]],
     buildings: [['yurt_smoke', 700], ['sheep_pen', 1300, 1.1], ['yurt', 2400], ['stable', 3500, 1.15], ['yurt', 4700, 0.9]],
@@ -242,6 +247,7 @@
   // ---------------------------------------------------------------- 5 話が市場を一周する（旅人の話が、知らない話になって戻ってくる）
   C.push({
     id: 'iro', name: 'インダスタン', sub: '色の都', screens: 6, far: 'twilight',
+    map: [25, 78], // 世界地図の位置（緯度, 経度）
     hill: '#2e2018', ground: ['#8a8a4a', '#6a4a30', '#a08060'], tint: 'rgba(140,80,30,.08)', bscale: 1.0,
     props: [['palm', 300, 300], ['palm', 2250, 320], ['bush_berry', 4200, 90]],
     buildings: [['in_market', 500], ['in_haveli', 1150], ['in_blue', 1900], ['pk_lahore', 2650], ['pk_mosque', 3400], ['pk_mountain', 4550]],
@@ -302,6 +308,7 @@
 // ---------------------------------------------------------------- 6 水の行方を調べる（足あとで真相を見る）
   C.push({
     id: 'suna', name: 'サハリア', sub: '砂の国', time: 'night', screens: 5, far: 'oasis_night', fore: false,
+    map: [24, 10], // 世界地図の位置（緯度, 経度）
     hill: '#3a2a20', ground: ['#c8a46a', '#a07a4a', '#b89064'], tint: 'rgba(30,30,90,.06)', bscale: 1.0,
     props: [['cactus', 300, 140], ['palm', 900, 300], ['pyramid', 1780, 300], ['desert_temple', 4200, 320]],
     buildings: [['adobe', 500], ['mideast_white', 1300], ['adobe', 2700, 0.9], ['mideast_white', 3600, 0.95]],
@@ -348,6 +355,7 @@
   // ---------------------------------------------------------------- 7 橋渡し（同じ灯りを数える二人）
   C.push({
     id: 'shirakabe', name: 'グレシア', sub: '白壁の港', time: 'night', screens: 6, far: 'river_bridge_night',
+    map: [38, 23], // 世界地図の位置（緯度, 経度）
     hill: '#22303a', ground: ['#8aa06a', '#7a6a5a', '#c8b8a0'], tint: 'rgba(255,250,230,.0)', bscale: 1.1,
     props: [['tree_olive', 2600, 300], ['lighthouse', 5250, 420], ['boat_wreck', 5500, 200]],
     buildings: [['gr_chapel', 350], ['es_white', 900], ['it_townhouse', 1550], ['med_white', 2100, 0.9], ['es_gate', 2900], ['it_tuscan', 3500], ['gr_temple', 4400]],
@@ -391,6 +399,7 @@
   // ---------------------------------------------------------------- 8 霧（追っている者が、追われていた）
   C.push({
     id: 'kiri', name: 'ブリテニア', sub: '霧の島', time: 'morning', screens: 7, far: 'cliffs_morning', mid: 'trees',
+    map: [54, -2], // 世界地図の位置（緯度, 経度）
     hill: '#1c2430', ground: ['#4a6a4a', '#34443a', '#6a6a60'], tint: 'rgba(60,70,100,.08)', bscale: 1.0,
     props: [['tower_ivy', 3100, 380], ['rune_stone', 4100, 110], ['tree_dead', 4600, 260], ['stone_chapel', 6100, 360]],
     buildings: [['uk_tudor', 400], ['uk_terrace', 900], ['uk_terrace', 1180], ['city_building', 1700, 0.95], ['white_mansion', 2500, 0.95], ['castle_gate', 3500], ['treehouse', 5000, 0.9]],
@@ -442,6 +451,7 @@
   // ---------------------------------------------------------------- 9 火を分ける（頼まれて、最後の窓に灯りを届ける）
   C.push({
     id: 'yuki', name: 'ノルヴィーク', sub: '雪の村', time: 'night', screens: 5, far: 'aurora_night', fore: false,
+    map: [62, 10], // 世界地図の位置（緯度, 経度）
     hill: '#3a4458', ground: ['#e8eef4', '#c4ccd8', '#a8b0bc'], tint: 'rgba(120,140,190,.08)', bscale: 1.0,
     props: [['pine_snow', 300, 300], ['tree_snow', 2900, 300], ['pine_snow', 4400, 320]],
     buildings: [['nordic_red', 500], ['nordic_red', 1500, 0.85], ['lumber_hut', 2400, 1.4], ['nordic_red', 3400, 1.05]],
@@ -485,6 +495,7 @@
   // ---------------------------------------------------------------- 10 落とし物の持ち主探し（色の町で、色を手がかりに）
   C.push({
     id: 'saka', name: 'チリーノ', sub: '坂の港', screens: 7, far: 'volcano',
+    map: [-33, -71], // 世界地図の位置（緯度, 経度）
     hill: '#2a2030', ground: ['#7a9a5a', '#5a4a3a', '#9a8a70'], tint: 'rgba(120,60,80,.06)', bscale: 1.05,
     props: [['palm', 2650, 300], ['step_pyramid', 5800, 360], ['cactus', 6300, 140]],
     buildings: [['mx_house', 400], ['mx_church', 1000], ['br_townhouse', 1550], ['br_hillside', 2150], ['cl_hill_house', 2950], ['ar_boca', 3450], ['cl_stilt', 4150], ['ar_estancia', 5300]],
@@ -532,6 +543,7 @@
   // ---------------------------------------------------------------- 11 届いた荷（オランジェから同じ道を来たもの）
   C.push({
     id: 'mizu', name: 'シャムラ', sub: '水上の町', time: 'noon', screens: 7, far: 'mangrove_noon',
+    map: [14, 100], // 世界地図の位置（緯度, 経度）
     hill: '#1e2a26', ground: ['#5a7a4a', '#4a3e30', '#7a6a54'], tint: 'rgba(40,90,80,.03)', bscale: 1.05,
     props: [['reeds', 3300, 120], ['palm', 4100, 320], ['jungle_temple_tree', 6000, 400]],
     buildings: [['sea_barrack', 400], ['sea_twostory', 950], ['sea_stall', 1550], ['sea_shop', 2150], ['sea_tall', 2750], ['sea_stilt', 3500], ['stilt_house', 4400], ['sea_barrack', 5300, 0.9]],
@@ -601,6 +613,7 @@
   // ---------------------------------------------------------------- 12 大事件（堤防のしみ。戦わずに、知らせて間に合わせる）
   C.push({
     id: 'kazaguruma', name: 'ネーデラ', sub: '風車の低地', time: 'morning', screens: 6, far: 'windmills_morning',
+    map: [52, 5], // 世界地図の位置（緯度, 経度）
     hill: '#2a3a34', ground: ['#6a9a5a', '#3e5a3c', '#7a6a54'], tint: 'rgba(120,140,170,.05)', bscale: 1.0,
     props: [['reeds', 500, 120], ['tree_green', 1700, 250], ['bush', 3000, 80], ['reeds2', 4900, 120]],
     buildings: [['thatched_farm', 900, 0.9], ['uk_terrace', 2700], ['nordic_red', 3300, 0.9], ['house_small', 5000, 1.5]],
@@ -648,6 +661,7 @@
   // ---------------------------------------------------------------- 13 祈りがぶつかる（雨を待つ人が、降るなと願う人に雨を知らせる）
   C.push({
     id: 'shio', name: 'ボリビアナ', sub: '塩の湖', time: 'noon', screens: 6, far: 'salt_lake_noon', fore: false,
+    map: [-20, -67], // 世界地図の位置（緯度, 経度）
     hill: '#b8b0a8', ground: ['#e8e4dc', '#d4cec4', '#c8beb0'], tint: 'rgba(200,220,255,.04)', bscale: 1.0,
     props: [['cactus', 600, 150], ['rock', 2200, 80], ['rock2', 4600, 100]],
     buildings: [['adobe', 300, 0.8], ['adobe', 4500, 0.7]],
@@ -699,6 +713,7 @@
 // ---------------------------------------------------------------- 14 言葉のない返事（黙った案内人の合図を読む）
   C.push({
     id: 'mine', name: 'ネパラ', sub: '雪の峰', time: 'noon', screens: 6, far: 'snow_peaks_noon',
+    map: [28, 84], // 世界地図の位置（緯度, 経度）
     hill: '#3a4656', ground: ['#8a9a7a', '#5a5a4a', '#8a8070'], tint: 'rgba(160,190,230,.05)', bscale: 1.0,
     props: [['pine_snow', 500, 280], ['rune_stone', 2900, 120], ['rock_moss', 4000, 110], ['pine_snow', 5200, 300]],
     buildings: [['pk_mountain', 700, 0.95], ['pk_mountain', 3300, 0.8]],
@@ -739,6 +754,7 @@
   // ---------------------------------------------------------------- 15 人ちがい（名人だと思われた旅人）
   C.push({
     id: 'budou', name: 'イタリカ', sub: 'ぶどうの丘', time: 'morning', screens: 6, far: 'vineyard_morning',
+    map: [43, 12], // 世界地図の位置（緯度, 経度）
     hill: '#3a4a30', ground: ['#7a9a4a', '#5a5a3a', '#9a8460'], tint: 'rgba(255,220,180,.04)', bscale: 1.0,
     props: [['tree_olive', 400, 280], ['bush_berry', 1700, 90], ['tree_olive', 3600, 300], ['stump', 4800, 70]],
     buildings: [['it_tuscan', 600], ['it_townhouse', 1300, 0.9], ['it_tuscan', 4100, 0.85]],
@@ -786,6 +802,7 @@
   // ---------------------------------------------------------------- 16 立ち位置（返ってこないあいさつの正体）
   C.push({
     id: 'asahi', name: 'ケニアラ', sub: '朝日の草原', time: 'morning', screens: 6, far: 'savanna_morning',
+    map: [0, 37], // 世界地図の位置（緯度, 経度）
     hill: '#4a3a24', ground: ['#a09a5a', '#6a5a3a', '#a88a60'], tint: 'rgba(255,200,140,.05)', bscale: 1.0,
     props: [['bush', 700, 80], ['tree_dead', 2100, 240], ['rock', 3300, 90], ['bush', 4700, 80]],
     buildings: [['thatched_farm', 300, 0.8], ['adobe', 4900, 0.8]],
