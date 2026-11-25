@@ -74,7 +74,7 @@ for (const c of world.C) {
 
 // ---- 上半身だけの絵（192×256 の胸像）は街に立たせない
 {
-  const BUST = new Set(['villager', 'elder', 'archer', 'porter', 'craftsman', 'wizard', 'mermaid', 'lumber', 'elf', 'yui']);
+  const BUST = new Set(['villager', 'elder', 'archer', 'porter', 'craftsman', 'wizard', 'mermaid', 'lumber', 'elf', 'yui', 'goatgirl', 'traveler']);
   world.C.forEach(c => c.npcs.forEach(n => { if (n.actor && BUST.has(n.actor)) R(c.id, 'E', `役者 ${n.actor} は上半身だけの絵。全身の住人に替える: ${n.id}`); }));
 }
 
