@@ -1238,7 +1238,7 @@
     id: 'samarka', name: 'サマルカ', sub: '隊商宿の町', time: 'night', screens: 5, far: 'steppe_night', timeBack: 'morning', map: [39.6, 67],
     hill: '#2a2438', ground: ['#a08a64', '#6a5640', '#b09a74'], tint: 'rgba(60,50,110,.08)', bscale: 1.0,
     props: [['palm', 350, 280], ['ship_barrels', 1250, 90], ['stool', 1900, 40], ['rock', 4500, 80]],
-    buildings: [['es_gate', 700], ['adobe', 1500, 0.95], ['mideast_white', 2300, 0.95], ['in_haveli', 3300, 0.9], ['adobe', 4200, 0.9]],
+    buildings: [['caravan_gate', 450], ['adobe', 1500, 0.95], ['mideast_white', 2250, 0.9], ['caravan_wall', 3050], ['adobe', 4250, 0.85]],
     npcs: [
       { id: 'yusuf', name: '鍵番のユスフ', actor: 'keykeeper', x: 600, face: 1 },
       { id: 'rahman', name: '楽師のラフマン', actor: 'minstrel', x: 1900, face: -1 },
@@ -1295,14 +1295,14 @@
     id: 'golmok', name: 'コリアナ', sub: '秋の路地', time: 'morning', screens: 5, far: 'autumn_morning', map: [37.5, 127],
     hill: '#3a2a24', ground: ['#a07a50', '#6a4a34', '#b08a60'], tint: 'rgba(255,170,110,.05)', bscale: 1.0,
     props: [['tree_autumn', 400, 300], ['stool2', 1250, 40], ['tree_autumn', 2900, 320], ['bucket2', 3900, 50]],
-    buildings: [['cn_house', 700, 0.9], ['teahouse', 1500, 0.9], ['cn_nagaya', 2400, 0.95], ['house_small', 3500, 1.4]],
+    buildings: [['kr_gate', 450], ['kr_hanok', 950], ['kr_jars', 1900], ['kr_hanok', 2450, 0.9], ['kr_school', 3450]],
     npcs: [
       { id: 'postman', name: '郵便屋のジフン', actor: 'postman', x: 650, face: 1 },
       { id: 'halmoni', name: 'スンジャばあちゃん', actor: 'fisher_granny', x: 1300, face: -1 },
       { id: 'mina2', name: 'となりのミンジ', actor: 'hanbok', x: 2300, face: -1 },
-      { id: 'teacher', name: '夜学の先生', actor: 'teacher', x: 3600, face: -1 }
+      { id: 'teacher', name: '夜学の先生', actor: 'teacher', x: 3350, face: -1 }
     ],
-    places: [{ id: 'board', name: '夜学の黒板', x: 3950, verb: '見る' }],
+    places: [{ id: 'board', name: '夜学の黒板', x: 3620, verb: '見る' }],
     weather: { clear: 6, wind: 2, drizzle: 2 },
     animals: [['dog_shiba', 1700], ['crow', 2900], ['cat_calico', 4300]],
     talk: {
