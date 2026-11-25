@@ -72,6 +72,12 @@ for (const c of world.C) {
       for (const l of fn(st) || []) if (l[0] === 'me' && RIDE.test(l[2]) && !/乗れ|乗らな/.test(l[2])) R(c.id, 'W', `nono が乗り物に乗る描写（ride なし）: ${id}「${l[2].slice(0, 30)}」`); } catch (_) {} } } });
 }
 
+// ---- 上半身だけの絵（192×256 の胸像）は街に立たせない
+{
+  const BUST = new Set(['villager', 'elder', 'archer', 'porter', 'craftsman', 'wizard', 'mermaid', 'lumber', 'elf', 'yui']);
+  world.C.forEach(c => c.npcs.forEach(n => { if (n.actor && BUST.has(n.actor)) R(c.id, 'E', `役者 ${n.actor} は上半身だけの絵。全身の住人に替える: ${n.id}`); }));
+}
+
 // ---- 骨組みのラベル：同じ型の国が続かないように
 world.C.forEach((c, i) => {
   if (!c.shape) { R(c.id, 'W', '骨組みのラベル（shape）がない'); return; }

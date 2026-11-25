@@ -49,7 +49,7 @@
     props: [['tree_green', 450, 260], ['bush_berry', 1050, 90], ['tree_autumn', 1980, 250], ['stump', 2950, 70], ['rock_moss', 3700, 110], ['tree_green', 4300, 280], ['pine', 4700, 300]],
     buildings: [['house_small', 560], ['bakery', 1100], ['house_large', 1640], ['elder_house', 2260], ['lumber_hut', 3080]],
     npcs: [
-      { id: 'villager', name: 'ゴンジ（村人）', actor: 'villager', x: 940, face: -1 },
+      { id: 'villager', name: 'ゴンジ（村人）', actor: 'prospector', x: 940, face: -1 },
       { id: 'elder', name: '長老', actor: 'scholar', x: 2420, face: -1 },
       { id: 'lumber', name: 'ダイ（木こり）', actor: 'bearhunter', x: 3360, face: -1 },
       { id: 'porter', name: 'ミツ（運び屋）', actor: 'courier', x: 4020, face: 1, when: f => !f.boardsSent }
@@ -2451,6 +2451,124 @@
         if (f.dizzy) { f.rescued = true;
           return [['me', '', '（犬に、マントのすそをくわえられて、引っぱられるように歩いた。……気がつくと、井戸の横の日陰に座っていた）'], ['npc', 'normal', 'ほら、水。ゆっくりね。……昼の赤い道を、ひとりで歩いてきたのかい。'], ['npc', 'normal', 'レッドが吠えたんで、また来たなと思ったよ。この夏で三人目だ。'], ['npc', 'normal', 'あの子は、子犬のときに、昼の道で倒れてたのを、わたしが拾ったんだ。……だから、昼の道を見張ってるのさ。']]; }
         return [['npc', 'normal', '……旅の人かい。昼のうちに、よくここまで来たね。'], ['npc', 'normal', '水場は、うちの井戸だけだよ。好きなだけ飲んでいきな。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 45 飛んでいったリボン（旅人のなくしたリボンが、雲の中の曲がり角の目印になっていた）
+  C.push({
+    id: 'huangsha', shape: '旅人の落とし物が役に立つ', name: 'ホアンシャナ', sub: '雲の上の峠', time: 'night', screens: 5, far: 'sea_of_clouds_night', timeBack: 'morning', map: [30.1, 118.2],
+    weatherBack: { fog: 7, clear: 1 },
+    hill: '#1e2430', ground: ['#6a6a64', '#4a4a46', '#7a7a72'], tint: 'rgba(120,140,200,.06)', bscale: 1.0,
+    props: [['pine', 300, 280], ['stone_lantern', 1200, 160], ['rock_moss', 2000, 80], ['pine', 3000, 300], ['rock', 3900, 70]],
+    buildings: [['cn_teahouse', 800, 0.8], ['cn_paifang', 4300, 0.8]],
+    npcs: [
+      { id: 'yun', name: '茶店のシャオユン', actor: 'qipao', x: 1050, face: 1 },
+      { id: 'wang', name: '担ぎ屋のラオ・ワン', actor: 'miner2', x: 2200, face: -1 },
+      { id: 'chen', name: '峠守りのチェン老人', actor: 'monk', x: 3700, face: -1 }
+    ],
+    places: [
+      { id: 'gust', name: '雲の吹き上がる崖', x: 2700, verb: '見る' },
+      { id: 'bend', name: '峠の曲がり角', x: 3350, verb: '見る' }
+    ],
+    weather: { clear: 6, wind: 4 },
+    animals: [['crow', 1600], ['hawk', 2600, { mode: 'fly' }]],
+    talk: {
+      yun(S) {
+        const f = S.f;
+        if (S.back && f.ribbonUsed) return [['npc', 'normal', 'けさは霧が濃かったのに、担ぎ屋さんたち、一人も道をまちがえなかったって。'], ['npc', 'normal', '……赤いのが見えたから、って。何のことかしら。']];
+        if (S.back) return [['npc', 'normal', '霧の朝は、担ぎ屋さんたちがよく道をまちがえるの。……今朝も、一人。']];
+        if (f.yunTold) return [['npc', 'normal', '雲の上の夜は、星が近いでしょう。手をのばしたら、届きそう。']];
+        f.yunTold = true;
+        return [['me', '', '（峠の茶店で、娘さんが、湯をわかしながら空を見上げている）'], ['npc', 'normal', 'いらっしゃい。……見て、雲が海みたい。この峠の夜だけの景色よ。'], ['npc', 'normal', 'でも、朝になると、この雲がのぼってきて、道を全部かくしちゃうの。'], ['npc', 'normal', '担ぎ屋さんたちは、それでも夜明け前に荷を運ぶ。……東の曲がり角で、去年、ふたり落ちかけたわ。']];
+      },
+      wang(S) {
+        const f = S.f;
+        if (S.back && f.ribbonUsed) return [['npc', 'normal', '赤い布、見えたか？ 霧の中で、あれだけが浮かんで見える。曲がるのが、怖くなくなった。']];
+        if (S.back) return [['npc', 'normal', '霧の朝は、足の裏で道を探すんだ。……おととい、片足が空を踏んだ。']];
+        return [['npc', 'normal', '担ぎ屋のワンだ。夜明け前に、この峠を荷を担いで越える。'], ['npc', 'normal', '霧の朝はな、曲がり角が分からんのよ。白い岩も、白い霧も、同じ色だ。'], ['npc', 'normal', '……何か、目立つ目印があればいいんだがな。白くない、何か。']];
+      },
+      gust(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（崖の下から、朝の雲が、ゆっくりわき上がってくる）']];
+        if (f.ribbonLost) return [['me', '', '（崖の下は、雲の海。……リボンは、もう見えない）']];
+        f.ribbonLost = true;
+        return [['me', '', '（崖のふちに立つと、下から、ごうっと雲まじりの風が吹き上がった）'], ['me', '', '（あっ、と言うまに、マントを留めていた赤いリボンが、ほどけて空へ）'], ['me', '', '（くるくると回りながら、東のほうへ流されていった）'], ['me', '', '（……旅に出る日に、母さんが結んでくれたリボンだった）']];
+      },
+      bend(S) {
+        const f = S.f;
+        if (S.back && f.ribbonUsed) return [['me', '', '（霧の中に、赤いものが一つ、ぽつんと浮かんでいる。……わたしのリボンだ）'], ['me', '', '（曲がり角の杭に結ばれて、霧の中で、道の曲がる方へなびいている）']];
+        if (S.back) return [['me', '', '（霧で、白い岩と白い道の区別がつかない。足もとを確かめながら曲がる）']];
+        return [['me', '', '（道が急に左へ折れている。右は、雲の海へ落ちる崖）'], ['me', '', '（曲がり角に、古い杭が一本。何も結ばれていない）']];
+      },
+      chen(S) {
+        const f = S.f;
+        if (S.back && f.ribbonUsed) return [['npc', 'normal', '赤い布は、霧の朝ほどよく見える。……担ぎ屋たちが、角で手を合わせていくようになった。'], ['insight', '', 'なくして悲しかった赤いリボンは、雲の上の曲がり角で、だれかの足を止める目印になっていた。']];
+        if (S.back) return [['npc', 'normal', '……霧の朝は、杭に何か結んでやれればと思うんだがな。白いものしか、持っとらん。']];
+        if (f.ribbonUsed) return [['npc', 'normal', '気に入らんかったら、ほどいて持っていけ。……あんたのものだ。']];
+        if (f.ribbonLost) { f.ribbonUsed = true;
+          return [['npc', 'normal', '旅の人。……ゆうべ、風が赤い布を運んできてな。この崖の、わしの小屋の屋根に引っかかった。'], ['npc', 'normal', 'あんたのマントの留め紐が、ないようだが。……これか。'], ['me', '', '（チェン老人の手に、赤いリボン。……でも、老人は、それを返す前に、曲がり角の杭を見た）'], ['npc', 'normal', '……いや、頼みがある。これを、あの杭に結ばせてくれんか。霧の朝、白くないものが、ひとつほしかった。'], ['me', '', '（少し考えて、うなずいた。老人が、杭にリボンを結んだ）']]; }
+        return [['npc', 'normal', '峠守りのチェンだ。四十年、この曲がり角を見ておる。'], ['npc', 'normal', '霧の朝に、この角で何人もが空を踏みかけた。……目印を立てても、白い霧に、白い杭ではな。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 46 炎を運ぶ稜線（教わったことを、こんどは旅人が子どもに教える）
+  C.push({
+    id: 'hawaina', shape: '旅人が教える側に回る', name: 'ハワイナ', sub: '溶岩の稜線', time: 'night', screens: 5, far: 'lava_night', timeBack: 'morning', map: [19.6, -155.5],
+    hill: '#1a1414', ground: ['#3a3434', '#242020', '#4a4040'], tint: 'rgba(255,90,40,.07)', bscale: 1.0,
+    props: [['palm', 300, 300], ['tree_dead', 1500, 220], ['rock', 2300, 70], ['rock2', 2700, 90], ['palm', 4400, 320]],
+    buildings: [['stilt_house', 700, 0.85], ['thatched_farm', 4000, 0.85]],
+    npcs: [
+      { id: 'keoni', name: 'ケオニ（足をくじいた兄）', actor: 'islandboy', x: 950, face: 1 },
+      { id: 'kai', name: 'カイ', actor: 'leafkid', x: 1350, face: -1 },
+      { id: 'tutu', name: 'トゥトゥ・レイ', actor: 'fruitseller', x: 4250, face: -1 }
+    ],
+    places: [
+      { id: 'ridge', name: '細い溶岩の稜線', x: 2500, verb: '教える', when: f => f.kaiTold },
+      { id: 'torch', name: '祭りの火床', x: 4450, verb: '見る' }
+    ],
+    weather: { clear: 7, wind: 3 },
+    animals: [['rooster', 500], ['dog_brown', 3600], ['owl', 1900, { mode: 'stay' }]],
+    talk: {
+      keoni(S) {
+        const f = S.f;
+        if (S.back && f.kaiCrossed) return [['npc', 'normal', 'カイのやつ、けさ「向こうを見て歩くんだよ」って、おれに教えに来た。……生意気だ。'], ['npc', 'normal', '……足が治ったら、来年は、あいつのうしろを歩くよ。']];
+        if (S.back) return [['npc', 'normal', '火は、ことしは届かなかった。……トゥトゥの家の火床、冷たいままだって。']];
+        if (f.keoniTold) return [['npc', 'normal', '月が昇るまでに、トゥトゥの火床へ。……それが、決まりなんだ。']];
+        f.keoniTold = true;
+        return [['me', '', '（男の子が、足首に布を巻いて、松明を抱えたまま座りこんでいる）'], ['npc', 'normal', '……転んだ。祭りの火を、東のトゥトゥの家まで運ぶ役なのに。'], ['npc', 'normal', '月が昇るまでに火床に火を入れないと、ことしの祭りは始まらない。……弟のカイに頼むしかないんだけど。']];
+      },
+      kai(S) {
+        const f = S.f;
+        if (S.back && f.kaiCrossed) return [['npc', 'normal', '旅の人の言うとおりだった。向こうの火床の灯りだけ見てたら、足が勝手に歩いた。'], ['npc', 'normal', '……旅の人は、だれに教わったの？']];
+        if (S.back) return [['npc', 'normal', '……こわかった。下を見たら、足が動かなくなった。']];
+        if (f.kaiCrossed) return [['npc', 'normal', '……渡れた！ 渡れたよ！']];
+        if (f.kaiTold) return [['npc', 'normal', '……あの稜線、両側が真っ黒な崖なの。下を見たら、もうだめ。']];
+        f.kaiTold = true;
+        return [['npc', 'normal', '兄ちゃんの代わりに、火を運べって。……むり。'], ['npc', 'normal', '東へ行くには、細い溶岩の稜線を渡らなきゃいけない。両側は、真っ黒な崖。'], ['npc', 'normal', '足もとを見ないと落ちそうで、足もとを見ると、足が動かなくなるの。']];
+      },
+      ridge(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（朝の稜線は、夜ほど細く見えない。両側の黒い岩に、小さな草が生えている）']];
+        if (f.kaiCrossed) return [['me', '', '（稜線の向こうで、火床の火が、ぱちぱちと燃えている）']];
+        f.kaiCrossed = true;
+        return [['me', '', '（カイと並んで、稜線の入口に立つ。松明の火が、風でゆれる）'], ['me', '', '手もとを見ないで。向こうの、トゥトゥの家の灯りだけを見て。'], ['me', '', '……湖の国で、カヌーの漕ぎ方を、そう教わったんだ。'], ['me', '', '（カイが、ごくりとつばを飲んで、遠くの灯りを見た。……一歩、二歩）'], ['me', '', '（ふり返らずに、カイは稜線を渡りきった。わたしは、そのうしろを歩いた）']];
+      },
+      torch(S) {
+        const f = S.f;
+        if (S.back && f.kaiCrossed) return [['me', '', '（火床の灰が、まだあたたかい。そのまわりに、踊った足あとが、たくさん）']];
+        if (S.back) return [['me', '', '（火床は、冷たいままだ）']];
+        if (f.kaiCrossed) return [['me', '', '（火床に、カイの松明から火が移った。炎が、夜空に高く上がる）']];
+        return [['me', '', '（石で囲んだ火床。まだ、火は入っていない）']];
+      },
+      tutu(S) {
+        const f = S.f;
+        if (S.back && f.kaiCrossed) return [['npc', 'normal', 'カイが、ゆうべ一晩じゅう、あんたのまねをして歩いてたよ。顔を上げて、遠くを見て。'], ['insight', '', '湖の国で教わったことは、炎の稜線で手わたしたときに、はじめてわたしのものになった。']];
+        if (S.back) return [['npc', 'normal', '火がなくても、月は昇る。……でも、祭りのない夜は、長いね。']];
+        if (f.kaiCrossed) return [['npc', 'normal', 'カイ！ ……弟のほうが来たかい。足が震えてるね。でも、火は消えてない。']];
+        return [['npc', 'normal', '……火は、まだかね。月が、山の肩まで来てるよ。']];
       }
     }
   });
