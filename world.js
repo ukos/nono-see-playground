@@ -1233,5 +1233,115 @@
     }
   });
 
+// ---------------------------------------------------------------- 23 背の高さの印（取り壊される隊商宿の壁に、二十年前の息子の印を探す）
+  C.push({
+    id: 'samarka', name: 'サマルカ', sub: '隊商宿の町', time: 'night', screens: 5, far: 'steppe_night', timeBack: 'morning', map: [39.6, 67],
+    hill: '#2a2438', ground: ['#a08a64', '#6a5640', '#b09a74'], tint: 'rgba(60,50,110,.08)', bscale: 1.0,
+    props: [['palm', 350, 280], ['ship_barrels', 1250, 90], ['stool', 1900, 40], ['rock', 4500, 80]],
+    buildings: [['es_gate', 700], ['adobe', 1500, 0.95], ['mideast_white', 2300, 0.95], ['in_haveli', 3300, 0.9], ['adobe', 4200, 0.9]],
+    npcs: [
+      { id: 'yusuf', name: '鍵番のユスフ', actor: 'keykeeper', x: 600, face: 1 },
+      { id: 'rahman', name: '楽師のラフマン', actor: 'minstrel', x: 1900, face: -1 },
+      { id: 'aziz', name: 'アジズじいさん', actor: 'ca_elder', x: 2700, face: -1, when: (f, back) => !back },
+      { id: 'aziz2', name: 'アジズじいさん', actor: 'ca_elder', x: 1400, face: 1, when: (f, back) => back && f.azizKnows }
+    ],
+    places: [{ id: 'wall', name: '隊商宿の長い壁', x: 3500, verb: '探す' }],
+    weather: { clear: 7, wind: 3 },
+    animals: [['camel', 1000, { face: -1 }], ['dog_brown', 3000]],
+    talk: {
+      yusuf(S) {
+        const f = S.f;
+        if (S.back && f.azizKnows) return [['npc', 'normal', '壁は、けさ取り壊した。……あの印のところだけ、石を切り出しておいた。'], ['npc', 'normal', 'じいさんの家の戸口に、はめてある。見ていくといい。']];
+        if (S.back) return [['npc', 'normal', '壁は、けさ取り壊した。百年分の印も、いっしょにな。']];
+        if (f.yusufTold) return [['npc', 'normal', '鍵を回すのは、夜明けの鐘のあとだ。それまでは、門は開けておく。']];
+        f.yusufTold = true;
+        return [['me', '', '（大きな鍵束を下げた男が、門の前で、ため息をついている）'], ['npc', 'normal', '旅の人、この宿に泊まる最後の客になるかもしれんよ。'], ['npc', 'normal', '百年続いた隊商宿だが、夜明けに鍵を返して、壁ごと取り壊す。新しい道を通すんだと。'], ['npc', 'normal', '……奥のアジズじいさんは、まだ壁の前から動かない。']];
+      },
+      rahman(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '壁がなくなっても、歌は残る。きのうの夜、一つ増えた。「背くらべの歌」だ。']];
+        if (f.rahmanHint) return [['npc', 'normal', '旅立つ日の背の高さに刻む。帰ってきたら、となりに今の背を刻む。それが、ならわしさ。']];
+        f.rahmanHint = true;
+        return [['npc', 'normal', 'この宿の壁の印を歌にして、四十年になる。'], ['npc', 'normal', '旅に出る者は、壁に自分の印を刻んでいく。目の高さじゃない、その日の背の高さにな。'], ['npc', 'normal', '帰ってきたら、となりに今の背を刻む。……帰ってこなかった印のほうが、ずっと多いがね。']];
+      },
+      aziz(S) {
+        const f = S.f;
+        if (f.azizKnows) return [['npc', 'normal', 'となりに、わしの印を刻んでおく。夜明けまでに。']];
+        if (f.markFound) { f.azizKnows = true;
+          return [['me', '', 'ありました。ざくろと星。膝の高さに。'], ['npc', 'normal', '……膝？'], ['npc', 'normal', '……そうだ。あの子は、十二だった。わしは、あの子の背の高さを、忘れておった。'], ['npc', 'normal', '毎晩、自分の目の高さばかり探しておった。二十年たった、今のあの子の背をな。']]; }
+        if (f.azizTold) return [['npc', 'normal', 'ざくろの実に、星が一つ。……わしの目では、もう見つからん。']];
+        f.azizTold = true;
+        return [['npc', 'normal', '息子が二十年前、ここから隊商について西へ出た。'], ['npc', 'normal', 'この壁に、印を刻んでいったはずだ。ざくろの実に、星が一つ。'], ['npc', 'normal', '夜明けには、壁ごとなくなる。毎晩探したが、わしの目では見つからん。']];
+      },
+      wall(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（壁のあった場所は、平らにならされている。新しい道の杭が、点々と打たれている）']];
+        if (f.azizKnows) return [['me', '', '（ざくろと星の印のとなりに、新しい印が刻まれている。ずっと高いところに）']];
+        if (f.markFound) return [['me', '', '（膝の高さの、ざくろと星。……アジズじいさんに知らせよう）']];
+        if (!f.azizTold) return [['me', '', '（壁いっぱいに、ラクダ、太陽、名前、手の形……数えきれない印が刻まれている）']];
+        if (!f.rahmanHint) return [['me', '', '（目の高さの印を、端から順に見ていく。ざくろは、見つからない）'], ['me', '', '（上のほうは、暗くてよく見えない）']];
+        f.markFound = true;
+        return [['me', '', '（その日の背の高さ……しゃがんで、低いところを探していく）'], ['me', '', '（膝の高さに、小さなざくろの実。そのとなりに、星が一つ）'], ['me', '', '（……思っていたより、ずっと低い）']];
+      },
+      aziz2(S) {
+        return [['npc', 'normal', '息子の印の石を、戸口にはめた。毎朝くぐるたびに、十二のあの子と背くらべをしとる。'], ['npc', 'normal', '……わしのほうが、ずっと高い。まだ、負けておらん。'], ['insight', '', '壁の印は、旅立った日の背の高さのまま、二十年待っていた。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 24 はじめての手紙（夜学で字を習うハルモニが、孫の手紙を自分で読みたい）
+  C.push({
+    id: 'golmok', name: 'コリアナ', sub: '秋の路地', time: 'morning', screens: 5, far: 'autumn_morning', map: [37.5, 127],
+    hill: '#3a2a24', ground: ['#a07a50', '#6a4a34', '#b08a60'], tint: 'rgba(255,170,110,.05)', bscale: 1.0,
+    props: [['tree_autumn', 400, 300], ['stool2', 1250, 40], ['tree_autumn', 2900, 320], ['bucket2', 3900, 50]],
+    buildings: [['cn_house', 700, 0.9], ['teahouse', 1500, 0.9], ['cn_nagaya', 2400, 0.95], ['house_small', 3500, 1.4]],
+    npcs: [
+      { id: 'postman', name: '郵便屋のジフン', actor: 'postman', x: 650, face: 1 },
+      { id: 'halmoni', name: 'スンジャばあちゃん', actor: 'fisher_granny', x: 1300, face: -1 },
+      { id: 'mina2', name: 'となりのミンジ', actor: 'hanbok', x: 2300, face: -1 },
+      { id: 'teacher', name: '夜学の先生', actor: 'teacher', x: 3600, face: -1 }
+    ],
+    places: [{ id: 'board', name: '夜学の黒板', x: 3950, verb: '見る' }],
+    weather: { clear: 6, wind: 2, drizzle: 2 },
+    animals: [['dog_shiba', 1700], ['crow', 2900], ['cat_calico', 4300]],
+    talk: {
+      postman(S) {
+        const f = S.f;
+        if (S.back && f.teacherTold) return [['npc', 'normal', '返事、あずかりました！ ……封筒の宛名、ばあちゃんの字です。'], ['npc', 'normal', '一字ずつ、まっすぐ。郵便屋を十年やって、いちばん読みやすい宛名です。']];
+        if (S.back) return [['npc', 'normal', '手紙は、ミンジさんが読んであげたそうです。……ばあちゃん、ちょっと悔しそうだったな。']];
+        if (f.postTold) return [['npc', 'normal', '返事は、あしたの朝の便で。それを逃すと、次は十日後です。']];
+        f.postTold = true;
+        return [['me', '', '（郵便屋が、封筒を一通持ったまま、ばあちゃんの家の前で困っている）'], ['npc', 'normal', '海の向こうのお孫さんからの手紙です。でも、受け取ってもらえなくて。'], ['npc', 'normal', '「読んでやろうか」と言ったら、怒られました。……返事は、あしたの朝の便までなんですが。']];
+      },
+      halmoni(S) {
+        const f = S.f;
+        if (S.back && f.teacherTold) return [['npc', 'normal', 'ゆうべ、読んだよ。ひと晩かかった。'], ['npc', 'normal', '孫が「ハルモニ、元気？」と書いとった。……七十年生きて、はじめて自分で読んだ言葉だ。'], ['npc', 'normal', '返事も書いた。「げんき」の一言だけだがね。'], ['insight', '', 'ひと晩かけて読んだ手紙に、ひと晩かけて書いた一言の返事が出ていった。']];
+        if (S.back) return [['npc', 'normal', 'ミンジに読んでもらったよ。……いい手紙だった。いい手紙だったがね。']];
+        if (f.halmoniTold) return [['npc', 'normal', '読んでもらうのは、かんたんだ。でも、それじゃあ、わしの手紙にならん。']];
+        f.halmoniTold = true;
+        return [['npc', 'normal', '旅の人、あんた、この字が読めるかい。……読めない？ そりゃよかった。'], ['npc', 'normal', '孫の手紙はね、わしが最初に読むと決めとる。'], ['npc', 'normal', 'この春から、夜学で字を習っとる。七十にもなってね。まだ、自分の名前しか書けんが。']];
+      },
+      mina2(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ゆうべ、ばあちゃんの家の灯りが、朝まで消えなかったの。……字を、一つずつ読んでたのね。']];
+        return [['npc', 'normal', 'スンジャばあちゃんの手紙？ わたしが読んであげるって言ったんだけど。'], ['npc', 'normal', '……ばあちゃん、手紙を胸に当てて、首をふるの。'], ['npc', 'normal', '夜学の先生なら、何か手を考えてくれるかも。路地のいちばん奥よ。']];
+      },
+      board(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（黒板に、ふるえた大きな字で「ハルモニ、げんき」と書いてある。消されずに残っている）']];
+        return [['me', '', '（黒板に、たどたどしい字が並んでいる。いちばん下に、「スンジャ」と大きく書いてある）'], ['me', '', '（ほかの字より、ずっと濃い。何度もなぞったあとがある）']];
+      },
+      teacher(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ゆうべの授業は、生徒が一人だけでした。教科書は、海の向こうからの手紙です。']];
+        if (f.teacherTold) return [['npc', 'normal', '今夜は、手紙の字だけを教えます。教科書は、使いません。']];
+        if (!f.halmoniTold) return [['npc', 'normal', 'ここは夜学です。昼は、ただの物置ですがね。']];
+        f.teacherTold = true;
+        return [['me', '', 'スンジャさんが、お孫さんの手紙を、自分で読みたいそうです。あしたの朝までに。'], ['npc', 'normal', '……あしたの朝まで。一晩で、手紙一通ぶんの字。'], ['npc', 'normal', '無理です、と言うのが先生の仕事かもしれません。でも、あの人は名前を三百回書いた人だ。'], ['npc', 'normal', '今夜は、特別授業にしましょう。手紙に出てくる字だけ、教えます。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
