@@ -4346,5 +4346,102 @@
     }
   });
 
+// ---------------------------------------------------------------- 81 同じ願いはまとめられる（一本の太い布になる）
+  C.push({
+    id: 'armenia', shape: '同じ願いはまとめられる', name: 'アルメニナ', sub: '願いの木の峠', time: 'noon', screens: 5, far: 'mountains', timeBack: 'dusk', map: [40.2, 44.5],
+    weatherBack: { wind: 8, drizzle: 2 },
+    hill: '#6a5a4a', ground: ['#a08a68', '#806a48', '#b09a78'], tint: 'rgba(255,225,190,.05)', bscale: 1.0,
+    props: [['tree_old_roots', 2500, 360], ['rock2', 1300, 90], ['stool2', 3100, 40], ['cairn_built', 4200, 120]],
+    buildings: [['elder_house', 800, 0.85], ['gr_chapel', 3700, 0.85]],
+    npcs: [
+      { id: 'ani', name: 'アニ', actor: 'ukr_girl', x: 900, face: 1 },
+      { id: 'lusine', name: '杏売りのルシネ', actor: 'florist', x: 1800, face: -1 },
+      { id: 'aram', name: '木守りのアラムじいさん', actor: 'ca_elder', x: 3400, face: -1 }
+    ],
+    places: [{ id: 'wishtree', name: '願いの木', x: 2500, verb: '読む' }],
+    weather: { clear: 5, wind: 4 },
+    animals: [['sheep', 1400], ['crow', 2500], ['dog_spot', 4000]],
+    talk: {
+      ani(S) {
+        const f = S.f;
+        if (S.back && f.am_done) return [['npc', 'normal', 'わたしの「おばあちゃんの足」、村の七人と同じだった。……七人ぶん、太い布になったよ。'], ['npc', 'normal', '風がすごいのに、枝、ちゃんと持ってる。……七人で、ひっぱってるみたい。']];
+        if (S.back) return [['npc', 'normal', '……風、強くなってきた。わたしの布、どうなるの。']];
+        if (f.am_ani) return [['npc', 'normal', '自分の布を外す人なんて、いないよ。……わたしも、外したくない。']];
+        f.am_ani = true;
+        return [['me', '', '（女の子が、峠の大きな木を見上げて、手に残った布の切れはしをにぎっている）'], ['npc', 'normal', '旅の人。あれは願いの木。村の人は、願いを布に書いて、枝に結ぶの。'], ['npc', 'normal', '今夜、嵐が来るの。布が重すぎて、いちばん大きい枝が、折れそうなんだって。'], ['npc', 'normal', 'アラムじいさんが、布を半分外せって。……でも、だれも、自分の願いは外したくないの。']];
+      },
+      lusine(S) {
+        const f = S.f;
+        if (S.back && f.am_done) return [['npc', 'normal', '「雨を」の布、十二人ぶんよ。……今夜の嵐は、願いすぎかしら。']];
+        if (S.back) return [['npc', 'normal', '杏の木は、風に強いの。……願いの木も、そうだといいんだけど。']];
+        return [['npc', 'normal', 'わたしの布？ 「杏の畑に、雨を」。……毎年、同じことを書いてるの。'], ['npc', 'normal', '外すなんて、とんでもない。去年は、ちゃんと降ったんだから。']];
+      },
+      wishtree(S) {
+        const f = S.f;
+        if (S.back && f.am_done) return [['me', '', '（嵐の風に、太い布が何本も、旗のようになびいている。枝は、しなっても折れない）']];
+        if (S.back) return [['me', '', '（嵐の風に、布がばたばた鳴る。大きな枝が、ぎしりときしんだ）']];
+        f.am_read = true;
+        return [['me', '', '（枝という枝に、色とりどりの布。……読んでみる）'], ['me', '', '（「杏の畑に雨を」「雨を」「畑に雨」……。「おばあちゃんの足がよくなりますように」が、筆跡ちがいで、いくつも）'], ['me', '', '（同じ願いが、ちがう手で、何度も結ばれている）']];
+      },
+      aram(S) {
+        const f = S.f;
+        if (S.back && f.am_done) return [['npc', 'normal', '布は半分になった。願いは、ひとつも減っとらん。……わしの木守り、五十年で、いちばんの仕事だ。']];
+        if (S.back) return [['npc', 'normal', '……嵐が来る。枝が折れたら、願いもいっしょに落ちる。']];
+        if (f.am_done) return [['npc', 'normal', '同じ願いの人は、同じ布に名前を書きに来い。……村じゅうに、そう伝えてくれ。']];
+        if (!f.am_read) return [['me', '', '（おじいさんが、木の根もとで、はしごに手をかけたまま、ためらっている）'], ['npc', 'normal', '……布を外せと言っても、だれも外さん。わしにも、自分の布がある。']];
+        f.am_done = true;
+        return [['me', '', '（おじいさんが、木の根もとで、はしごに手をかけたまま、ためらっている）'], ['me', '', '布を読みました。「雨を」と「おばあちゃんの足」が、何人ぶんも、別々に結ばれていました。'], ['npc', 'normal', '……同じ願いが、ばらばらに。なら、外さんでいい。まとめればいい。'], ['npc', 'normal', '同じ願いは、一本の布に、全員の名前を書いて結びなおす。……布は減る。願いは減らん。'], ['insight', '', '同じ願いは、まとめると、一本の太い布になった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 82 同じ人への贈り物で競り合う（二人は、同じ歌を返そうとしていた）
+  C.push({
+    id: 'parisia', shape: '同じ人への贈り物で競り合う', name: 'パリジア', sub: 'のみの市', time: 'morning', screens: 5, far: 'river_bridge_night', timeBack: 'dusk', map: [48.9, 2.35],
+    hill: '#5a5a6a', ground: ['#9a9088', '#7a7068', '#aaa098'], tint: 'rgba(255,225,200,.05)', bscale: 1.0,
+    props: [['tree_green', 400, 280], ['iso_stall', 1000, 120], ['stool2', 1900, 40], ['signboard', 2700, 100], ['tree_autumn', 4300, 280]],
+    buildings: [['it_townhouse', 1500, 0.9], ['uk_terrace', 3000, 0.9], ['it_townhouse', 3900, 0.9]],
+    npcs: [
+      { id: 'gaston', name: '古道具屋のガストン', actor: 'bookmerchant', x: 850, face: 1 },
+      { id: 'marc', name: '帽子の男マルク', actor: 'chef', x: 2000, face: -1 },
+      { id: 'lea', name: 'レア', actor: 'nurse', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'musicbox', name: '古いオルゴール', x: 1100, verb: '聞く' }],
+    weather: { clear: 5, drizzle: 3, fog: 1 },
+    animals: [['crow', 1300], ['cat_black', 2400], ['dog_pug', 3000]],
+    talk: {
+      gaston(S) {
+        const f = S.f;
+        if (S.back && f.pa_done) return [['npc', 'normal', '札を出してた二人が、親子だったとはね。……代金は、ふたりで半分ずつ。わしも、ちょいとまけた。']];
+        if (S.back) return [['npc', 'normal', '……日暮れだ。札の数字は、もう、どっちも上がらんらしい。']];
+        if (f.pa_gas) return [['npc', 'normal', '札は、日暮れまで。……いい勝負だよ。どっちも、財布が苦しそうだがね。']];
+        f.pa_gas = true;
+        return [['me', '', '（古道具屋のおじさんが、小さな紙の札を二枚、オルゴールの横に並べている）'], ['npc', 'normal', '旅の人。このオルゴールに、買い手が二人ついてね。顔は見せずに、値段を書いた札を置いていく。'], ['npc', 'normal', 'ひとりが上げると、もうひとりも上げる。……けさから、ずっとその繰り返しさ。'], ['npc', 'normal', '日暮れに、高いほうに売る。……どっちも、もう、ぎりぎりの数字だがね。']];
+      },
+      musicbox(S) {
+        const f = S.f;
+        if (S.back && f.pa_done) return [['me', '', '（オルゴールの台に、「売約済み」の札。その下に、ふたつの名前が並んでいる）']];
+        if (S.back) return [['me', '', '（夕方のオルゴールは、ねじが切れかけて、ゆっくりと同じ節を鳴らしている）']];
+        f.pa_box = true;
+        return [['me', '', '（ねじを巻くと、ゆっくりした子守歌が鳴る）'], ['me', '', '（ふたの裏に、ひっかいたような小さな字。「C・D」）']];
+      },
+      marc(S) {
+        const f = S.f;
+        if (S.back && f.pa_done) return [['npc', 'normal', 'レアと、半分ずつ。……母さんの八十の誕生日に、ふたりで渡すよ。娘と並ぶなんて、何年ぶりかな。']];
+        if (S.back) return [['npc', 'normal', '……あの札の相手、だれなんだ。顔くらい、見せてほしいもんだ。']];
+        return [['npc', 'normal', '札の片方は、わたしだ。……あのオルゴールは、母さんが子どものころ持っていたものなんだ。'], ['npc', 'normal', '苦しい年に、手放した。ふたに、母さんの名前の頭文字がある。クレール・デュボワ。'], ['npc', 'normal', '来週、母さんは八十になる。……あの子守歌を、もう一度、聞かせたいんだ。']];
+      },
+      lea(S) {
+        const f = S.f;
+        if (S.back && f.pa_done) return [['npc', 'normal', 'パパとわたし、同じ店で、ずっと競ってたなんて。……おばあちゃんに言ったら、笑うだろうな。']];
+        if (S.back) return [['npc', 'normal', '……もう、これ以上は書けない。今月のお給料、ぜんぶになっちゃう。']];
+        if (f.pa_done) return [['npc', 'normal', 'パパに会いに行かなきゃ。……札、二枚とも、やぶって。']];
+        if (!(f.pa_box && f.pa_gas)) return [['me', '', '（看護師の服の女の人が、紙の札とペンを持って、数字をにらんでいる）'], ['npc', 'normal', '……あ、ごめんなさい。いま、ちょっと、計算中なの。']];
+        f.pa_done = true;
+        return [['me', '', '（看護師の服の女の人が、紙の札とペンを持って、数字をにらんでいる）'], ['npc', 'normal', 'あのオルゴール？ ……おばあちゃんが、毎晩、口ずさんでた歌が入ってるの。'], ['me', '', 'もう一枚の札の人は、マルクさんでした。お母さんのクレールさんに、来週、渡したいそうです。'], ['npc', 'normal', '……マルク？ それ、パパよ！ クレールは、わたしのおばあちゃん！'], ['npc', 'normal', 'パパと、ずっと、競り合ってたの？ ……ふたりとも、同じ人に、同じ歌を。'], ['insight', '', '競り合っていた二人は、同じ人に、同じ歌を返そうとしていた。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
