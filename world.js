@@ -3204,5 +3204,108 @@
     }
   });
 
+// ---------------------------------------------------------------- 59 壁の向こうの遊び相手（知らないふりを、おたがいに続けていた）
+  C.push({
+    id: 'maltia', shape: '壁の向こうの遊び相手', name: 'マルティア', sub: '石垣の島', time: 'noon', screens: 5, far: 'sea_noon', timeBack: 'dusk', map: [35.9, 14.5],
+    hill: '#8a7a5a', ground: ['#c8b088', '#a08860', '#d8c098'], tint: 'rgba(255,230,180,.05)', bscale: 1.0,
+    props: [['tree_olive', 400, 220], ['stone_well', 1200, 90], ['tree_olive', 2600, 240], ['wall_flowers', 3000, 110], ['tree_green', 4300, 260]],
+    buildings: [['med_white', 700, 0.9], ['caravan_wall', 1900, 0.9], ['gr_chapel', 2700, 0.85], ['es_white', 3600, 0.9]],
+    npcs: [
+      { id: 'ninamt', name: 'ニーナ', actor: 'braidgirl', x: 1000, face: 1 },
+      { id: 'carmela', name: 'カルメラばあさん', actor: 'fisher_granny', x: 2400, face: -1 },
+      { id: 'salvu', name: 'サルヴじいさん', actor: 'wheelchair', x: 3400, face: -1 }
+    ],
+    places: [{ id: 'wall', name: '高い石垣', x: 1800, verb: '見る' }],
+    weather: { clear: 6, wind: 3 },
+    animals: [['cat_calico', 1500], ['hen', 2900], ['dog_spot', 4000]],
+    talk: {
+      ninamt(S) {
+        const f = S.f;
+        if (f.ballBack) {
+          if (f.ninaGot) return [['npc', 'normal', '石垣の上で、レモンの枝がゆれてる。……向こうで、聞いてるのかな。']];
+          f.ninaGot = true;
+          return [['me', '', '（赤いボールと、レモンを渡す。……だれが返したかは、言わずに）'], ['npc', 'normal', '……ありがとう。あのね、旅の人。ほんとは、知ってたの。'], ['npc', 'normal', 'レモンの木があるの、この島じゃサルヴさんちだけだもん。'], ['npc', 'normal', 'サルヴさん、子どものふりしてるでしょ。だから、わたしも知らないふりしてたの。'], ['npc', 'normal', '……あしたは、紙を巻いて投げる。「サルヴさんへ。ニーナより」って。'], ['insight', '', '石垣ごしの遊び相手は、知らないふりを、おたがいに続けてくれていた。']];
+        }
+        if (S.back) return [['npc', 'normal', '……ボール、まだ返ってこない。向こうの子、もう遊ぶの、いやになったのかな。']];
+        if (f.ninaTold) return [['npc', 'normal', '石垣、ぐるっと回れば向こうに出られるよ。わたしは、井戸より先、行っちゃだめなの。']];
+        f.ninaTold = true;
+        return [['me', '', '（女の子が、空っぽの両手を、石垣のほうへ伸ばしたまま立っている）'], ['npc', 'normal', '旅の人。毎日三時に、この石垣の向こうへボールを投げるの。'], ['npc', 'normal', 'すぐ投げ返してくれるの。ときどき、レモンが一個、くっついてくる。'], ['npc', 'normal', '……でも、きょうは返ってこない。向こうの子、どうしたんだろう。'], ['npc', 'normal', '見たことないの。声も聞いたことない。……見てきてくれる？']];
+      },
+      wall(S) {
+        const f = S.f;
+        if (S.back && f.ballBack) return [['me', '', '（石垣の向こうで、車いすのきしむ音。……だれかが、こちら側の音を待っている）']];
+        if (S.back) return [['me', '', '（石垣の上に、レモンの枝の先だけが、のぞいている）']];
+        return [['me', '', '（大人の背の倍はある石垣。上から、レモンの枝が一本だけ、こちらへはみ出している）'], ['me', '', '（石のすき間に、赤いゴムのかすが、いくつもこびりついている。……何年ぶんだろう）']];
+      },
+      carmela(S) {
+        const f = S.f;
+        if (S.back && f.ballBack) return [['npc', 'normal', 'サルヴが、庭の石垣のきわまで出てきてるよ。……あんなとこ、何年ぶりかね。']];
+        if (S.back) return [['npc', 'normal', '石垣の向こう？ ……あの人、きょうは窓も開けてないね。']];
+        if (!f.ninaTold) return [['npc', 'normal', 'いい風だろう。この島の石垣は、風よけなんだよ。人よけじゃない。']];
+        return [['npc', 'normal', 'あの高い石垣の向こうは、サルヴの庭さ。レモンの木のある家。'], ['npc', 'normal', '脚を悪くしてから、門の外へ出なくなってね。……子どもなんか、いない家だよ。']];
+      },
+      salvu(S) {
+        const f = S.f;
+        if (S.back && f.ballBack) return [['npc', 'normal', '……三時は、とうに過ぎたな。あの子、待ちくたびれていないかね。'], ['npc', 'normal', '肩が治ったら、また投げ返す。……それまでは、レモンだけでも。']];
+        if (S.back) return [['npc', 'normal', '……ボールは、そこの棚にある。投げられないなら、もう終わりだ。']];
+        if (f.salvuMet) return [['npc', 'normal', 'ボール、届けてくれたかね。……わしのことは、言わんでくれよ。']];
+        if (!f.ninaTold) return [['npc', 'normal', '……旅の人か。うちの庭は、レモンしかないよ。']];
+        f.salvuMet = true; f.ballBack = true;
+        return [['me', '', '（車いすのおじいさんが、ひざの上に、赤いボールをのせている）'], ['npc', 'normal', '……あの子に、頼まれたのか。きょうは、肩が上がらなくてな。'], ['npc', 'normal', 'あの子は、向こうに同い年の友だちがいると思っとる。……がっかりさせたくない。'], ['npc', 'normal', 'これを、あの子に。レモンもつけて。……だれが返したかは、内緒だ。'], ['me', '', '（赤いボールと、レモンを一個、あずかった）']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 60 まちがいを模様にする（ほどかずに、もう一本足す）
+  C.push({
+    id: 'persia', shape: 'まちがいを模様にする', name: 'ペルシャナ', sub: '絨毯の村', time: 'morning', screens: 5, far: 'mountains', timeBack: 'dusk', map: [34.0, 51.4],
+    hill: '#6a5040', ground: ['#b89870', '#8a6a48', '#c8a880'], tint: 'rgba(255,210,170,.05)', bscale: 1.0,
+    props: [['tree_olive', 400, 230], ['mint_table', 1300, 60], ['textile_stall', 2400, 140], ['stone_well', 3100, 90], ['tree_green', 4300, 270]],
+    buildings: [['mideast_white', 700, 0.9], ['adobe', 1800, 0.9], ['in_market', 2900, 0.85], ['mideast_white', 3800, 0.9]],
+    npcs: [
+      { id: 'leila', name: 'レイラ', actor: 'hijab', x: 900, face: 1 },
+      { id: 'dariush', name: '絨毯屋のダリウシュ', actor: 'turban', x: 2000, face: -1 },
+      { id: 'maryam', name: 'マルヤムばあさん', actor: 'granny_scarf', x: 3400, face: -1 }
+    ],
+    places: [{ id: 'rug', name: '店先の古い絨毯', x: 2500, verb: '見る' }],
+    weather: { clear: 6, wind: 3, drizzle: 1 },
+    animals: [['cat_persian', 1500], ['donkey', 2800], ['rooster', 4000]],
+    talk: {
+      leila(S) {
+        const f = S.f;
+        if (f.river) return [['npc', 'normal', '反対がわにも、青を一列！ ……二本で、川にする！ 手、止まらない！']];
+        if (f.grannyTold) {
+          f.river = true;
+          return [['me', '', 'おばあさんの最初の絨毯にも、青い一列があるそうです。……ほどかなかったって。'], ['npc', 'normal', '……おばあちゃんも？ ほどかずに、どうしたの？'], ['me', '', '反対がわにも、もう一本、足したそうです。'], ['npc', 'normal', '……もう一本。そっか。一本だと、まちがい。二本だと……。'], ['npc', 'normal', '川！ 花の野原を流れる、青い川にする！'], ['npc', 'normal', '花嫁さんの家の前にも、ほんとうに川が流れてるの。……ぴったり。'], ['insight', '', 'まちがいは、ほどかずに、もう一本足すと、模様になる。']];
+        }
+        if (S.back) return [['npc', 'normal', '……ほどくのは、一週間かかる。あしたには、間に合わない。']];
+        if (f.leilaTold) return [['npc', 'normal', 'おばあちゃんには、まだ言えない。……わたしの、はじめての絨毯なのに。']];
+        f.leilaTold = true;
+        return [['me', '', '（女の子が、機の前で手を止めて、糸の一列をじっとにらんでいる）'], ['npc', 'normal', '旅の人、見て、ここ。赤のはずが、一列だけ、青になってる。'], ['npc', 'normal', 'あしたの朝、いとこの嫁入りに持っていくの。……はじめて、ひとりで織った絨毯。'], ['npc', 'normal', 'ほどいたら、一週間かかる。……おばあちゃんに、どう言えばいいの。']];
+      },
+      dariush(S) {
+        const f = S.f;
+        if (S.back && f.grannyTold) return [['npc', 'normal', 'ばあさん、きょうは孫の機のほうを、わざと見ないようにしてる。……わざとらしくてね。']];
+        if (S.back) return [['npc', 'normal', '夕方の糸は、色がよく見えん。織るのは、朝のうちさ。']];
+        return [['npc', 'normal', 'いらっしゃい。店先の古いのは、マルヤムばあさんの絨毯だよ。'], ['npc', 'normal', 'ばあさんのは、どれも一か所だけ、どこかがちがう。……わざとだって言う人もいる。']];
+      },
+      rug(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（夕日のなかで、古い絨毯の、さかさまの星がひとつ、光っている）']];
+        f.rugSeen = true;
+        return [['me', '', '（赤と紺の、星の模様。……すみのひとつだけ、星がさかさまだ）'], ['me', '', '（となりの絨毯は、鳥が一羽だけ、反対を向いている。……たしかに、どれも一か所ずつ）']];
+      },
+      maryam(S) {
+        const f = S.f;
+        if (S.back && f.grannyTold) return [['npc', 'normal', 'あの子の母さんの嫁入りの絨毯にも、わたしの青が二列あるのよ。'], ['npc', 'normal', '……あの子は、まだ知らない。いつか、自分で見つけるでしょう。']];
+        if (S.back) return [['npc', 'normal', 'レイラ、夕ごはんにも来ないの。……あの子、なにか困ってるのね。']];
+        if (!f.leilaTold) return [['npc', 'normal', 'おはよう。孫が、はじめての絨毯を仕上げているのよ。……のぞいちゃだめって言われてるの。']];
+        if (!f.rugSeen) return [['npc', 'normal', 'レイラが、困った顔？ ……店先の、わたしの古い絨毯を見てきてごらんなさい。']];
+        f.grannyTold = true;
+        return [['npc', 'normal', '……さかさまの星を見たのね。あれは、わざとよ。まちがいのない絨毯は、息ができないの。'], ['npc', 'normal', 'でも、いちばん最初のは、ほんとうのまちがいだった。青を一列、まちがえた。'], ['npc', 'normal', 'ほどかないで、反対のはしにも、青を一列足したの。……そうしたら、模様になった。'], ['npc', 'normal', 'わたしから聞いたって、言わなくていいのよ。あの子が、自分で決めればいい。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
