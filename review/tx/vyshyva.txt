@@ -1,7 +1,7 @@
 == 国: ウクリーナ（麦の村）
 〔20番目の国／広さ 5 画面／朝／遠景 wheat_noon〕
 〔天候：晴れ 60%、強風 20%、小雨 20%〕
-〔建物：thatched_farm、house_small、elder_house、bakery／小物：tree_green、bucket、bush_berry、tree_green〕
+〔建物：thatched_farm、house_small、elder_house、bakery／小物：sunflowers、bride_dress、well、korovai_table、haystack、tree_green〕
 〔住人（西から）：オクサナばあちゃん @1000、花嫁のソフィア @2200、ソフィアの母オレナ @3300〕
 
 〔行き〕
