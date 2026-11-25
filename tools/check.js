@@ -52,6 +52,26 @@ for (const c of world.C) {
   }
 }
 
+// ---- 乗り物：walk through the world なので、乗り物は歩いて越えられない所だけ
+{
+  const N = world.C.length;
+  world.C.forEach((c, i) => {
+    if (!c.ride) return;
+    if (!['ship', 'self'].includes(c.ride)) R(c.id, 'E', `ride は 'ship'（海を越える船旅）か 'self'（自分の力で渡る）だけ。陸で運ばれる乗り物は使わない: ${c.ride}`);
+    if (c.ride === 'ship' && !c.sea) R(c.id, 'E', '船旅の国は sea: true（地図で航路を描く）にする');
+    const near = world.C.findIndex((d, j) => j < i && i - j < 8 && d.ride);
+    if (near >= 0) R(c.id, 'W', `乗り物の国が近い（${world.C[near].id}）。8か国以上あける`);
+  });
+  const ships = world.C.filter(c => c.ride === 'ship').length, selfs = world.C.filter(c => c.ride === 'self').length;
+  if (ships > Math.max(1, Math.ceil(N / 15))) R('_world', 'W', `船旅が ${ships} か国（目安は15か国に1か国、上限 ${Math.ceil(N / 15)}）`);
+  if (selfs > Math.max(1, Math.floor(N / 30))) R('_world', 'W', `自分で漕いで渡る国が ${selfs} か国（目安は30か国に1か国）`);
+  // ride のない国の地の文に、乗って運ばれる描写がないか
+  const RIDE = /(馬車|汽車|列車|バス|荷車|渡し舟|舟|船|カヌー|ボート|馬)に(乗|の)(る|って|せて|った|り)/;
+  world.C.forEach(c => { if (c.ride) return; for (const [id, fn] of Object.entries(c.talk)) {
+    for (const back of [false, true]) { try { const st = { f: {}, back, ev() {}, has: () => false, met: () => false };
+      for (const l of fn(st) || []) if (l[0] === 'me' && RIDE.test(l[2]) && !/乗れ|乗らな/.test(l[2])) R(c.id, 'W', `nono が乗り物に乗る描写（ride なし）: ${id}「${l[2].slice(0, 30)}」`); } catch (_) {} } } });
+}
+
 // ---- 骨組みのラベル：同じ型の国が続かないように
 world.C.forEach((c, i) => {
   if (!c.shape) { R(c.id, 'W', '骨組みのラベル（shape）がない'); return; }

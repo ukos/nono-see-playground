@@ -23,6 +23,7 @@
 //   sea             : true なら船旅の国（地図の道のりを点線の航路で描く）
 //   farBack/timeBack/weatherBack : 帰り道だけの遠景・時間帯・天候（嵐の夜の船が、帰りは朝の凪になる等）
 //   when(f, back)   : 住人・場所の when には帰り道かどうかも渡る
+//   ride            : 乗り物を使う国だけ。'ship'（海を越える船旅）／'self'（自分で漕ぐなど、自分の力で渡る）。陸で人に運ばれる乗り物は使わない
 //   shape           : 話の骨組みのラベル（直前の2か国と同じだと check.js が注意を出す）
 //   weather         : 起こりやすい天候と重み { clear, drizzle, squall, typhoon, wind, fog, densefog, snow }
 //   talk            : 住人ごとの会話。S を受け取り行の配列を返す
@@ -415,7 +416,7 @@
 
   // ---------------------------------------------------------------- 船旅 灯台の数え方（グレシアで覚えた「七つ」が、夜の海の道しるべになる）
   C.push({
-    id: 'kamome', shape: '前の国の知識を使う', name: 'カモメ号', sub: '船の上・霧の島へ', time: 'night', screens: 5, far: 'sea_night', fore: false,
+    id: 'kamome', ride: 'ship', shape: '前の国の知識を使う', name: 'カモメ号', sub: '船の上・霧の島へ', time: 'night', screens: 5, far: 'sea_night', fore: false,
     ship: true, sea: true,
     map: [40, -13], // 地図の位置（グレシアから霧の島への航路のなかほど）
     hill: '#1a2440', ground: ['#8a6a48', '#5a4330', '#9a7a58'], tint: 'rgba(40,60,120,.06)', bscale: 1.0,
@@ -1127,7 +1128,7 @@
 
 // ---------------------------------------------------------------- 21 嵐を見届ける（四十年この海を避けてきた元船長と、甲板に立つ）
   C.push({
-    id: 'pelican', shape: '隣に立つ', name: 'ペリカン号', sub: '船の上・黒い海', time: 'night', screens: 5, far: 'storm_sea', fore: false,
+    id: 'pelican', ride: 'ship', shape: '隣に立つ', name: 'ペリカン号', sub: '船の上・黒い海', time: 'night', screens: 5, far: 'storm_sea', fore: false,
     farBack: 'sea_morning', timeBack: 'morning', weatherBack: { clear: 6, wind: 2 },
     ship: true, sea: true, map: [43, 33],
     hill: '#1a2030', ground: ['#7a5e44', '#4e3a2a', '#8a6e50'], tint: 'rgba(30,40,70,.10)', bscale: 1.0,
@@ -1524,7 +1525,7 @@
   
 // ---------------------------------------------------------------- 28 まっすぐ漕ぐ（渡し舟が休みの湖を、旅人が自分で渡る）
   C.push({
-    id: 'kanadia', shape: '旅人が教わって自分で渡る', name: 'カナディア', sub: '湖の渡し', time: 'morning', screens: 5, far: 'lake_reeds_morning', map: [46.5, -80],
+    id: 'kanadia', ride: 'self', shape: '旅人が教わって自分で渡る', name: 'カナディア', sub: '湖の渡し', time: 'morning', screens: 5, far: 'lake_reeds_morning', map: [46.5, -80],
     hill: '#24382e', ground: ['#5a7a4a', '#3a4a34', '#7a7058'], tint: 'rgba(180,200,220,.05)', bscale: 1.0,
     props: [['pine', 300, 300], ['reeds', 1300, 120], ['pier', 1700, 110], ['ship_boat', 2300, 80], ['reeds2', 3000, 120], ['pine', 4500, 320]],
     buildings: [['lumber_hut', 700, 1.3], ['lumber_hut', 3900, 1.2]],
