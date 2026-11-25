@@ -2794,5 +2794,107 @@
     }
   });
 
+// ---------------------------------------------------------------- 51 ひと晩の隠し味（母のグヤーシュの味が出ない。足りなかったのは、時間だった）
+  C.push({
+    id: 'hungaria', shape: '時間が隠し味', name: 'ハンガリナ', sub: 'パプリカの平原', time: 'dusk', screens: 5, far: 'wheat_noon', timeBack: 'noon', map: [47.1, 19.5],
+    hill: '#4a3a20', ground: ['#a09050', '#706030', '#b0a060'], tint: 'rgba(255,150,90,.06)', bscale: 1.0,
+    props: [['haystack', 300, 120], ['bucket', 1250, 50], ['sunflowers', 2200, 130], ['well', 3300, 150], ['haystack', 4400, 130]],
+    buildings: [['inn', 800, 0.9], ['thatched_farm', 2600, 0.9], ['house_small', 3900, 1.3]],
+    npcs: [
+      { id: 'laci', name: '食堂のラツィ', actor: 'chef', x: 1050, face: 1 },
+      { id: 'erzsi', name: 'エルジおばさん', actor: 'granny_scarf', x: 2350, face: -1 },
+      { id: 'peti', name: 'ペティ', actor: 'boy_cap', x: 3500, face: -1 }
+    ],
+    places: [{ id: 'pot', name: 'かまどの大鍋', x: 1300, verb: '味見する' }],
+    weather: { clear: 6, wind: 2, drizzle: 2 },
+    animals: [['rooster', 2000], ['hen', 2120], ['dog_bulldog', 3700], ['horse_bay', 4600, { mode: 'stay' }]],
+    talk: {
+      laci(S) {
+        const f = S.f;
+        if (S.back && f.tasted) return [['npc', 'normal', '……一晩、おいただけだった。母さんは、毎晩、あしたの分を煮ていたんだ。'], ['npc', 'normal', '三年、毎朝作りたてを出してた。いちばん大事なものを、毎朝、捨ててたわけだ。'], ['insight', '', '行きに足りなかった隠し味は、帰り道までの、ひと晩という時間だった。']];
+        if (S.back) return [['npc', 'normal', '……店は、やっぱり閉めることにした。母さんの味が出せない食堂なんて、看板だけだ。']];
+        if (f.lid) return [['npc', 'normal', 'ふたをして、火から下ろした。……あしたの朝、だれかが味見してくれたらな。']];
+        if (f.laciTold && f.erzsiTold) { f.lid = true;
+          return [['me', '', 'エルジさんが、お母さんは毎晩、あしたの分の鍋を煮ていたって。'], ['npc', 'normal', '……あしたの分？ 夜に作って、朝に出す？'], ['npc', 'normal', 'そういえば、母さんの鍋は、いつも朝には冷めてた。温めなおしてるだけだと思ってた。'], ['me', '', '（ラツィは、煮えたばかりの鍋に、ふたをした）'], ['npc', 'normal', '旅の人、帰りにまた寄ってくれ。……あしたの朝の味を、確かめてほしい。']]; }
+        if (f.laciTold) return [['npc', 'normal', 'パプリカも、玉ねぎも、母さんと同じ店のを使ってる。……何が足りないんだ。']];
+        f.laciTold = true;
+        return [['me', '', '（食堂の前で、コック帽の男が、木のさじをくわえたまま、空をにらんでいる）'], ['npc', 'normal', '……ちがう。また、ちがう。'], ['npc', 'normal', '母さんのグヤーシュの味が、どうしても出ないんだ。三年、毎朝作ってる。'], ['npc', 'normal', '今週出せなかったら、店を閉める。……母さんの店を、母さんの味なしで続ける意味がない。']];
+      },
+      pot(S) {
+        const f = S.f;
+        if (S.back && f.lid) { f.tasted = true;
+          return [['me', '', '（ひと晩おいた鍋を、温めなおして、ひと口）'], ['me', '', '（……ゆうべとは、ちがう。肉がやわらかくほどけて、パプリカの甘さが奥まで入っている）'], ['me', '', '（ラツィが、となりで、同じさじをくわえたまま、動かなくなった）']]; }
+        if (S.back) return [['me', '', '（鍋は、からっぽで洗ってある）']];
+        if (f.lid) return [['me', '', '（ふたの閉まった鍋から、まだ湯気がもれている）']];
+        return [['me', '', '（ひと口もらう。……おいしい。でも、何かが角ばっている。辛さと甘さが、別々に舌に来る）']];
+      },
+      erzsi(S) {
+        const f = S.f;
+        if (S.back && f.tasted) return [['npc', 'normal', 'けさ、ラツィの店の前に、行列ができてたよ。……三年ぶりに、あの匂いがしたからね。']];
+        if (S.back) return [['npc', 'normal', 'ラツィの店、閉まっちゃったんだって。……もったいないね。']];
+        if (f.erzsiTold) return [['npc', 'normal', 'あの人の母さんは、夜になると、あしたの鍋を煮てたよ。……それしか、知らないけどね。']];
+        if (!f.laciTold) return [['npc', 'normal', 'いい夕方だね、旅の人。パプリカが、いちばん赤くなる時間だよ。']];
+        f.erzsiTold = true;
+        return [['npc', 'normal', 'ラツィの母さんのグヤーシュ？ ……うちは、となりだったからね。'], ['npc', 'normal', '材料なんて、ふつうのものさ。それより、あの人は、夜おそくまで台所に灯りがついてた。'], ['npc', 'normal', '「あしたの分を煮てるの」って、いつも言ってたよ。……朝は、温めるだけ。']];
+      },
+      peti(S) {
+        const f = S.f;
+        if (S.back && f.tasted) return [['npc', 'normal', 'けさのグヤーシュ、おかわりした！ ……おばあちゃんの味がするって、父ちゃんが泣いてた。']];
+        if (S.back) return [['npc', 'normal', '食堂、閉まっちゃった。……あそこのパン、好きだったのに。']];
+        return [['npc', 'normal', 'ラツィおじさんのグヤーシュ？ ……うーん、おいしいよ。'], ['npc', 'normal', 'でも、おばあちゃんのとは、ちがう。……どこがって聞かれても、わかんないけど。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 52 地図に載らない村（村を記事にしに来た記者が、高山病で村に助けられる）
+  C.push({
+    id: 'peruna', shape: '書かずにおく記事', name: 'ペルーナ', sub: '雲の上の村', time: 'morning', screens: 5, far: 'highland', timeBack: 'dusk', map: [-13.5, -72],
+    hill: '#2a3424', ground: ['#7a7a4a', '#4a4a30', '#8a8058'], tint: 'rgba(220,230,255,.04)', bscale: 1.0,
+    props: [['rock_moss', 300, 80], ['stone_well', 1400, 100], ['rock2', 2300, 90], ['bush', 3300, 90], ['rock', 4300, 70]],
+    buildings: [['adobe', 800, 0.9], ['cl_hill_house', 2700, 0.9], ['adobe', 3900, 0.85]],
+    npcs: [
+      { id: 'felipe', name: '記者のフェリペ', actor: 'reporter', x: 1100, face: 1 },
+      { id: 'mama', name: 'ママ・ロサリオ', actor: 'granny_andes', x: 2500, face: -1 },
+      { id: 'nina', name: 'ニナ', actor: 'chullo', x: 3600, face: -1 }
+    ],
+    places: [{ id: 'note', name: '記者の手帳', x: 1300, verb: '見る', when: f => f.felipeSick }],
+    weather: { clear: 5, fog: 3, wind: 2 },
+    animals: [['llama', 1800, { mode: 'stay' }], ['llama', 3000], ['dog_spot', 2100], ['hawk', 2600, { mode: 'fly' }]],
+    talk: {
+      felipe(S) {
+        const f = S.f;
+        if (S.back && f.healed) return [['npc', 'normal', '記事は、書いたよ。題は「どこかにある村」。……村の名前も、道も、書かなかった。'], ['npc', 'normal', '編集長には怒られるだろうな。でも、あのお茶の味を、道しるべつきで売るわけにはいかない。']];
+        if (S.back) return [['npc', 'normal', '……下の町へ戻る。記事は、書けなかった。頭が割れそうで、何も覚えていない。']];
+        if (f.healed && !f.teaGiven) { f.teaGiven = true;
+          return [['me', '', '（ママ・ロサリオのお茶を、ひと口ずつ飲ませる。草の匂いがする）'], ['me', '', '（しばらくすると、記者の唇に、色が戻ってきた）'], ['npc', 'normal', '……村の人が、これを？ おれは、この村を地図に載せに来たのに。'], ['npc', 'normal', '（記者は、手帳の「道の図」のページを、じっと見ている）']].map(l => l[2].startsWith('（記者') ? ['me', '', l[2]] : l); }
+        if (f.healed) return [['npc', 'normal', '……ママ・ロサリオに、お茶の礼を言ってくれないか。おれの顔は、見たくないだろうから。']];
+        if (f.felipeSick) return [['me', '', '（記者は、石に座りこんで、頭をかかえている。唇が、紫色だ）']];
+        f.felipeSick = true;
+        return [['me', '', '（山高帽の男が、手帳を開いたまま、ふらふらと坂を上ってくる）'], ['npc', 'normal', '旅の人……この村の名前を、知ってるか。どこの地図にも、載ってないんだ。'], ['npc', 'normal', '「雲の上の幻の村」。記事にすれば、町の新聞の一面だ。……下に道ができて、人がたくさん来るぞ。'], ['npc', 'normal', '……う。なんだ、頭が……。空気が、うすい……。']];
+      },
+      note(S) {
+        const f = S.f;
+        if (f.healed) return [['me', '', '（手帳の最後のページに、大きな字で「どこかにある村」とだけ書いてある）']];
+        return [['me', '', '（落ちた手帳に、走り書き。「道の図」「村の名前は？」「観光客が来れば、もうかる」）']];
+      },
+      mama(S) {
+        const f = S.f;
+        if (S.back && f.healed) return [['npc', 'normal', 'あの人、帰るとき、帽子をとって頭を下げていったよ。……記者ってのは、案外、礼儀正しいんだね。'], ['insight', '', '村を地図に載せに来た人は、村のお茶に助けられて、村の場所を書かずに帰った。']];
+        if (S.back) return [['npc', 'normal', '記者さんは、ふらふらのまま、下りていったよ。……こわいね、いつか道ができるのかね。']];
+        if (f.healed) return [['npc', 'normal', '……あの人が、村のことを書くなら、書くでいいさ。お茶を出したのは、困ってたからだよ。']];
+        if (f.felipeSick) { f.healed = true;
+          return [['me', '', '坂の下で、記者の人が倒れそうで。……この村のことを書きに来た人です。'], ['npc', 'normal', '……そうかい。村を地図に載せに来た人かい。'], ['me', '', '（ばあさんは、しばらく黙って、それから鍋に湯をわかしはじめた）'], ['npc', 'normal', 'この草のお茶を、ゆっくり飲ませな。……高い山に慣れてない人は、みんなああなる。客でも、記者でもね。']]; }
+        return [['npc', 'normal', '旅の人かい。この村まで来る人は、めったにいないよ。……道が、ないからね。'], ['npc', 'normal', '道がないから、静かでいられる。……下の町の人は、そこがわからない。']];
+      },
+      nina(S) {
+        const f = S.f;
+        if (S.back && f.healed) return [['npc', 'normal', '記者のおじさん、わたしの名前だけ、手帳に書いていったの。「ニナ、九歳、リャマが好き」だって。……それだけ。']];
+        if (S.back) return [['npc', 'normal', '下の町に道ができたら、学校に行けるって、父さんが。……でも、ばあちゃんは、いやだって。']];
+        return [['npc', 'normal', 'この村、地図にないの。ないけど、ちゃんとあるの。'], ['npc', 'normal', '……地図に載ったら、どうなるのかな。いいことも、あるのかな。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
