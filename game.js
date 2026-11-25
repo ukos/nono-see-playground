@@ -280,6 +280,14 @@ $('map').addEventListener('click', e => { const el = e.target.closest('[data-id]
 $('bm').addEventListener('click', e => { e.stopPropagation(); toggleJournal(false); toggleMap(); });
 $('mclose').addEventListener('click', () => toggleMap(false));
 
+// ---- 旅の終わり：世界の果てから、最初の国まで帰ってきたら
+function showHome() {
+  st.flags._home = true; st.home = true; save();
+  const nv = Object.keys(st.visited).length;
+  $('hstat').textContent = `歩いた国 ${nv} ／ ${C.length}　・　気づき ${st.insights.length}`;
+  $('home').classList.add('on');
+}
+function closeHome() { st.home = false; $('home').classList.remove('on'); }
 function toggleJournal(on) { st.journal = on ?? !st.journal; $('journal').classList.toggle('on', st.journal); if (st.journal) renderJournal(); }
 
 // ================= 吊り橋（オランジェの谷） =================
@@ -307,6 +315,7 @@ function nearTarget() {
   return null;
 }
 function act() {
+  if (st.home) return closeHome();
   if (st.journal) return toggleJournal(false);
   if (st.map) return toggleMap(false);
   if (ins.classList.contains('on') || st.talking) return advance();
@@ -332,7 +341,7 @@ st.auto = 0; st.run = false;
 try { if (localStorage.getItem('see-swiped')) $('hint').style.opacity = 0; } catch (_) {}
 {
   let sx = 0, sy = 0, down = false;
-  const game = $('game'), ui = e => e.target.closest('button,#talk,#insight,#journal,#map');
+  const game = $('game'), ui = e => e.target.closest('button,#talk,#insight,#journal,#map,#home');
   game.addEventListener('pointerdown', e => { if (ui(e)) return; down = true; sx = e.clientX; sy = e.clientY; });
   game.addEventListener('pointerup', e => {
     if (!down) return; down = false;
@@ -347,6 +356,8 @@ try { if (localStorage.getItem('see-swiped')) $('hint').style.opacity = 0; } cat
 }
 $('bt').addEventListener('click', e => { e.stopPropagation(); st.auto = 0; st.run = false; act(); }); $('bj').addEventListener('click', () => { toggleMap(false); toggleJournal(); });
 $('jclose').addEventListener('click', () => toggleJournal(false));
+$('hclose').addEventListener('click', closeHome);
+$('hj').addEventListener('click', () => { closeHome(); toggleJournal(true); });
 talk.addEventListener('click', advance); ins.addEventListener('click', advance);
 
 // ================= 描画 =================
@@ -627,7 +638,7 @@ function showBanner(c) {
 let last = 0, lastCam = null, saveT = 0;
 function frame(ts) {
   const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts; st.t += dt;
-  const busy = st.talking || st.journal || st.map || ins.classList.contains('on');
+  const busy = st.talking || st.journal || st.map || st.home || ins.classList.contains('on');
   if (busy) { st.auto = 0; st.run = false; }
   if (st.keyL || st.keyR) st.auto = 0;
   const v = busy ? 0 : ((st.keyR ? 1 : 0) - (st.keyL ? 1 : 0)) || st.auto;
@@ -642,6 +653,8 @@ function frame(ts) {
     if (bt.textContent !== lab) bt.textContent = lab;
     $('bj').classList.toggle('hide', !!st.journal || !!st.map); $('bm').classList.toggle('hide', !!st.journal || !!st.map); }
   st.maxX = Math.max(st.maxX, st.x);
+  if (st.x >= WORLD - 320) st.flags._end = true;
+  if (st.flags._end && !st.flags._home && st.x <= 320 && !busy) showHome();
   const here = countryAt(st.x);
   if (here !== st.cur) {
     const first = !st.visited[here.id]; st.cur = here; st.visited[here.id] = true;
