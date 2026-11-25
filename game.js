@@ -248,6 +248,13 @@ const mxy = ([la, lo]) => [706 + 3.8 * lo, 342 - 3.76 * la];
 function renderMap() {
   const svg = $('msvg'), here = st.cur;
   let h = '<image href="assets/ui/world_map.webp" x="0" y="0" width="1432" height="640"/>';
+  // 歩いてきた道のり：行った国を旅の順に線でつなぐ（船旅の区間は c.sea で点線）
+  const way = C.filter(c => c.map && st.visited[c.id]);
+  for (let k = 1; k < way.length; k++) {
+    const [x1, y1] = mxy(way[k - 1].map), [x2, y2] = mxy(way[k].map), sea = way[k].sea || way[k - 1].sea;
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2 - Math.min(60, Math.hypot(x2 - x1, y2 - y1) * 0.12); // ゆるい弧
+    h += `<path class="way${sea ? ' sea' : ''}" d="M${x1},${y1} Q${mx},${my} ${x2},${y2}"/>`;
+  }
   for (const c of C) {
     if (!c.map || !st.visited[c.id]) continue;
     const [x, y] = mxy(c.map), me = c === here;

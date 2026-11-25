@@ -20,6 +20,7 @@
 //   animals         : 動物 [種類, x, {mode('walk'/'stay'/'fly'), range, face, when(f), back('only'/'not'), h, shy, follow(f, back), moveTo:[条件, x]}]
 //                     種類と大きさ・ふるまいは game.js の ANIM。絵は assets/animals/<種類>_<コマ>.webp
 //   map             : 世界地図に印をつける位置 [緯度, 経度]（もじった実在の国のあたり）
+//   sea             : true なら船旅の国（地図の道のりを点線の航路で描く）
 //   weather         : 起こりやすい天候と重み { clear, drizzle, squall, typhoon, wind, fog, densefog, snow }
 //   talk            : 住人ごとの会話。S を受け取り行の配列を返す
 //                     行＝[話し手, 表情, 文]。話し手は 'npc'（話している相手）/ 'me'（nono）/ 'insight'（気づき）
