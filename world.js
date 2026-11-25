@@ -12,7 +12,7 @@
 //   bscale          : 建物の倍率（素材の解像度差を吸収）
 //   props           : 木や岩などの小物 [画像名, x, 高さpx]（assets/props/）。建物より奥に描く
 //   buildings       : [画像名, 国の左端からのx, 倍率(省略可)]
-//   npcs            : { id, name, actor, x, face(1=右向き,-1=左向き) }
+//   npcs            : { id, name, actor, x, face(1=右向き,-1=左向き), h(背の高さ), follow(f)(真のあいだ nono のうしろを歩く) }
 //                     1枚絵の住人は sprite（assets/actors/<sprite>.webp。f を受け取る関数でも可）、name も関数にできる。
 //                     全身ドット絵の住人は sheet（シート定義。画像は assets/actors/<actor>_sheet.webp）と pose(f)、
 //                     when(f)（いるときだけ）、leaveWhen(f)（その後は歩き去る）を持てる
@@ -908,6 +908,182 @@
         if (f.sunSeen) { f.eastKnows = true;
           return [['me', '', 'ムワンギさんが、毎朝あいさつしても返事がないって。'], ['npc', 'normal', '……振ってる。跳んで振ってる。'], ['me', '', '西からだと、朝日がまぶしくて、こっちが見えないんです。'], ['npc', 'normal', '……朝日の中にいたのは、おれのほうだったのか。'], ['npc', 'normal', 'あいつがなんで怒ってるのか、ずっとわからなかった。'], ['insight', '', 'あいさつが返ってこないのは、まぶしくて見えないだけのこともある。']]; }
         return [['npc', 'normal', '……ムワンギに会ったか。'], ['npc', 'normal', '毎朝、手を振ってくる。おれも振る。跳んで振る。'], ['npc', 'normal', 'なのに、牛の市はやめだと、人づてに言ってきた。……わけがわからん。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 18 匂いの道案内（地図のない旧市街で、迷子を家へ送る）
+  C.push({
+    id: 'medina', name: 'マロッカ', sub: '迷路の旧市街', time: 'noon', screens: 5, far: 'red_rocks_noon',
+    map: [32, -6],
+    hill: '#5a3424', ground: ['#c08a5a', '#8a5a3a', '#d0a070'], tint: 'rgba(200,110,60,.05)', bscale: 1.0,
+    props: [['palm', 300, 300], ['stool', 1250, 40], ['cactus', 3300, 130], ['palm', 4500, 320]],
+    buildings: [['mideast_white', 600], ['adobe', 1500, 0.9], ['es_gate', 2300], ['mideast_white', 3100, 0.9], ['adobe', 4000]],
+    npcs: [
+      { id: 'nadi', name: '迷子の女の子', actor: 'toddler', x: 700, face: 1, h: 0.62, when: f => !f.nadiHome, follow: f => f.nadiTaken && !f.nadiHome },
+      { id: 'mustafa', name: 'ミントティー売りのムスタファ', actor: 'teaseller', x: 1250, face: -1 },
+      { id: 'idris', name: '辻のイドリスじいさん', actor: 'na_elder', x: 2550, face: -1 },
+      { id: 'fatima', name: 'ファティマ（ナディの母）', actor: 'hijab', x: 4300, face: -1, when: f => f.turned },
+      { id: 'nadi2', name: 'ナディ', actor: 'toddler', x: 4020, face: 1, h: 0.62, when: f => f.nadiHome }
+    ],
+    places: [
+      { id: 'bread', name: 'パンを焼く匂い', x: 1900, verb: 'かぐ' },
+      { id: 'copper', name: '銅をたたく音', x: 3000, verb: '聞く' },
+      { id: 'mint', name: 'ミントの匂いの角', x: 3700, verb: '曲がる' }
+    ],
+    weather: { clear: 7, wind: 2, drizzle: 1 },
+    animals: [['cat_calico', 1000], ['cat_white', 2200], ['cat_black', 3400], ['donkey', 4700, { mode: 'stay', face: -1 }]],
+    talk: {
+      nadi(S) {
+        const f = S.f;
+        if (f.nadiTaken) return [['npc', 'normal', '……ママ、ミントのにおい。']];
+        if (!f.mustafaTold) return [['me', '', '（小さな女の子が、壁にくっついて、じっと立っている）'], ['npc', 'normal', '……ママ。'], ['me', '', '（それきり、何も言わない）']];
+        f.nadiTaken = true;
+        return [['me', '', 'ナディ？ ママのところへ、いっしょに行こう。'], ['npc', 'normal', '……うん。'], ['me', '', '（小さな手が、マントのすそをつかんだ）']];
+      },
+      mustafa(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '帰りかい。ファティマが、あんたの分のお茶代を置いていったよ。'], ['npc', 'normal', '一杯どうぞ。……この町じゃ、道案内のお礼はお茶なんだ。']];
+        if (f.mustafaTold) return [['npc', 'normal', 'パンの匂いを右、銅の音をまっすぐ、ミントの匂いで左。忘れるなよ。']];
+        f.mustafaTold = true;
+        return [['npc', 'normal', '旅の人、うしろの小さいのは、あんたの連れかい？'], ['me', '', 'いいえ。ずっと、ひとりで立っていて。'], ['npc', 'normal', 'ナディだ。織物屋のファティマの子だよ。……市場で手を離しちまったんだな。'], ['npc', 'normal', 'この旧市街に、地図はない。道は、匂いと音で教える。'], ['npc', 'normal', 'パンの匂いを右、銅の音をまっすぐ、ミントの匂いで左。そこが織物屋だ。'], ['npc', 'normal', 'おれは店を離れられん。昼の礼拝の前に、送ってやってくれ。']];
+      },
+      idris(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'あの子、今朝はひとりでパンを買いに来たそうだ。匂いをたどってな。']];
+        if (f.nadiTaken) return [['npc', 'normal', 'ほう、小さな連れだ。……銅の音は、この先だ。耳をすませ。'], ['npc', 'normal', '目で探すと、この町は迷う。迷った者は、たいてい目に頼りすぎておる。']];
+        return [['npc', 'normal', '旅の者か。この辻で五十年、迷った者を見てきた。'], ['npc', 'normal', 'みな、地図をにらんで迷う。わしの孫は、目をつぶって家に帰る。']];
+      },
+      bread(S) {
+        if (S.back) return [['me', '', '（焼きたての匂い。……小さな足あとが、店の前まで続いている）']];
+        return S.f.nadiTaken ? [['me', '', '（パンの焼ける匂い。ここを、右）'], ['me', '', '（ナディが、くん、と鼻を鳴らした）']] : [['me', '', '（パンの焼ける、香ばしい匂いがする）']];
+      },
+      copper(S) {
+        if (S.back) return [['me', '', '（カン、カン、と銅をたたく音が、今日も通りに響いている）']];
+        return S.f.nadiTaken ? [['me', '', '（カン、カン、と銅の音。ここは、まっすぐ）']] : [['me', '', '（どこかで、カン、カンと金属をたたく音がする）']];
+      },
+      mint(S) {
+        const f = S.f;
+        if (f.turned) return [['me', '', '（ミントの匂いの角。左に、織物屋の布がゆれている）']];
+        if (!f.nadiTaken) return [['me', '', '（すうっとする匂い。左に細い路地がある）']];
+        f.turned = true;
+        return [['me', '', '（ミントの匂い。ここを、左へ）'], ['me', '', '（細い路地の先で、色とりどりの布がゆれている。だれかが、名前を呼んでいる）']];
+      },
+      fatima(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'ナディったら、今朝はひとりでパン屋まで行ったの。匂いをたどって。'], ['npc', 'normal', '……あなたのまねをしたのね。帰り道のまねを。']];
+        if (f.nadiHome) return [['npc', 'normal', 'お茶屋のムスタファに、お代をあずけておくわ。帰りに飲んでいって。']];
+        if (!f.nadiTaken) return [['npc', 'normal', 'ナディ、ナディ！ ……旅の人、小さな女の子を見なかった？ 赤い服の。']];
+        f.nadiHome = true;
+        return [['npc', 'normal', 'ナディ！'], ['me', '', '（ナディが、マントのすそを離して、走っていった）'], ['npc', 'normal', 'ありがとう……！ どうやって、ここが分かったの？'], ['me', '', 'パンの匂いを右、銅の音をまっすぐ、ミントの匂いで左。'], ['npc', 'normal', '……この町の人みたいな道の言い方ね。'], ['insight', '', '地図のない町では、匂いと音が、帰り道になっていた。']];
+      },
+      nadi2(S) {
+        if (S.back) return [['npc', 'normal', 'パン、ひとりで、かった！ ……みぎ、まっすぐ、ひだり。']];
+        return [['npc', 'normal', '……ミント。ママ。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 19 絵の中の旅人（人を描けない画家の絵に、旅人が歩いて入る）
+  C.push({
+    id: 'blanco', name: 'イスパーニャ', sub: '白い坂の町', time: 'noon', screens: 5, far: 'sunflower_noon',
+    map: [37, -4],
+    hill: '#4a5a30', ground: ['#c8b890', '#9a8460', '#dccaa0'], tint: 'rgba(255,230,180,.04)', bscale: 1.0,
+    props: [['tree_olive', 350, 280], ['stool2', 1350, 40], ['tree_olive', 3200, 300], ['stump', 4300, 70]],
+    buildings: [['es_white', 600], ['med_white', 1500, 0.95], ['es_gate', 2300], ['es_white', 3000, 0.9], ['bakery', 3900, 0.95]],
+    npcs: [
+      { id: 'dolores', name: 'ドロレスばあさん', actor: 'es_granny', x: 900, face: -1 },
+      { id: 'pablo', name: '画家のパブロ', actor: 'painter', x: 1700, face: 1 },
+      { id: 'rosa', name: 'パン屋のロサ', actor: 'baker_girl', x: 3950, face: -1 }
+    ],
+    places: [
+      { id: 'street', name: '白い坂道', x: 2600, verb: '歩く', when: f => f.pabloAsk && !f.walked },
+      { id: 'painting', name: 'パン屋の壁の絵', x: 4150, verb: '見る', when: f => f.walked }
+    ],
+    weather: { clear: 8, wind: 1, drizzle: 1 },
+    animals: [['dog_borzoi', 2100, { range: 200 }], ['cat_orange', 3500], ['donkey', 4600, { mode: 'stay', face: -1 }]],
+    talk: {
+      dolores(S) {
+        const f = S.f;
+        if (S.back && f.walked) return [['npc', 'normal', '見たかい、パン屋の壁。あの子が、とうとう人を描いた。'], ['npc', 'normal', '十年前に、恋人がこの坂を下りていったきり、あの子の絵から人が消えてね。'], ['npc', 'normal', '……下りていく背中じゃなく、上ってくる人を描いた。それで、いいのさ。']];
+        if (S.back) return [['npc', 'normal', 'あの子の絵は、きょうも白い壁ばかりさ。']];
+        if (f.doloresTold) return [['npc', 'normal', '昼寝の前に、あの子の絵を見てやっとくれ。']];
+        f.doloresTold = true;
+        return [['npc', 'normal', '旅の人、うちの通りで、いちばんきれいなものは何だい？'], ['me', '', '……白い壁、でしょうか。'], ['npc', 'normal', 'そう答えると、あの子が喜ぶ。坂の下の画家さ。二十日も、同じ通りを描いとる。'], ['npc', 'normal', 'あしたが、祭りのポスターのしめきり。……なのに、まだ何か足りないんだと。']];
+      },
+      pablo(S) {
+        const f = S.f;
+        if (S.back) return f.walked
+          ? [['npc', 'normal', '絵、見てくれたかい。題は「通りすぎる人」。'], ['npc', 'normal', '人を描くのは、こわかった。止まっていてくれる人を描くと、いなくなるから。'], ['npc', 'normal', '……あんたは止まらなかった。だから、描けた。']]
+          : [['npc', 'normal', '……白い壁は、何も言わずにいてくれる。']];
+        if (f.walked) return [['npc', 'normal', 'それだ……それだよ！ 見ないで、見ないで。帰りに、パン屋の壁で。']];
+        if (f.pabloAsk) return [['npc', 'normal', '坂を、ふつうに歩いて。こっちを見ないで。止まらないで。']];
+        f.pabloAsk = true;
+        return [['npc', 'normal', '……あっ、そこ！ 赤いマントの人、そのまま、そのまま！'], ['npc', 'normal', 'いや、止まらないで。歩いて。坂を、ふつうに上って。'], ['npc', 'normal', '二十日、この通りを描いてる。白い壁も、影も、花も、ちゃんと描けた。'], ['npc', 'normal', 'でも、絵が止まって見えるんだ。……歩いてる人が、足りなかったのかもしれない。']];
+      },
+      street(S) {
+        S.f.walked = true;
+        return [['me', '', '（白い坂を、ゆっくり上る。うしろで、筆の走る音がする）'], ['me', '', '（ふり返りたいのを、がまんした）'], ['me', '', '（坂の上で、「ありがとう！」と声が飛んできた）']];
+      },
+      rosa(S) {
+        const f = S.f;
+        if (S.back && f.walked) return [['npc', 'normal', 'パブロの絵、うちの壁に飾らせてもらったの。祭りのポスターの元の絵。'], ['npc', 'normal', '赤いマントの人、あなたでしょう？ お客さんがみんな、だれって聞くのよ。']];
+        return [['npc', 'normal', '焼きたてよ。……昼寝の時間の前に、パンを買いに来る人で混むの。'], ['npc', 'normal', 'パブロ？ あの人、パンを買うときも、壁ばかり見てる。']];
+      },
+      painting(S) {
+        if (!S.back) return [['me', '', '（まだ、壁には何もかかっていない）']];
+        return [['me', '', '（白い坂の町の絵。真ん中に、赤いマントの小さな人が、坂を上っている）'], ['me', '', '（顔は描かれていない。でも、歩いているのが分かる）'], ['insight', '', 'わたしは、だれかの絵の中で、いまも坂を上りつづけている。']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 20 遠い道の模様（花嫁の服に、旅人の道のりを縫いこむ）
+  C.push({
+    id: 'vyshyva', name: 'ウクリーナ', sub: '麦の村', time: 'morning', screens: 5, far: 'wheat_noon',
+    map: [49, 32],
+    hill: '#5a5a2a', ground: ['#a8a050', '#6a6030', '#b8a868'], tint: 'rgba(255,230,140,.04)', bscale: 1.0,
+    props: [['tree_green', 400, 300], ['bucket', 1300, 50], ['bush_berry', 2900, 90], ['tree_green', 4500, 320]],
+    buildings: [['thatched_farm', 700], ['house_small', 1600, 0.95], ['elder_house', 2500], ['bakery', 3600, 0.9]],
+    npcs: [
+      { id: 'oksana', name: 'オクサナばあちゃん', actor: 'ru_granny', x: 1000, face: -1 },
+      { id: 'sofia', name: '花嫁のソフィア', actor: 'ukr_girl', x: 2200, face: -1 },
+      { id: 'olena', name: 'ソフィアの母オレナ', actor: 'mother', x: 3300, face: -1 }
+    ],
+    places: [{ id: 'shirt', name: '刺しゅうの花嫁衣装', x: 1300, verb: '見る' }],
+    weather: { clear: 6, wind: 2, drizzle: 2 },
+    animals: [['rooster', 600], ['hen', 720], ['dog_akita', 1900], ['cow', 4000, { mode: 'stay' }], ['crow', 4400]],
+    talk: {
+      oksana(S) {
+        const f = S.f;
+        if (S.back && f.stitched) return [['npc', 'normal', 'ソフィアは、あしたの朝、町へ発つ。あの服を着てね。'], ['npc', 'normal', '……泣かなかったよ。泣くのは、帰ってきた日にとっておく。']];
+        if (S.back) return [['npc', 'normal', '最後の模様は、けっきょく、わしの目では縫えなんだ。……空けたまま、渡したよ。']];
+        if (f.stitched) return [['npc', 'normal', 'ありがとう。これで、あの子は迷わない。']];
+        if (f.oksanaAsk) {
+          f.stitched = true;
+          return [['me', '', '（ばあちゃんの針に、赤い糸を通した）'], ['npc', 'normal', 'さあ、話しておくれ。あんたが歩いてきた道を。国の名前を、順番に。'], ['me', '', '花野の村、棚田の里、紅灯の都、風の草原……'], ['me', '', '（ひと針、ひと針、えりもとに細い赤い道が伸びていく）'], ['npc', 'normal', '……ここまで。ありがとう。'], ['npc', 'normal', '残りは、わしが夜のうちに縫う。目が見えんでも、縫える模様だからね。']];
+        }
+        f.oksanaAsk = true;
+        return [['npc', 'normal', '旅の人、手を見せておくれ。……ふむ、針に糸を通せる手だ。'], ['npc', 'normal', '孫のソフィアが、あした嫁ぐ。町の、遠いところへ。'], ['npc', 'normal', '花嫁の服の刺しゅうは、ほとんどできた。残りは、えりもとの「遠い道」の模様だけ。'], ['npc', 'normal', '遠くを歩いた人の話を聞きながら縫う決まりでね。……それに、わしの目じゃ、もう糸が通らん。']];
+      },
+      shirt(S) {
+        const f = S.f;
+        if (S.back && f.stitched) return [['me', '', '（えりもとに、赤い糸と黒い糸の細い道が、二本ならんで続いている）']];
+        if (f.stitched) return [['me', '', '（えりもとに、赤い糸の細い道が続いている。そのとなりは、まだ空いている）']];
+        return [['me', '', '（白い麻の服に、赤と黒の刺しゅう。麦の穂、鳥、木。えりもとだけ、空いている）']];
+      },
+      sofia(S) {
+        const f = S.f;
+        if (S.back && f.stitched) return [['npc', 'normal', '見て、えりもとの道。赤が行きで、黒が帰り。'], ['npc', 'normal', 'ばあちゃん、帰り道の分まで縫ってたの。……帰ってこいってことよね。'], ['insight', '', 'わたしの歩いた道が、行きと帰りの二本の糸になって、だれかの旅じたくになった。']];
+        if (S.back) return [['npc', 'normal', 'あした、町へ行く。……えりもとは、空いたまま。']];
+        if (f.stitched) return [['npc', 'normal', 'えりもとの模様、ばあちゃんが「見るのは朝まで待て」って。']];
+        return [['npc', 'normal', 'わたしが嫁ぐ町、ここから汽車で二日なの。'], ['npc', 'normal', 'うれしいの。うれしいんだけど……麦の匂いのしない町で、迷ったらどうしよう。']];
+      },
+      olena(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'パンを焼いたの。花嫁のパン。……焼いてるあいだだけ、泣いてもいいことにした。']];
+        return [['npc', 'normal', 'あしたの婚礼のパンを、これから焼くの。編みこみの、大きな輪のパン。'], ['npc', 'normal', '母が刺しゅう、わたしがパン。……あの子が持っていけるものは、それくらいだから。']];
       }
     }
   });

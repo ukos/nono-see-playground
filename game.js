@@ -478,7 +478,7 @@ function drawActor(n, cam) {
   }
   const im = img(P.a(n.actor, 'normal')), h = NONO_H * (n.h || 1), w = im ? im.width * h / im.height : h * .6;
   g.fillStyle = 'rgba(0,0,0,.3)'; g.beginPath(); g.ellipse(x, GROUND + 4, Math.min(34, w * .45), 7, 0, 0, Math.PI * 2); g.fill();
-  if (im) { g.save(); g.translate(x, 0); g.scale(n.off ? -(n.leaveDir || 1) : (n.face || -1), 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
+  if (im) { g.save(); g.translate(x, 0); g.scale(n.off && !n.follow ? -(n.leaveDir || 1) : (n.face || -1), 1); g.drawImage(im, -w / 2, GROUND - h + 4 + Math.sin(st.t * 1.6 + n.ax) * 1.2, w, h); g.restore(); }
 }
 // ---------------------------------------------------------------- 動物（ペット・家畜・鳥）
 // 国の animals: [[種類, x, {mode, range, when, back, face}]]
@@ -638,6 +638,10 @@ function frame(ts) {
     showBanner(here); setWeather(pickWeather(here)); wx.timer = 40 + Math.random() * 50; if (first) save();
   }
   prefetch(here); prefetch(C[here.i + 1]); prefetch(C[here.i - 1]);
+  // ついてくる住人（迷子の子など）：follow(f) が真のあいだ、nono のうしろを歩く
+  if (!busy) for (const n of NPCS) if (n.follow && n.follow(st.flags) && st.x > n.c.x0 && st.x < n.c.x1) { // 国の外へはついてこない
+    const t = st.x - st.dir * 80 - n.ax; n.off = (n.off || 0) + (t - (n.off || 0)) * Math.min(1, dt * 2.2);
+  }
   if (!busy) for (const n of NPCS) {
     if (!n.leaveWhen || !n.leaveWhen(st.flags) || st.flags[n.id + 'Gone']) continue;
     if (!n.wait) n.wait = st.t + 1.2; // 手を挙げてから歩き出す
