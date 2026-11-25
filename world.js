@@ -2012,5 +2012,120 @@
     }
   });
 
+// ---------------------------------------------------------------- 37 十三番目の鐘（壊れたと思った時計は、亡くなった師匠が弟子に残した最後の宿題だった）
+  C.push({
+    id: 'bohemia', shape: '師匠の残した宿題', name: 'ボヘミア', sub: '時計塔の町', time: 'noon', screens: 5, far: 'valley', map: [50.1, 14.4],
+    hill: '#3a3a2a', ground: ['#8a8070', '#5a5048', '#9a9080'], tint: 'rgba(255,230,190,.04)', bscale: 1.0,
+    props: [['ship_bell', 1950, 140], ['stool2', 3100, 40], ['wall_flowers', 4200, 110]],
+    buildings: [['uk_tudor', 600, 0.9], ['castle_gate', 1650, 0.8], ['it_townhouse', 2700, 0.9], ['house_small', 3700, 1.3]],
+    npcs: [
+      { id: 'jiri', name: '時計屋のイジー', actor: 'surveyor', x: 1350, face: 1 },
+      { id: 'baker', name: 'パン屋のマルタ', actor: 'baker_girl', x: 2450, face: -1 },
+      { id: 'vera', name: 'ヴェラおばあさん', actor: 'kasuri', x: 3950, face: -1 }
+    ],
+    places: [
+      { id: 'tower', name: '時計塔の歯車', x: 1950, verb: '見る' },
+      { id: 'tools', name: '師匠の道具箱', x: 3650, verb: '開ける', when: f => f.veraTold }
+    ],
+    weather: { clear: 6, drizzle: 3, fog: 1 },
+    animals: [['crow', 1700], ['cat_white', 2900], ['dog_bulldog', 4400]],
+    talk: {
+      jiri(S) {
+        const f = S.f;
+        if (S.back && f.lever) return [['npc', 'normal', 'けさ、正午に十二回だけ鳴った。町じゅうが、少しさびしそうな顔をした。'], ['npc', 'normal', '……師匠の前掛けを着てみた。まだ、ちょっと大きい。']];
+        if (S.back) return [['npc', 'normal', 'きょうも十三回。……町の人は、もう笑わなくなった。慣れたらしい。']];
+        if (f.lever) return [['npc', 'normal', '……裏の小さなレバー、ありました。十三番目の槌だけを、止めるレバー。'], ['npc', 'normal', '壊れてなかったんだ。師匠が、わざと鳴らしてたんだ。']];
+        if (f.jiriTold) return [['npc', 'normal', '歯車は全部見た。どこも、壊れてない。……なのに、十三回鳴るんだ。']];
+        f.jiriTold = true;
+        return [['me', '', '（正午の鐘が鳴りはじめた。……十一、十二、十三）'], ['me', '', '（町の人たちが、くすくす笑って空を見上げる。若い男だけが、頭を抱えている）'], ['npc', 'normal', '……聞きましたか。十三回。師匠が死んでから、ずっとです。'], ['npc', 'normal', 'ぼくは弟子です。でも、直せない。来週、町長が新しい時計屋を呼ぶそうです。そうしたら、ぼくはおしまいだ。']];
+      },
+      tower(S) {
+        const f = S.f;
+        if (S.back) return [['me', '', '（歯車の音が、ていねいに続いている。十三番目の槌だけが、静かに止まっている）']];
+        f.towerSeen = true;
+        return [['me', '', '（塔の窓から、大小の歯車が見える。どれも、油でつやつやしている）'], ['me', '', '（鐘を打つ槌が十二本。……その奥に、小さな槌がもう一本。ほかのより、ずっと新しい）']];
+      },
+      baker(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '十二回になっちゃったのね。……ちょっと、損した気分。'], ['npc', 'normal', 'お昼に一回多く鳴ると、ひとつ多く売れたのよ。']];
+        return [['npc', 'normal', '十三番目の鐘？ わたしは好き。お昼が、ちょっとだけ長くなる気がするの。'], ['npc', 'normal', 'イジーは、あれを恥ずかしがってる。師匠のおじいさんは、毎日笑って聞いてたのにね。']];
+      },
+      vera(S) {
+        const f = S.f;
+        if (S.back && f.lever) return [['npc', 'normal', 'けさ、十二回だったね。……あの人も、ようやく安心しただろうよ。'], ['insight', '', '壊れていると思った十三番目の鐘は、師匠が弟子に残した、最後の宿題だった。']];
+        if (S.back) return [['npc', 'normal', 'まだ十三回だね。……あの子が気づくまで、あの人は鳴らしつづけるのさ。']];
+        if (f.veraTold) return [['npc', 'normal', '道具箱は、そこの戸口の横。あの人は、何でもあの箱にしまう人だった。']];
+        f.veraTold = true;
+        return [['npc', 'normal', 'イジーの話かい。……あの子は、うちの人の最後の弟子でね。'], ['npc', 'normal', '亡くなる前の月、あの人は毎晩、塔にのぼって、何かを足していた。新しい部品をね。'], ['npc', 'normal', '道具箱を見てごらん。わたしには、何が書いてあるのか分からないけど。']];
+      },
+      tools(S) {
+        const f = S.f;
+        if (f.lever) return [['me', '', '（道具箱の中に、小さな紙がもう一枚。「よくやった」とだけ書いてある）']];
+        if (!f.towerSeen) return [['me', '', '（古い道具箱。ふたの裏に、紙が貼ってある。……時計塔の何かのことらしい）']];
+        f.lever = true;
+        return [['me', '', '（ふたの裏の紙。「十三番目の槌は、イジーが自分で見つけるまで鳴らしておくこと。見つけたら、裏のレバーで止めてよい」）'], ['me', '', '（……塔の奥の、新しい小さな槌のことだ。イジーに伝えよう）'], ['me', '', '（紙の下に、もう一枚。「よくやった」とだけ書いてある）']];
+      }
+    }
+  });
+
+  
+// ---------------------------------------------------------------- 38 片方のコウノトリ（毎年二羽で戻る屋根に、一羽だけ帰ってきた）
+  C.push({
+    id: 'belarus', shape: '渡り鳥の帰りを待つ', name: 'ベラルシア', sub: 'コウノトリの沼', time: 'dusk', screens: 5, far: 'marsh', timeBack: 'morning', map: [52.1, 27],
+    hill: '#2a3424', ground: ['#5a6a40', '#3a4430', '#6a7050'], tint: 'rgba(255,180,120,.05)', bscale: 1.0,
+    props: [['reeds', 1300, 120], ['reeds2', 2500, 130], ['reeds', 3200, 120], ['haystack', 4300, 110]],
+    buildings: [['thatched_farm', 700, 0.95], ['house_small', 4000, 1.3]],
+    npcs: [
+      { id: 'misha', name: 'ミーシャ', actor: 'scout', x: 1050, face: 1 },
+      { id: 'hanna', name: 'ハンナばあちゃん', actor: 'ru_granny', x: 600, face: 1, when: (f, back) => !f.hannaOut },
+      { id: 'hanna2', name: 'ハンナばあちゃん', actor: 'ru_granny', x: 2700, face: -1, when: (f, back) => f.hannaOut && !back },
+      { id: 'hanna3', name: 'ハンナばあちゃん', actor: 'ru_granny', x: 400, face: 1, when: (f, back) => back && f.freed }
+    ],
+    places: [
+      { id: 'roof', name: '屋根の車輪の巣', x: 750, verb: '見上げる' },
+      { id: 'reedbird', name: '葦の中の白い鳥', x: 2900, verb: '見る' }
+    ],
+    weather: { clear: 5, drizzle: 3, fog: 2 },
+    animals: [['duck', 1600], ['crow', 3600], ['cow', 4500, { mode: 'stay', face: -1 }]],
+    talk: {
+      misha(S) {
+        const f = S.f;
+        if (S.back && f.freed) return [['npc', 'normal', '見た？ 屋根に二羽！ くちばしを鳴らして、かちかちかちって、ずっと話してる。']];
+        if (S.back) return [['npc', 'normal', '屋根は、きょうも一羽だけ。……ばあちゃん、外に出てこない。']];
+        if (f.freed) return [['npc', 'normal', 'ばあちゃんが、沼に入ったの？ ……長靴、三年ぶりにはいたんだって。']];
+        return [['npc', 'normal', 'ハンナばあちゃんの屋根のコウノトリ、毎年四月十日に、二羽で帰ってくるの。'], ['npc', 'normal', 'ことしは、一羽だけ。もう五日たった。'], ['npc', 'normal', 'ばあちゃん、それから窓を閉めて、外に出てこなくなっちゃった。……あっちの一羽は、どこかで死んじゃったんだって。']];
+      },
+      hanna(S) {
+        const f = S.f;
+        if (f.reedSeen) { f.hannaOut = true;
+          return [['me', '', '沼の東の葦の中に、白い鳥がいました。片足に、何かがからまって、飛べないみたいです。'], ['npc', 'normal', '……白い鳥？ 片足？'], ['npc', 'normal', 'はさみと、長靴を。……ミーシャ、灯りを持っておいで。']]; }
+        return [['me', '', '（閉じた窓のむこうで、おばあさんが、屋根のほうを見上げている）'], ['npc', 'normal', '……旅の人かい。コウノトリを見に来たなら、ことしは一羽だよ。'], ['npc', 'normal', '六十年、この屋根に二羽で来た。親から子へ、子から孫へ。……とうとう、片方がいなくなった。']];
+      },
+      roof(S) {
+        const f = S.f;
+        if (S.back && f.freed) return [['me', '', '（屋根の上の、古い車輪の巣に、白い鳥が二羽。かちかちと、くちばしを鳴らしあっている）']];
+        if (S.back) return [['me', '', '（屋根の巣に、一羽。沼のほうを、じっと見ている）']];
+        return [['me', '', '（屋根のてっぺんに、古い荷車の車輪。その上に、枝で編んだ大きな巣）'], ['me', '', '（白い鳥が一羽、巣のふちに立って、東の沼のほうばかり見ている）']];
+      },
+      reedbird(S) {
+        const f = S.f;
+        if (S.back && f.freed) return [['me', '', '（葦の中に、切れた網の糸が、ひとかたまり落ちている）']];
+        if (f.freed) return [['me', '', '（葦のあいだに、切った糸が落ちている。白い鳥は、もういない）']];
+        if (f.hannaOut) return [['me', '', '（白い鳥は、さっきと同じ場所で、片足で立っている）']];
+        f.reedSeen = true;
+        return [['me', '', '（葦のあいだに、白くて大きな鳥が立っている。片足で）'], ['me', '', '（もう片方の足に、古い網の糸が、ぐるぐるに巻きついている。羽ばたこうとして、やめた）'], ['me', '', '（近づくと、首をのばして、くちばしをかちかちと鳴らした。……追いはらわれた）']];
+      },
+      hanna2(S) {
+        const f = S.f;
+        if (f.freed) return [['npc', 'normal', '……飛んでいったね。屋根のほうへ。'], ['npc', 'normal', '片方が見えないと、片方は待つ場所から動けない。……鳥も、人も、同じだね。']];
+        f.freed = true;
+        return [['me', '', '（ハンナばあちゃんが、長靴で葦の中へ入っていく。鳥は、くちばしを鳴らさない）'], ['npc', 'normal', '……そうかい、そうかい。網にかかって、五日も。'], ['me', '', '（ぱちん、ぱちん。はさみが、糸を切る）'], ['me', '', '（白い鳥が、大きく羽をひろげて、夕焼けの中を、屋根のほうへ飛んでいった）']];
+      },
+      hanna3(S) {
+        return [['npc', 'normal', 'けさ、窓を開けたよ。五日ぶりに、全部。'], ['npc', 'normal', '……あの子らは、来年も二羽で来るだろう。わしも、それまでは、窓を開けておくことにする。'], ['insight', '', '片方を待って動けなかった屋根の一羽は、沼で、もう片方を待たせていた。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
