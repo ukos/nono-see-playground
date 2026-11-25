@@ -4953,5 +4953,104 @@
     }
   });
 
+// ---------------------------------------------------------------- 93 ほら話の証人（手のひらで覚えている人がいた）
+  C.push({
+    id: 'tanzania', shape: 'ほら話の証人', name: 'タンザニナ', sub: '雪の山のふもと', time: 'noon', screens: 5, far: 'snow_peaks_noon', farBack: 'savanna_morning', timeBack: 'dusk', map: [-3.3, 37.3],
+    hill: '#5a6a3a', ground: ['#a09060', '#807040', '#b0a070'], tint: 'rgba(255,230,190,.05)', bscale: 1.0,
+    props: [['big_tree2', 500, 330], ['rock', 1500, 60], ['bush', 2300, 80], ['big_tree2', 3100, 350], ['rock2', 4200, 100]],
+    buildings: [['thatched_farm', 900, 0.85], ['kr_school', 2000, 0.8], ['thatched_farm', 3800, 0.85]],
+    npcs: [
+      { id: 'baraka', name: 'バラカ', actor: 'boy_frog', x: 950, face: 1 },
+      { id: 'mwalimu2', name: 'ザウディア先生', actor: 'teacher', x: 2050, face: -1 },
+      { id: 'babu', name: 'ババ・ジョセフ（バラカのじいちゃん）', actor: 'ca_elder', x: 2900, face: -1 },
+      { id: 'bibi', name: 'ビビ・ネエマ', actor: 'granny_andes', x: 3600, face: -1 }
+    ],
+    places: [],
+    weather: { clear: 7, wind: 2 },
+    animals: [['hen', 1300], ['cow', 2500], ['crow', 4100]],
+    talk: {
+      baraka(S) {
+        const f = S.f;
+        if (S.back && f.tz_done) return [['npc', 'normal', 'じいちゃんの話、今夜、ぼくが続きを話すんだ。「その雪玉はね、ばあちゃんの手で、とけました」って。']];
+        if (S.back) return [['npc', 'normal', '……今夜、じいちゃん、また雪玉の話をする。みんな、笑うのかな。']];
+        if (f.tz_done) return [['npc', 'normal', 'ばあちゃんが？ 雪玉を、もらった人？ ……じゃあ、ほんとの話なんだ！']];
+        if (f.tz_bar) return [['npc', 'normal', '山のてっぺんから、ここまで、まる一日かかるんだよ。雪玉なんて、とけるに決まってる。']];
+        f.tz_bar = true;
+        return [['me', '', '（男の子が、遠くの白い山を見上げて、口をとがらせている）'], ['npc', 'normal', '旅の人。うちのじいちゃん、毎年、村の話の夜に、同じほら話をするんだ。'], ['npc', 'normal', '「若いころ、あの山のてっぺんの雪を、雪玉にして、村まで持って帰った」って。'], ['npc', 'normal', '今夜も話すの。友だちがみんな、ほら吹きの孫って笑う。……ほんとか、うそか、知りたいの。']];
+      },
+      mwalimu2(S) {
+        const f = S.f;
+        if (S.back && f.tz_done) return [['npc', 'normal', '教室の「村の本当の話」の帳面に、書き足すわ。証人の名前つきでね。']];
+        if (S.back) return [['npc', 'normal', '……証拠はないけど、わたしは、あの話が好き。それじゃ、だめかしら。']];
+        return [['npc', 'normal', 'ジョセフさんの雪玉の話？ わたしも子どものころ、聞いたわ。……信じたかったけど、証拠がなくて。'], ['npc', 'normal', '先生になってからは、「村の本当の話」を帳面に集めてるの。あの話だけ、まだ書けてない。'], ['npc', 'normal', '……ひとつだけ、ひっかかるの。あの話、いつも「そして、あの子の手で」で、ぷつっと終わるのよ。']];
+      },
+      babu(S) {
+        const f = S.f;
+        if (S.back && f.tz_done) return [['npc', 'normal', 'ばあさんが、しゃべったのか。……五十年、わしの話を、だまって聞いとったくせに。']];
+        if (S.back) return [['npc', 'normal', '……ほら話でいいさ。孫に笑われても、話すよ。']];
+        f.tz_babu = true;
+        return [['npc', 'normal', '雪玉の話かね。ほんとうだよ。……だれも信じんがね。'], ['npc', 'normal', '帽子に雪をつめて、一日じゅう走った。村に着いたら、こぶしくらいに小さくなっとった。'], ['npc', 'normal', '……それを、ある子にわたした。だれにかは、言わん。それは、わしの話じゃないからな。']];
+      },
+      bibi(S) {
+        const f = S.f;
+        if (S.back && f.tz_done) return [['npc', 'normal', 'あの冷たさは、五十年たっても、手のひらにある。……今夜は、わたしも、いちばん前で聞くよ。']];
+        if (S.back) return [['npc', 'normal', '……あの人の話は、いつも、いいところで終わるねえ。']];
+        if (f.tz_done) return [['npc', 'normal', 'バラカに伝えておくれ。……雪は、ほんとうに、冷たかったって。']];
+        if (!f.tz_babu) return [['me', '', '（おばあさんが、日なたで、両手を、膝の上で重ねている）'], ['npc', 'normal', 'いいお天気だねえ。山の雪が、よく見える。']];
+        f.tz_done = true;
+        return [['me', '', '（おばあさんが、日なたで、両手を、膝の上で重ねている）'], ['me', '', 'ジョセフさんの雪玉、だれにわたしたのか、言わないんです。……「それは、わしの話じゃない」って。'], ['npc', 'normal', '……あの人らしい。もらったのは、わたしだよ。十二の夏。'], ['npc', 'normal', 'こぶしくらいの雪が、わたしの手のひらで、とけていった。生まれてはじめての、雪だった。'], ['npc', 'normal', 'とけるまでに、願いごとをした。……あの人と、いっしょになれますように、ってね。'], ['insight', '', 'ほら話に聞こえた話にも、手のひらで覚えている証人がいた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 94 一軒だけちがう色の理由（海の上から、家を見つける目印）
+  C.push({
+    id: 'hellas', shape: '一軒だけちがう色の理由', name: 'ヘラーシア', sub: '白い島の階段', time: 'noon', screens: 5, far: 'sea_noon', farBack: 'sea_dusk', timeBack: 'dusk', map: [36.4, 25.4],
+    hill: '#7a8a9a', ground: ['#e8e4dc', '#c8c4bc', '#f4f0e8'], tint: 'rgba(220,235,255,.05)', bscale: 1.0,
+    props: [['wall_flowers', 500, 110], ['stool2', 1400, 40], ['wall_flowers', 2300, 110], ['pier', 3300, 90], ['lighthouse', 4300, 300]],
+    buildings: [['med_white', 800, 0.9], ['gr_chapel', 1900, 0.85], ['es_white', 2700, 0.9]],
+    npcs: [
+      { id: 'kostas', name: '町役場のコスタス', actor: 'stationmaster', x: 950, face: 1 },
+      { id: 'eleni', name: 'エレニおばあさん', actor: 'granny_nordic', x: 2500, face: -1 },
+      { id: 'yorgos', name: '桟橋の子ヨルゴ', actor: 'boy_cap', x: 3500, face: -1 },
+      { id: 'nikos', name: '船乗りのニコス', actor: 'sailor_boy', x: 3800, face: -1, when: (f, back) => back }
+    ],
+    places: [],
+    weather: { clear: 8, wind: 3 },
+    animals: [['cat_white', 1200], ['cat_black', 2200], ['donkey', 3000]],
+    talk: {
+      kostas(S) {
+        const f = S.f;
+        if (S.back && f.gr_done) return [['npc', 'normal', '決まりの帳面に、一行書き足した。「ただし、海から家を探す者のある家は、この限りにあらず」。']];
+        if (S.back) return [['npc', 'normal', '……あしたの祭りまでに、白く塗りなおす。決まりは、決まりだ。']];
+        if (f.gr_done) return [['npc', 'normal', '……海から？ ……わしの親父も、船乗りだった。港に入るとき、いつも、教会の塔を探してたっけ。']];
+        if (f.gr_kos) return [['npc', 'normal', 'この島の家は、白と青。昔からの決まりだ。……桃色の家は、一軒だけ。']];
+        f.gr_kos = true;
+        return [['me', '', '（役人ふうの男の人が、ペンキの缶と、決まりの帳面を抱えて、汗をふいている）'], ['npc', 'normal', '旅の人。あしたは島の祭り。役場は、家をぜんぶ白と青にそろえる決まりでね。'], ['npc', 'normal', '一軒だけ、桃色の家があるんだ。エレニばあさんの家。……塗りなおしてくれと、もう三年、頼んでる。'], ['npc', 'normal', '今年こそ、あしたまでに塗るって約束させたい。……あのばあさん、がんこでね。']];
+      },
+      eleni(S) {
+        const f = S.f;
+        if (S.back && f.gr_done) return [['npc', 'normal', 'ニコスが帰ってきたよ。……海の上から、桃色が見えたって。']];
+        if (S.back) return [['npc', 'normal', '……白く塗られちまう前に、あの子、帰ってくればいいんだけど。']];
+        f.gr_ele = true;
+        return [['me', '', '（おばあさんが、桃色の壁の前で、刷毛を握ったまま、海のほうを見ている）'], ['npc', 'normal', '役場の人に頼まれたのかい。……塗りなおすつもりは、あるんだよ。ほんとうに。'], ['npc', 'normal', 'でもね、孫のニコスが、船で外国へ行ってるの。帰ってくるのは、いつも夕方。'], ['npc', 'normal', '……それ以上は、言いたくない。年寄りの、わがままだからね。']];
+      },
+      yorgos(S) {
+        const f = S.f;
+        if (S.back && f.gr_done) return [['npc', 'normal', 'ニコス兄ちゃんの船、来た！ 甲板で、桃色の家に手をふってたよ。']];
+        if (S.back) return [['npc', 'normal', '船が見えた！ ……でも、まだ、どの家がどれか、わからないくらい遠い。']];
+        if (f.gr_done) return [['npc', 'normal', 'ほらね。ぼくの言ったとおりでしょ。']];
+        if (!f.gr_ele) return [['npc', 'normal', 'ぼく、桟橋で、船を待ってるの。……毎日、港に入る船を、数えてる。']];
+        f.gr_done = true;
+        return [['npc', 'normal', 'エレニばあちゃんの家？ ……あれ、海から見ると、すっごく目立つんだよ。'], ['npc', 'normal', 'ニコス兄ちゃんが言ってた。「島の家は、海からだと、ぜんぶ同じに見える。でも、ばあちゃんちだけは、すぐわかる」って。'], ['npc', 'normal', '……白く塗ったら、兄ちゃん、迷子になっちゃうよ。'], ['insight', '', '町の決まりに合わない一軒の色は、海の上から家を見つける目印だった。']];
+      },
+      nikos(S) {
+        const f = S.f;
+        if (f.gr_done) return [['npc', 'normal', '……ただいま。海の上から、いつもあの桃色を探すんだ。ばあちゃんには、照れくさくて言ってないけど。']];
+        return [['npc', 'normal', 'ただいま。……あれ、ばあちゃんの家、まだ桃色だ。よかった。']];
+      }
+    }
+  });
+
   window.SEE_WORLD = { countries: C };
 })();
