@@ -3266,10 +3266,14 @@
       { id: 'carmela', name: 'カルメラばあさん', actor: 'fisher_granny', x: 2400, face: -1 },
       { id: 'salvu', name: 'サルヴじいさん', actor: 'wheelchair', x: 3400, face: -1 }
     ],
-    places: [{ id: 'wall', name: '高い石垣', x: 1800, verb: '見る' }],
+    places: [{ id: 'walk_maltia', name: '石垣ぞいの坂道', x: 2900, verb: '歩く' }, { id: 'wall', name: '高い石垣', x: 1800, verb: '見る' }],
     weather: { clear: 6, wind: 3 },
     animals: [['cat_calico', 1500], ['hen', 2900], ['dog_spot', 4000]],
     talk: {
+      walk_maltia(S) {
+        if (S.back) return [['me', '', '（帰りの石垣ぞい。ボールの道はまっすぐ一本。人の道は、ぐるりと遠回りだ）']];
+        return [['me', '', '（石垣にそって、ぐるりと回る。……向こう側の門まで、子どもの足なら、ずいぶん遠い）']];
+      },
       ninamt(S) {
         const f = S.f;
         if (f.ballBack) {
@@ -3385,7 +3389,7 @@
           f.cu_gave = true;
           return [['me', '', '（レコードを渡す。……どこにあったかは、言わずに）'], ['npc', 'normal', 'あった！ ……どこに？ いいや、聞かない。楽団のとこへ走る！'], ['npc', 'normal', '今夜は、ぼくが針を置く係だ。二番の頭で、太鼓に合図する。……じいちゃんの代わりに。']];
         }
-        if (S.back && f.cu_liveFill) return [['npc', 'normal', '針を置く練習、十回やった。二番の頭で手を上げると、太鼓がぴたっと入るんだ。'], ['npc', 'normal', '……じいちゃんの歌と、いまの太鼓が、つながって聞こえた。']];
+        if (S.back && f.cu_liveFill) return [['npc', 'normal', '針を置く練習、十回やった。二番の頭で手を上げると、太鼓がぴたっと入るんだ。'], ['npc', 'normal', '……じいちゃんの歌と、いまの太鼓が、つながって聞こえた。'], ['npc', 'normal', '……あれ。広場のはしにいるの、ばあちゃん？ ……手、ふってる。ぼくのほう、見てたんだ。']];
         if (S.back) return [['npc', 'normal', '……レコード、どこにもない。今夜のパーティー、じいちゃんの歌なしで始まっちゃう。']];
         if (f.cu_liveFill) return [['npc', 'normal', '楽団、二番の頭だけ、何回もやりなおしてる。……なんでそこだけ？']];
         if (f.cu_pepeTold) return [['npc', 'normal', '楽団は、夕方までに曲を覚えなきゃいけないんだ。……時間がない！']];
@@ -3520,7 +3524,7 @@
       },
       youssef(S) {
         const f = S.f;
-        if (S.back && f.tn_yes) return [['npc', 'normal', 'あの裏返り、わしの若いころと、そっくりじゃ。……わしも、ああだった。']];
+        if (S.back && f.tn_yes) return [['me', '', '（港のほうから、ラッパ。三つめで、ぷわっと裏返る。……町じゅうの歌声が、それを追いかける）'], ['npc', 'normal', '……聞こえるか。わしの耳でも、ちゃんと聞こえる。あの裏返り、わしの若いころと、そっくりじゃ。']];
         if (S.back) return [['npc', 'normal', '今夜は、合図なしか。……地面の下の音も、きのうから止まっとる。']];
         if (f.tn_old) return [['npc', 'normal', 'わしのラッパも貸すぞ。……あの子のより、ちと、裏返りにくい。']];
         if (!f.tn_amina) return [['me', '', '（おじいさんが、口を手でおさえて、ふがふが笑っている）'], ['npc', 'normal', 'ふぁふぁ。旅の人か。歯が一本、休みをとってな。']];
