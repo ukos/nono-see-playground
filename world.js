@@ -7100,7 +7100,7 @@
   C.push({
     id: 'puertorica', shape: 'カエルの声がしない家', name: 'プエルトリカ', sub: 'カエルの歌う島', time: 'dusk', screens: 5, far: 'rainforest_noon', farBack: 'sea_night', timeBack: 'night', map: [18.2, -66.5],
     hill: '#3a6a48', ground: ['#a89878', '#887858', '#b8a888'], tint: 'rgba(255,235,215,.06)', bscale: 1.0,
-    props: [['palm', 400, 310], ['bush_berry', 1450, 80], ['tree_green', 2350, 270], ['bush_berry', 3600, 80], ['palm', 4450, 300]],
+    props: [['palm', 400, 310], ['bush_berry', 1450, 80], ['tree_green', 2350, 270], ['bush_berry', 3600, 80], ['bromeliad_pot', 3280, 45, null, 1], ['bromeliad_pot', 1080, 40, (f, back) => back && f.pr_done, 1], ['bromeliad_pot', 700, 38, (f, back) => back && f.pr_done, 1], ['palm', 4450, 300]],
     buildings: [['white_plinth_house', 750, 0.6], ['mx_house', 1800, 0.85], ['sea_shop', 2850, 0.85]],
     npcs: [
       { id: 'javi', name: 'ハビ', actor: 'boy_kite', x: 950, face: 1 },
@@ -7141,12 +7141,12 @@
       },
       rolando(S) {
         const f = S.f;
-        if (S.back && f.pr_done) return [['npc', 'normal', 'ハビが、鉢を三つ買っていった。……小づかい、ぜんぶはたいてな。半分にまけてやったよ。']];
+        if (S.back && f.pr_done) return [['npc', 'normal', 'ハビが、鉢を三つ買っていった。……小づかい、ぜんぶはたいてな。半分にまけてやったよ。'], ['npc', 'normal', '今夜は、ティトの家の窓の下で、いっしょに聞くことにした。……四十年ぶんの話も、あるしな。']];
         if (S.back) return [['npc', 'normal', '夜は、店じまい。……カエルの仕事の時間だ。']];
         if (f.pr_done) return [['npc', 'normal', '見ただろう、葉のつけねの水たまり。……あれが、あいつらの家さ。']];
         if (f.pr_ro) return [['npc', 'normal', '植木屋は、待つ商売だ。売れるまで、育つまで、来るまで。']];
         f.pr_ro = true;
-        return [['npc', 'normal', 'うちは植木屋。……コキーを探してる？ なら、カエルじゃなくて、葉っぱを探しな。'], ['npc', 'normal', 'つかまえて連れてっても、カエルは、もとの家に帰っちまう。……あいつらにも、帰り道があるんだ。'], ['npc', 'normal', 'しげみの葉を、のぞいてみな。……昼間は、そこで寝てる。']];
+        return [['npc', 'normal', 'うちは植木屋。……コキーを探してる？ なら、カエルじゃなくて、葉っぱを探しな。'], ['npc', 'normal', 'つかまえて連れてっても、カエルは、もとの家に帰っちまう。……あいつらにも、帰り道があるんだ。'], ['npc', 'normal', 'しげみの葉を、のぞいてみな。……昼間は、そこで寝てる。'], ['npc', 'normal', 'ティトとは、子どものころ、いっしょにカエルをつかまえて、逃げられた仲だ。……あいつ、まだ、こりてないのか。']];
       },
       grove(S) {
         const f = S.f;
@@ -7164,8 +7164,8 @@
   C.push({
     id: 'lesotona', shape: '山の帽子', name: 'レソトナ', sub: '山の帽子の国', time: 'morning', screens: 5, far: 'mountains', farBack: 'twilight', timeBack: 'dusk', map: [-29.5, 28.2],
     hill: '#6a7a58', ground: ['#a89878', '#887858', '#b8a888'], tint: 'rgba(250,245,230,.05)', bscale: 1.0,
-    props: [['rock2', 400, 100], ['haystack', 1400, 110], ['rock_moss', 2400, 110], ['rock', 3300, 60], ['rock2', 3950, 70]],
-    buildings: [['thatched_farm', 750, 0.8], ['thatched_farm', 1750, 0.75], ['sheep_pen', 2800, 0.8]],
+    props: [['rock2', 400, 100], ['haystack', 1400, 110], ['rock_moss', 2400, 110], ['rock', 3300, 60], ['qiloane', 4200, 260], ['rock2', 3950, 70], ['basotho_hat', 1120, 30, null, 1]],
+    buildings: [['rondavel', 720, 0.55], ['rondavel', 1700, 0.5], ['sheep_pen', 2800, 0.8]],
     npcs: [
       { id: 'thabols', name: 'タボ', actor: 'tribekid', x: 950, face: 1 },
       { id: 'palesa', name: '帽子編みのパレサ', actor: 'market_woman', x: 2000, face: -1 },
@@ -7195,7 +7195,7 @@
       },
       litsepo(S) {
         const f = S.f;
-        if (S.back && f.ls_done) return [['npc', 'normal', 'タボのじいちゃんが、あの石の上まで、杖ついて歩いてきたよ。……山と帽子を、見くらべてた。']];
+        if (S.back && f.ls_done) return [['npc', 'normal', 'タボのじいちゃんが、あの石の上まで、杖ついて歩いてきたよ。……山と帽子を、見くらべてた。'], ['npc', 'normal', 'タボが、ぼくに字を教えてくれるって。山の名前から書くんだ。……かわりに、山の見え方を、ぜんぶ教えてやる。']];
         if (S.back) return [['npc', 'normal', '日が暮れると、山は、ただの黒い影になる。']];
         if (f.ls_done) return [['npc', 'normal', '見た？ ……あそこからだけ、山が、帽子になるんだ。']];
         if (f.ls_li) return [['npc', 'normal', '石の上は、すべるから、気をつけて。']];
