@@ -7669,7 +7669,115 @@
     }
   });
 
-// ---------------------------------------------------------------- 139 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 139 雨にけずれた壁（壁の下に、何十年ぶんの手が重なっていた）
+  C.push({
+    id: 'burkina', shape: '雨にけずれた壁', name: 'ブルキナ', sub: '絵の家の村', time: 'morning', screens: 5, far: 'savanna_morning', farBack: 'twilight', timeBack: 'dusk', map: [11.1, -1.1],
+    hill: '#8a7a58', ground: ['#b89868', '#987848', '#c8a878'], tint: 'rgba(255,240,215,.06)', bscale: 1.0,
+    props: [['tree_dead', 400, 260], ['rice_basket', 1400, 60], ['tree_green', 2400, 260], ['rock', 3300, 60], ['tree_dead', 4500, 260]],
+    buildings: [['adobe', 750, 0.85], ['adobe', 1750, 0.8], ['adobe', 2800, 0.8], ['adobe', 3800, 0.85]],
+    npcs: [
+      { id: 'awabf', name: 'アワ', actor: 'braidgirl', x: 950, face: 1 },
+      { id: 'poko', name: 'ポコばあちゃん', actor: 'herbgranny', x: 2000, face: -1 },
+      { id: 'rasane', name: 'いとこのラサネ', actor: 'tribekid', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'paintwall', name: '雨にけずれた壁', x: 3950, verb: '見る' }],
+    weather: { clear: 5, drizzle: 3, squall: 2 },
+    animals: [['hen', 1600], ['cow', 2500], ['crow', 3500]],
+    talk: {
+      awabf(S) {
+        const f = S.f;
+        if (S.back && f.bf_done) return [['npc', 'normal', 'みんなで描きなおしたよ。わたしも、ギザギザを、ひとつだけ描いた。……ちょっと、まがったけど。'], ['npc', 'normal', 'ばあちゃん、「来年の雨が、そのまがったところも、なじませてくれる」って笑ってた。']];
+        if (S.back) return [['npc', 'normal', '……壁、ぬりつぶされちゃうのかな。']];
+        if (f.bf_done) return [['npc', 'normal', '壁の下に、何十年ぶんの模様が？ ……ばあちゃんの母さんのも？']];
+        if (f.bf_aw) return [['npc', 'normal', '……消えないでほしいのに。']];
+        f.bf_aw = true;
+        return [['me', '', '（女の子が、雨の跡がのこる土の壁を、指でなぞっている）'], ['npc', 'normal', 'うちの壁の模様は、ばあちゃんが描いたの。黒と白と赤の、ギザギザの模様。'], ['npc', 'normal', 'でも、雨の季節が来ると、少しずつ流れて消えちゃうの。……ばあちゃん、もう手がふるえて、描けないのに。'], ['npc', 'normal', 'あしたから、村の女の人たちで、壁を描きなおすんだって。……ばあちゃんの模様が、上から塗られちゃう。']];
+      },
+      poko(S) {
+        const f = S.f;
+        if (S.back && f.bf_done) return [['npc', 'normal', 'アワの描いたギザギザ、まがってたよ。……わたしの最初のも、そうだった。壁の下に、まだ残ってるはずさ。']];
+        if (S.back) return [['npc', 'normal', '……今年の雨は、長いね。']];
+        if (f.bf_done) return [['npc', 'normal', '壁の下を見たかい。……雨は、消すだけじゃない。ときどき、昔を見せてくれる。']];
+        if (f.bf_po) return [['npc', 'normal', '模様はね、壁に描くより先に、手に描くんだよ。']];
+        f.bf_po = true;
+        return [['npc', 'normal', 'ポコだよ。……手が、もう言うことをきかなくてね。今年は、壁を描けない。'], ['npc', 'normal', '雨が流すのは、しかたない。そのかわり、乾いた季節に、また描く。この村の女は、みんなそうやってきた。'], ['npc', 'normal', 'アワは、わたしの模様が消えるのを、こわがってる。……わたしがこわいのは、あの子が描かなくなることさ。']];
+      },
+      rasane(S) {
+        const f = S.f;
+        if (S.back && f.bf_done) return [['npc', 'normal', '今年は、去年より大きい三角を描いたの。……来年、消えたら、また描く。']];
+        if (S.back) return [['npc', 'normal', '土、こねすぎて、手がかたまった。']];
+        if (f.bf_done) return [['npc', 'normal', 'わたしの三角が消えたあとに、昔の模様が？ ……消えるのも、悪くないね。']];
+        if (f.bf_ra) return [['npc', 'normal', 'くさくないってば。……ちょっとしか。']];
+        f.bf_ra = true;
+        return [['npc', 'normal', 'いとこのラサネ。壁に塗る土を、こねてるの。この黒は、焼いた石と、牛のふん。……くさくないよ。ちょっとしか。'], ['npc', 'normal', '去年、はじめて描かせてもらったの。いちばん下の段の、三角だけ。'], ['npc', 'normal', 'でも、雨で、わたしの三角が、いちばん先に消えちゃった。……へただったから、かな。']];
+      },
+      paintwall(S) {
+        const f = S.f;
+        if (S.back && f.bf_done) return [['me', '', '（夕方の壁。描きたての模様の中に、まがったギザギザが、ひとつ）']];
+        if (S.back) return [['me', '', '（夕方の壁。雨の筋が、模様を、ななめに横切っている）']];
+        if (f.bf_done) return [['me', '', '（はがれた下の、いちばん古い線を、指でそっとなぞる）']];
+        if (!(f.bf_aw && f.bf_po && f.bf_ra)) return [['me', '', '（雨で流れた土の壁。模様が、ところどころ、はがれている）']];
+        f.bf_done = true;
+        return [['me', '', '（雨で流れた土の壁。模様が、ところどころ、はがれている）'], ['me', '', '（はがれたところの下から、ちがう色の模様がのぞいている。その下にも、また、べつの模様）'], ['me', '', '（ばあちゃんのギザギザ。その下に、だれかの丸。いちばん下に、まがった線。……何十年ぶんの手が、重なっている）'], ['insight', '', '雨がけずった壁の下に、何十年ぶんの手が重なっていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 140 湖の真珠（にせものと言われた真珠は、この湖にしかない光）
+  C.push({
+    id: 'ohrida', shape: '湖の真珠', name: 'オフリダ', sub: '湖の真珠の町', time: 'morning', screens: 5, far: 'lake_reeds_morning', farBack: 'twilight', timeBack: 'dusk', map: [41.1, 20.8],
+    hill: '#5a7a68', ground: ['#b8b0a0', '#989080', '#c8c0b0'], tint: 'rgba(240,248,255,.05)', bscale: 1.0,
+    props: [['tree_olive', 400, 270], ['wall_flowers', 1400, 100], ['tree_olive', 2400, 280], ['ship_rope', 3500, 50], ['pier', 4000, 80]],
+    buildings: [['med_white', 750, 0.85], ['it_townhouse', 1750, 0.85], ['mx_church', 2800, 0.7]],
+    npcs: [
+      { id: 'anaoh', name: 'アナ', actor: 'ukr_girl', x: 950, face: 1 },
+      { id: 'kiril', name: '真珠屋のキリルじいさん', actor: 'beekeeper', x: 2050, face: -1 },
+      { id: 'petre', name: '湖の漁師ペトレ', actor: 'sailor_boy', x: 3100, face: -1 }
+    ],
+    places: [{ id: 'scales', name: '干してある小魚', x: 3900, verb: '見る' }],
+    weather: { clear: 5, fog: 4, drizzle: 1 },
+    animals: [['duck', 1500], ['cat_white', 2600], ['crow', 3700]],
+    talk: {
+      anaoh(S) {
+        const f = S.f;
+        if (S.back && f.oh_done) return [['npc', 'normal', 'クラスの子に、言ってやったの。「うちの真珠は、この湖の魚の光でできてる。ほかのどこにも、ないよ」って。'], ['npc', 'normal', 'じいちゃんが、わたしのぶんの真珠を、ひとつくれたの。……世界で、ここにしかない光。']];
+        if (S.back) return [['npc', 'normal', '……首かざり、しまっておこう。']];
+        if (f.oh_done) return [['npc', 'normal', '湖の魚のうろこ？ ……それって、この湖にしか、ないの？']];
+        if (f.oh_an) return [['npc', 'normal', '真珠って、貝の中で、できるんだよね。……ふつうは。']];
+        f.oh_an = true;
+        return [['me', '', '（女の子が、湖のほとりで、首かざりを、ぎゅっとにぎっている）'], ['npc', 'normal', 'うちは、真珠屋さん。じいちゃんが、ひとつずつ、真珠をつくってるの。'], ['npc', 'normal', 'でも、学校で言われたの。「この湖に真珠の貝なんかいない。おまえんちのは、にせものだ」って。'], ['npc', 'normal', '……じいちゃんに、聞けないの。ほんとに、にせものだったら、どうしよう。']];
+      },
+      kiril(S) {
+        const f = S.f;
+        if (S.back && f.oh_done) return [['npc', 'normal', 'アナに、つくり方を、ひとつだけ見せた。……うろこを、ていねいに洗うところだけな。'], ['npc', 'normal', 'あの子、「にせものじゃなくて、ここにしかない、だね」と言った。……五十年、その言い方を、思いつかんかった。']];
+        if (S.back) return [['npc', 'normal', '……湖の霧が、こい夜だ。']];
+        if (f.oh_done) return [['npc', 'normal', '……漁師のやつ、しゃべったな。まあいい。アナには、わしから、話してやるさ。']];
+        if (f.oh_ki) return [['npc', 'normal', 'ひみつは、ひみつだ。……湖に聞いてみな。']];
+        f.oh_ki = true;
+        return [['npc', 'normal', 'キリルだ。真珠をつくって、五十年。……つくり方は、言えん。うちの家だけのひみつだ。'], ['npc', 'normal', 'にせもの、と言われたか。……わしも、子どものころ、言われたよ。'], ['npc', 'normal', 'アナに、継いでくれとは、言えん。……にせものと言われる仕事を、すすめられるか。']];
+      },
+      petre(S) {
+        const f = S.f;
+        if (S.back && f.oh_done) return [['npc', 'normal', 'アナが、魚を見に来たよ。……「この子たちを、とりすぎないで」とさ。言われんでも、わかっとる。']];
+        if (S.back) return [['npc', 'normal', '夕方の湖は、魚が、浅いところへ来る。']];
+        if (f.oh_done) return [['npc', 'normal', 'うろこを見たか。……ほら、銀色だろう。じいさんの真珠と、同じ色だ。']];
+        if (f.oh_pe) return [['npc', 'normal', 'わしは、なにも言っとらんぞ。……魚の話しか、しとらん。']];
+        f.oh_pe = true;
+        return [['npc', 'normal', 'この湖の漁師、ペトレだ。……キリルじいさんのとこへは、毎朝、小さな魚を届けとる。'], ['npc', 'normal', '真珠のために、魚？ ……あ、いや、なんでもない。わしは、なにも言っとらん。'], ['npc', 'normal', 'この小さな魚は、この湖にしか、おらんのだ。……だから、とりすぎんように、気をつけとる。']];
+      },
+      scales(S) {
+        const f = S.f;
+        if (S.back && f.oh_done) return [['me', '', '（夕方の岸。銀色のうろこが、夕日を受けて、桃色に光っている）']];
+        if (S.back) return [['me', '', '（夕方の岸。干した小魚が、風にゆれている）']];
+        if (f.oh_done) return [['me', '', '（おけの底の光を、もう一度のぞく。……ゆらゆらと、湖の色がうつっている）']];
+        if (!(f.oh_an && f.oh_ki && f.oh_pe)) return [['me', '', '（岸に、小さな魚がならべて干してある）']];
+        f.oh_done = true;
+        return [['me', '', '（岸に、小さな魚がならべて干してある。銀色のうろこが、日にきらきら光っている）'], ['me', '', '（そばのおけの中に、うろこだけを集めた水。……底が、真珠と同じ色に光っている）'], ['me', '', '（貝の中じゃない。この湖の魚の光を、ひとつぶずつ、玉にまとめていたんだ）'], ['insight', '', 'にせものと言われた真珠は、この湖にしかない光だった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 141 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -7714,7 +7822,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 140 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 142 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
