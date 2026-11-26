@@ -5950,8 +5950,8 @@
   C.push({
     id: 'bosna', shape: '飛ばない飛びこみ手', name: 'ボスニナ', sub: '石の橋の町', time: 'morning', screens: 5, far: 'valley', farBack: 'twilight', timeBack: 'dusk', map: [43.3, 17.8],
     hill: '#5a6a58', ground: ['#c0b8a8', '#a09888', '#d0c8b8'], tint: 'rgba(240,245,255,.05)', bscale: 1.0,
-    props: [['tree_green', 400, 270], ['stool', 1750, 40], ['tree_olive', 2300, 260], ['river_steps', 3450, 70], ['rock2', 3750, 90], ['tree_green', 4400, 280]],
-    buildings: [['med_white', 700, 0.9], ['mideast_white', 1500, 0.85], ['stone_bridge', 2700, 1.0]],
+    props: [['tree_green', 400, 270], ['stool', 1750, 40], ['tree_olive', 2300, 260], ['river_steps', 3450, 70], ['rock_seat', 3720, 80], ['tree_green', 4400, 280]],
+    buildings: [['med_white', 700, 0.9], ['mideast_white', 1500, 0.85], ['high_bridge', 2550, 0.72]],
     npcs: [
       { id: 'emir', name: 'エミル', actor: 'fisherboy', x: 950, face: 1, leaveWhen: f => f.bs_done, leaveDir: 1 },
       { id: 'hasanbs', name: 'ハサンじいさん', actor: 'ca_elder', x: 1250, face: -1, when: (f, back) => back },
