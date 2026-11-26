@@ -7436,7 +7436,115 @@
     }
   });
 
-// ---------------------------------------------------------------- 135 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 135 布でけんか（口で言えないことは、布が言う）
+  C.push({
+    id: 'lamuna', shape: '布でけんか', name: 'ラムナ', sub: 'ロバの島', time: 'morning', screens: 5, far: 'sea_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-2.3, 40.9],
+    hill: '#5a7a68', ground: ['#d8c8a8', '#b8a888', '#e8d8b8'], tint: 'rgba(255,248,235,.05)', bscale: 1.0,
+    props: [['palm', 400, 310], ['textile_stall', 1450, 110], ['palm', 2400, 320], ['textile_stall', 3800, 110], ['palm', 4500, 300]],
+    buildings: [['mideast_white', 750, 0.8], ['mideast_white', 1750, 0.8], ['sea_tall', 2850, 0.8]],
+    npcs: [
+      { id: 'zawadi', name: 'ザワディ', actor: 'sari', x: 950, face: 1 },
+      { id: 'fatuma', name: 'となりのファトゥマおばさん', actor: 'levant_woman', x: 2050, face: -1 },
+      { id: 'omari', name: 'ロバの布売りオマリ', actor: 'turban', x: 3100, face: -1 }
+    ],
+    places: [{ id: 'kangabox', name: 'ロバの背の布', x: 3950, verb: '読む' }],
+    weather: { clear: 7, wind: 2, drizzle: 1 },
+    animals: [['donkey', 3600], ['donkey', 1300], ['cat_white', 2500]],
+    talk: {
+      zawadi(S) {
+        const f = S.f;
+        if (S.back && f.lm_done) return [['npc', 'normal', '母さんに、新しい布をあげたの。「先にゆるした人が、いちばん強い」って書いてあるやつ。'], ['npc', 'normal', '母さん、それを巻いて、おばさんの家の前を、三回も行ったり来たり。……おばさん、笑って、戸をあけたよ。']];
+        if (S.back) return [['npc', 'normal', '……あさっての誕生日、どっちか、来ないかも。']];
+        if (f.lm_done) return [['npc', 'normal', '布で、仲直りもできるの？ ……母さんに、持っていく！']];
+        if (f.lm_za) return [['npc', 'normal', '……きょうの布、なんて書いてあるか、見るのがこわい。']];
+        f.lm_za = true;
+        return [['me', '', '（女の子が、となりあう二軒の家を見くらべて、ためいきをついている）'], ['npc', 'normal', 'この島の女の人は、ことばが書いてある布を巻くの。……母さんと、となりのおばさんが、十日も口をきいてないの。'], ['npc', 'normal', 'そのかわり、布でけんか。母さんのは「かくれても、においでわかる」。おばさんのは「口の大きい人は、耳が小さい」。'], ['npc', 'normal', 'あさっては、わたしの誕生日。……ふたりとも、来てほしいのに。']];
+      },
+      fatuma(S) {
+        const f = S.f;
+        if (S.back && f.lm_done) return [['npc', 'normal', '……あの人、あの布を巻いて、三回も通るんだもの。笑っちゃったわ。'], ['npc', 'normal', 'あさってのザワディの誕生日は、ふたりで、おなじ鍋でごはんを炊くの。']];
+        if (S.back) return [['npc', 'normal', '……きょうの布は、「ひとりでも、鍋はにえる」よ。']];
+        if (f.lm_done) return [['npc', 'normal', '仲直りの布？ ……先に巻いたほうの、負けよ。……負けても、いいけど。']];
+        if (f.lm_fa) return [['npc', 'normal', 'わたしの布、読んだ？ ……読まなくていいわよ。']];
+        f.lm_fa = true;
+        return [['npc', 'normal', 'となりの、ファトゥマよ。……あの家の人？ 知らないわね。'], ['npc', 'normal', '口をきかないのは、けんかじゃないの。布が、ちゃんと、しゃべってるもの。きょうのは「待つ人の鍋は、焦げない」。'], ['npc', 'normal', 'ほんとはね、なんでけんかしたか、もう、よく覚えてないの。……でも、先に布を変えるのは、くやしいのよ。']];
+      },
+      omari(S) {
+        const f = S.f;
+        if (S.back && f.lm_done) return [['npc', 'normal', '布、売れたぞ。……ついでに、わしも、女房に一枚、渡してきた。ロバに背中をおされてな。']];
+        if (S.back) return [['npc', 'normal', '夕方は、ロバも、家に帰りたがる。']];
+        if (f.lm_done) return [['npc', 'normal', 'その布か。……十年、いちばん下にしまっといたやつだ。やっと、出番が来たな。']];
+        if (f.lm_om) return [['npc', 'normal', 'ロバのほうが、わしより、道をよく知っとる。']];
+        f.lm_om = true;
+        return [['npc', 'normal', 'ロバで島じゅうに布を売り歩く、オマリだ。この島には、車が一台もない。ロバが、いちばんの働き者さ。'], ['npc', 'normal', '布のことばはな、言いにくいことを言うためにある。……「ごめん」の布は、よく売れる。'], ['npc', 'normal', 'だが、買った人は、たいてい、たんすにしまったままさ。……わしも、女房に一枚、渡しそびれとる。']];
+      },
+      kangabox(S) {
+        const f = S.f;
+        if (S.back && f.lm_done) return [['me', '', '（夕方のロバの背。いちばん下の布の場所が、ぽっかり空いている）']];
+        if (S.back) return [['me', '', '（夕方のロバの背。布の山が、すこし低くなっている）']];
+        if (f.lm_done) return [['me', '', '（ロバが、鼻を鳴らして、布の山をゆらした）']];
+        if (!(f.lm_za && f.lm_fa && f.lm_om)) return [['me', '', '（ロバの背中に、色とりどりの布が、山のように積んである）']];
+        f.lm_done = true;
+        return [['me', '', '（ロバの背中に、色とりどりの布が、山のように積んである）'], ['me', '', '（一枚ずつ、ことばが書いてある。「急ぐ人の鍋は、焦げる」「海は、ゆっくり満ちる」……）'], ['me', '', '（いちばん下に、たたみじわのついた一枚。「先にゆるした人が、いちばん強い」）'], ['insight', '', '口で言えないことは、布が、かわりに言ってくれる。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 136 もうない目印（なくなった木は、道案内の中にまだ立っていた）
+  C.push({
+    id: 'nicaragua', shape: 'もうない目印', name: 'ニカラグナ', sub: '番地のない町', time: 'morning', screens: 5, far: 'lake_reeds_morning', farBack: 'twilight', timeBack: 'dusk', map: [12.1, -86.3],
+    hill: '#5a7a58', ground: ['#c8b898', '#a89878', '#d8c8a8'], tint: 'rgba(255,245,230,.05)', bscale: 1.0,
+    props: [['palm', 400, 300], ['wall_flowers', 1400, 100], ['tree_green', 2400, 270], ['stump', 3950, 55], ['palm', 4500, 300]],
+    buildings: [['mx_house', 750, 0.85], ['white_plinth_house', 1700, 0.6], ['mx_church', 2800, 0.75]],
+    npcs: [
+      { id: 'moises', name: 'パン配りのモイセス', actor: 'boy_cap', x: 950, face: 1 },
+      { id: 'marta', name: '果物売りのマルタ', actor: 'granny_apron', x: 2050, face: -1 },
+      { id: 'ramonni', name: 'ラモンじいさん', actor: 'mustache', x: 3100, face: -1 }
+    ],
+    places: [{ id: 'ceiba', name: '広場の切り株', x: 3950, verb: '見る' }],
+    weather: { clear: 6, drizzle: 3, squall: 1 },
+    animals: [['dog_brown', 1600], ['rooster', 2500], ['crow', 3500]],
+    talk: {
+      moises(S) {
+        const f = S.f;
+        if (S.back && f.ni_done) return [['npc', 'normal', 'パン、とどけたよ！ ……おばあさんが、「セイバの木の下で、昔、おじいさんと会ったの」って。'], ['npc', 'normal', 'ぼく、この町の地図をつくることにした。……もうない目印も、ぜんぶ書くんだ。']];
+        if (S.back) return [['npc', 'normal', '……パン、冷めちゃった。']];
+        if (f.ni_done) return [['npc', 'normal', '切り株から、湖のほうへ二ブロック？ ……走ってくる！']];
+        if (f.ni_mo) return [['npc', 'normal', '「あった」ところ、って、なに。……ないのに。']];
+        f.ni_mo = true;
+        return [['me', '', '（男の子が、パンのかごと紙きれを持って、首をかしげている）'], ['npc', 'normal', 'この町には、番地がないんだ。道を聞くと、みんな、目印で教えてくれる。'], ['npc', 'normal', '注文の紙に「大きなセイバの木があったところから、湖のほうへ二ブロック」って。……セイバの木なんて、どこにもないよ！'], ['npc', 'normal', 'ぼく、先月、この町に引っ越してきたばかり。……配達、はじめてなのに。']];
+      },
+      marta(S) {
+        const f = S.f;
+        if (S.back && f.ni_done) return [['npc', 'normal', '夫と、切り株を見てきたの。……芽のまわりで、四十年ぶりに、待ち合わせしたわ。']];
+        if (S.back) return [['npc', 'normal', '夕方の果物は、ちょっと、まけてあげる。']];
+        if (f.ni_done) return [['npc', 'normal', '切り株に、新しい芽が？ ……あら、知らなかった。夫に、見せに行かなきゃ。']];
+        if (f.ni_ma) return [['npc', 'normal', 'マンゴー、ひとつどうぞ。……道に迷ったら、まず、食べなさい。']];
+        f.ni_ma = true;
+        return [['npc', 'normal', 'わたしは、果物売りのマルタ。……セイバの木？ もちろん、覚えてるわよ。'], ['npc', 'normal', 'あの木の下で雨やどりして、いまの夫に会ったの。……木は、なくなったけど、夫は、まだいるわ。'], ['npc', 'normal', '若い子は、もう木を知らないのね。……「なにもないところから二ブロック」じゃ、迷うわよねえ。']];
+      },
+      ramonni(S) {
+        const f = S.f;
+        if (S.back && f.ni_done) return [['npc', 'normal', 'モイセスが、地図をつくるそうだ。……わしの店の「あったところ」も、書いてくれるとさ。']];
+        if (S.back) return [['npc', 'normal', '夕方は、湖から、風が来る。']];
+        if (f.ni_done) return [['npc', 'normal', 'セイバの切り株を見たか。……あの木の下で、町じゅうの人が、待ち合わせをしたもんだ。']];
+        if (f.ni_ra) return [['npc', 'normal', '道は、目で見るより、覚えとるほうが、たしかだ。']];
+        f.ni_ra = true;
+        return [['npc', 'normal', 'ラモンだ。……この町はな、昔の大きな地震で、目印が、ずいぶん、なくなった。'], ['npc', 'normal', 'それでも、みんな、なくなった目印で道を言う。映画館があったところ、教会の鐘があったところ……。'], ['npc', 'normal', 'わしの店も、地震でなくなった。……それでも、いまだに「ラモンの店があったところ」で、通じるんだ。']];
+      },
+      ceiba(S) {
+        const f = S.f;
+        if (S.back && f.ni_done) return [['me', '', '（夕方の切り株。若い芽のそばに、老夫婦がならんで座っている）']];
+        if (S.back) return [['me', '', '（夕方の広場。大きな切り株に、夕日があたっている）']];
+        if (f.ni_done) return [['me', '', '（切り株の若い芽が、風にゆれている）']];
+        if (!(f.ni_mo && f.ni_ma && f.ni_ra)) return [['me', '', '（広場のまん中に、大きな切り株がある）']];
+        f.ni_done = true;
+        return [['me', '', '（広場のまん中に、大きな切り株。まわりの石だたみが、まるく、すりへっている）'], ['me', '', '（切り株のわきから、小さな若い芽が、のびている）'], ['me', '', '（ここから、湖のほうへ二ブロック。……もうない木を目印に、町の人は、まだ道を歩いている）'], ['insight', '', 'なくなった目印は、町の人の道案内の中で、まだ立っていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 137 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -7481,7 +7589,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 136 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 138 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
