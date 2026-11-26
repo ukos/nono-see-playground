@@ -6201,7 +6201,7 @@
   C.push({
     id: 'vanuana', shape: 'ひと筆で描く道', name: 'ヴァヌアナ', sub: '砂絵の島', time: 'morning', screens: 5, far: 'beach_noon', farBack: 'sea_dusk', timeBack: 'dusk', map: [-15.4, 167.7],
     hill: '#4a7a58', ground: ['#e0d0a8', '#c0b088', '#f0e0b8'], tint: 'rgba(255,250,230,.05)', bscale: 1.0,
-    props: [['palm', 400, 310], ['tree_green', 1400, 260], ['palm', 2400, 320], ['rock', 3300, 60], ['canoe', 3750, 60], ['palm', 4400, 300]],
+    props: [['palm', 400, 310], ['sand_drawing', 1080, 55, null, 1], ['tree_green', 1450, 260], ['palm', 2400, 320], ['rock', 3300, 60], ['canoe', 3750, 60], ['palm', 4400, 300]],
     buildings: [['thatched_farm', 750, 0.85], ['stilt_house', 1750, 0.8], ['thatched_farm', 2800, 0.8]],
     npcs: [
       { id: 'mele', name: 'メレ', actor: 'tribekid', x: 950, face: 1 },
@@ -6223,12 +6223,12 @@
       },
       kalo(S) {
         const f = S.f;
-        if (S.back && f.va_done) return [['npc', 'normal', 'メレが、浜から足あとをたどって帰ってきた。……わしの祖母も、ああして覚えたそうだ。'], ['npc', 'normal', 'あしたの客には、言葉はいらん。……あの子の線が、あいさつだ。']];
+        if (S.back && f.va_done) return [['npc', 'normal', 'メレが、浜から足あとをたどって帰ってきた。……わしの祖母も、ああして覚えたそうだ。'], ['npc', 'normal', 'あしたの客には、言葉はいらん。……あの子の線が、あいさつだ。'], ['npc', 'normal', '今夜、わしも浜の端まで歩いてみる。……長が描けんままじゃ、恥ずかしいからな。']];
         if (S.back) return [['npc', 'normal', '夕方は、浜の線が、潮に消されていく時間だ。']];
         if (f.va_done) return [['npc', 'normal', '道の砂絵は、往復の形か。……そうだ。行ったきりの線は、絵にならん。']];
         if (f.va_ka) return [['npc', 'normal', 'となりの島の客は、あしたの朝に着く。……それまでに、描けるといいが。']];
         f.va_ka = true;
-        return [['npc', 'normal', 'この島々には、言葉のちがう村がいくつもある。砂絵は、言葉のかわりの手紙なんだ。'], ['npc', 'normal', '「道の砂絵」は、村から浜までの道を描いたものさ。昔の人は、歩いた道を、そのまま砂に写した。'], ['npc', 'normal', 'あしたは、言葉の通じない客が来る。……砂絵がなけりゃ、あいさつもできん。わしの役目が、果たせんのだ。']];
+        return [['npc', 'normal', 'この島々には、言葉のちがう村がいくつもある。砂絵は、言葉のかわりの手紙なんだ。'], ['npc', 'normal', '「道の砂絵」は、村から浜までの道を描いたものさ。昔の人は、歩いた道を、そのまま砂に写した。'], ['npc', 'normal', 'あしたは、言葉の通じない客が来る。……砂絵がなけりゃ、あいさつもできん。'], ['npc', 'normal', '……白状すると、わしも描けん。長なのに、指が覚えとらんのだ。だから、メレにたのんだ。']];
       },
       tevita(S) {
         const f = S.f;
@@ -6255,10 +6255,11 @@
   C.push({
     id: 'ivorina', shape: '遠回りして帰ってきた豆', name: 'アイヴォリナ', sub: 'カカオの森の村', time: 'morning', screens: 5, far: 'rainforest_noon', farBack: 'twilight', timeBack: 'dusk', map: [6.8, -5.3],
     hill: '#3a6a40', ground: ['#a88060', '#886040', '#b89070'], tint: 'rgba(255,240,220,.05)', bscale: 1.0,
-    props: [['palm', 400, 300], ['big_forest_tree', 1450, 330], ['rice_basket', 2250, 60], ['ship_crates', 3050, 80], ['tree_green', 3850, 270], ['palm', 4400, 300]],
+    props: [['palm', 400, 300], ['big_forest_tree', 1450, 330], ['rice_basket', 2250, 60], ['ship_crates', 3050, 80], ['cacao_tree', 3800, 260], ['palm', 4400, 300]],
     buildings: [['thatched_farm', 750, 0.85], ['adobe', 1750, 0.85], ['stable', 2750, 0.8]],
     npcs: [
       { id: 'kouassi', name: 'クワシ', actor: 'drummer', x: 950, face: 1 },
+      { id: 'koffi', name: 'クワシの兄コフィ', actor: 'swimboy2', x: 1250, face: -1 },
       { id: 'akissi', name: '市場通いのアキシ', actor: 'market_woman', x: 2000, face: -1 },
       { id: 'yao', name: '組合のはかり番ヤオ', actor: 'na_elder', x: 3100, face: -1 }
     ],
@@ -6274,6 +6275,15 @@
         if (f.iv_ko) return [['npc', 'normal', 'カエルの絵は、ぼくだけのしるし。……だれにも言ってないよ。']];
         f.iv_ko = true;
         return [['me', '', '（男の子が、割ったカカオの実から、白い豆をかき出している）'], ['npc', 'normal', 'カカオの豆を干すのが、ぼくの仕事。……でも、チョコレートって、食べたことがないんだ。'], ['npc', 'normal', 'この豆が遠くで何になるのか、だれも知らない。だから袋のすみに、こっそりカエルの絵を描いて出すんだ。'], ['npc', 'normal', '兄ちゃんは、カカオなんかやめて、町で働けって言う。……ぼく、この木が好きなのに。']];
+      },
+      koffi(S) {
+        const f = S.f;
+        if (S.back && f.iv_done) return [['npc', 'normal', 'クワシに、ひとかけ、もらった。……町で売ってるのより、うまい気がした。'], ['npc', 'normal', 'カカオをやめろって言ったのは、取り消さない。……でも、町で働いたら、あいつの豆のチョコを、買って帰ってやる。']];
+        if (S.back) return [['npc', 'normal', 'あしたから、町の工場だ。……弟の木は、あいつにまかせる。']];
+        if (f.iv_done) return [['npc', 'normal', 'カエル？ ……あいつ、まだ描いてたのか。おれが教えたんだ、あの描き方。']];
+        if (f.iv_kf) return [['npc', 'normal', '弟は、この木が好きなんだ。……おれも、昔はそうだった。']];
+        f.iv_kf = true;
+        return [['npc', 'normal', 'クワシの兄の、コフィだ。あしたから、町の工場で働く。'], ['npc', 'normal', '豆をいくら干しても、それが何になるのか、だれも知らない。……カカオじゃ、先が見えないんだよ。']];
       },
       akissi(S) {
         const f = S.f;
