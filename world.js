@@ -5946,7 +5946,128 @@
     }
   });
 
-// ---------------------------------------------------------------- 109 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 109 飛ばない飛びこみ手（橋の下で、四十年待っていた人）
+  C.push({
+    id: 'bosna', shape: '飛ばない飛びこみ手', name: 'ボスニナ', sub: '石の橋の町', time: 'morning', screens: 5, far: 'valley', farBack: 'twilight', timeBack: 'dusk', map: [43.3, 17.8],
+    hill: '#5a6a58', ground: ['#c0b8a8', '#a09888', '#d0c8b8'], tint: 'rgba(240,245,255,.05)', bscale: 1.0,
+    props: [['tree_green', 400, 270], ['stool', 1750, 40], ['tree_olive', 2300, 260], ['river_steps', 3450, 70], ['rock2', 3750, 90], ['tree_green', 4400, 280]],
+    buildings: [['med_white', 700, 0.9], ['mideast_white', 1500, 0.85], ['stone_bridge', 2700, 1.0]],
+    npcs: [
+      { id: 'emir', name: 'エミル', actor: 'fisherboy', x: 950, face: 1, leaveWhen: f => f.bs_done, leaveDir: 1 },
+      { id: 'hasanbs', name: 'ハサンじいさん', actor: 'ca_elder', x: 1250, face: -1, when: (f, back) => back },
+      { id: 'senad', name: 'コーヒー屋のセナド', actor: 'teaseller', x: 1950, face: -1 },
+      { id: 'mirsad', name: '飛びこみ組の頭ミルサド', actor: 'sailor_boy', x: 3000, face: -1 },
+      { id: 'emir2', name: 'エミル', actor: 'fisherboy', x: 3500, face: 1, when: f => f.bs_done }
+    ],
+    places: [{ id: 'rockbs', name: '川べりの岩', x: 3800, verb: '見る' }],
+    weather: { clear: 7, wind: 2 },
+    animals: [['cat_white', 1300], ['dog_brown', 2300], ['crow', 4100]],
+    talk: {
+      emir(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '……あした、橋の上に立てるかな。']];
+        if (f.bs_em) return [['npc', 'normal', '橋の上から下を見ると、川が、針みたいに細く見えるんだ。']];
+        f.bs_em = true;
+        return [['me', '', '（男の子が、石の橋を見上げて、手すりの高さを指で測っている）'], ['npc', 'normal', 'あしたは、橋からの飛びこみ大会。うちのじいちゃんは、「飛びこみ手ハサン」って、町いちばんの有名人なんだ。'], ['npc', 'normal', 'だから、ぼくも飛ばなきゃいけない。……泳ぐのは、だれにも負けないのに。'], ['npc', 'normal', '高いところが、こわいんだ。……じいちゃんには、ないしょだよ。']];
+      },
+      emir2(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '下から見ると、橋って、空みたいに高いね。……でも、飛ぶ人の顔が、ちゃんと見える。'], ['npc', 'normal', 'あしたは、ぼくが拾い役をやる。じいちゃんが、となりの岩で、見ててくれるって。']];
+        if (f.bs_e2) return [['npc', 'normal', '流れのはやいところは、ここと、あそこ。……じいちゃんの岩から、ぜんぶ見える。']];
+        f.bs_e2 = true;
+        return [['me', '', '（エミルが、走ってきて、すり減った岩に、そっと座った）'], ['npc', 'normal', 'じいちゃん、飛んでなかったの？ ……ずっと、ここで、飛んだ人を待ってたの？'], ['npc', 'normal', 'ここなら、こわくない。……ぼく、泳ぐのは、町でいちばんなんだ。']];
+      },
+      hasanbs(S) {
+        const f = S.f;
+        if (f.bs_done && f.bs_ha) return [['npc', 'normal', 'あの岩は、冷たいぞ。……毛布を、一枚持っていってやらんとな。']];
+        if (f.bs_done) { f.bs_ha = true; return [['npc', 'normal', 'エミルが、わしの岩に座ったそうだな。……ばれたか。'], ['npc', 'normal', 'わしも、高いところが、こわかった。だから、下で待つことにした。……四十年な。']]; }
+        return [['npc', 'normal', '孫が、あした飛ぶ。……わしは、いつもの場所で待っとるよ。']];
+      },
+      senad(S) {
+        const f = S.f;
+        if (S.back && f.bs_done) return [['npc', 'normal', 'ハサンに、やっとコーヒーを出せたよ。三十年ぶんの、おかわりつきでな。'], ['npc', 'normal', '「礼なら、孫にしてくれ」だと。……あした、エミルにも一杯いれてやろう。']];
+        if (S.back) return [['npc', 'normal', '夕方のコーヒーは、砂糖をひとつ多めにするんだ。']];
+        if (f.bs_done) return [['npc', 'normal', 'ハサンの岩を見たのか。……わしも、あそこで目をさましたんだよ。']];
+        if (f.bs_se) return [['npc', 'normal', 'ハサンが飛ぶところ？ ……思い返しても、やっぱり、見た覚えがない。']];
+        f.bs_se = true;
+        return [['npc', 'normal', '飛びこみ大会か。わしも三十年前に飛んだ。……川に落ちて、そのまま気を失った。'], ['npc', 'normal', '引き上げてくれたのが、ハサンさ。……礼を言いそびれて、それきりだ。'], ['npc', 'normal', 'ハサンが橋から飛ぶのを見たことがあるか、だって？ ……そういえば、ない。一度も。']];
+      },
+      mirsad(S) {
+        const f = S.f;
+        if (S.back && f.bs_done) return [['npc', 'normal', '拾い役が見つかった！ ……ハサンの孫なら、だれも文句は言わん。'], ['npc', 'normal', '飛ぶ連中に言っておいた。「下を見ろ。待ってるやつがいる」ってな。']];
+        if (S.back) return [['npc', 'normal', '……拾い役なしじゃ、あしたは中止だな。']];
+        if (f.bs_done) return [['npc', 'normal', '岩の札を見たのか。……あの名前は、飛んだ回数じゃなくて、拾った回数なんだ。']];
+        if (f.bs_mi) return [['npc', 'normal', '流れのはやい日に、拾い役なしで飛ばせるわけにはいかん。']];
+        f.bs_mi = true;
+        return [['npc', 'normal', 'あしたの大会、困ったことになった。ハサンじいさんが、今年で拾い役をやめると言うんだ。'], ['npc', 'normal', '飛んだあと、流された者を、川で拾う役さ。……あの人なしじゃ、だれも飛ばせない。'], ['npc', 'normal', 'わしも、若いころに二度、拾われた。……あの人は、いつも、橋の真下の岩にいたよ。']];
+      },
+      rockbs(S) {
+        const f = S.f;
+        if (S.back && f.bs_done) return [['me', '', '（夕方の岩。すり減ったくぼみが、ふたつにふえている）']];
+        if (S.back) return [['me', '', '（夕方の川べり。橋の影が、水の上に長くのびている）']];
+        if (f.bs_done) return [['me', '', '（岩の上から見上げると、橋の上の人の顔が、よく見える）']];
+        if (!(f.bs_em && f.bs_se && f.bs_mi)) return [['me', '', '（橋の真下、流れのはやいところに、平たい岩がある）']];
+        f.bs_done = true;
+        return [['me', '', '（橋の真下の、平たい岩。ひとりぶん、すり減ってくぼんでいる）'], ['me', '', '（岩のわきに、古い浮き輪と、木の札のたば。大会ごとに、拾った人の名前が刻んである）'], ['me', '', '（札の数は、四十年ぶん。……飛びこみ手ハサンは、ここで、飛んだ人を待っていた）'], ['insight', '', '橋の上だけが、勇気のある場所じゃなかった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 110 姉さんの見えない一枚（ゆずったかばんの中に、まだ縫いこまれていた）
+  C.push({
+    id: 'banglana', shape: 'ゆずったものの中に残っていた', name: 'バングラナ', sub: '川のほとりの村', time: 'morning', screens: 5, far: 'marsh', farBack: 'twilight', timeBack: 'dusk', map: [24.0, 90.0],
+    hill: '#4a6a48', ground: ['#a89878', '#887858', '#b8a888'], tint: 'rgba(255,240,220,.05)', bscale: 1.0,
+    props: [['palm', 400, 300], ['textile_stall', 1900, 110], ['palm', 2600, 310], ['reeds', 3300, 90], ['canoe', 3950, 60], ['reeds2', 4300, 90]],
+    buildings: [['thatched_farm', 750, 0.85], ['stilt_house', 1650, 0.85], ['thatched_farm', 2900, 0.8]],
+    npcs: [
+      { id: 'mitu', name: 'ミトゥ', actor: 'sari', x: 950, face: 1 },
+      { id: 'rafiq', name: '仕立て屋のラフィク', actor: 'in_elder', x: 2050, face: -1 },
+      { id: 'nodi', name: 'となりのノディ', actor: 'boy_student', x: 3750, face: -1 }
+    ],
+    places: [{ id: 'ghat', name: '舟の渡し場', x: 4000, verb: '待つ' }],
+    weather: { clear: 5, drizzle: 3, squall: 1 },
+    animals: [['duck', 1300], ['cow', 2400], ['hen', 3200]],
+    talk: {
+      mitu(S) {
+        const f = S.f;
+        if (S.back && f.bd_done) return [['npc', 'normal', '姉さんの布、真ん中に縫ったよ。表からは見えない。……でも、さわると、ちょっと固いの。'], ['npc', 'normal', '姉さんに見せたら、「わたしのかばん、まだ学校に通ってるのね」って、泣いて笑った。']];
+        if (S.back) return [['npc', 'normal', '……姉さんのいないカンタを、渡すしかないのかな。']];
+        if (f.bd_done) return [['npc', 'normal', 'ノディのかばんの、内側の布？ ……それなら、だれにも見えないね。']];
+        if (f.bd_mi) return [['npc', 'normal', '姉さんの布がないと、姉さんのいないカンタになっちゃう。']];
+        f.bd_mi = true;
+        return [['me', '', '（女の子が、色とりどりの古い布を、何枚も重ねて縫っている）'], ['npc', 'normal', 'カンタっていうの。古いサリーやシャツを重ねて、刺し子で一枚の布団にするの。'], ['npc', 'normal', 'あした、姉さんがお嫁に行く。家族みんなの古い布で作って、持たせたいの。'], ['npc', 'normal', 'でも、姉さんの布だけがないの。……姉さんが縫った布かばん、だれかにあげちゃったんだって。']];
+      },
+      rafiq(S) {
+        const f = S.f;
+        if (S.back && f.bd_done) return [['npc', 'normal', 'カンタの真ん中に、かばんの切れ端か。……仕立て屋の切れ端が、嫁入り道具になるとはな。'], ['npc', 'normal', 'わしのくせも、たまには役に立つ。……あしたの婚礼、いちばん前で見るとしよう。']];
+        if (S.back) return [['npc', 'normal', '夕方は、針の穴が見えにくい。……店じまいだ。']];
+        if (f.bd_done) return [['npc', 'normal', 'ノディが自分でほどいたか。……あの子の手つき、わしより、ていねいだったろう。']];
+        if (f.bd_ra) return [['npc', 'normal', '内側の布は、ほどけば出てくる。……ほどくかどうかは、持ってる子が決めることだ。']];
+        f.bd_ra = true;
+        return [['npc', 'normal', 'あの子の布かばん？ 覚えてるよ。去年、ひもを短くしてくれって、持ってきた。'], ['npc', 'normal', '自分で使うんじゃない。となりのノディに合わせてくれ、ってな。……代金は、自分の小遣いで払っていった。'], ['npc', 'normal', '切ったひもの布は、捨てずに、かばんの内側に縫いこんである。……仕立て屋のくせでな。']];
+      },
+      nodi(S) {
+        const f = S.f;
+        if (S.back && f.bd_done) return [['npc', 'normal', 'かばんの内側、自分で縫いなおしたよ。ちょっと、まがっちゃったけど。'], ['npc', 'normal', 'あしたの婚礼、このかばんをさげて行く。……姉さんに、見えるように。']];
+        if (S.back) return [['npc', 'normal', '学校の舟、きょうも遅れてる。']];
+        if (f.bd_done) return [['npc', 'normal', 'これで、姉さんに、お礼ができた。……ほどいたところは、自分で縫いなおすね。']];
+        if (f.bd_no) return [['npc', 'normal', 'このかばん、毎朝、手でしわをのばしてから、さげるんだ。']];
+        f.bd_no = true;
+        return [['npc', 'normal', '……このかばん？ ミトゥの姉さんにもらったんだ。うち、かばんが買えなかったから。'], ['npc', 'normal', '姉さんがいなかったら、学校に行けてない。……なのに、お礼、なにもできてない。'], ['npc', 'normal', 'あした、お嫁に行っちゃうんだって。……ぼく、舟で学校だから、見送れないんだ。']];
+      },
+      ghat(S) {
+        const f = S.f;
+        if (S.back && f.bd_done) return [['me', '', '（夕方の渡し場。学校帰りの舟から、ノディがかばんをふっている）']];
+        if (S.back) return [['me', '', '（夕方の渡し場。川の水が、オレンジ色に光っている）']];
+        if (f.bd_done) return [['me', '', '（学校の舟が、川の向こうから、ゆっくり近づいてくる）']];
+        if (!(f.bd_mi && f.bd_ra && f.bd_no)) return [['me', '', '（川べりの渡し場。子どもたちが、学校の舟を待っている）']];
+        f.bd_done = true;
+        return [['me', '', '（ノディに、仕立て屋の話をした。ノディが、かばんを、そっと裏返す）'], ['me', '', '（内側に、細い布が縫いこんである。姉さんが刺した花の模様が、半分だけ残っている）'], ['me', '', '（ノディは、糸を歯で切って、ひと目ずつほどき、それを差し出した）'], ['insight', '', 'ゆずったかばんの中に、姉さんは、まだ縫いこまれていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 111 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -5991,7 +6112,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 110 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 112 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
