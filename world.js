@@ -7551,7 +7551,125 @@
     }
   });
 
-// ---------------------------------------------------------------- 137 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 137 ぬけた板（道は、家の数だけの手で、毎年つなぎなおされていた）
+  C.push({
+    id: 'bruneina', shape: 'ぬけた板', name: 'ブルネイナ', sub: '水の上の村', time: 'morning', screens: 5, far: 'sea_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [4.9, 114.9],
+    hill: '#4a6a68', ground: ['#a08868', '#806848', '#b09878'], tint: 'rgba(240,250,255,.05)', bscale: 1.0,
+    props: [['pier', 400, 80], ['pier', 1400, 80], ['pier', 2400, 80], ['pier', 3400, 80], ['pier', 4400, 80]],
+    buildings: [['sea_stilt', 750, 0.85], ['stilt_house', 1750, 0.8], ['sea_stilt', 2800, 0.8], ['stilt_house', 3650, 0.75]],
+    npcs: [
+      { id: 'nurul', name: 'ヌルル', actor: 'girl', x: 950, face: 1 },
+      { id: 'rosli', name: '大工のロスリじいさん', actor: 'oldsmith', x: 2000, face: -1 },
+      { id: 'farida', name: 'となりのファリダさん', actor: 'kasuri', x: 3050, face: -1 },
+      { id: 'halima', name: '空き家のハリマさん', actor: 'ru_granny', x: 3700, face: 1, when: (f, back) => back && f.bn_done }
+    ],
+    places: [{ id: 'gap', name: 'ぬけた板', x: 3950, verb: 'はめる' }],
+    weather: { clear: 6, squall: 3, drizzle: 1 },
+    animals: [['cat_white', 1500], ['crow', 2600]],
+    talk: {
+      nurul(S) {
+        const f = S.f;
+        if (S.back && f.bn_done) return [['npc', 'normal', '板、新しくなってた！ 跳ばずに、歩いて通れたよ。'], ['npc', 'normal', '空き家のおばあさんが、町から、ようすを見に来てたの。……新しい板の上で、泣いてた。']];
+        if (S.back) return [['npc', 'normal', '……あした、また、跳ばなきゃ。']];
+        if (f.bn_done) return [['npc', 'normal', '板が、はまったの？ ……旅の人が？ ほんと？']];
+        if (f.bn_nu) return [['npc', 'normal', 'ぬけた板のすきまから、魚が見えるの。……見ないようにしてる。']];
+        f.bn_nu = true;
+        return [['me', '', '（女の子が、板の道のとちゅうで、立ちどまっている）'], ['npc', 'normal', 'この村は、ぜんぶ水の上。家と家は、板の道でつながってるの。学校も、モスクも、ぜんぶ。'], ['npc', 'normal', 'でも、ずっとむこうで、一枚、板がぬけてるの。下は海。……毎朝、そこを飛びこえるのが、こわいの。'], ['npc', 'normal', 'あの板の前の家は、空き家なの。……だれも、直さない。']];
+      },
+      rosli(S) {
+        const f = S.f;
+        if (S.back && f.bn_done) return [['npc', 'normal', 'わしの板が、やっと、はまったか。……三年、かべに立てかけたままだったからな。'], ['npc', 'normal', '来年からは、ヌルルが、あの家の前の板を見ると言っとる。……きまりを、ひとつ、つけたしだ。']];
+        if (S.back) return [['npc', 'normal', '夕方は、板が、ちょっとだけ、きしむ。']];
+        if (f.bn_done) return [['npc', 'normal', '運んでくれたか。……よその人が運べば、だれの家の分でもない。うまいこと、考えたもんだ。']];
+        if (f.bn_ro) return [['npc', 'normal', 'その板は、あの家の前の寸法に、切ってある。……持っていくか？']];
+        f.bn_ro = true;
+        return [['npc', 'normal', '大工のロスリだ。この村の板の道は、家の前の分を、その家の人が直すきまりだ。……だから、何百年も続いとる。'], ['npc', 'normal', 'あの空き家の前だけは、だれも手を出さん。よその家の分をいじるのは、失礼だからな。'], ['npc', 'normal', 'じつは、一枚、切ってとってある。……あんた、旅の人だな。村の者でない人が運ぶなら、失礼にはならんかもしれん。']];
+      },
+      farida(S) {
+        const f = S.f;
+        if (S.back && f.bn_done) return [['npc', 'normal', 'ハリマさんに、電話したの。……「すぐ見に行く」って、ほんとに来ちゃったわ。']];
+        if (S.back) return [['npc', 'normal', '夕方の海は、板の道の下まで、満ちてくるの。']];
+        if (f.bn_done) return [['npc', 'normal', 'あの板が、はまったの？ ……ハリマさんに、知らせなきゃ。']];
+        if (f.bn_fa) return [['npc', 'normal', '直してあげたいけど……よその家の前は、ね。きまりだから。']];
+        f.bn_fa = true;
+        return [['npc', 'normal', 'となりのファリダよ。あの空き家のハリマさんは、町の娘さんのところへ行ったの。'], ['npc', 'normal', '出ていくとき、「家の前の板だけが、心のこり」って言ってたわ。……五十年、毎年、自分で直してた人なのよ。'], ['npc', 'normal', 'わたしが直してあげたいけど……よその家の前は、ね。きまりだから。']];
+      },
+      halima(S) {
+        const f = S.f;
+        if (f.bn_ha) return [['npc', 'normal', '……この道は、あなたの帰り道にも、なったのね。']];
+        f.bn_ha = true;
+        return [['npc', 'normal', 'ハリマよ。……町から、ようすを見に来たの。そしたら、板が、新しくなってた。'], ['npc', 'normal', 'だれが直してくれたの？ ……旅の人？ そう。……この道は、あなたの帰り道にも、なったのね。']];
+      },
+      gap(S) {
+        const f = S.f;
+        if (S.back && f.bn_done) return [['me', '', '（夕方の板の道。新しい板だけ、少し色が明るい）']];
+        if (S.back) return [['me', '', '（夕方の板の道。ぬけた穴の下で、波が鳴っている）']];
+        if (f.bn_done) return [['me', '', '（新しい板の上で、そっと足ぶみしてみる。……ゆれない）']];
+        if (!(f.bn_nu && f.bn_ro && f.bn_fa)) return [['me', '', '（板の道に、ぽっかり、一枚ぶんの穴。下で、波がちゃぷちゃぷ鳴っている）']];
+        f.bn_done = true;
+        return [['me', '', '（板の道に、ぽっかり、一枚ぶんの穴。下で、波がちゃぷちゃぷ鳴っている）'], ['me', '', '（ロスリじいさんの板を、穴にはめる。……ぴたりと、おさまった）'], ['me', '', '（家ごとに、少しずつ色のちがう板。この道は、家の数だけの手で、毎年、つなぎなおされている）'], ['insight', '', '道は、家の数だけの手で、毎年つなぎなおされていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 138 川のはじまり（川は、遠い町までつづく一本の道）
+  C.push({
+    id: 'ugandana', shape: '川のはじまり', name: 'ウガンダナ', sub: 'ナイルのはじまり', time: 'morning', screens: 5, far: 'lake_reeds_morning', farBack: 'twilight', timeBack: 'dusk', map: [0.4, 33.2],
+    hill: '#3a6a48', ground: ['#8a8058', '#6a6038', '#9a9068'], tint: 'rgba(245,250,235,.05)', bscale: 1.0,
+    props: [['palm', 400, 300], ['tree_green', 1450, 270], ['reeds', 2400, 90], ['tree_green', 3300, 280], ['reeds2', 3900, 90], ['palm', 4500, 300]],
+    buildings: [['thatched_farm', 750, 0.8], ['adobe', 1750, 0.8], ['thatched_farm', 2800, 0.75]],
+    npcs: [
+      { id: 'okello', name: 'オケロ', actor: 'drummer', x: 950, face: 1 },
+      { id: 'akello', name: 'オケロの母さん', actor: 'market_woman', x: 2000, face: -1 },
+      { id: 'kato', name: '漁師のカトー', actor: 'fisherboy', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'nilesrc', name: '川のはじまり', x: 3950, verb: '見る' }],
+    weather: { clear: 6, drizzle: 3, squall: 1 },
+    animals: [['hen', 1600], ['crow', 2500], ['duck', 3600]],
+    talk: {
+      okello(S) {
+        const f = S.f;
+        if (S.back && f.ug_done) return [['npc', 'normal', '手紙、流したよ。最初の一行は、「この水、ぼくのところから来たよ」にした。'], ['npc', 'normal', '兄ちゃんが、川を見たら、きっと、わかる。……とどかなくても、わかる。']];
+        if (S.back) return [['npc', 'normal', '……ボトル、まだ、流せない。']];
+        if (f.ug_done) return [['npc', 'normal', '川が、ひとつの道……？ じゃあ、兄ちゃんも、この道の、むこうのはしにいるんだね。']];
+        if (f.ug_ok) return [['npc', 'normal', '手紙、何回書きなおしても、最初の一行が、決まらないんだ。']];
+        f.ug_ok = true;
+        return [['me', '', '（男の子が、川べりで、ペットボトルに手紙をつめている）'], ['npc', 'normal', 'このへんは、大きな川のはじまり。この水は、ずっとずっと流れて、砂漠の国まで行くんだって。'], ['npc', 'normal', '兄ちゃんは、その砂漠の国の町で働いてる。もう二年、帰ってこない。……電話は、高いから、めったにできない。'], ['npc', 'normal', 'だから、手紙を、川に流すの。……でも、ほんとに、とどくのかな。']];
+      },
+      akello(S) {
+        const f = S.f;
+        if (S.back && f.ug_done) return [['npc', 'normal', 'わたしも、オケロの手紙に、ひとこと書いたの。……「水は、元気？」って。おかしいでしょ。'], ['npc', 'normal', '兄さんの持っていったびんの水と、同じ水だものね。……元気かって、聞きたくなったの。']];
+        if (S.back) return [['npc', 'normal', '夕方の川は、空と同じ色になるの。']];
+        if (f.ug_done) return [['npc', 'normal', '川を見てきたのね。……わたしも、オケロの手紙に、ひとこと書かせてもらおうかしら。']];
+        if (f.ug_ak) return [['npc', 'normal', '手紙は、苦手なのよ。……言いたいことは、あるんだけどね。']];
+        f.ug_ak = true;
+        return [['npc', 'normal', 'オケロの母です。……あの子、毎晩、手紙を書きなおしてるの。'], ['npc', 'normal', '兄さんは、出ていくとき、この川の水を、小さなびんにつめて持っていったのよ。……「ふるさとの水」って。'], ['npc', 'normal', 'わたしも、言いたいことがあるの。でも、手紙は、苦手でね。']];
+      },
+      kato(S) {
+        const f = S.f;
+        if (S.back && f.ug_done) return [['npc', 'normal', 'オケロのボトル、下流のほうへ、ちゃんと流れていった。……今度は、網を上げておいたよ。']];
+        if (S.back) return [['npc', 'normal', '夕方の川は、魚より、空がよく映る。']];
+        if (f.ug_done) return [['npc', 'normal', '川のはじまりを見たか。……ボトルはとどかなくても、川は、まちがいなく、とどく。']];
+        if (f.ug_ka) return [['npc', 'normal', '去年の子のボトルは、三日後、わしの網にかかった。……読まずに、また流してやったよ。']];
+        f.ug_ka = true;
+        return [['npc', 'normal', 'この川で漁をして、三十年。……手紙を流す子は、毎年、何人かいる。'], ['npc', 'normal', '去年の子のボトルは、三日後、わしの網にかかった。……読まずに、また流してやったよ。'], ['npc', 'normal', 'わしの娘も、下流の町に嫁いだ。……毎朝、この水を見ると、娘の町を通っていくんだと思う。']];
+      },
+      nilesrc(S) {
+        const f = S.f;
+        if (S.back && f.ug_done) return [['me', '', '（夕方の川のはじまり。ペットボトルが、ひとつ、ゆっくり、北へ流れていく）']];
+        if (S.back) return [['me', '', '（夕方の川のはじまり。水が、北へむかって、うねっている）']];
+        if (f.ug_done) return [['me', '', '（水の音が、どこまでも、北へつづいていく）']];
+        if (!(f.ug_ok && f.ug_ak && f.ug_ka)) return [['me', '', '（大きな湖から、川が流れ出している）']];
+        f.ug_done = true;
+        const L = [['me', '', '（湖から、川が流れ出すところ。水が、ゆっくり、北へむかってうねっている）'], ['me', '', '（この水は、いくつもの国をこえて、砂漠のまん中を通り、海まで流れていく）']];
+        if (f.dawn) L.push(['me', '', '（……あの砂の神殿の国で、夜明けに見た川も、この水だったのかもしれない）']);
+        L.push(['me', '', '（兄さんのびんの水も、ここで汲んだ水。……川は、ふたりのあいだに、とぎれずにつづいている）'], ['insight', '', '川は、遠い町まで、とぎれずにつづく一本の道だった。']);
+        return L;
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 139 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -7596,7 +7714,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 138 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 140 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
