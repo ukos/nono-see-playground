@@ -5741,7 +5741,7 @@
       },
       karimpk(S) {
         const f = S.f;
-        if (S.back && f.pk_done) return [['npc', 'normal', '落ち葉、どけてくれたか。……今朝より、水の音が大きい。'], ['npc', 'normal', 'そうか、あの木か。……わしが上れたころ、毎年、あの木の根元だけ、ぬれていたっけ。']];
+        if (S.back && f.pk_done) return [['npc', 'normal', '落ち葉、どけてくれたか。……今朝より、水の音が大きい。'], ['npc', 'normal', 'そうか、あの木か。……わしが上れたころ、毎年、あの木の根元だけ、ぬれていたっけ。'], ['npc', 'normal', '決めた。あしたから、ザイナブに水路番を教える。……あの木まで上れる足が、もう一本いるからな。']];
         if (S.back) return [['npc', 'normal', '日が落ちると、谷には、水の音だけが残る。']];
         if (f.pk_done) return [['npc', 'normal', '水の音が変わった。……はじまりの落ち葉、どけてくれたんだな。']];
         if (f.pk_ka) return [['npc', 'normal', '水路のはじまりは、この道を、東へ上ったところだ。落ち葉を、たのんだぞ。']];
@@ -5768,7 +5768,7 @@
     buildings: [['mx_house', 800, 0.9], ['it_townhouse', 1650, 0.9], ['mx_house', 2800, 0.9], ['it_townhouse', 3700, 0.85]],
     npcs: [
       { id: 'valen', name: 'ヴァレンティナ', actor: 'schoolgirl', x: 900, face: 1 },
-      { id: 'andres', name: 'ペンキ屋のアンドレス', actor: 'painter', x: 1250, face: -1, when: (f, back) => back },
+      { id: 'andres', name: 'ペンキ屋のアンドレス', actor: 'painter', x: 1250, face: -1 },
       { id: 'gilberto', name: 'パン屋のヒルベルト', actor: 'chef', x: 1950, face: -1 },
       { id: 'carmenco', name: 'カルメンばあちゃん', actor: 'granny_apron', x: 2700, face: 1 }
     ],
@@ -5789,7 +5789,11 @@
         const f = S.f;
         if (f.co_done && f.co_an) return [['npc', 'joy', 'あの子が町をぜんぶ描くなら、ペンキが足りないな。……分けてやらなきゃ。']];
         if (f.co_done) { f.co_an = true; return [['npc', 'normal', 'ヴァレンティナに、ばれたか。……描くものがないなんて、うそをついた。'], ['npc', 'normal', '自分の家に、自分の子を描くのは、てれくさくてな。……人の家になら、描けたんだ。']]; }
-        return [['npc', 'normal', '娘の宿題か。……うちの壁には、描くものがないんだ。']];
+        if (S.back) return [['npc', 'normal', '娘の宿題か。……うちの壁には、描くものがないんだ。']];
+        if (f.co_done) return [['npc', 'normal', 'すみっこを見たって顔だな。……ばれるのは、時間の問題か。']];
+        if (f.co_an0) return [['npc', 'normal', 'すまんな、いまは手がはなせない。……すみっこは、筆の先でしか描けないんだ。']];
+        f.co_an0 = true;
+        return [['me', '', '（ペンキだらけの男の人が、よその家の腰壁に、細い筆で何かを描きこんでいる）'], ['npc', 'normal', 'ペンキ屋のアンドレスだ。……娘の宿題？ うちの壁には、描くものがないんだ。'], ['npc', 'normal', 'いまは、この家の絵の、すみっこを描きたしてるところでね。……のぞきこむのは、なしだぞ。']];
       },
       gilberto(S) {
         const f = S.f;
