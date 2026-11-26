@@ -7096,7 +7096,125 @@
     }
   });
 
-// ---------------------------------------------------------------- 129 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 129 カエルの声がしない家（住める葉を置けば、むこうから来る）
+  C.push({
+    id: 'puertorica', shape: 'カエルの声がしない家', name: 'プエルトリカ', sub: 'カエルの歌う島', time: 'dusk', screens: 5, far: 'rainforest_noon', farBack: 'sea_night', timeBack: 'night', map: [18.2, -66.5],
+    hill: '#3a6a48', ground: ['#a89878', '#887858', '#b8a888'], tint: 'rgba(255,235,215,.06)', bscale: 1.0,
+    props: [['palm', 400, 310], ['bush_berry', 1450, 80], ['tree_green', 2350, 270], ['bush_berry', 3600, 80], ['palm', 4450, 300]],
+    buildings: [['white_plinth_house', 750, 0.6], ['mx_house', 1800, 0.85], ['sea_shop', 2850, 0.85]],
+    npcs: [
+      { id: 'javi', name: 'ハビ', actor: 'boy_kite', x: 950, face: 1 },
+      { id: 'tito', name: 'ティトじいさん', actor: 'cowboy', x: 1250, face: -1 },
+      { id: 'nerida', name: 'となりのネリダおばさん', actor: 'ranchwife', x: 2050, face: -1 },
+      { id: 'rolando', name: '植木屋のロランド', actor: 'florist', x: 3100, face: -1 }
+    ],
+    places: [{ id: 'grove', name: 'しげみの葉', x: 3950, verb: 'のぞく' }],
+    weather: { clear: 6, drizzle: 3, squall: 1 },
+    animals: [['hen', 1600], ['cat_orange', 2600], ['crow', 3400]],
+    talk: {
+      javi(S) {
+        const f = S.f;
+        if (S.back && f.pr_done) return [['npc', 'normal', 'じいちゃんの家の窓の下に、あの葉っぱの鉢を、みっつ置いたの。'], ['npc', 'normal', '夜、コキーって、一回だけ鳴いた。……じいちゃん、それきり、いびきかいて寝ちゃった。']];
+        if (S.back) return [['npc', 'normal', '……缶の中、からっぽ。']];
+        if (f.pr_done) return [['npc', 'normal', 'つかまえなくていいの？ 葉っぱを置けば、むこうから来る？ ……やってみる！']];
+        if (f.pr_ja) return [['npc', 'normal', 'コキー、どこにいるの。……鳴いてるのに、見えないんだよ。']];
+        f.pr_ja = true;
+        return [['me', '', '（男の子が、空き缶を持って、しげみの前にしゃがみこんでいる）'], ['npc', 'normal', 'じいちゃんが、遠い国の大きな町から、四十年ぶりに帰ってきたんだ。でも、夜、ねむれないんだって。'], ['npc', 'normal', '「コキーが鳴かない」って。この島の小さなカエル。夜になると、コキー、コキーって、うるさいくらい鳴くんだ。'], ['npc', 'normal', 'じいちゃんの家のまわりは、コンクリートばっかり。だから、つかまえて連れてくの！ ……でも、すぐ逃げちゃう。']];
+      },
+      tito(S) {
+        const f = S.f;
+        if (S.back && f.pr_done) return [['npc', 'normal', 'ゆうべ、一回だけ、コキーと鳴いた。……それで、十分だった。'], ['npc', 'normal', '待ってりゃ、来るもんだな。……わしが、この島に帰ってきたのと、同じだ。']];
+        if (S.back) return [['npc', 'normal', '……静かすぎるんだ、この家は。']];
+        if (f.pr_done) return [['npc', 'normal', '葉っぱの鉢を置いて、待つのか。……待つのは得意だ。四十年、待ったからな。']];
+        if (f.pr_ti) return [['npc', 'normal', '……静かすぎるんだ、この家は。']];
+        f.pr_ti = true;
+        return [['npc', 'normal', 'ティトだ。……遠い町では、夜じゅう、車の音だった。'], ['npc', 'normal', '眠れないのは、車の音がないからじゃない。コキーの声がないからだ。……子どものころは、あれが子守歌だった。']];
+      },
+      nerida(S) {
+        const f = S.f;
+        if (S.back && f.pr_done) return [['npc', 'normal', 'ゆうべは、一匹ぶん、静かだったわ。……あら、ちょっと、さびしいかも。']];
+        if (S.back) return [['npc', 'normal', '今夜も、大合唱ね。……耳せん、耳せん。']];
+        if (f.pr_done) return [['npc', 'normal', '葉っぱで引っ越し大作戦？ ……うちの庭の鉢、ひとつ持っていきなさい。カエルつきでね。']];
+        if (f.pr_ne) return [['npc', 'normal', '耳せん、ひとつ、いる？']];
+        f.pr_ne = true;
+        return [['npc', 'normal', 'コキーがうるさくて、眠れない？ ……あら、ちがうの。鳴かなくて、眠れないの？ ぜいたくね。'], ['npc', 'normal', 'うちの庭なんか、夜じゅう大合唱よ。わたしは、耳せんをして寝てるわ。'], ['npc', 'normal', 'ティトさんの家に、何匹か引っ越してくれたら、うちは静かになるのにねえ。……おたがいさまよ。']];
+      },
+      rolando(S) {
+        const f = S.f;
+        if (S.back && f.pr_done) return [['npc', 'normal', 'ハビが、鉢を三つ買っていった。……小づかい、ぜんぶはたいてな。半分にまけてやったよ。']];
+        if (S.back) return [['npc', 'normal', '夜は、店じまい。……カエルの仕事の時間だ。']];
+        if (f.pr_done) return [['npc', 'normal', '見ただろう、葉のつけねの水たまり。……あれが、あいつらの家さ。']];
+        if (f.pr_ro) return [['npc', 'normal', '植木屋は、待つ商売だ。売れるまで、育つまで、来るまで。']];
+        f.pr_ro = true;
+        return [['npc', 'normal', 'うちは植木屋。……コキーを探してる？ なら、カエルじゃなくて、葉っぱを探しな。'], ['npc', 'normal', 'つかまえて連れてっても、カエルは、もとの家に帰っちまう。……あいつらにも、帰り道があるんだ。'], ['npc', 'normal', 'しげみの葉を、のぞいてみな。……昼間は、そこで寝てる。']];
+      },
+      grove(S) {
+        const f = S.f;
+        if (S.back && f.pr_done) return [['me', '', '（夜のしげみ。コキー、コキー。……遠くの、ティトじいさんの家のほうからも、一匹ぶんの声がした）']];
+        if (S.back) return [['me', '', '（夜のしげみ。あちこちの葉のつけねから、コキー、コキー）']];
+        if (f.pr_done) return [['me', '', '（葉のつけねの小さなカエルが、こちらを見て、すまして座っている）']];
+        if (!(f.pr_ja && f.pr_ne && f.pr_ro)) return [['me', '', '（夕方のしげみ。ギザギザの葉が、何重にも重なっている）']];
+        f.pr_done = true;
+        return [['me', '', '（夕方のしげみ。ギザギザの葉のつけねに、水がたまっている）'], ['me', '', '（のぞきこむと、水の中に、親指の先ほどの小さなカエル。……目が合った）'], ['me', '', '（日がしずむ。あちこちの葉のつけねから、いっせいに声がした。コキー、コキー）'], ['insight', '', 'カエルは、つかまえるものじゃない。住める葉を置けば、むこうから来る。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 130 山の帽子（帽子のかたちは、ここから見た山のかたち）
+  C.push({
+    id: 'lesotona', shape: '山の帽子', name: 'レソトナ', sub: '山の帽子の国', time: 'morning', screens: 5, far: 'mountains', farBack: 'twilight', timeBack: 'dusk', map: [-29.5, 28.2],
+    hill: '#6a7a58', ground: ['#a89878', '#887858', '#b8a888'], tint: 'rgba(250,245,230,.05)', bscale: 1.0,
+    props: [['rock2', 400, 100], ['haystack', 1400, 110], ['rock_moss', 2400, 110], ['rock', 3300, 60], ['rock2', 3950, 70]],
+    buildings: [['thatched_farm', 750, 0.8], ['thatched_farm', 1750, 0.75], ['sheep_pen', 2800, 0.8]],
+    npcs: [
+      { id: 'thabols', name: 'タボ', actor: 'tribekid', x: 950, face: 1 },
+      { id: 'palesa', name: '帽子編みのパレサ', actor: 'market_woman', x: 2000, face: -1 },
+      { id: 'litsepo', name: '羊飼いのリツェポ', actor: 'herdboy', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'viewstone', name: '道のはずれの石', x: 3950, verb: 'のぼる' }],
+    weather: { clear: 7, wind: 3 },
+    animals: [['sheep', 2600], ['sheep', 3400], ['horse_bay', 1500]],
+    talk: {
+      thabols(S) {
+        const f = S.f;
+        if (S.back && f.ls_done) return [['npc', 'normal', '道のはずれから見た山の形で、編みなおしたよ。……てっぺんの飾り、山の上の岩とおんなじにした。'], ['npc', 'normal', 'じいちゃんが、かぶったまま、昼寝しちゃった。……こんどは、座布団にしないでね。']];
+        if (S.back) return [['npc', 'normal', '……やっぱり、形が、へんだよ。']];
+        if (f.ls_done) return [['npc', 'normal', 'あの山を、あの石の上から見るの？ ……見てくる！']];
+        if (f.ls_th) return [['npc', 'normal', 'とんがりすぎ？ ……まるすぎ？']];
+        f.ls_th = true;
+        return [['me', '', '（男の子が、草で編んだとんがり帽子を、ひっくり返したり、かぶったりしている）'], ['npc', 'normal', 'この国の帽子、知ってる？ てっぺんに、ちょこんと飾りがついた、山みたいな形。'], ['npc', 'normal', 'じいちゃんの誕生日に、新しいのを編んでるんだ。じいちゃんのは、座布団にしちゃって、ぺしゃんこだから。'], ['npc', 'normal', 'でも、どう編んでも、形がへんなの。……ほんとの形って、どんなだっけ。']];
+      },
+      palesa(S) {
+        const f = S.f;
+        if (S.back && f.ls_done) return [['npc', 'normal', 'タボの帽子、見たわ。……わたしのより、山に似てた。くやしいけど。'], ['npc', 'normal', 'あしたから、わたしも、道のはずれまで歩いてから編むわ。……母さんと、同じにね。']];
+        if (S.back) return [['npc', 'normal', '夕方の草は、色がきれいなのよ。']];
+        if (f.ls_done) return [['npc', 'normal', '母さんの散歩は、山を見に行ってたのね。……四十年、ただの散歩だと思ってた。']];
+        if (f.ls_pa) return [['npc', 'normal', '草は、ぬらすと、やわらかくなるの。……人の頭と同じ。']];
+        f.ls_pa = true;
+        return [['npc', 'normal', '帽子編みのパレサよ。形のこと？ ……わたしは、手が覚えてるだけ。わけは、考えたこともないわ。'], ['npc', 'normal', 'でもね、うちの母さんは、編む前に、かならず、道のはずれまで歩いていったの。……散歩だと思ってたけど。'], ['npc', 'normal', '近ごろは、町の店で、外国の帽子ばかり売れるの。……この形をわかって買う人が、へったのよ。']];
+      },
+      litsepo(S) {
+        const f = S.f;
+        if (S.back && f.ls_done) return [['npc', 'normal', 'タボのじいちゃんが、あの石の上まで、杖ついて歩いてきたよ。……山と帽子を、見くらべてた。']];
+        if (S.back) return [['npc', 'normal', '日が暮れると、山は、ただの黒い影になる。']];
+        if (f.ls_done) return [['npc', 'normal', '見た？ ……あそこからだけ、山が、帽子になるんだ。']];
+        if (f.ls_li) return [['npc', 'normal', '石の上は、すべるから、気をつけて。']];
+        f.ls_li = true;
+        return [['npc', 'normal', '羊飼いのリツェポ。毛布にくるまって、一日じゅう、山の上にいる。'], ['npc', 'normal', '山の形？ ……あの山は、見る場所で、ぜんぜん形がちがうよ。こっちからは、ぺったんこ。'], ['npc', 'normal', 'でも、道のはずれの石の上から見ると……あ、言っちゃだめだ。自分で見に行かせろって、言われてるんだった。']];
+      },
+      viewstone(S) {
+        const f = S.f;
+        if (S.back && f.ls_done) return [['me', '', '（夕方の石の上。山の影が、帽子の形のまま、村までのびている）']];
+        if (S.back) return [['me', '', '（夕方の石の上。山が、夕日にそまっている）']];
+        if (f.ls_done) return [['me', '', '（山のてっぺんの岩が、帽子の飾りに見える）']];
+        if (!(f.ls_th && f.ls_pa && f.ls_li)) return [['me', '', '（道のはずれに、平たい石。上にのぼれそうだ）']];
+        f.ls_done = true;
+        return [['me', '', '（道のはずれの、平たい石にのぼる）'], ['me', '', '（正面に、とんがった山。てっぺんに、ちょこんと岩がのっている）'], ['me', '', '（……タボの帽子と、同じ形だ。いや、帽子のほうが、この山と同じ形なんだ）'], ['insight', '', '帽子のかたちは、この場所から見た山のかたちだった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 131 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -7141,7 +7259,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 130 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 132 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,

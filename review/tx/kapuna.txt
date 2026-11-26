@@ -1,5 +1,5 @@
 == 国: ケープナ（岬の町）
-〔129番目の国／広さ 5 画面／昼／遠景 cliffs_morning〕
+〔131番目の国／広さ 5 画面／昼／遠景 cliffs_morning〕
 〔天候：晴れ 50%、強風 40%、小雨 10%〕
 〔建物：br_townhouse、sea_twostory／小物：bush、rock2、stool2、rock、lighthouse〕
 〔住人（西から）：タンディ @950、ゴゴ（タンディのおばあちゃん） @2100、灯台守のシポ @3700〕
