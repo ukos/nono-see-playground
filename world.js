@@ -5867,12 +5867,12 @@
       },
       luc(S) {
         const f = S.f;
-        if (S.back && f.ca_done) return [['npc', 'normal', 'クロエの親父さんか。……あしたから、わしも、道の半分を踏もう。ふたりなら、軽い。']];
+        if (S.back && f.ca_done) return [['npc', 'normal', 'クロエの親父さんか。……かんじきは返さんでいい。あしたから、わしも、道の半分を踏もう。']];
         if (S.back) return [['npc', 'normal', '夕方の雪は、足あとが青く見える。']];
-        if (f.ca_done) return [['npc', 'normal', 'バス停の木に、かんじきが？ ……なるほど、そこで脱いで、長靴で戻るわけか。']];
-        if (f.ca_lu) return [['npc', 'normal', 'かんじきの足あとは、東のほうで、ぴたりと終わってる。……そこを見てみな。']];
+        if (f.ca_done) return [['npc', 'normal', 'わしのかんじきと、ぴったり重なったか。……つまり、あれは人の足、網の靴だ。']];
+        if (f.ca_lu) return [['npc', 'normal', 'かんじきは、つま先を上げて歩くんだ。……足あとの終わりまで、行ってみな。']];
         f.ca_lu = true;
-        return [['npc', 'normal', 'あの足あとか。熊にしちゃ、まっすぐすぎる。ヘラジカにしちゃ、平べったい。'], ['npc', 'normal', 'あれは、かんじきだ。雪の上を歩くための、網の靴さ。……積もったばかりの雪を、わざわざ固めてある。'], ['npc', 'normal', 'わしも年で、かんじきが重くなった。……あの道があるから、まだ、わなを見回れるんだ。']];
+        return [['npc', 'normal', 'あの足あとか。熊にしちゃ、まっすぐすぎる。ヘラジカにしちゃ、平べったい。'], ['npc', 'normal', 'わしも年で、足が重くなった。……あの道があるから、まだ、わなを見回れるんだ。'], ['npc', 'normal', 'ほれ、わしの古いかんじきを貸そう。はいて歩いてみな。……雪が、教えてくれるさ。']];
       },
       busstop(S) {
         const f = S.f;
@@ -5881,7 +5881,7 @@
         if (f.ca_done) return [['me', '', '（かんじきの網に、雪がうっすら積もっている）']];
         if (!(f.ca_ch && f.ca_lu)) return [['me', '', '（バス停の看板。そばの木に、なにかがぶら下がっている）']];
         f.ca_done = true;
-        return [['me', '', '（大きな足あとは、バス停の看板の前で、ぴたりと終わっている）'], ['me', '', '（そばの木に、大きなかんじきがひと組。内側に、製材所の焼き印がおしてある）'], ['me', '', '（足あとの終わりは、子どもたちが、まだ暗いうちからバスを待つ場所だった）'], ['insight', '', 'こわい足あとは、だれかが先に歩いてくれた道だった。']];
+        return [['me', '', '（借りたかんじきで歩くと、大きな足あとに、ぴたりと重なった。雪男じゃない。網の靴だ）'], ['me', '', '（足あとは、バス停の看板の前で、ぴたりと終わっている）'], ['me', '', '（そばの木に、大きなかんじきがひと組。内側に、製材所の焼き印がおしてある）'], ['me', '', '（足あとの終わりは、子どもたちが、まだ暗いうちからバスを待つ場所だった）'], ['insight', '', 'こわい足あとは、だれかが先に歩いてくれた道だった。']];
       }
     }
   });
@@ -5890,25 +5890,31 @@
   C.push({
     id: 'uruguana', shape: 'ありがとうと言うと、もう回ってこない', name: 'ウルグアナ', sub: 'マテ茶の広場の町', time: 'morning', screens: 5, far: 'harbor_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.5, -57.8],
     hill: '#6a7a6a', ground: ['#c8b8a0', '#a89880', '#d8c8b0'], tint: 'rgba(255,245,230,.05)', bscale: 1.0,
-    props: [['tree_olive', 400, 280], ['stool', 1300, 40], ['tea_table', 2250, 60], ['stool2', 2380, 40], ['tree_olive', 3100, 290], ['lighthouse', 4300, 320]],
+    props: [['tree_olive', 400, 280], ['stool', 1300, 40], ['tea_table', 2300, 60], ['stool2', 2440, 40], ['tree_olive', 3100, 290], ['lighthouse', 4300, 320]],
     buildings: [['es_white', 700, 0.9], ['med_white', 1600, 0.9], ['es_gate', 2800, 0.85], ['it_townhouse', 3600, 0.85]],
     npcs: [
-      { id: 'tomas', name: 'トマス', actor: 'backpacker', x: 950, face: 1 },
-      { id: 'elsa', name: 'マテを入れるエルサ', actor: 'ranchwife', x: 2050, face: 1 },
-      { id: 'julio', name: '牧童のフリオじいさん', actor: 'cowboy', x: 2470, face: -1 }
+      { id: 'tomas', name: 'トマス', actor: 'backpacker', x: 950, face: 1, leaveWhen: f => f.uy_done, leaveDir: 1 },
+      { id: 'tomas2', name: 'トマス', actor: 'backpacker', x: 2120, face: 1, when: f => f.uy_done },
+      { id: 'elsa', name: 'マテを入れるエルサ', actor: 'ranchwife', x: 1890, face: 1 },
+      { id: 'julio', name: '牧童のフリオじいさん', actor: 'cowboy', x: 2570, face: -1 }
     ],
-    places: [{ id: 'ronda', name: 'マテの輪', x: 2260, verb: '座る' }],
+    places: [{ id: 'ronda', name: 'マテの輪', x: 2340, verb: '座る' }],
     weather: { clear: 7, wind: 2 },
     animals: [['dog_brown', 1500], ['horse', 3300], ['crow', 2900]],
     talk: {
       tomas(S) {
         const f = S.f;
-        if (S.back && f.uy_done) return [['npc', 'normal', 'きょうは最後まで「ありがとう」を言わなかった。十二回、回ってきたよ。おなかが、たぷたぷだ。'], ['npc', 'normal', '夕方、エルサさんが、ぼくに入れる番をくれた。……この町に、残ることにした。']];
         if (S.back) return [['npc', 'normal', '……あしたの船で、帰ろうかな。']];
-        if (f.uy_done) return [['npc', 'normal', '「ありがとう」が、「もう、じゅうぶん」？ ……ぼく、ひと月も、ことわってたのか！']];
         if (f.uy_to) return [['npc', 'normal', 'あの輪に、もう一度入る勇気がないんだ。……きみ、どうだったか、教えて。']];
         f.uy_to = true;
         return [['me', '', '（若い男の人が、広場のすみで、ひとりで海を見ている）'], ['npc', 'normal', 'ぼくはトマス。遠い国から、この町の港へ働きに来た。広場のマテ茶の輪に、一度だけ入ったんだ。'], ['npc', 'normal', '器が回ってきて、ちゃんと「ありがとう」って言った。……なのに、それきり、二度と回ってこない。'], ['npc', 'normal', '嫌われたのかな。……あしたで見習いの期間が終わる。この町に残るか、決めなきゃいけないんだ。']];
+      },
+      tomas2(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'きょうは最後まで「ありがとう」を言わなかった。十二回、回ってきたよ。おなかが、たぷたぷだ。'], ['npc', 'normal', '夕方、エルサさんが、ぼくに入れる番をくれた。……この町に、残ることにした。']];
+        if (f.uy_t2) return [['npc', 'normal', 'また回ってきた。……「ありがとう」が、のどまで出かかるのを、がまんしてる。']];
+        f.uy_t2 = true;
+        return [['me', '', '（トマスが、走ってきて、輪のはしに、そっと腰をおろした）'], ['npc', 'normal', '「ありがとう」が、「もう、じゅうぶん」？ ……ぼく、ひと月も、ことわってたのか！'], ['me', '', '（エルサさんが、だまって器を差し出す。トマスは、口をぎゅっと結んで、受け取った）']];
       },
       elsa(S) {
         const f = S.f;
