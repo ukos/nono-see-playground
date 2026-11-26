@@ -1,7 +1,7 @@
 == 国: ケベッカ（雪の森の町）
 〔107番目の国／広さ 5 画面／朝／遠景 snow〕
 〔天候：晴れ 60%、雪 30%、強風 10%〕
-〔建物：nordic_red、lumber_hut、house_small／小物：pine_snow、tree_snow、pine_snow、tree_snow、signboard、pine_snow〕
+〔建物：nordic_red、lumber_hut、house_small／小物：pine_snow、tree_snow、pine_snow、tree_snow、busstop_snowshoes、pine_snow〕
 〔住人（西から）：クロエ @950、クロエのパパ @1250、メープル小屋のマルティーヌ @1900、わな猟師のリュック @2950〕
 
 〔行き〕

@@ -1,7 +1,7 @@
 == 国: ウルグアナ（マテ茶の広場の町）
 〔108番目の国／広さ 5 画面／朝／遠景 harbor_morning〕
 〔天候：晴れ 78%、強風 22%〕
-〔建物：es_white、med_white、es_gate、it_townhouse／小物：tree_olive、stool、tea_table、stool2、tree_olive、lighthouse〕
+〔建物：es_white、med_white、es_gate、it_townhouse／小物：tree_olive、stool、mate_bench、tree_olive、lighthouse〕
 〔住人（西から）：トマス @950、マテを入れるエルサ @1890、トマス @2120、牧童のフリオじいさん @2570〕
 
 〔行き〕

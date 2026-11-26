@@ -6071,7 +6071,133 @@
     }
   });
 
-// ---------------------------------------------------------------- 111 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 111 ミツバチに知らせる（ハチは、とっくにあの子の話を聞いていた）
+  C.push({
+    id: 'slovena', shape: 'ミツバチに知らせる', name: 'スロヴェナ', sub: 'ミツバチの丘の村', time: 'morning', screens: 5, far: 'mountains', farBack: 'twilight', timeBack: 'dusk', map: [46.3, 14.1],
+    hill: '#5a7a50', ground: ['#a8b888', '#889868', '#b8c898'], tint: 'rgba(250,250,230,.05)', bscale: 1.0,
+    props: [['tree_green', 400, 270], ['wall_flowers', 1500, 100], ['haystack', 2500, 120], ['nofence', 3600, 70], ['stump', 3900, 50], ['tree_green', 4300, 280]],
+    buildings: [['house_large', 750, 0.85], ['inn', 1750, 0.85], ['stable', 2800, 0.8]],
+    npcs: [
+      { id: 'luka', name: 'ルカ', actor: 'boy_frog', x: 950, face: 1 },
+      { id: 'janez', name: '養蜂家のヤネスじいさん', actor: 'oldsmith', x: 1250, face: -1 },
+      { id: 'marijasl', name: 'となりのマリヤ', actor: 'granny_broom', x: 2050, face: -1 },
+      { id: 'tone', name: '粉屋のトーネ', actor: 'mustache', x: 3000, face: -1 }
+    ],
+    places: [{ id: 'hives', name: '巣箱の丘', x: 3950, verb: '近づく' }],
+    weather: { clear: 7, wind: 2 },
+    animals: [['cow', 2300], ['hen', 1400], ['cat_calico', 3300]],
+    talk: {
+      luka(S) {
+        const f = S.f;
+        if (S.back && f.svn_done) return [['npc', 'normal', 'ハチに、じいさんのことを話したよ。……毎朝の声が、あしたから、ぼくの声になるって。'], ['npc', 'normal', '一匹、ぼくの肩にとまって、しばらく動かなかった。……返事だと、思うことにした。']];
+        if (S.back) return [['npc', 'normal', '……あした、ハチに、何て言おう。']];
+        if (f.svn_done) return [['npc', 'normal', 'ハチが、ぼくのことを、もう知ってた？ ……行ってくる！']];
+        if (f.svn_lu) return [['npc', 'normal', 'じいさんは、毎朝、巣箱のところで、何かしゃべってる。……何を話してるんだろう。']];
+        f.svn_lu = true;
+        return [['me', '', '（男の子が、丘の上の巣箱を、柵ごしに、じっと見ている）'], ['npc', 'normal', 'ヤネスじいさんが、あした町の娘さんのところへ引っ越すんだ。巣箱は、ぼくがもらうことになった。'], ['npc', 'normal', 'この村じゃ、飼い主が変わったら、ハチに知らせなきゃいけない。知らせないと、ハチが出ていっちゃう。'], ['npc', 'normal', '何て言えばいいのか、わからない。……ハチは、ぼくのことなんか、知らないのに。']];
+      },
+      janez(S) {
+        const f = S.f;
+        if (S.back && f.svn_done && f.svn_ja) return [['npc', 'normal', '町には、ハチがおらん。……娘の家の窓に、花でも置くか。']];
+        if (S.back && f.svn_done) { f.svn_ja = true; return [['npc', 'normal', 'ハチに、さよならは言えなかった。……五十年、毎朝しゃべってきたのにな。'], ['npc', 'normal', '坊主が、かわりに言ってくれたそうだ。「じいさんは、ときどき話しに来る」とな。……そういうことにしておこう。']]; }
+        if (S.back) return [['npc', 'normal', '……ハチには、まだ、何も言っとらん。']];
+        if (f.svn_done) return [['npc', 'normal', '……見ておったのか。だれにも、言うなよ。']];
+        if (f.svn_jz) return [['npc', 'normal', '道具は、ぜんぶ坊主にやる。……煙を出す道具だけは、すこし、くせがあるがな。']];
+        f.svn_jz = true;
+        return [['me', '', '（おじいさんが、養蜂の道具を、ひとつずつ木箱につめている）'], ['npc', 'normal', 'ヤネスだ。あした、町へ行く。……巣箱は、ルカにやる。'], ['npc', 'normal', 'ハチに知らせろ？ ……それは、あの坊主の仕事だ。わしは、何も言わん。']];
+      },
+      marijasl(S) {
+        const f = S.f;
+        if (S.back && f.svn_done) return [['npc', 'normal', 'ルカがハチに話してるのが、垣根ごしに聞こえたわ。……声が、ヤネスより、ずっと大きいの。'], ['npc', 'normal', 'あしたから、わたしの孫の話も、ルカにハチへ伝えてもらおう。']];
+        if (S.back) return [['npc', 'normal', '夕方は、ハチも巣に帰って、静かになるのよ。']];
+        if (f.svn_done) return [['npc', 'normal', 'あら、聞いちゃったのね。……あの人、てれ屋だから、言わないでおいてあげて。']];
+        if (f.svn_ma) return [['npc', 'normal', 'このごろの毎朝の話は、同じ話ばかり。……「柵の向こうの坊主」の話よ。']];
+        f.svn_ma = true;
+        return [['npc', 'normal', 'ヤネスはね、毎朝、ハチに村のことを話して聞かせるの。だれが生まれた、だれが嫁いだって。'], ['npc', 'normal', 'うちの孫が生まれたことも、わたしより先に、ハチが知ってたのよ。……垣根ごしに、聞こえちゃうの。'], ['npc', 'normal', 'あの人が町へ行ったら、だれがハチに村の話をするのかしら。……ちょっと、さびしいの。']];
+      },
+      tone(S) {
+        const f = S.f;
+        if (S.back && f.svn_done) return [['npc', 'normal', '坊主が、ハチに知らせたって？ ……よし、祭りの巻きパン、坊主の分を、いちばん大きく焼こう。']];
+        if (S.back) return [['npc', 'normal', '粉をひく音は、夕方になると、よく響く。']];
+        if (f.svn_done) return [['npc', 'normal', 'ヤネスがハチに、坊主の話を？ ……なんだ、引きつぎは、とっくに済んでたのか。']];
+        if (f.svn_to) return [['npc', 'normal', '別れのあいさつが言えない男が、ハチにだけは、毎朝しゃべってる。……おかしなもんだ。']];
+        f.svn_to = true;
+        return [['npc', 'normal', '秋の祭りの、くるみの巻きパン。あれには、ヤネスのはちみつがなきゃ、だめなんだ。'], ['npc', 'normal', 'ハチが出ていったら、祭りの味が変わっちまう。……あの坊主、ちゃんと知らせられるのか？'], ['npc', 'normal', 'じいさんに、きちんと言ってやれと頼んだんだ。でも、「言えん」の一点張りでな。']];
+      },
+      hives(S) {
+        const f = S.f;
+        if (S.back && f.svn_done) return [['me', '', '（夕方の巣箱。ルカが、巣箱に、小さな声で話しかけている）']];
+        if (S.back) return [['me', '', '（夕方の巣箱。羽音が、少しずつ静かになっていく）']];
+        if (f.svn_done) return [['me', '', '（ハチが一匹、こちらのまわりを、くるりと回って、巣へ帰っていった）']];
+        if (!(f.svn_lu && f.svn_ma && f.svn_to)) return [['me', '', '（丘の上に、色とりどりの巣箱がならんでいる。羽音が、低く響いている）']];
+        f.svn_done = true;
+        return [['me', '', '（巣箱の前で、ヤネスじいさんが、小さな声で話している）'], ['me', '', '（「……それから、柵の向こうの坊主だ。おまえたちを見るとき、あいつは息を止める」）'], ['me', '', '（「いい養蜂家になる。……毎朝この話をしたから、もう覚えたな」）'], ['me', '', '（ふり返ったじいさんは、こちらに気づくと、顔を赤くして、丘を下りていった）'], ['insight', '', 'ミツバチは、ずっと前から、あの子の話を聞かされていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 112 もう半分の模様（欠けて見えた模様は、もう一枚と合わさる形）
+  C.push({
+    id: 'kirgina', shape: 'もう半分の模様', name: 'キルギナ', sub: 'フェルトの谷の村', time: 'morning', screens: 5, far: 'highland', farBack: 'twilight', timeBack: 'dusk', map: [42.5, 75.5],
+    hill: '#6a7a58', ground: ['#a8a878', '#888858', '#b8b888'], tint: 'rgba(250,245,230,.05)', bscale: 1.0,
+    props: [['rock2', 400, 100], ['textile_stall', 1350, 110], ['rock', 2300, 60], ['haystack', 3100, 110], ['rock_moss', 4400, 100]],
+    buildings: [['yurt', 750, 0.85], ['yurt_smoke', 1750, 0.85], ['sheep_pen', 2700, 0.8], ['yurt', 3800, 0.8]],
+    npcs: [
+      { id: 'aigerim', name: 'アイゲリム', actor: 'farmgirl', x: 950, face: 1 },
+      { id: 'nurai', name: 'ヌライ', actor: 'ukr_girl', x: 1200, face: -1, when: (f, back) => back && f.kg_done },
+      { id: 'gulnara', name: 'フェルト縫いのグルナラばあちゃん', actor: 'herbgranny', x: 2000, face: -1 },
+      { id: 'bakyt', name: '馬飼いのバキト', actor: 'falconer', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'nuraiyurt', name: '谷の奥のユルト', x: 3950, verb: '訪ねる' }],
+    weather: { clear: 7, wind: 3 },
+    animals: [['horse_bay', 2500], ['sheep', 2850], ['yak', 3500]],
+    talk: {
+      aigerim(S) {
+        const f = S.f;
+        if (S.back && f.kg_done) return [['npc', 'normal', 'ふたつ、ならべてみたの。わたしの模様のすきまに、ヌライの模様が、ぴったり入った。'], ['npc', 'normal', '夏に帰ってきたら、また、ならべようって。……けんかのことは、ふたりとも、言わなかった。']];
+        if (S.back) return [['npc', 'normal', '……ヌライに会わないまま、行くのかな。']];
+        if (f.kg_done) return [['npc', 'normal', 'もう半分が、ヌライの家に？ ……待ってる。ここで、待ってる。']];
+        if (f.kg_ai) return [['npc', 'normal', '模様のぬけたところ、ばあちゃんは「もう半分がある」って言うの。']];
+        f.kg_ai = true;
+        return [['me', '', '（女の子が、大きなフェルトの敷物を、くるくる丸めている）'], ['npc', 'normal', 'これはシルダック。わたしが生まれたとき、ばあちゃんたちが作ったの。あしたから町の寮に持っていくの。'], ['npc', 'normal', 'ふしぎな模様でしょ。角の形が、なにかが、ぬけたみたいなの。'], ['npc', 'normal', 'きのう、ヌライとけんかしたの。「町に行くなら、もう友だちじゃない」って。……あやまれないまま、行くことになりそう。']];
+      },
+      nurai(S) {
+        const f = S.f;
+        if (f.kg_nu) return [['npc', 'normal', '夏までに、わたしも、自分でシルダックを縫えるようになる。……そしたら、また、二枚作ろう。']];
+        f.kg_nu = true;
+        return [['npc', 'normal', 'アイゲリムの模様、わたしのより、ちょっとだけ、ゆがんでた。……母さんたち、しゃべりながら縫ったんだね。'], ['npc', 'normal', 'けんかのこと？ ……シルダックが、ぴったりだったから、もういいの。']];
+      },
+      gulnara(S) {
+        const f = S.f;
+        if (S.back && f.kg_done) return [['npc', 'normal', 'ふたりが、ならんで座ってたって？ ……あの日、母親たちも、ああして縫ってたのよ。'], ['npc', 'normal', 'あしたから、ヌライに針を教えようかね。……あの子、手が器用なの。']];
+        if (S.back) return [['npc', 'normal', '日が暮れると、フェルトの色が見えにくくなる。']];
+        if (f.kg_done) return [['npc', 'normal', 'ヌライの家？ ……ああ、そうだった。あの週、生まれたのは、ふたりだったのよ。']];
+        if (f.kg_gu) return [['npc', 'normal', '二枚は、もとは一枚。……どっちが欠けても、模様にならないの。']];
+        f.kg_gu = true;
+        return [['npc', 'normal', 'シルダックはね、二色のフェルトを重ねて、いっしょに切りぬくの。それから、入れかえて縫う。'], ['npc', 'normal', 'だから、いつも二枚できる。色があべこべの二枚がね。……一枚は、よその家にあげるのよ。'], ['npc', 'normal', 'アイゲリムのを、どこにあげたか？ ……あの週は、いろいろあってね。思い出せないの。'], ['npc', 'normal', 'あの子が町へ行ったら、わたしの針仕事を、横で見る子がいなくなるねえ。']];
+      },
+      bakyt(S) {
+        const f = S.f;
+        if (S.back && f.kg_done) return [['npc', 'normal', '町の娘に、手紙を書くことにした。……十年ぶんだから、長くなるな。']];
+        if (S.back) return [['npc', 'normal', '谷の風は、夜になると、向きを変える。']];
+        if (f.kg_done) return [['npc', 'normal', 'ヌライの家で、見たか。……わしが運んだ包みの中身は、それだったのか。']];
+        if (f.kg_ba) return [['npc', 'normal', '谷の奥の家は、この道を、まっすぐだ。']];
+        f.kg_ba = true;
+        return [['npc', 'normal', '馬飼いのバキトだ。あの年の春のことなら、覚えとるよ。'], ['npc', 'normal', '同じ週に、女の子がふたり生まれた。わしは、フェルトの包みを、馬で谷の奥の家まで運んだ。'], ['npc', 'normal', 'わしの娘も、町へ出て、もう十年。……出ていく前に、ちゃんと話しておけば、よかった。']];
+      },
+      nuraiyurt(S) {
+        const f = S.f;
+        if (S.back && f.kg_done) return [['me', '', '（夕方のユルト。戸口の前に、フェルトのくずが、少しだけ落ちている）']];
+        if (S.back) return [['me', '', '（夕方のユルト。煙突から、細い煙が上っている）']];
+        if (f.kg_done) return [['me', '', '（ヌライが、敷物をかかえて、谷を下りていった）']];
+        if (!(f.kg_ai && f.kg_gu && f.kg_ba)) return [['me', '', '（谷の奥のユルト。戸口が、ぴたりと閉まっている）']];
+        f.kg_done = true;
+        return [['me', '', '（戸口から、女の子が顔を出した。ヌライだ。目が、まっ赤になっている）'], ['me', '', '（ユルトの中に、シルダックが一枚。アイゲリムのと同じ形。……色だけが、あべこべだ）'], ['me', '', '（ヌライは、敷物の角をじっと見て、だまって、丸めはじめた）'], ['insight', '', '欠けて見えた模様は、もう一枚と合わさる形だった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 113 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -6116,7 +6242,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 112 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 114 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,

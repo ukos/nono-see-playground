@@ -1,7 +1,7 @@
 == 国: コロンビナ（腰壁の絵の町）
 〔106番目の国／広さ 5 画面／朝／遠景 valley〕
 〔天候：晴れ 78%、強風 22%〕
-〔建物：mx_house、it_townhouse、mx_house、it_townhouse／小物：palm、wall_flowers、wall_painting、bush_berry、wall_painting、palm、easel〕
+〔建物：white_plinth_house、it_townhouse、mx_house、it_townhouse／小物：palm、wall_flowers、wall_painting、bush_berry、wall_painting、palm、easel〕
 〔住人（西から）：ヴァレンティナ @900、ペンキ屋のアンドレス @1250、パン屋のヒルベルト @1950、カルメンばあちゃん @2700〕
 
 〔行き〕
