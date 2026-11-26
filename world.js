@@ -7326,10 +7326,11 @@
   C.push({
     id: 'rwandana', shape: 'ゴリラのあいさつ', name: 'ルワンダナ', sub: '霧の山の森', time: 'morning', screens: 5, far: 'rainforest_noon', farBack: 'misty_pines_dawn', timeBack: 'dusk', map: [-1.5, 29.6],
     hill: '#3a6a48', ground: ['#7a8a58', '#5a6a38', '#8a9a68'], tint: 'rgba(235,245,235,.06)', bscale: 1.0,
-    props: [['big_forest_tree', 400, 330], ['tree_green', 1450, 270], ['bush_berry', 2350, 80], ['big_forest_tree', 3300, 340], ['bush_berry', 3800, 90], ['tree_green', 4450, 280]],
+    props: [['big_forest_tree', 400, 330], ['tree_green', 1450, 270], ['bush_berry', 2350, 80], ['big_forest_tree', 3300, 340], ['gorilla_bush', 4120, 115, null, 1], ['tree_green', 4500, 280]],
     buildings: [['thatched_farm', 750, 0.8], ['adobe', 1800, 0.8], ['thatched_farm', 2800, 0.75]],
     npcs: [
-      { id: 'aline', name: 'アリン', actor: 'farmgirl', x: 950, face: 1 },
+      { id: 'aline', name: 'アリン', actor: 'farmgirl', x: 950, face: 1, leaveWhen: f => f.rw_done, leaveDir: 1 },
+      { id: 'aline2', name: 'アリン', actor: 'farmgirl', x: 3700, face: 1, when: f => f.rw_done },
       { id: 'gahiji', name: 'アリンのじいちゃん', actor: 'na_elder', x: 1250, face: -1 },
       { id: 'mukami', name: '畑のムカミさん', actor: 'hijab', x: 2600, face: -1 }
     ],
@@ -7339,12 +7340,17 @@
     talk: {
       aline(S) {
         const f = S.f;
-        if (S.back && f.rw_done) return [['npc', 'normal', 'じいちゃんの昼寝のいびき、ちゃんと聞いてみた。……ンーン、ンーン。ゴリラより、上手だった。'], ['npc', 'normal', 'あした、森で、あいさつしてみる。……こわくないよ、って。']];
         if (S.back) return [['npc', 'normal', '……ンーン。やっぱり、いびきみたい。']];
-        if (f.rw_done) return [['npc', 'normal', '低いうなり声は、「だいじょうぶ」の意味？ ……じいちゃんのいびきも、そうなのかな。']];
         if (f.rw_al) return [['npc', 'normal', 'ンーン……ちがう。もっと低く？']];
         f.rw_al = true;
         return [['me', '', '（女の子が、口をとじたまま、のどの奥で、ンーン、ンーンと、うなっている）'], ['npc', 'normal', 'これ、ゴリラのあいさつ。父さんは、森でゴリラを見守る仕事をしてるの。'], ['npc', 'normal', 'あした、はじめて森へ連れていってもらえるの。……でも、このあいさつが、うまくできないとだめなんだって。'], ['npc', 'normal', '弟に聞かせたら、「じいちゃんのいびき」って笑うの。……ほんとのゴリラは、どんな声なんだろ。']];
+      },
+      aline2(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'じいちゃんの昼寝のいびき、ちゃんと聞いてみた。……ンーン、ンーン。ゴリラより、上手だった。'], ['npc', 'normal', 'あしたは、森のもっと奥で、あいさつしてみる。……こわくないよ、って。']];
+        if (f.rw_a2) return [['npc', 'normal', '低く、ゆっくり、おなかから。……じいちゃんのいびきと、同じだ。']];
+        f.rw_a2 = true;
+        return [['me', '', '（アリンが、走ってきた。しげみのほうを向いて、そっと、のどを鳴らす。……ンーン）'], ['me', '', '（しげみの奥から、ンーン。……大きな背中は、こちらを見もしないで、草を食べつづけている）'], ['npc', 'normal', '……返事した！ いま、ンーンって、返事したよね？ ……こわくない、って言われた！']];
       },
       gahiji(S) {
         const f = S.f;
@@ -7380,7 +7386,7 @@
   C.push({
     id: 'seychella', shape: 'ひいじいちゃんより年上のカメ', name: 'セイシェルナ', sub: '大きなカメの島', time: 'morning', screens: 5, far: 'beach_noon', farBack: 'sea_dusk', timeBack: 'dusk', map: [-4.6, 55.5],
     hill: '#4a7a58', ground: ['#d8c8a0', '#b8a880', '#e8d8b0'], tint: 'rgba(255,250,235,.05)', bscale: 1.0,
-    props: [['palm', 400, 310], ['bush_berry', 1450, 80], ['palm', 2400, 320], ['rock2', 3300, 90], ['tree_old_roots', 3900, 320], ['palm', 4500, 300]],
+    props: [['palm', 400, 310], ['bush_berry', 1450, 80], ['palm', 2400, 320], ['rock2', 3300, 90], ['tree_old_roots', 3900, 320], ['initial_trunk', 4080, 110, null, 1], ['giant_tortoise', 3720, 70, null, 1], ['palm', 4500, 300]],
     buildings: [['sea_twostory', 750, 0.85], ['sea_shop', 1800, 0.85], ['thatched_farm', 2800, 0.8]],
     npcs: [
       { id: 'noa', name: 'ノア', actor: 'islandboy', x: 950, face: 1 },
@@ -7389,7 +7395,7 @@
     ],
     places: [{ id: 'takamaka', name: '大きな木の下', x: 3950, verb: '見る' }],
     weather: { clear: 7, wind: 2, squall: 1 },
-    animals: [['hen', 1600], ['crow', 2300], ['turtle', 3750]],
+    animals: [['hen', 1600], ['crow', 2300]],
     talk: {
       noa(S) {
         const f = S.f;
@@ -7422,7 +7428,7 @@
         const f = S.f;
         if (S.back && f.sy_done) return [['me', '', '（夕方の大きな木の下。いちばん下に、彫ったばかりの、小さな頭文字がふえている）']];
         if (S.back) return [['me', '', '（夕方の大きな木の下。大きなカメが、目をとじている）']];
-        if (f.sy_done) return [['me', '', '（大きなカメが、首をのばして、木の葉をひとつ、ゆっくり食べた）']];
+        if (f.sy_done) return [['me', '', '（ノアが走ってきて、グランの前にしゃがんだ。「グラン」。……大きな首が、ゆっくり、こっちを向いた）']];
         if (!(f.sy_no && f.sy_ja && f.sy_ma)) return [['me', '', '（大きな木の下に、岩みたいな、大きな甲羅がある）']];
         f.sy_done = true;
         return [['me', '', '（大きな木の下で、巨大なリクガメが、のんびり草をはんでいる）'], ['me', '', '（木のみきに、ナイフで彫った頭文字が、上から下まで、ずらりとならんでいる）'], ['me', '', '（いちばん上は、もう、ほとんど読めない。いちばん下は、まだ新しい。……どれも、グランの世話をした人の名前だ）'], ['insight', '', 'カメは、何代もの家族が、通りすぎていくのを見ていた。']];
