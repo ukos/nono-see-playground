@@ -6658,7 +6658,7 @@
     id: 'feroa', shape: 'だれも全部は覚えていない歌', name: 'フェロナ', sub: '草屋根の島', time: 'morning', screens: 5, far: 'cliffs_morning', farBack: 'sea_night', timeBack: 'night', map: [62.0, -6.8],
     hill: '#5a7a58', ground: ['#98a880', '#788860', '#a8b890'], tint: 'rgba(230,240,250,.06)', bscale: 1.0,
     props: [['rock2', 400, 100], ['stone_wall_low', 1350, 80], ['rock_moss', 2400, 110], ['stone_wall_low', 3300, 80], ['rock2', 4450, 100]],
-    buildings: [['nordic_red', 750, 0.85], ['house_small', 1750, 0.85], ['nordic_red', 2800, 0.8], ['lumber_hut', 3800, 0.85]],
+    buildings: [['turf_house', 700, 0.55], ['house_small', 1750, 0.85], ['turf_house', 2750, 0.5], ['turf_house', 3750, 0.62]],
     npcs: [
       { id: 'rakul', name: 'ラクル', actor: 'ukr_girl', x: 950, face: 1 },
       { id: 'hansfr', name: '歌の先頭ハンスじいさん', actor: 'oldsmith', x: 2000, face: -1 },
@@ -6702,7 +6702,7 @@
         if (f.fr_done) return [['me', '', '（輪の練習は、まだ続いている。……いまは、百五十番あたりらしい）']];
         if (!(f.fr_ra && f.fr_ha && f.fr_jo)) return [['me', '', '（草屋根の集会所。中から、足をふむ音が聞こえる）']];
         f.fr_done = true;
-        return [['me', '', '（集会所で、輪踊りの練習。手をつながれて、輪に引きこまれる）'], ['me', '', '（ラクルが、ふるえる声で一番を歌う。……三番で、つまった）'], ['me', '', '（すると、輪のどこかから、パン屋のおばさんの声。四番、五番。十番で、先生の声にかわる）'], ['me', '', '（百十二番。ヨーグヴァンが、とつぜん、ものすごい声で、くしゃみの歌を歌った）'], ['insight', '', '長い歌は、輪の中で、みんなに分けて覚えられていた。']];
+        return [['me', '', '（集会所で、輪踊りの練習。手をつながれて、輪に引きこまれる）'], ['me', '', '（ラクルが、ふるえる声で一番を歌う。……三番で、つまった）'], ['me', '', '（すると、輪のどこかから、パン屋のおばさんの声。嵐の番になると、こぶしをにぎって歌う）'], ['me', '', '（王さまの番では、先生が背すじをのばす。羊の番では、羊飼いの子が、メエと鳴きまねを入れる）'], ['me', '', '（百十二番。ヨーグヴァンが、とつぜん、ものすごい声で、くしゃみの歌を歌った）'], ['insight', '', '長い歌は、輪の中で、みんなに分けて覚えられていた。']];
       }
     }
   });
@@ -6711,7 +6711,7 @@
   C.push({
     id: 'kameruna', shape: '森をわたることば', name: 'カメルナ', sub: '太鼓の森の村', time: 'morning', screens: 5, far: 'rainforest_noon', farBack: 'twilight', timeBack: 'dusk', map: [3.9, 11.5],
     hill: '#3a6a40', ground: ['#a07850', '#805830', '#b08860'], tint: 'rgba(255,240,220,.05)', bscale: 1.0,
-    props: [['palm', 400, 300], ['big_forest_tree', 1400, 330], ['rice_basket', 2250, 60], ['big_forest_tree', 3500, 340], ['stump2', 3950, 60], ['palm', 4450, 300]],
+    props: [['palm', 400, 300], ['big_forest_tree', 1400, 330], ['rice_basket', 2250, 60], ['big_forest_tree', 3500, 340], ['slit_drum', 3920, 70], ['palm', 4450, 300]],
     buildings: [['thatched_farm', 750, 0.85], ['adobe', 1750, 0.85], ['thatched_farm', 2800, 0.8]],
     npcs: [
       { id: 'mbarga', name: '太鼓たたきのンバルガじいさん', actor: 'na_elder', x: 950, face: 1 },
@@ -6733,9 +6733,9 @@
       },
       ateba(S) {
         const f = S.f;
-        if (S.back && f.cm_done) return [['npc', 'normal', '母さんの村の太鼓、「名前は？」って、三回も聞いてきたのよ。……せっかちなの、昔から。'], ['npc', 'normal', 'あしたは市場で、みんなに言いふらさなきゃ。……太鼓より、わたしの口のほうが、はやいからね。']];
+        if (S.back && f.cm_done) return [['npc', 'normal', '母さんの村の太鼓、「名前は？」って、三回も聞いてきたのよ。……せっかちなの、昔から。'], ['npc', 'normal', 'わたしも、はじめて太鼓をたたいたの。「名前は、あした」って。……ひとつ、音をはずしたけどね。'], ['npc', 'normal', 'あしたは市場で、みんなに言いふらさなきゃ。……太鼓より、わたしの口のほうが、はやいからね。']];
         if (S.back) return [['npc', 'normal', '市場は、もう、店じまいよ。']];
-        if (f.cm_done) return [['npc', 'normal', '森のむこうから、返事が？ ……母さんの村の太鼓だわ。']];
+        if (f.cm_done) return [['npc', 'normal', '森のむこうから、返事が？ ……母さんの村の太鼓だわ。'], ['npc', 'normal', '店はあとまわし。わたしも、空き地へ行く。……母さんに、返事を返さなきゃ。']];
         if (f.cm_at) return [['npc', 'normal', 'ター、タ、ターン。……覚えた？']];
         f.cm_at = true;
         return [['npc', 'normal', 'ンゴノの太鼓？ 聞こえてたわよ。……「ヤギが、ふとった」って言ってたわね。'], ['npc', 'normal', '「赤ちゃんが生まれた」と「ヤギがふとった」は、太鼓だと、高い低いがひとつちがうだけなの。'], ['npc', 'normal', 'ほら、こう歌うの。ター、タ、ターン。……太鼓は、歌えば、まちがえないのよ。'], ['npc', 'normal', '森のむこうのばあさんは、わたしの母さんでもあるの。……早く知らせたいのは、わたしも同じ。']];
