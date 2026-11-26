@@ -1,7 +1,7 @@
 == 国: サクラジマ（灰のふる島）
 〔123番目の国／広さ 5 画面／朝／遠景 volcano〕
 〔天候：晴れ 60%、霧 30%、強風 10%〕
-〔建物：machiya、nagaya、thatched_farm／小物：tree_green、rice_basket、signboard、tree_green、rice_basket〕
+〔建物：machiya、nagaya、thatched_farm／小物：tree_green、rice_basket、ash_bags、tree_green、daikon_big〕
 〔住人（西から）：ミオ @950、灰袋のヨシエさん @2000、大根畑のシゲルじいさん @3050〕
 
 〔行き〕

@@ -6765,7 +6765,7 @@
   C.push({
     id: 'sakurajima', shape: '灰のふる島', name: 'サクラジマ', sub: '灰のふる島', time: 'morning', screens: 5, far: 'volcano', farBack: 'twilight', timeBack: 'dusk', map: [31.6, 130.7],
     hill: '#6a6258', ground: ['#8a8278', '#6a6258', '#9a9288'], tint: 'rgba(230,225,220,.08)', bscale: 1.0,
-    props: [['tree_green', 400, 260], ['rice_basket', 1350, 60], ['signboard', 2350, 100], ['tree_green', 3300, 250], ['rice_basket', 3900, 60]],
+    props: [['tree_green', 400, 260], ['rice_basket', 1350, 60], ['ash_bags', 2200, 70], ['tree_green', 3300, 250], ['daikon_big', 3870, 55, (f, back) => f.sk_done]],
     buildings: [['machiya', 750, 0.85], ['nagaya', 1750, 0.8], ['thatched_farm', 2800, 0.8]],
     npcs: [
       { id: 'miosk', name: 'ミオ', actor: 'okappa', x: 950, face: 1 },
@@ -6819,7 +6819,7 @@
   C.push({
     id: 'slovakina', shape: 'ひみつのキノコの場所', name: 'スロヴァキナ', sub: 'キノコの森の村', time: 'morning', screens: 5, far: 'misty_pines_dawn', farBack: 'twilight', timeBack: 'dusk', map: [48.9, 19.5],
     hill: '#4a6a48', ground: ['#8a9a70', '#6a7a50', '#9aaa80'], tint: 'rgba(235,245,235,.06)', bscale: 1.0,
-    props: [['pine', 400, 300], ['stump', 1400, 50], ['pine', 2300, 310], ['tree_old_roots', 3300, 300], ['stump2', 3950, 60], ['pine', 4450, 300]],
+    props: [['pine', 400, 300], ['stump', 1400, 50], ['pine', 2300, 310], ['tree_old_roots', 3300, 300], ['stump2', 3950, 60], ['porcini_basket', 3820, 55], ['pine', 4450, 300]],
     buildings: [['house_large', 750, 0.85], ['bakery', 1750, 0.85], ['lumber_hut', 2800, 0.8]],
     npcs: [
       { id: 'tomascz', name: 'トマーシュ', actor: 'boy_cap', x: 950, face: 1 },

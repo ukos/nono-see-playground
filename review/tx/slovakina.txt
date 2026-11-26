@@ -1,7 +1,7 @@
 == 国: スロヴァキナ（キノコの森の村）
 〔124番目の国／広さ 5 画面／朝／遠景 misty_pines_dawn〕
 〔天候：晴れ 40%、霧 50%、小雨 10%〕
-〔建物：house_large、bakery、lumber_hut／小物：pine、stump、pine、tree_old_roots、stump2、pine〕
+〔建物：house_large、bakery、lumber_hut／小物：pine、stump、pine、tree_old_roots、stump2、porcini_basket、pine〕
 〔住人（西から）：トマーシュ @950、トマーシュのじいちゃん @1250、パン屋のハナさん @2000、森番のパヴェル @3050〕
 
 〔行き〕
