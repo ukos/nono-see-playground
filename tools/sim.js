@@ -23,7 +23,7 @@ function simulate(world) {
   const last = {};
   const pre = {}; // 国ごと：気づきが出る直前の flags
   const nameOf = n => typeof n.name === 'function' ? n.name(st.flags) : n.name;
-  const present = (n, c) => (!n.when || n.when(st.flags, st.maxX >= c.x1 - 2 && st.x < c.x1)) && !st.flags[n.id + 'Gone'];
+  const present = (n, c) => (!n.when || n.when(st.flags, st.maxX >= c.x1 - 2 && st.x < c.x1)) && !st.flags[n.id + 'Gone'] && !(n.leaveWhen && n.leaveWhen(st.flags));
   const ctx = c => ({
     f: st.flags, back: st.maxX >= c.x1 - 2 && st.x < c.x1,
     ev: k => { if (!st.evidence.includes(k)) st.evidence.push(k); },
