@@ -1,7 +1,7 @@
 == 国: ジャマイカナ（青い山のふもと）
 〔102番目の国／広さ 5 画面／朝／遠景 rainforest_noon〕
 〔天候：晴れ 56%、小雨 33%、スコール 11%〕
-〔建物：br_townhouse、sea_shop、thatched_farm／小物：palm、tea_tree、bush_berry、tree_green、palm〕
+〔建物：br_townhouse、sea_shop、thatched_farm／小物：palm、tea_tree、bush_berry、tree_green、waterfall、palm〕
 〔住人（西から）：デズモンド @950、果物売りのパール @1650、太鼓のウィンストン @2250、コーヒー摘みのラス @2850、姉さんのマーシャ @3800〕
 
 〔行き〕

@@ -1,7 +1,7 @@
 == 国: エストニナ（湖のほとりの村）
 〔101番目の国／広さ 5 画面／朝／遠景 lake_reeds_morning〕
 〔天候：晴れ 50%、小雨 30%、霧 20%〕
-〔建物：nordic_red、lumber_hut／小物：pine、reeds、big_tree2、reeds2、pine〕
+〔建物：nordic_red、lumber_hut／小物：pine、reeds、tree_swing、reeds2、pine〕
 〔住人（西から）：リース @1000、弟のペーテル @2650、漁師のマルトじいさん @3500〕
 
 〔行き〕
