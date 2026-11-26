@@ -7214,7 +7214,115 @@
     }
   });
 
-// ---------------------------------------------------------------- 131 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 131 消えない火（こわい火は、夜の砂漠の灯台だった）
+  C.push({
+    id: 'turkmena', shape: '消えない火', name: 'トルクメナ', sub: '燃える穴の砂漠', time: 'dusk', screens: 5, far: 'desert', farBack: 'oasis_night', timeBack: 'night', map: [40.3, 58.4],
+    hill: '#9a7a58', ground: ['#d0b088', '#b09068', '#e0c098'], tint: 'rgba(255,230,200,.07)', bscale: 1.0,
+    props: [['rock2', 400, 90], ['cairn_built', 1450, 100], ['rock', 2450, 60], ['rock2', 3350, 90], ['rock', 4450, 60]],
+    buildings: [['yurt', 750, 0.8], ['yurt_smoke', 1700, 0.75], ['sheep_pen', 2700, 0.75]],
+    npcs: [
+      { id: 'ayna', name: 'アイナ', actor: 'kg_girl', x: 950, face: 1 },
+      { id: 'myrat', name: '羊飼いのムラトじいさん', actor: 'falconer', x: 2000, face: -1 },
+      { id: 'mikhail', name: '迷った旅人ミハイル', actor: 'backpacker', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'crater', name: '燃える穴のふち', x: 3950, verb: '見る' }],
+    weather: { clear: 8, wind: 2 },
+    animals: [['sheep', 2550], ['camel', 3400], ['crow', 1500]],
+    talk: {
+      ayna(S) {
+        const f = S.f;
+        if (S.back && f.tk_done) return [['npc', 'normal', '夜、あの火のほうを見たの。……赤い光の下に、ちゃんと、道が見えた。'], ['npc', 'normal', 'あした、羊と、あの火のそばを通る。……こわいけど、迷わないって、わかったから。']];
+        if (S.back) return [['npc', 'normal', '……今夜も、あっちを見ないで寝る。']];
+        if (f.tk_done) return [['npc', 'normal', '迷った人が、あの火を目じるしに？ ……ちょっとだけ、見てみる。']];
+        if (f.tk_ay) return [['npc', 'normal', '……あっちは、見ない。見ないもん。']];
+        f.tk_ay = true;
+        return [['me', '', '（女の子が、テントのかげから、地平線のほうを、こわごわ見ている）'], ['npc', 'normal', 'あっちに大きな穴があって、ずっと火が燃えてるの。おじいちゃんが子どものころから、一度も消えたことがないんだって。'], ['npc', 'normal', '夜になると、空まで赤くなるの。みんな「地獄の門」って呼んでる。……わたし、あっちを見ないで寝るの。'], ['npc', 'normal', 'あしたから、羊を連れて、あの穴のそばを通らなきゃいけない。……水場への道が、ほかにないんだって。']];
+      },
+      myrat(S) {
+        const f = S.f;
+        if (S.back && f.tk_done) return [['npc', 'normal', 'アイナが、あの火を見たか。……わしの目のかわりに、あの火が、羊の道を照らしてくれる。']];
+        if (S.back) return [['npc', 'normal', '夜の砂漠は、寒い。……火のそばだけが、あたたかい。']];
+        if (f.tk_done) return [['npc', 'normal', 'あの若いのに会ったか。……毎年ひとりか、ふたり、ああやって、火を目指して歩いてくる。']];
+        if (f.tk_my) return [['npc', 'normal', '火は、夕方より、夜のほうが、よく見える。']];
+        f.tk_my = true;
+        return [['npc', 'normal', '羊飼いのムラトだ。……あの火か。わしが子どものころ、地面に穴があいて、火がついた。それきり燃えとる。'], ['npc', 'normal', 'こわいか？ ……わしも、最初は、こわかった。悪いことの前ぶれだと、みんな言った。'], ['npc', 'normal', 'わしは、もう目が悪い。……あしたの羊の道は、アイナにまかせるしかないんだ。']];
+      },
+      mikhail(S) {
+        const f = S.f;
+        if (S.back && f.tk_done) return [['npc', 'normal', 'アイナちゃんに、コンパスの代わりの話をしたよ。……「火を背にして、まっすぐ」ってね。']];
+        if (S.back) return [['npc', 'normal', '夜は、あの火が、いちばんたのもしい。']];
+        if (f.tk_done) return [['npc', 'normal', 'きみも、あの火を見たかい。……あれをこわいと思えるのは、迷っていない人だけだよ。']];
+        if (f.tk_mi) return [['npc', 'normal', 'コンパスを、なくしたんだ。……あの火があれば、いらないけどね。']];
+        f.tk_mi = true;
+        return [['npc', 'normal', '……み、水を。……ありがとう。ぼくは、砂漠を歩いて横断している旅の者だ。'], ['npc', 'normal', 'きのう、道をまちがえて、真っ暗な砂漠で、一晩じゅう迷った。……水も、コンパスも、なくしてね。'], ['npc', 'normal', 'そうしたら、ずっと遠くに、赤い光がぼうっと見えたんだ。……それを目指して、歩いてきた。']];
+      },
+      crater(S) {
+        const f = S.f;
+        if (S.back && f.tk_done) return [['me', '', '（夜の穴のふち。赤い光が、砂漠のずっと先まで、道を照らしている）']];
+        if (S.back) return [['me', '', '（夜の穴のふち。ごうごうと、火が燃えている）']];
+        if (f.tk_done) return [['me', '', '（火の熱で、顔が、ほてる）']];
+        if (!(f.tk_ay && f.tk_my && f.tk_mi)) return [['me', '', '（夕方の砂漠。地平線のむこうが、ほんのり赤い）']];
+        f.tk_done = true;
+        return [['me', '', '（砂の上に、ぽっかり大きな穴。底で、火が、ごうごうと燃えている）'], ['me', '', '（日がしずむ。ふり返ると、来た道の砂に、火の明かりがとどいて、足あとが、くっきり浮かんでいる）'], ['me', '', '（遠くの砂丘のむこうからも、この赤い光は、見えるはずだ）'], ['insight', '', 'こわい火は、夜の砂漠の、灯台だった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 132 指ひとつぶんの国（小さい国も、足で歩けば大きい）
+  C.push({
+    id: 'luxemba', shape: '指ひとつぶんの国', name: 'ルクセンナ', sub: '小さな国の町', time: 'morning', screens: 5, far: 'valley', farBack: 'twilight', timeBack: 'dusk', map: [49.6, 6.1],
+    hill: '#5a7a58', ground: ['#a8b088', '#889068', '#b8c098'], tint: 'rgba(245,250,240,.05)', bscale: 1.0,
+    props: [['tree_green', 400, 270], ['signboard', 1350, 100], ['tree_green', 2400, 280], ['stone_wall_low', 3300, 80], ['cairn_built', 3950, 90], ['tree_green', 4450, 270]],
+    buildings: [['house_large', 750, 0.85], ['bakery', 1750, 0.85], ['uk_tudor', 2800, 0.8]],
+    npcs: [
+      { id: 'leaLu', name: 'レア', actor: 'braidgirl', x: 950, face: 1 },
+      { id: 'annalu', name: 'パン屋のアンナ', actor: 'granny_nordic', x: 2000, face: -1 },
+      { id: 'marclu', name: '郵便屋のマルク', actor: 'postman', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'border', name: '国境の石', x: 3950, verb: 'またぐ' }],
+    weather: { clear: 6, drizzle: 2, fog: 2 },
+    animals: [['cat_white', 1500], ['dog_brown', 2600], ['crow', 3500]],
+    talk: {
+      leaLu(S) {
+        const f = S.f;
+        if (S.back && f.lu_done) return [['npc', 'normal', '国の三分の一まで歩いたよ。足のうら、まめだらけ。'], ['npc', 'normal', '小さい国って、歩くと、ぜんぜん小さくないね。……あの男の子に、そう言ってやる。']];
+        if (S.back) return [['npc', 'normal', '……地図、ちょっと、まちがってたかも。']];
+        if (f.lu_done) return [['npc', 'normal', '国境まで、まだ、そんなに？ ……で、でも、もうちょっと歩く。']];
+        if (f.lu_le) return [['npc', 'normal', '地図の上なら、指ひとつぶんなのに。']];
+        f.lu_le = true;
+        return [['me', '', '（女の子が、手描きの地図とパンの袋をかかえて、張りきっている）'], ['npc', 'normal', 'この国は、すっごく小さいの。地図で見ると、親指くらい。だから、きょう、はしからはしまで、歩いてわたるの！'], ['npc', 'normal', 'お昼までに半分、夕方には、むこうの国境に着く予定。……かんたんでしょ？'], ['npc', 'normal', 'クラスの男の子に、「小さい国のやつは、小さい」って言われたの。……歩いて、見返してやるんだ。']];
+      },
+      annalu(S) {
+        const f = S.f;
+        if (S.back && f.lu_done) return [['npc', 'normal', 'レアちゃん、足をひきずって帰ってきたわ。……パンを、三個も食べてた。']];
+        if (S.back) return [['npc', 'normal', '夕方は、パンの棚が、からっぽ。']];
+        if (f.lu_done) return [['npc', 'normal', '国境の石まで行ったの？ ……息子が、毎朝またいでる石ね。']];
+        if (f.lu_an) return [['npc', 'normal', 'パン、もう一個、持っていく？ ……レアちゃんの、夕ごはん用に。']];
+        f.lu_an = true;
+        return [['npc', 'normal', 'パン屋のアンナよ。うちの息子は、毎朝、となりの国の家から、パンを焼きに来るの。'], ['npc', 'normal', '国境を、一日に二回またぐのよ。……行きと、帰りでね。'], ['npc', 'normal', 'レアちゃん、パンを持っていった？ ……あの子、お昼のぶんしか、持っていってないわよ。']];
+      },
+      marclu(S) {
+        const f = S.f;
+        if (S.back && f.lu_done) return [['npc', 'normal', 'レアが、来月、わしの最後の配達についてくるそうだ。……国のはしまで、ふたりでな。']];
+        if (S.back) return [['npc', 'normal', '夕方の配達は、窓の灯りで、家がわかる。']];
+        if (f.lu_done) return [['npc', 'normal', '国境の石を見たか。……あれは、国のはしでもあるし、となりの国のはじまりでもある。']];
+        if (f.lu_ma) return [['npc', 'normal', '小さい国ほど、道は、くねくねしとるんだ。']];
+        f.lu_ma = true;
+        return [['npc', 'normal', '郵便屋のマルクだ。この国を、歩いて配達して、四十年。……足した道は、国を二百回は横断した勘定だ。'], ['npc', 'normal', 'あの子、一日でわたるって？ ……はっはっは。わしの足でも、二日はかかる。'], ['npc', 'normal', 'わしも来月で引退だ。……最後の配達の日に、国のはしまで、歩いてみようと思っとる。']];
+      },
+      border(S) {
+        const f = S.f;
+        if (S.back && f.lu_done) return [['me', '', '（夕方の国境の石。こっちとあっちに、ひとつずつ、小さな足あとがある）']];
+        if (S.back) return [['me', '', '（夕方の国境の石。むこうの国の窓に、灯りがともりはじめた）']];
+        if (f.lu_done) return [['me', '', '（石のむこうの道も、こっちの道と、同じ色をしている）']];
+        if (!(f.lu_le && f.lu_an && f.lu_ma)) return [['me', '', '（道のわきに、小さな石の柱がある）']];
+        f.lu_done = true;
+        return [['me', '', '（道のわきに、小さな石の柱。こっち側とあっち側で、彫ってある国の名前がちがう）'], ['me', '', '（片足をあっち、片足をこっちに置いてみる。……ひとりで、ふたつの国に立っている）'], ['me', '', '（ふり返ると、来た道は、もう、ずっと遠い。……指ひとつぶんの国は、足では、まだまだ大きい）'], ['insight', '', '小さい国も、足で歩けば、ちゃんと大きい。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 133 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -7259,7 +7367,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 132 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 134 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
