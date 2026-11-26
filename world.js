@@ -5787,8 +5787,8 @@
       },
       andres(S) {
         const f = S.f;
-        if (f.co_done && f.co_an) return [['npc', 'joy', 'あの子が町をぜんぶ描くなら、ペンキが足りないな。……分けてやらなきゃ。']];
-        if (f.co_done) { f.co_an = true; return [['npc', 'normal', 'ヴァレンティナに、ばれたか。……描くものがないなんて、うそをついた。'], ['npc', 'normal', '自分の家に、自分の子を描くのは、てれくさくてな。……人の家になら、描けたんだ。']]; }
+        if (S.back && f.co_done && f.co_an) return [['npc', 'joy', 'あの子が町をぜんぶ描くなら、ペンキが足りないな。……分けてやらなきゃ。']];
+        if (S.back && f.co_done) { f.co_an = true; return [['npc', 'normal', 'ヴァレンティナに、ばれたか。……描くものがないなんて、うそをついた。'], ['npc', 'normal', '自分の家に、自分の子を描くのは、てれくさくてな。……人の家になら、描けたんだ。']]; }
         if (S.back) return [['npc', 'normal', '娘の宿題か。……うちの壁には、描くものがないんだ。']];
         if (f.co_done) return [['npc', 'normal', 'すみっこを見たって顔だな。……ばれるのは、時間の問題か。']];
         if (f.co_an0) return [['npc', 'normal', 'すまんな、いまは手がはなせない。……すみっこは、筆の先でしか描けないんだ。']];
