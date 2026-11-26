@@ -8016,7 +8016,115 @@
     }
   });
 
-// ---------------------------------------------------------------- 145 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 145 海女の口笛（海からの口笛は、生きてもどったしるし）
+  C.push({
+    id: 'jejuna', shape: '海女の口笛', name: 'チェジュナ', sub: '海女の島', time: 'morning', screens: 5, far: 'sea_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [33.4, 126.5],
+    hill: '#4a5a58', ground: ['#5a5a58', '#3a3a38', '#6a6a68'], tint: 'rgba(235,245,250,.05)', bscale: 1.0,
+    props: [['rock2', 400, 100], ['stone_wall_low', 1350, 80], ['rock', 2350, 60], ['stone_wall_low', 3200, 80], ['rock2', 3700, 90], ['rock', 4450, 60]],
+    buildings: [['elder_house', 750, 0.8], ['house_small', 1750, 0.8], ['sea_shop', 2800, 0.8]],
+    npcs: [
+      { id: 'subin', name: 'スビン', actor: 'okappa', x: 950, face: 1 },
+      { id: 'myongja', name: '海女のミョンジャ', actor: 'kasuri', x: 2000, face: -1 },
+      { id: 'donghyun', name: 'おかゆ屋のトンヒョン', actor: 'mustache', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'haenyeo', name: '黒い岩の浜', x: 3950, verb: '待つ' }],
+    weather: { clear: 5, wind: 4, drizzle: 1 },
+    animals: [['crow', 1500], ['cat_white', 2500]],
+    talk: {
+      subin(S) {
+        const f = S.f;
+        if (S.back && f.jj_done) return [['npc', 'normal', 'ばあちゃんがあがってきたとき、わたしも、ヒューッて、まねしてみたの。……ばあちゃん、笑ってた。'], ['npc', 'normal', 'あの音は、かなしい音じゃなかった。……「ただいま」の音だった。']];
+        if (S.back) return [['npc', 'normal', '……ヒューッ。やっぱり、かなしい音。']];
+        if (f.jj_done) return [['npc', 'normal', 'あの音は、息の音？ ……生きて、もどったしるし？']];
+        if (f.jj_su) return [['npc', 'normal', 'ヒューッ……。また、聞こえた。']];
+        f.jj_su = true;
+        return [['me', '', '（女の子が、黒い岩の浜で、海のほうへ耳をすましている）'], ['npc', 'normal', 'ばあちゃんは、海女なの。八十歳。息を止めて海にもぐって、貝やウニをとるの。'], ['npc', 'normal', '海からあがるとき、ばあちゃんたち、ヒューッて、口笛みたいな音を出すの。……すごく、かなしい音なの。'], ['npc', 'normal', '泣いてるのかな。……もう、もぐるの、やめてほしい。']];
+      },
+      myongja(S) {
+        const f = S.f;
+        if (S.back && f.jj_done) return [['npc', 'normal', 'スビンが、浜で、口笛のまねしてたわ。……ばあちゃん、きょうは、いつもより一回多く、もぐってた。']];
+        if (S.back) return [['npc', 'normal', '夕方の海は、波が高くなる。']];
+        if (f.jj_done) return [['npc', 'normal', '聞いたのね、あの音。……あれがなきゃ、海女は、つづけられない。']];
+        if (f.jj_my) return [['npc', 'normal', '海女は、ひとりでは、もぐらないの。']];
+        f.jj_my = true;
+        return [['npc', 'normal', '海女のミョンジャ。……この村じゃ、六十は、まだ若手よ。'], ['npc', 'normal', 'スビンのばあちゃんは、海女のまとめ役。いちばん深くもぐって、いちばん長く、息を止める。'], ['npc', 'normal', '若いころ、わたし、海で気をうしないかけたの。……そのとき、ばあちゃんの口笛で、目がさめたのよ。']];
+      },
+      donghyun(S) {
+        const f = S.f;
+        if (S.back && f.jj_done) return [['npc', 'normal', 'スビンに、おかゆを、ただで食わせてやった。……ばあちゃんの貝のぶんだ。']];
+        if (S.back) return [['npc', 'normal', '夕方は、おかゆが、いちばんよく売れる。']];
+        if (f.jj_done) return [['npc', 'normal', '数えたか。……口笛の数と、あがってきた頭の数。いっしょだったろう。']];
+        if (f.jj_do) return [['npc', 'normal', 'おかゆ、どうだい。……ばあちゃんたちの、きょうの海の味だ。']];
+        f.jj_do = true;
+        return [['npc', 'normal', 'おかゆ屋のトンヒョンだ。あの口笛か。……わしも子どものころ、幽霊の声かと思って、こわかった。'], ['npc', 'normal', 'でもな、あの音がしないと、浜の者は、みんな海を見る。……だれかが、あがってこない、ってことだからな。'], ['npc', 'normal', 'わしの母ちゃんも、海女だった。……わしは泳げんから、毎日、浜で、口笛を数えとったよ。']];
+      },
+      haenyeo(S) {
+        const f = S.f;
+        if (S.back && f.jj_done) return [['me', '', '（夕方の浜。海女たちが、岩の上で、ぬれた髪をしぼりながら、笑っている）']];
+        if (S.back) return [['me', '', '（夕方の浜。オレンジ色の浮きが、ひとつずつ、岸へ引きあげられていく）']];
+        if (f.jj_done) return [['me', '', '（遠くで、また、ヒューッ。……浜の人が、ひとり、うなずいた）']];
+        if (!(f.jj_su && f.jj_my && f.jj_do)) return [['me', '', '（黒い岩の浜。波の間に、オレンジ色の浮きが、いくつも浮いている）']];
+        f.jj_done = true;
+        return [['me', '', '（黒い岩の浜。波の間に、オレンジ色の浮きが、いくつも浮いている）'], ['me', '', '（ひとつの浮きのそばで、頭が、ぷかりと出た。……ヒューッ）'], ['me', '', '（またひとつ。ヒューッ。……浜で待つ人たちが、そのたびに、ほっと肩の力をぬく）'], ['insight', '', '海からの口笛は、生きてもどった、しるしだった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 146 百歳の村（長生きのひみつは、坂をのぼって会いに行くこと）
+  C.push({
+    id: 'sardina', shape: '百歳の村', name: 'サルディナ', sub: '百歳の村', time: 'morning', screens: 5, far: 'vineyard_morning', farBack: 'twilight', timeBack: 'dusk', map: [40.0, 9.3],
+    hill: '#7a7a58', ground: ['#c0b090', '#a09070', '#d0c0a0'], tint: 'rgba(255,245,225,.05)', bscale: 1.0,
+    props: [['tree_olive', 400, 270], ['stone_well', 1400, 90], ['tree_olive', 2400, 280], ['stone_wall_low', 3300, 80], ['tree_olive', 4450, 270]],
+    buildings: [['it_tuscan', 750, 0.8], ['med_white', 1750, 0.8], ['it_townhouse', 2800, 0.8], ['elder_house', 3850, 0.75]],
+    npcs: [
+      { id: 'giulia', name: 'ジュリア', actor: 'schoolgirl', x: 950, face: 1 },
+      { id: 'tonino', name: 'トニーノじいさん（百一歳）', actor: 'oldman', x: 2000, face: -1 },
+      { id: 'peppe', name: '羊飼いのペッペ（百歳）', actor: 'island_fisher', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'mariahouse', name: '坂の上の家', x: 3950, verb: '訪ねる' }],
+    weather: { clear: 8, wind: 2 },
+    animals: [['sheep', 2600], ['sheep', 3350], ['donkey', 1600]],
+    talk: {
+      giulia(S) {
+        const f = S.f;
+        if (S.back && f.sd_done) return [['npc', 'normal', '宿題、書けたよ。「長生きのひみつは、毎日、坂をのぼって、だれかに会いに行くこと」。'], ['npc', 'normal', 'ひいおばあちゃんに見せたら、「まちがい。ほんとのひみつは、ワインを一杯」だって。……書きなおすべき？']];
+        if (S.back) return [['npc', 'normal', '……宿題、白紙のまま。']];
+        if (f.sd_done) return [['npc', 'normal', '毎日、坂をのぼって、だれかに会いに行く……それが、ひみつ？']];
+        if (f.sd_gi) return [['npc', 'normal', 'ひみつ……ひみつ……。']];
+        f.sd_gi = true;
+        return [['me', '', '（女の子が、ノートとえんぴつを持って、坂の上の家々を見上げている）'], ['npc', 'normal', 'この村には、百歳をこえた人が、七人もいるの。学校の宿題で、長生きのひみつを、聞いてまわってるの。'], ['npc', 'normal', 'ひいおばあちゃんは、百二歳。……でも、聞いても、「ひみつなんかないよ」しか言わないの。'], ['npc', 'normal', '宿題、あしたまでなの。……ひみつ、ひとつも見つかってない。']];
+      },
+      tonino(S) {
+        const f = S.f;
+        if (S.back && f.sd_done) return [['npc', 'normal', 'ジュリアのノートに「ワイン一杯」と書いてあった。……あとで、「坂」とも書いといてやった。']];
+        if (S.back) return [['npc', 'normal', '夕方の坂は、のぼるより、くだるほうが、ひざにくる。']];
+        if (f.sd_done) return [['npc', 'normal', 'わしが毎朝、坂をのぼる理由？ ……マリアに、パンの文句を言われるためさ。']];
+        if (f.sd_to) return [['npc', 'normal', 'ワインは一杯。……二杯目は、あしたのぶんだ。']];
+        f.sd_to = true;
+        return [['npc', 'normal', 'トニーノ、百一歳だ。……長生きのひみつ？ 毎晩、ワインを一杯。二杯じゃない。一杯だ。'], ['npc', 'normal', 'それと、他人の悪口を言わんことだ。……言うと、聞いたやつのほうが長生きするからな。'], ['npc', 'normal', 'わしは毎朝、坂の上のマリアのところへ、パンを持っていく。……百二歳のくせに、まだ、うまく焼けんのだ。']];
+      },
+      peppe(S) {
+        const f = S.f;
+        if (S.back && f.sd_done) return [['npc', 'normal', 'きょうの口げんかの相手は、トニーノだった。……マリアの家の前でな。百年、飽きんよ。']];
+        if (S.back) return [['npc', 'normal', '羊は、夕方になると、勝手に坂をくだっていく。']];
+        if (f.sd_done) return [['npc', 'normal', 'マリアの家で、かちあったって？ ……ふん、わざとじゃない。たまたまだ。毎日な。']];
+        if (f.sd_pe) return [['npc', 'normal', 'きょうの口げんかの相手は、まだ決まっとらん。……あんたにするか。']];
+        f.sd_pe = true;
+        return [['npc', 'normal', 'ペッペ、百歳。羊飼いだ。……ひみつ？ 毎日、羊と、山をひとつ、のぼりおりする。'], ['npc', 'normal', 'それと、毎日、だれかと、口げんかする。……きょうの相手は、まだ決まっとらん。あんたにするか。'], ['npc', 'normal', 'トニーノのやつ、毎朝、マリアの家へ行く。……わしは昼に行く。あいつと、かちあわんようにな。']];
+      },
+      mariahouse(S) {
+        const f = S.f;
+        if (S.back && f.sd_done) return [['me', '', '（夕方の坂の上の家。戸口に、杖が三本、立てかけてある）']];
+        if (S.back) return [['me', '', '（夕方の坂の上の家。窓から、パンのにおいがする）']];
+        if (f.sd_done) return [['me', '', '（家の中から、また、笑い声と、口げんかの声）']];
+        if (!(f.sd_gi && f.sd_to && f.sd_pe)) return [['me', '', '（坂のいちばん上に、小さな家がある）']];
+        f.sd_done = true;
+        return [['me', '', '（坂のいちばん上の、小さな家。戸があいていて、中から、笑い声がする）'], ['me', '', '（百二歳のマリアおばあさんのまわりに、トニーノじいさんと、羊飼いのペッペ。……パンの文句と、羊の話と、昔の悪口）'], ['me', '', '（ふり返ると、村の坂道は、どれも、この家に向かってのびている。……毎日、だれかがのぼってくる坂だ）'], ['insight', '', '長生きのひみつは、毎日、坂をのぼって、だれかに会いに行くことだった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 147 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -8061,7 +8169,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 146 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 148 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
