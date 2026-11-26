@@ -6532,7 +6532,128 @@
     }
   });
 
-// ---------------------------------------------------------------- 119 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 119 砂は魚がつくる（島の大工は、水の中にいた）
+  C.push({
+    id: 'maldiva', shape: '砂は魚がつくる', name: 'モルディナ', sub: '白い砂の島', time: 'noon', screens: 5, far: 'sea_noon', farBack: 'sea_dusk', timeBack: 'dusk', map: [4.2, 73.5],
+    hill: '#5a8a68', ground: ['#f0e8d0', '#d8d0b8', '#fff8e0'], tint: 'rgba(240,255,255,.05)', bscale: 1.0,
+    props: [['palm', 400, 310], ['stool', 1350, 40], ['palm', 2300, 320], ['ship_boat', 3150, 90], ['pier', 3900, 80], ['palm', 4450, 300]],
+    buildings: [['sea_twostory', 750, 0.85], ['sea_shop', 1750, 0.85], ['sea_stilt', 2750, 0.8]],
+    npcs: [
+      { id: 'aminath', name: 'アミナト', actor: 'hijab', x: 950, face: 1 },
+      { id: 'musa', name: '浜のムーサじいさん', actor: 'in_elder', x: 2000, face: -1 },
+      { id: 'alimd', name: '漁師のアリ', actor: 'fisherboy', x: 3050, face: -1 }
+    ],
+    places: [{ id: 'jetty', name: '桟橋の先', x: 3950, verb: 'のぞく' }],
+    weather: { clear: 8, wind: 2 },
+    animals: [['crow', 1300], ['cat_white', 2400], ['turtle', 4200]],
+    talk: {
+      aminath(S) {
+        const f = S.f;
+        if (S.back && f.md_done) return [['npc', 'normal', 'ほんとだった！ 魚がガリッてかじって、白い砂を、ふわって出したの。……笑っちゃった。'], ['npc', 'normal', 'アリおじさんが、錨をおろす場所を、砂の上にかえてくれたの。……島の大工さんの家を、こわさないように。']];
+        if (S.back) return [['npc', 'normal', '……杭の印、またひとつ、下にずらさなきゃ。']];
+        if (f.md_done) return [['npc', 'normal', '魚が、砂を？ ……おしりから？ 見てくる！']];
+        if (f.md_am) return [['npc', 'normal', '杭の印、来年は、どこになるんだろう。']];
+        f.md_am = true;
+        return [['me', '', '（女の子が、浜の杭に、自分の背の高さで印をつけている）'], ['npc', 'normal', '去年は、この杭のところまで、砂浜があったの。……いまは、波が来てる。'], ['npc', 'normal', '島が、だんだん小さくなってる。うちの家、浜のすぐそばなの。'], ['npc', 'normal', 'ムーサじいちゃんは、「砂は、魚がつくる」って言うの。……そんなわけないよね。']];
+      },
+      musa(S) {
+        const f = S.f;
+        if (S.back && f.md_done) return [['npc', 'normal', 'アミナトが、魚の話を、学校でするそうだ。……七十年分の話を、あの子は、ひと晩で覚えおった。']];
+        if (S.back) return [['npc', 'normal', '夕方の浜は、砂が、いちばん白く見える。']];
+        if (f.md_done) return [['npc', 'normal', '聞こえたか、ガリッという音。……あれが、島の大工の音だ。']];
+        if (f.md_mu) return [['npc', 'normal', '桟橋の先から、水の中をのぞいてみな。……耳をすませてな。']];
+        f.md_mu = true;
+        return [['npc', 'normal', 'わしは、この島で七十年、砂を見てきた。……この白い砂、どこから来ると思う？'], ['npc', 'normal', '魚さ。くちばしみたいな歯の魚が、サンゴをかじって、細かい砂にして出す。島は、魚がつくったんだ。'], ['npc', 'normal', 'だが近ごろは、その魚の住むサンゴが、錨でこわれる。……わしは、もう泳げん。孫に、見せてやれんのだ。']];
+      },
+      alimd(S) {
+        const f = S.f;
+        if (S.back && f.md_done) return [['npc', 'normal', '錨をおろす場所を、砂地に変えた。……餌のとれ方は、ちょっと悪いけどな。'], ['npc', 'normal', '魚が砂を出すとこ、おれも、はじめてちゃんと見た。……島の大工に、悪いことしたよ。']];
+        if (S.back) return [['npc', 'normal', '夕方は、錨を上げて、帰る時間だ。']];
+        if (f.md_done) return [['npc', 'normal', '魚が、ほんとに砂を……？ じゃあ、おれの錨は、島の大工の家を、こわしてたのか。']];
+        if (f.md_al) return [['npc', 'normal', '錨は、毎朝、同じ岩場におろす。……そのほうが、楽だからな。']];
+        f.md_al = true;
+        return [['npc', 'normal', 'おれは漁師のアリ。毎朝、あの岩場に錨をおろして、カツオ釣りの餌をとる。'], ['npc', 'normal', '魚が砂をつくる？ ……ムーサじいさんの話は、半分は、ほら話さ。'], ['npc', 'normal', 'でも、岩場のサンゴが、年々白くくずれていくのは、ほんとだ。……おれの錨のせいだって言うやつもいる。']];
+      },
+      jetty(S) {
+        const f = S.f;
+        if (S.back && f.md_done) return [['me', '', '（夕方の桟橋。砂地に、新しい錨のあと。サンゴのまわりで、魚が、まだかじっている）']];
+        if (S.back) return [['me', '', '（夕方の桟橋。水の中で、なにかが、ガリッと鳴った）']];
+        if (f.md_done) return [['me', '', '（ガリッ。……また、ふわっ）']];
+        if (!(f.md_am && f.md_mu && f.md_al)) return [['me', '', '（桟橋の先。すきとおった水の下に、サンゴが見える）']];
+        f.md_done = true;
+        return [['me', '', '（桟橋の先から、すきとおった水の中をのぞく。サンゴのあいだを、青と緑の魚が泳いでいる）'], ['me', '', '（ガリッ、ガリッ。魚が、サンゴをかじる音が、水の中から聞こえてくる）'], ['me', '', '（……と、魚のおしりから、白い砂が、ふわっと出た。思わず、笑ってしまう）'], ['insight', '', '島の砂は、魚が少しずつ、つくり足していた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 120 まだ見えない太陽（暗い季節の終わりは、空の色から先に来る）
+  C.push({
+    id: 'alaskana', shape: 'まだ見えない太陽', name: 'アラスカナ', sub: '長い夜の町', time: 'night', screens: 5, far: 'aurora_night', farBack: 'drift_ice_morning', timeBack: 'morning', map: [71.3, -156.8],
+    hill: '#5a6a7a', ground: ['#e0e8f0', '#c0ccd8', '#f0f4f8'], tint: 'rgba(200,220,255,.06)', bscale: 1.0,
+    props: [['pine_snow', 400, 280], ['iso_cabin_snow', 1300, 160], ['signboard', 1900, 100], ['igloo_shell', 3200, 90], ['pine_snow', 4450, 290]],
+    buildings: [['nordic_red', 750, 0.85], ['lumber_hut', 1650, 0.85], ['house_small', 2700, 0.8]],
+    npcs: [
+      { id: 'nanuq', name: 'ナヌク', actor: 'eskimo', x: 950, face: 1, leaveWhen: f => f.ak_parka, leaveDir: 1 },
+      { id: 'ray', name: '夜の店のレイ', actor: 'grocer', x: 1850, face: -1 },
+      { id: 'aana', name: 'アーナばあちゃん', actor: 'ru_granny', x: 2850, face: -1 },
+      { id: 'nanuq2', name: 'ナヌク', actor: 'eskimo', x: 3750, face: 1, when: f => f.ak_parka }
+    ],
+    places: [{ id: 'bluff', name: '南の浜', x: 4050, verb: '待つ' }],
+    weather: { clear: 6, snow: 3, wind: 1 },
+    animals: [['dog_husky', 1450], ['dog_husky', 3350]],
+    talk: {
+      nanuq(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '……妹、太陽、見られなかった。']];
+        if (f.ak_na) return [['npc', 'normal', 'ばあちゃん、まだ縫ってるかなあ。']];
+        f.ak_na = true;
+        return [['me', '', '（男の子が、まっ暗な空の南のほうを、何度も見ている）'], ['npc', 'normal', 'もうすぐ、六十五日ぶりに、太陽が少しだけ出るんだ。'], ['npc', 'normal', '妹は、暗い季節に生まれたから、まだ一度も太陽を見たことがない。……最初の太陽を、ぼくが見せてやるんだ。'], ['npc', 'normal', 'でも、母さんが「毛皮の上着ができるまで、外はだめ」って。……ばあちゃんの上着、まだできてないんだ。']];
+      },
+      nanuq2(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'のぼった！ 妹が、目を細めて、手をのばしたんだ。……つかめると思ったのかな。'], ['npc', 'normal', '来年は、妹が、ぼくをここへ連れてくるって。……まだ、しゃべれないけどね。']];
+        if (f.ak_done) return [['npc', 'normal', '空、どんどん桃色になってく。……妹、目を、まんまるにしてる。']];
+        if (f.ak_n2) return [['npc', 'normal', '妹、毛皮の中で、もぞもぞしてる。……もうすぐだよ。']];
+        f.ak_n2 = true;
+        return [['me', '', '（ナヌクが、毛皮にくるんだ赤ちゃんを抱いて、浜まで走ってきた）'], ['npc', 'normal', '上着、できた！ ……ありがとう。ばあちゃんが、旅の人が糸を運んでくれたって。'], ['npc', 'normal', '空の南のほう、見て。……まだ太陽はないのに、色が、ちょっとだけ変わってる。']];
+      },
+      ray(S) {
+        const f = S.f;
+        if (S.back && f.ak_done) return [['npc', 'normal', 'どうだった、赤ん坊の顔は。……目を細めて、手をのばした？ ははは、サングラスより、いい顔だ。']];
+        if (S.back) return [['npc', 'normal', '……太陽、きょうは、雲のむこうだったか。']];
+        if (f.ak_done) return [['npc', 'normal', '浜の空が、明るくなってきたって？ ……サングラス、ひとつ、ナヌクにやってくれ。']];
+        if (f.ak_parka) return [['npc', 'normal', 'ばあさんの上着、できたか。……なら、浜は、ひとり多いな。']];
+        if (f.ak_ra) return [['npc', 'normal', 'サングラスは、ほんとに売れるんだ。毎年な。']];
+        f.ak_ra = true;
+        return [['npc', 'normal', 'よう、旅の人。夜の店へようこそ。……サングラスはいかが？ 六十五日ぶりの太陽は、まぶしいぞ。'], ['npc', 'normal', 'アーナばあさんの家へ行くなら、この太い糸を持っていってくれ。……ばあさん、寒さで買いに来られなかったんだ。'], ['npc', 'normal', '代金はいらん。そのかわり、赤ん坊が太陽を見た顔を、あとで教えてくれ。……おれは、店番で行けないんだ。']];
+      },
+      aana(S) {
+        const f = S.f;
+        if (S.back && f.ak_done) return [['npc', 'normal', 'ナヌクから聞いたわ。赤ちゃんが、太陽に手をのばしたって。……わたしの母さんも、同じことを言ってた。']];
+        if (S.back) return [['npc', 'normal', '……上着、間に合わなかったわね。']];
+        if (f.ak_done) return [['npc', 'normal', '空の色が変わってきた？ ……なら、もうすぐね。わたしは、窓から見ることにするわ。']];
+        if (f.ak_parka) return [['npc', 'normal', '小さな上着ね。……わたしも、これと同じ型の上着で、最初の太陽を見たのよ。']];
+        if (f.ak_ra) {
+          f.ak_parka = true;
+          return [['npc', 'normal', 'まあ、レイの糸！ ……ちょっと、待っててね。'], ['me', '', '（おばあさんの指が、すばやく動く。最後のひと針。……毛皮の小さな上着が、できあがった）'], ['npc', 'normal', 'ナヌクに、とどけてやって。……いいえ、あの子のほうが、もう走ってきてるわ。']];
+        }
+        if (f.ak_aa) return [['npc', 'normal', '店のレイに、太い糸があるはずなんだけどね。']];
+        f.ak_aa = true;
+        return [['npc', 'normal', '上着は、あと少し。……でも、太い糸が切れちゃってね。この寒さじゃ、店まで歩くのが、こたえるのよ。'], ['npc', 'normal', 'あの子の母さんも、その母さんも、最初の太陽は、この型の上着で迎えたの。']];
+      },
+      bluff(S) {
+        const f = S.f;
+        if (S.back && f.ak_done) return [['me', '', '（朝の浜。地平線から、太陽がほんの少し顔を出す。浜じゅうの人が、声をあげた）']];
+        if (S.back) return [['me', '', '（朝の浜。地平線に、太陽が、ほんの少しだけ顔を出している）']];
+        if (f.ak_done) return [['me', '', '（南の空のふちが、さっきより、少し明るい）']];
+        if (!f.ak_parka) return [['me', '', '（まっ暗な浜。南の空は、まだ、夜と同じ色だ）']];
+        f.ak_done = true;
+        return [['me', '', '（ナヌクと、毛皮にくるまれた妹と、浜で南を見る）'], ['me', '', '（空のふちが、ほんの少しだけ白く、それから、うすい桃色に変わっていく）'], ['me', '', '（太陽は、まだ見えない。……でも、光は、もう、ここまで来ている）'], ['insight', '', 'まだ見えない太陽は、空の色で、先に来ていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 121 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -6577,7 +6698,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 120 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 122 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
