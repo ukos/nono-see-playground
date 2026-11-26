@@ -1,7 +1,7 @@
 == 国: コスタリナ（海がめの浜の村）
 〔126番目の国／広さ 5 画面／夕暮れ／遠景 sea_dusk〕
 〔天候：晴れ 80%、強風 20%〕
-〔建物：sea_twostory、sea_shop、sea_stilt／小物：palm、signboard、palm、rock、palm〕
+〔建物：sea_twostory、sea_shop、sea_stilt／小物：palm、signboard、palm、rock、nest_fence、hatchling1、hatchling3、hatchling5、hatchling2、hatchling4、palm〕
 〔住人（西から）：ディエゴ @950、食堂のルペおばさん @2050、浜の見張りアンドレア @3150〕
 
 〔行き〕

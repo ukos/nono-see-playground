@@ -1,7 +1,7 @@
 == 国: トンガナ（日曜の島）
 〔125番目の国／広さ 5 画面／昼／遠景 beach_noon〕
 〔天候：晴れ 80%、強風 20%〕
-〔建物：thatched_farm、stilt_house、thatched_farm、sea_shop／小物：palm、big_tree2、palm、stool、palm〕
+〔建物：thatched_farm、stilt_house、thatched_farm、sea_shop／小物：palm、big_tree2、palm、stool、mat_family、palm〕
 〔住人（西から）：シオネ @950、漁師のヴィリアミ @2050、教会帰りのロサおばさん @3100〕
 
 〔行き〕
