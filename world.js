@@ -7895,7 +7895,128 @@
     }
   });
 
-// ---------------------------------------------------------------- 143 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 143 こわい人の庭の春（村でいちばん早い春は、こわい人の庭に咲いていた）
+  C.push({
+    id: 'moldova', shape: 'こわい人の庭の春', name: 'モルドヴナ', sub: '赤と白のひもの村', time: 'morning', screens: 5, far: 'vineyard_morning', farBack: 'twilight', timeBack: 'dusk', map: [47.0, 28.8],
+    hill: '#6a7a58', ground: ['#a8a080', '#888060', '#b8b090'], tint: 'rgba(245,245,240,.06)', bscale: 1.0,
+    props: [['tree_dead', 400, 250], ['tree_dead', 1400, 240], ['stone_well', 2400, 90], ['tree_dead', 3300, 250], ['nofence', 3700, 70], ['tree_green', 4050, 250]],
+    buildings: [['house_small', 750, 0.85], ['house_large', 1750, 0.8], ['house_small', 2800, 0.8], ['elder_house', 4250, 0.75]],
+    npcs: [
+      { id: 'irinamo', name: 'イリナ', actor: 'farmgirl', x: 950, face: 1 },
+      { id: 'dorin', name: 'ドリン', actor: 'boy_cap', x: 2000, face: -1 },
+      { id: 'veramo', name: 'ヴェラばあちゃん', actor: 'granny_broom', x: 3050, face: -1 },
+      { id: 'ionmo', name: 'イオンじいさん', actor: 'ca_elder', x: 3600, face: 1, when: (f, back) => back && f.mo_done }
+    ],
+    places: [{ id: 'iongarden', name: '柵ごしの木', x: 3950, verb: '見る' }],
+    weather: { clear: 5, wind: 3, fog: 2 },
+    animals: [['hen', 1600], ['crow', 2600], ['cat_white', 3400]],
+    talk: {
+      irinamo(S) {
+        const f = S.f;
+        if (S.back && f.mo_done) return [['npc', 'normal', 'イオンじいさんの木に、ひもを結んできたよ。……じいさん、窓から、知らんぷりしてた。'], ['npc', 'normal', '願いごと？ ……ないしょ。でも、「じいさんの木が、来年もいちばんに咲きますように」も、ちょっとだけ。']];
+        if (S.back) return [['npc', 'normal', '……ひも、まだ、手首のまま。']];
+        if (f.mo_done) return [['npc', 'normal', 'みんな、あの木に結んでたの？ ……イオンじいさん、知ってたの？']];
+        if (f.mo_ir) return [['npc', 'normal', 'イオンじいさん、こわいんだよ。……にらむんだもん。']];
+        f.mo_ir = true;
+        return [['me', '', '（女の子が、手首の赤と白のひもをいじりながら、木を一本ずつ見上げている）'], ['npc', 'normal', '春のはじめに、赤と白のひもを手首に結ぶの。はじめて花の咲いた木を見たら、その枝に結んで、願いごとをするの。'], ['npc', 'normal', 'でも、今年は寒くて、どの木も、まだつぼみ。……もう、春のひと月が終わっちゃう。'], ['npc', 'normal', 'ほんとは一本だけ、咲いてる木があるの。……こわいイオンじいさんの庭の中。']];
+      },
+      dorin(S) {
+        const f = S.f;
+        if (S.back && f.mo_done) return [['npc', 'normal', 'イリナも結んだって？ ……これで、クラスで結んでないやつ、いなくなった。']];
+        if (S.back) return [['npc', 'normal', '……イリナ、まだ、結べないのかな。']];
+        if (f.mo_done) return [['npc', 'normal', 'ほらね、みんな、やってるでしょ。……イオンじいさんには、ないしょだよ。']];
+        if (f.mo_do) return [['npc', 'normal', '柵の低いところなんか、知らないってば。']];
+        f.mo_do = true;
+        return [['npc', 'normal', 'ドリンだよ。ぼく？ もう結んだよ。……どこにかって？ ひみつ。'], ['npc', 'normal', 'イオンじいさんの庭なんか、入ってないよ。ほんとだよ。……柵の、低いところなんか、知らないし。'], ['npc', 'normal', 'ぼくの去年の願いごとは、かなったんだ。……だから、今年も、あそこにしたの。あ。']];
+      },
+      veramo(S) {
+        const f = S.f;
+        if (S.back && f.mo_done) return [['npc', 'normal', 'イオンが、柵の戸を、あけっぱなしにしてたよ。……わたしも、ひざをかばいながら、結んできた。']];
+        if (S.back) return [['npc', 'normal', '夕方は、つぼみが、また、かたくなる。']];
+        if (f.mo_done) return [['npc', 'normal', 'ひもでいっぱいの木を見たのかい。……イオンのやつ、毎年、あれを窓から見てるんだね。']];
+        if (f.mo_ve) return [['npc', 'normal', 'わたしも結びに行きたいけど、あの柵は、ひざにこたえる。']];
+        f.mo_ve = true;
+        return [['npc', 'normal', 'ヴェラだよ。……イオンの庭の木？ あれは、イオンが、死んだ奥さんのために植えたアンズさ。'], ['npc', 'normal', '奥さんは、春の最初の花が、なにより好きでね。だから日だまりの壁ぎわに植えた。……村でいちばん早く咲くように。'], ['npc', 'normal', 'イオンは、こわい顔をしとるけど……奥さんがいなくなってから、だれとも、口をきかんだけさ。']];
+      },
+      ionmo(S) {
+        const f = S.f;
+        if (f.mo_io) return [['npc', 'normal', '女房の木が、ひもで重そうだ。……あいつが見たら、きっと、笑う。']];
+        f.mo_io = true;
+        return [['npc', 'normal', 'イオンだ。……柵の戸か。あけておいた。ひざの悪いのが、ひとり、おったからな。'], ['npc', 'normal', '女房の木が、ひもで重そうだ。……あいつが見たら、きっと、笑う。']];
+      },
+      iongarden(S) {
+        const f = S.f;
+        if (S.back && f.mo_done) return [['me', '', '（夕方の柵ごしの木。柵の戸が、あけっぱなしになっている）']];
+        if (S.back) return [['me', '', '（夕方の柵ごしの木。白い花が、夕日にそまっている）']];
+        if (f.mo_done) return [['me', '', '（赤と白のひもが、風に、ひらひらゆれている）']];
+        if (!(f.mo_ir && f.mo_do && f.mo_ve)) return [['me', '', '（低い柵のむこうに、一本だけ、白い花の咲いた木がある）']];
+        f.mo_done = true;
+        return [['me', '', '（低い柵のむこう、日だまりの壁ぎわに、一本だけ、白い花の咲いた木）'], ['me', '', '（枝という枝に、赤と白のひもが、何十本も結んである。……風に、ひらひらゆれている）'], ['me', '', '（窓のむこうで、こわい顔のおじいさんが、こちらに気づいて、そっと、カーテンを閉めた）'], ['insight', '', 'こわい人の庭に、村でいちばん早い春が咲いていた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 144 山のむこうに、また山（だから、ひとつずつ、こえていく）
+  C.push({
+    id: 'haitina', shape: '山のむこうに、また山', name: 'ハイチナ', sub: '山また山の道', time: 'morning', screens: 5, far: 'mountains', farBack: 'twilight', timeBack: 'dusk', map: [18.5, -72.3],
+    hill: '#4a6a48', ground: ['#a89068', '#887048', '#b8a078'], tint: 'rgba(255,245,225,.05)', bscale: 1.0,
+    props: [['palm', 400, 300], ['tree_green', 1400, 270], ['stool', 2150, 40], ['rock2', 2500, 100], ['tree_green', 3300, 270], ['textile_stall', 4150, 110]],
+    buildings: [['thatched_farm', 750, 0.8], ['sea_shop', 2000, 0.75], ['mx_house', 4400, 0.8]],
+    npcs: [
+      { id: 'lovely', name: 'ラヴリー', actor: 'girl', x: 950, face: 1, leaveWhen: f => f.ht_done, leaveDir: 1 },
+      { id: 'joseph', name: '峠のコーヒー屋ジョゼフ', actor: 'na_elder', x: 2050, face: -1 },
+      { id: 'jeanht', name: 'ヤギ飼いのジャン', actor: 'swimboy2', x: 3100, face: -1 },
+      { id: 'lovely2', name: 'ラヴリー', actor: 'girl', x: 3800, face: 1, when: f => f.ht_done }
+    ],
+    places: [{ id: 'pass', name: '坂のてっぺん', x: 3950, verb: 'のぞく' }],
+    weather: { clear: 6, wind: 2, drizzle: 2 },
+    animals: [['sheep', 3300], ['donkey', 1600], ['crow', 2700]],
+    talk: {
+      lovely(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', '……かご、重くなってきた。']];
+        if (f.ht_lo) return [['npc', 'normal', 'あの山をこえたら……ほんとに？']];
+        f.ht_lo = true;
+        return [['me', '', '（女の子が、大きなかごを頭にのせて、坂の上で、立ちどまっている）'], ['npc', 'normal', 'おばさんが、市場にマンゴーのかごを、わすれていったの。とどけに行くとちゅう。……ひとりで行くのは、はじめて。'], ['npc', 'normal', '「あの山をこえたら、市場だよ」って言われたの。こえたの。……そしたら、また山だった。'], ['npc', 'normal', 'もう三つ目。……ほんとに、この先に、市場なんてあるのかな。']];
+      },
+      lovely2(S) {
+        const f = S.f;
+        if (S.back) return [['npc', 'normal', 'かご、とどけたよ。おばさん、「よく、こえてきたね」って。'], ['npc', 'normal', '帰りの山、行きより、ひとつ少なく感じたの。……数えたら、同じだったけど。']];
+        if (f.ht_l2) return [['npc', 'normal', 'ふもとの屋根、ほんとに市場だよね。……もう、山、ないよね？']];
+        f.ht_l2 = true;
+        return [['me', '', '（ラヴリーが、かごを頭にのせて、坂をのぼってきた）'], ['npc', 'normal', '見えた！ 市場の屋根！ ……むこうに、また山もあるけど。'], ['npc', 'normal', 'いいの。あの山は、こんどにする。……きょうは、ここまで、こえてきたから。']];
+      },
+      joseph(S) {
+        const f = S.f;
+        if (S.back && f.ht_done) return [['npc', 'normal', 'かごの子、帰りにも、ここで一休みしていったよ。……行きより、ずっと、いい顔だった。']];
+        if (S.back) return [['npc', 'normal', '夕方のコーヒーは、山の数だけ、苦くなる。']];
+        if (f.ht_done) return [['npc', 'normal', '見えたか、市場。……山のむこうに、また山。だが、そのあいだに、ちゃんと、ふもとがある。']];
+        if (f.ht_jo) return [['npc', 'normal', 'コーヒー、もう一杯どうだ。……次の山のぶんだ。']];
+        f.ht_jo = true;
+        return [['npc', 'normal', '峠のコーヒー屋、ジョゼフだ。……この国にはな、「山のむこうに、また山」ってことわざがある。'], ['npc', 'normal', 'わしは若いころ、この峠のむこうを見てやろうと出かけた。……山が多すぎて、くたびれて、ここに店を出した。'], ['npc', 'normal', 'それから四十年。……峠のこっちも、むこうも、わしの店の客になった。悪くない。']];
+      },
+      jeanht(S) {
+        const f = S.f;
+        if (S.back && f.ht_done) return [['npc', 'normal', 'あの子、かごをとどけたって？ ……ぼくも、あしたは、山をひとつ、多くこえてみる。']];
+        if (S.back) return [['npc', 'normal', 'ヤギは、山の数なんか、気にしないんだ。']];
+        if (f.ht_done) return [['npc', 'normal', 'てっぺんから、見えたでしょ。……ぼくは、数えないで、のぼるんだ。']];
+        if (f.ht_je) return [['npc', 'normal', '数えると、足が重くなるんだよ。ほんとだよ。']];
+        f.ht_je = true;
+        return [['npc', 'normal', 'ヤギ飼いのジャン。……市場？ この坂をのぼりきったら、見えるよ。たぶん。'], ['npc', 'normal', 'ぼくは毎日、ヤギを追って、山をみっつこえる。……数えるのは、やめたんだ。数えると、足が重くなるから。'], ['npc', 'normal', 'いつか、山のいちばんはしまで、行ってみたいんだ。……海が見えるんだって。']];
+      },
+      pass(S) {
+        const f = S.f;
+        if (S.back && f.ht_done) return [['me', '', '（夕方の坂のてっぺん。来た道の山が、夕日に、いくつも重なって光っている）']];
+        if (S.back) return [['me', '', '（夕方の坂のてっぺん。山の影が、長くのびている）']];
+        if (f.ht_done) return [['me', '', '（ふもとの市場から、にぎやかな声が、のぼってくる）']];
+        if (!(f.ht_lo && f.ht_jo && f.ht_je)) return [['me', '', '（坂のてっぺん。むこうは、まだ見えない）']];
+        f.ht_done = true;
+        return [['me', '', '（坂をのぼりきって、ふり返る。来た道に、山が、いくつも重なっている）'], ['me', '', '（前を見る。……また、山。でも、そのふもとに、色とりどりの屋根。市場だ）'], ['me', '', '（山のむこうには、また山。……それでも、ここまで、ひとつずつ、こえてきた）'], ['insight', '', '山のむこうには、また山。だから、ひとつずつ、こえていく。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 145 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -7940,7 +8061,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 144 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 146 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
