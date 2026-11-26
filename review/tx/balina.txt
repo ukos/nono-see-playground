@@ -1,7 +1,7 @@
 == 国: バリナ（鬼の人形の村）
 〔116番目の国／広さ 5 画面／朝／遠景 rice_terraces_morning〕
 〔天候：晴れ 60%、小雨 30%、スコール 10%〕
-〔建物：thatched_farm、stilt_house、thatched_farm／小物：palm、stone_lantern、temple_gold、palm、tree_old_roots〕
+〔建物：thatched_farm、stilt_house、thatched_farm／小物：palm、stone_lantern、temple_gold、palm、ogoh_father、ogoh_glasses、ogoh_night、tree_old_roots〕
 〔住人（西から）：ワヤン @950、お供えを編むニョマンばあちゃん @2000、青年団のクトゥット @3050〕
 
 〔行き〕

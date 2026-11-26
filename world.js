@@ -6319,7 +6319,7 @@
   C.push({
     id: 'sicilina', shape: '聖人さまが疲れる場所', name: 'シチリナ', sub: '坂の祭りの町', time: 'morning', screens: 5, far: 'vineyard_morning', farBack: 'twilight', timeBack: 'dusk', map: [37.2, 14.5],
     hill: '#7a7a58', ground: ['#c8b898', '#a89878', '#d8c8a8'], tint: 'rgba(255,245,225,.05)', bscale: 1.0,
-    props: [['tree_olive', 400, 270], ['wall_flowers', 1350, 100], ['stone_well', 2300, 90], ['tree_olive', 3700, 280], ['castle_flag', 4300, 200]],
+    props: [['tree_olive', 400, 270], ['wall_flowers', 1350, 100], ['stone_well', 2300, 90], ['saint_float', 3230, 150], ['tree_olive', 3700, 280], ['castle_flag', 4300, 200]],
     buildings: [['it_townhouse', 750, 0.85], ['med_white', 1650, 0.85], ['bakery', 2850, 0.9], ['it_tuscan', 3850, 0.8]],
     npcs: [
       { id: 'ninosc', name: 'ニーノ', actor: 'boy_cap', x: 950, face: 1 },
@@ -6373,8 +6373,8 @@
   C.push({
     id: 'balina', shape: 'こわいものに顔をつける', name: 'バリナ', sub: '鬼の人形の村', time: 'morning', screens: 5, far: 'rice_terraces_morning', farBack: 'twilight', timeBack: 'dusk', map: [-8.5, 115.3],
     hill: '#4a7a48', ground: ['#b8a888', '#988868', '#c8b898'], tint: 'rgba(255,245,230,.05)', bscale: 1.0,
-    props: [['palm', 400, 310], ['stone_lantern', 1350, 90], ['temple_gold', 2350, 220], ['palm', 3200, 300], ['tree_old_roots', 4400, 300]],
-    buildings: [['thatched_farm', 750, 0.85], ['stilt_house', 1700, 0.8], ['thatched_farm', 3750, 0.8]],
+    props: [['palm', 400, 310], ['stone_lantern', 1350, 90], ['temple_gold', 2350, 220], ['palm', 3200, 300], ['ogoh_father', 3800, 190, null, 1], ['ogoh_glasses', 4100, 165, null, 1], ['ogoh_night', 1150, 120, (f, back) => f.bl_done], ['tree_old_roots', 4450, 300]],
+    buildings: [['thatched_farm', 750, 0.85], ['stilt_house', 1700, 0.8], ['thatched_farm', 3350, 0.8]],
     npcs: [
       { id: 'wayan', name: 'ワヤン', actor: 'boy_kite', x: 950, face: 1 },
       { id: 'nyoman', name: 'お供えを編むニョマンばあちゃん', actor: 'aodai', x: 2000, face: -1 },

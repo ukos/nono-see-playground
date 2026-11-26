@@ -1,7 +1,7 @@
 == 国: シチリナ（坂の祭りの町）
 〔115番目の国／広さ 5 画面／朝／遠景 vineyard_morning〕
 〔天候：晴れ 80%、強風 20%〕
-〔建物：it_townhouse、med_white、bakery、it_tuscan／小物：tree_olive、wall_flowers、stone_well、tree_olive、castle_flag〕
+〔建物：it_townhouse、med_white、bakery、it_tuscan／小物：tree_olive、wall_flowers、stone_well、saint_float、tree_olive、castle_flag〕
 〔住人（西から）：ニーノ @950、担ぎ手の頭サルヴァトーレ @2000、パン屋のコンチェッタばあさん @2750〕
 
 〔行き〕
