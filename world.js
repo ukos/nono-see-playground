@@ -7674,7 +7674,7 @@
     id: 'burkina', shape: '雨にけずれた壁', name: 'ブルキナ', sub: '絵の家の村', time: 'morning', screens: 5, far: 'savanna_morning', farBack: 'twilight', timeBack: 'dusk', map: [11.1, -1.1],
     hill: '#8a7a58', ground: ['#b89868', '#987848', '#c8a878'], tint: 'rgba(255,240,215,.06)', bscale: 1.0,
     props: [['tree_dead', 400, 260], ['rice_basket', 1400, 60], ['tree_green', 2400, 260], ['rock', 3300, 60], ['tree_dead', 4500, 260]],
-    buildings: [['adobe', 750, 0.85], ['adobe', 1750, 0.8], ['adobe', 2800, 0.8], ['adobe', 3800, 0.85]],
+    buildings: [['tiebele_house', 700, 0.42], ['tiebele_house', 1700, 0.38], ['tiebele_house', 2750, 0.4], ['tiebele_house', 3780, 0.45]],
     npcs: [
       { id: 'awabf', name: 'アワ', actor: 'braidgirl', x: 950, face: 1 },
       { id: 'poko', name: 'ポコばあちゃん', actor: 'herbgranny', x: 2000, face: -1 },
@@ -7727,7 +7727,7 @@
   C.push({
     id: 'ohrida', shape: '湖の真珠', name: 'オフリダ', sub: '湖の真珠の町', time: 'morning', screens: 5, far: 'lake_reeds_morning', farBack: 'twilight', timeBack: 'dusk', map: [41.1, 20.8],
     hill: '#5a7a68', ground: ['#b8b0a0', '#989080', '#c8c0b0'], tint: 'rgba(240,248,255,.05)', bscale: 1.0,
-    props: [['tree_olive', 400, 270], ['wall_flowers', 1400, 100], ['tree_olive', 2400, 280], ['ship_rope', 3500, 50], ['pier', 4000, 80]],
+    props: [['tree_olive', 400, 270], ['wall_flowers', 1400, 100], ['tree_olive', 2400, 280], ['ship_rope', 3500, 50], ['scale_bucket', 3870, 60, null, 1], ['pier', 4100, 80]],
     buildings: [['med_white', 750, 0.85], ['it_townhouse', 1750, 0.85], ['mx_church', 2800, 0.7]],
     npcs: [
       { id: 'anaoh', name: 'アナ', actor: 'ukr_girl', x: 950, face: 1 },
