@@ -1,7 +1,7 @@
 == 国: ウェールナ（羊の谷の村）
 〔117番目の国／広さ 5 画面／朝／遠景 autumn_morning〕
 〔天候：晴れ 50%、強風 30%、小雨 20%〕
-〔建物：uk_terrace、thatched_farm、sheep_pen／小物：tree_green、stone_wall_low、haystack、stone_wall_low、nofence〕
+〔建物：uk_terrace、thatched_farm、sheep_pen／小物：tree_green、stone_wall_low、haystack、stone_wall_low、nofence、collie_lie、collie_run〕
 〔住人（西から）：見習い羊飼いのリース @950、グウィンの奥さんメーガン @2000、大会の審判ダヴィッド @3050〕
 
 〔行き〕
@@ -41,7 +41,7 @@ nono: （羊は、みんな門の中。モットは、谷の下の家のほう�
 
 〔帰り〕
 -- （丘の門） @4000
-nono: （夕方の丘の門。モットが、羊の囲いの前で、胸をはって座っている）
+nono: （夕方の丘の門。モットが、羊の囲いの前で、満足そうに寝そべっている）
 
 -- 大会の審判ダヴィッド @3050
 大会の審判ダヴィッド: やかんの持ちこみ、正式に認めた。……規則を書いたのは、おれだからな。

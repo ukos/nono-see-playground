@@ -1,7 +1,7 @@
 == 国: アタカマナ（乾いた砂の村）
 〔118番目の国／広さ 5 画面／朝／遠景 red_rocks_noon〕
 〔天候：晴れ 90%、強風 10%〕
-〔建物：adobe、adobe、adobe／小物：cactus、rock2、cactus、rock、cairn_built、cactus〕
+〔建物：adobe、adobe、adobe／小物：cactus、rock2、cactus、rock、cairn_built、cactus、observatory、desert_bloom1、desert_bloom2、desert_bloom3、desert_bloom2、desert_bloom1〕
 〔住人（西から）：アントゥ @950、天文台のルイス @2000、リャマ飼いのママニじいさん @3050〕
 
 〔行き〕

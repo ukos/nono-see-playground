@@ -6427,7 +6427,7 @@
   C.push({
     id: 'wales', shape: 'やかんの笛で走る犬', name: 'ウェールナ', sub: '羊の谷の村', time: 'morning', screens: 5, far: 'autumn_morning', farBack: 'twilight', timeBack: 'dusk', map: [52.9, -3.9],
     hill: '#5a7a50', ground: ['#98a878', '#788858', '#a8b888'], tint: 'rgba(240,250,240,.05)', bscale: 1.0,
-    props: [['tree_green', 400, 270], ['stone_wall_low', 1350, 80], ['haystack', 2400, 120], ['stone_wall_low', 3500, 80], ['nofence', 3900, 70]],
+    props: [['tree_green', 400, 270], ['stone_wall_low', 1350, 80], ['haystack', 2400, 120], ['stone_wall_low', 3500, 80], ['nofence', 3900, 70], ['collie_lie', 4120, 45, (f, back) => back || !f.wl_done], ['collie_run', 4150, 55, (f, back) => !back && f.wl_done]],
     buildings: [['uk_terrace', 750, 0.85], ['thatched_farm', 1750, 0.85], ['sheep_pen', 2800, 0.8]],
     npcs: [
       { id: 'rhys', name: '見習い羊飼いのリース', actor: 'ranchhand', x: 950, face: 1 },
@@ -6436,7 +6436,7 @@
     ],
     places: [{ id: 'gate', name: '丘の門', x: 4000, verb: '待つ' }],
     weather: { clear: 5, wind: 3, drizzle: 2 },
-    animals: [['sheep', 2600], ['sheep', 3300], ['dog_spot', 4100], ['crow', 1500]],
+    animals: [['sheep', 2600], ['sheep', 3300], ['crow', 1500]],
     talk: {
       rhys(S) {
         const f = S.f;
@@ -6467,7 +6467,7 @@
       },
       gate(S) {
         const f = S.f;
-        if (S.back && f.wl_done) return [['me', '', '（夕方の丘の門。モットが、羊の囲いの前で、胸をはって座っている）']];
+        if (S.back && f.wl_done) return [['me', '', '（夕方の丘の門。モットが、羊の囲いの前で、満足そうに寝そべっている）']];
         if (S.back) return [['me', '', '（夕方の丘。門の前で、白黒の犬が、谷の下をじっと見ている）']];
         if (f.wl_done) return [['me', '', '（羊は、みんな門の中。モットは、谷の下の家のほうを、まだ見ている）']];
         if (!(f.wl_rh && f.wl_me && f.wl_da)) return [['me', '', '（丘の門の前で、白黒の犬が、あごを前足にのせて寝そべっている）']];
@@ -6482,7 +6482,7 @@
     id: 'atacama', shape: 'まだ咲いていない場所', name: 'アタカマナ', sub: '乾いた砂の村', time: 'morning', screens: 5, far: 'red_rocks_noon', farBack: 'flower', timeBack: 'dusk', map: [-22.9, -68.2],
     weatherBack: { drizzle: 6, clear: 2 },
     hill: '#9a7a58', ground: ['#d0a878', '#b08858', '#e0b888'], tint: 'rgba(255,240,220,.05)', bscale: 1.0,
-    props: [['cactus', 400, 180], ['rock2', 1350, 100], ['cactus', 2300, 160], ['rock', 3300, 60], ['cairn_built', 3900, 110], ['cactus', 4400, 170]],
+    props: [['cactus', 400, 180], ['rock2', 1350, 100], ['cactus', 2300, 160], ['rock', 3300, 60], ['cairn_built', 3900, 110], ['cactus', 4400, 170], ['observatory', 2250, 200], ['desert_bloom1', 3350, 45, (f, back) => back && f.at_done], ['desert_bloom2', 3750, 45, (f, back) => back && f.at_done], ['desert_bloom3', 4150, 45, (f, back) => back && f.at_done], ['desert_bloom2', 2700, 40, (f, back) => back && f.at_done], ['desert_bloom1', 1300, 40, (f, back) => back && f.at_done]],
     buildings: [['adobe', 750, 0.85], ['adobe', 1750, 0.8], ['adobe', 2850, 0.8]],
     npcs: [
       { id: 'antu', name: 'アントゥ', actor: 'cholita', x: 950, face: 1 },
