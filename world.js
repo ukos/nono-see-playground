@@ -7218,7 +7218,7 @@
   C.push({
     id: 'turkmena', shape: '消えない火', name: 'トルクメナ', sub: '燃える穴の砂漠', time: 'dusk', screens: 5, far: 'desert', farBack: 'oasis_night', timeBack: 'night', map: [40.3, 58.4],
     hill: '#9a7a58', ground: ['#d0b088', '#b09068', '#e0c098'], tint: 'rgba(255,230,200,.07)', bscale: 1.0,
-    props: [['rock2', 400, 90], ['cairn_built', 1450, 100], ['rock', 2450, 60], ['rock2', 3350, 90], ['rock', 4450, 60]],
+    props: [['rock2', 400, 90], ['cairn_built', 1450, 100], ['rock', 2450, 60], ['rock2', 3350, 90], ['fire_crater', 3980, 75, null, 1], ['rock', 4450, 60]],
     buildings: [['yurt', 750, 0.8], ['yurt_smoke', 1700, 0.75], ['sheep_pen', 2700, 0.75]],
     npcs: [
       { id: 'ayna', name: 'アイナ', actor: 'kg_girl', x: 950, face: 1 },
@@ -7272,7 +7272,7 @@
   C.push({
     id: 'luxemba', shape: '指ひとつぶんの国', name: 'ルクセンナ', sub: '小さな国の町', time: 'morning', screens: 5, far: 'valley', farBack: 'twilight', timeBack: 'dusk', map: [49.6, 6.1],
     hill: '#5a7a58', ground: ['#a8b088', '#889068', '#b8c098'], tint: 'rgba(245,250,240,.05)', bscale: 1.0,
-    props: [['tree_green', 400, 270], ['signboard', 1350, 100], ['tree_green', 2400, 280], ['stone_wall_low', 3300, 80], ['cairn_built', 3950, 90], ['tree_green', 4450, 270]],
+    props: [['tree_green', 400, 270], ['signboard', 1350, 100], ['tree_green', 2400, 280], ['stone_wall_low', 3300, 80], ['border_stone', 3960, 50, null, 1], ['tree_green', 4450, 270]],
     buildings: [['house_large', 750, 0.85], ['bakery', 1750, 0.85], ['uk_tudor', 2800, 0.8]],
     npcs: [
       { id: 'leaLu', name: 'レア', actor: 'braidgirl', x: 950, face: 1 },
