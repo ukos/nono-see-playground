@@ -6884,7 +6884,7 @@
   C.push({
     id: 'tongana', shape: '何もしない日', name: 'トンガナ', sub: '日曜の島', time: 'noon', screens: 5, far: 'beach_noon', farBack: 'sea_dusk', timeBack: 'dusk', map: [-21.1, -175.2],
     hill: '#4a7a58', ground: ['#d8c8a0', '#b8a880', '#e8d8b0'], tint: 'rgba(255,250,235,.05)', bscale: 1.0,
-    props: [['palm', 400, 310], ['big_tree2', 1150, 300], ['palm', 2350, 320], ['stool', 3500, 40], ['palm', 4450, 300]],
+    props: [['palm', 400, 310], ['big_tree2', 1150, 300], ['palm', 2350, 320], ['stool', 3500, 40], ['mat_family', 3950, 80, (f, back) => back && f.tg_done, 1], ['palm', 4450, 300]],
     buildings: [['thatched_farm', 700, 0.8], ['stilt_house', 1750, 0.8], ['thatched_farm', 2800, 0.8], ['sea_shop', 3750, 0.8]],
     npcs: [
       { id: 'sionetg', name: 'シオネ', actor: 'islandboy', x: 950, face: 1 },
@@ -6938,7 +6938,7 @@
   C.push({
     id: 'costarina', shape: '灯りを消す夜', name: 'コスタリナ', sub: '海がめの浜の村', time: 'dusk', screens: 5, far: 'sea_dusk', farBack: 'sea_night', timeBack: 'night', map: [10.5, -85.7],
     hill: '#3a6a48', ground: ['#c8b890', '#a89870', '#d8c8a0'], tint: 'rgba(255,235,220,.06)', bscale: 1.0,
-    props: [['palm', 400, 310], ['signboard', 1950, 100], ['palm', 2400, 320], ['rock', 3400, 60], ['palm', 4450, 300]],
+    props: [['palm', 400, 310], ['signboard', 1950, 100], ['palm', 2400, 320], ['rock', 3400, 60], ['nest_fence', 3930, 60], ['hatchling1', 4120, 26, (f, back) => back && f.cr_done, 1], ['hatchling3', 4230, 26, (f, back) => back && f.cr_done, 1], ['hatchling5', 4330, 26, (f, back) => back && f.cr_done, 1], ['hatchling2', 4060, 26, (f, back) => back && f.cr_done, 1], ['hatchling4', 4400, 26, (f, back) => back && f.cr_done, 1], ['palm', 4550, 300]],
     buildings: [['sea_twostory', 750, 0.85], ['sea_shop', 1800, 0.85], ['sea_stilt', 2850, 0.8]],
     npcs: [
       { id: 'diego', name: 'ディエゴ', actor: 'swimboy2', x: 950, face: 1 },
@@ -6947,7 +6947,7 @@
     ],
     places: [{ id: 'nest', name: '浜の巣', x: 4000, verb: '待つ' }],
     weather: { clear: 8, wind: 2 },
-    animals: [['crow', 1500], ['dog_brown', 2500], ['turtle', 3750]],
+    animals: [['crow', 1500], ['dog_brown', 2500]],
     talk: {
       diego(S) {
         const f = S.f;
