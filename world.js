@@ -6790,9 +6790,9 @@
         if (S.back && f.sk_done) return [['npc', 'normal', 'ミオちゃんが、黄色い袋を、ふたつも出しに来たよ。……「畑の土になるなら」ってね。'], ['npc', 'normal', 'これで、あたしの四年連続は、あぶないねえ。……ははは、うれしいこった。']];
         if (S.back) return [['npc', 'normal', '夕方の灰は、日にすけて、ちょっとだけ、きれいなんだよ。']];
         if (f.sk_done) return [['npc', 'normal', 'シゲルさんの大根、抜けたかい！ ……その土の半分は、あたしが集めた灰だよ。']];
-        if (f.sk_yo) return [['npc', 'normal', '黄色い袋は、町の決まった場所に出すんだよ。……灰の行き先？ 畑に聞いてごらん。']];
+        if (f.sk_yo) return [['npc', 'normal', '黄色い袋は、町の決まった場所に出すんだよ。……行き先？ シゲルさんの畑のほうさ。']];
         f.sk_yo = true;
-        return [['npc', 'normal', 'この黄色い袋に、はいた灰を入れて、決まった場所に出すんだよ。'], ['npc', 'normal', '今年いちばん灰を集めた家は、町から表彰されるの。……あたし、三年連続さ。えっへん。'], ['npc', 'normal', '集めた灰はね、ほとんどが、畑の土を入れかえるのに使われるの。……子どもは、知らないだろうね。']];
+        return [['npc', 'normal', 'この黄色い袋に、はいた灰を入れて、決まった場所に出すんだよ。'], ['npc', 'normal', '今年いちばん灰を集めた家は、町から表彰されるの。……あたし、三年連続さ。えっへん。'], ['npc', 'normal', 'あたしが灰を集めるのは、表彰がほしいからじゃないよ。……いや、ちょっとは、ほしいけどね。']];
       },
       shigeru(S) {
         const f = S.f;
@@ -6823,7 +6823,7 @@
     buildings: [['house_large', 750, 0.85], ['bakery', 1750, 0.85], ['lumber_hut', 2800, 0.8]],
     npcs: [
       { id: 'tomascz', name: 'トマーシュ', actor: 'boy_cap', x: 950, face: 1 },
-      { id: 'jurajsk', name: 'トマーシュのじいちゃん', actor: 'beekeeper', x: 1250, face: -1, when: (f, back) => back },
+      { id: 'jurajsk', name: 'トマーシュのじいちゃん', actor: 'beekeeper', x: 1250, face: -1 },
       { id: 'hanacz', name: 'パン屋のハナさん', actor: 'granny_broom', x: 2000, face: -1 },
       { id: 'pavel', name: '森番のパヴェル', actor: 'hunter', x: 3050, face: -1 }
     ],
@@ -6842,9 +6842,13 @@
       },
       jurajsk(S) {
         const f = S.f;
-        if (f.cz_done && f.cz_ji) return [['npc', 'normal', 'あしたの朝は、トマーシュも連れていく。……もちろん、だまって、別々の木のかげにな。']];
-        if (f.cz_done) { f.cz_ji = true; return [['npc', 'normal', 'ばれたか。……わしは、五十年前から知っとったよ。あの切り株には、村じゅうが来るって。'], ['npc', 'normal', 'ひみつってのはな、みんなで守るから、楽しいんだ。……トマーシュにも、そう言っておいた。']]; }
-        return [['npc', 'normal', '……キノコの場所は、墓まで持っていくもんだ。']];
+        if (S.back && f.cz_done && f.cz_ji) return [['npc', 'normal', 'あしたの朝は、トマーシュも連れていく。……もちろん、だまって、別々の木のかげにな。']];
+        if (S.back && f.cz_done) { f.cz_ji = true; return [['npc', 'normal', 'ばれたか。……わしは、五十年前から知っとったよ。あの切り株には、村じゅうが来るって。'], ['npc', 'normal', 'ひみつってのはな、みんなで守るから、楽しいんだ。……トマーシュにも、そう言っておいた。']]; }
+        if (S.back) return [['npc', 'normal', '……キノコの場所は、墓まで持っていくもんだ。']];
+        if (f.cz_done) return [['npc', 'normal', '……切り株を見たな。わしの顔も、見たな。……見なかったことにしてくれ。']];
+        if (f.cz_j0) return [['npc', 'normal', 'ほんとに、とれんかったんだ。……そのにおいは、気のせいだ。']];
+        f.cz_j0 = true;
+        return [['me', '', '（おじいさんが、かごを背中にかくして、知らん顔で口笛をふいている）'], ['npc', 'normal', 'キノコ？ さあな、きょうは、とれんかった。……かご？ 背中に、かごなんかないぞ。'], ['me', '', '（背中から、キノコのいいにおいがする）']];
       },
       hanacz(S) {
         const f = S.f;
