@@ -5765,7 +5765,7 @@
     id: 'colombina', shape: '絵のない家の絵かき', name: 'コロンビナ', sub: '腰壁の絵の町', time: 'morning', screens: 5, far: 'valley', farBack: 'twilight', timeBack: 'dusk', map: [6.2, -75.2],
     hill: '#4a6a48', ground: ['#c0a890', '#a08870', '#d0b8a0'], tint: 'rgba(255,240,230,.05)', bscale: 1.0,
     props: [['palm', 350, 300], ['wall_flowers', 1350, 110], ['wall_painting', 1720, 56, null, 4], ['bush_berry', 2400, 80], ['wall_painting', 2850, 56, null, 4], ['palm', 4300, 300], ['easel', 1150, 130, (f, back) => back && f.co_done]],
-    buildings: [['mx_house', 800, 0.9], ['it_townhouse', 1650, 0.9], ['mx_house', 2800, 0.9], ['it_townhouse', 3700, 0.85]],
+    buildings: [['white_plinth_house', 720, 0.62], ['it_townhouse', 1650, 0.9], ['mx_house', 2800, 0.9], ['it_townhouse', 3700, 0.85]],
     npcs: [
       { id: 'valen', name: 'ヴァレンティナ', actor: 'schoolgirl', x: 900, face: 1 },
       { id: 'andres', name: 'ペンキ屋のアンドレス', actor: 'painter', x: 1250, face: -1 },
@@ -5829,7 +5829,7 @@
   C.push({
     id: 'quebeca', shape: '雪の上の大きな足あと', name: 'ケベッカ', sub: '雪の森の町', time: 'morning', screens: 5, far: 'snow', farBack: 'misty_pines_dawn', timeBack: 'dusk', map: [47.5, -70.5],
     hill: '#8a9aaa', ground: ['#e8eef4', '#c8d4e0', '#f4f8fc'], tint: 'rgba(220,235,255,.06)', bscale: 1.0,
-    props: [['pine_snow', 400, 300], ['tree_snow', 1400, 260], ['pine_snow', 2400, 290], ['tree_snow', 3300, 250], ['signboard', 3950, 100], ['pine_snow', 4400, 300]],
+    props: [['pine_snow', 400, 300], ['tree_snow', 1400, 260], ['pine_snow', 2400, 290], ['tree_snow', 3300, 250], ['busstop_snowshoes', 3870, 170], ['pine_snow', 4400, 300]],
     buildings: [['nordic_red', 750, 0.9], ['lumber_hut', 1650, 0.9], ['house_small', 2700, 0.85]],
     npcs: [
       { id: 'chloe', name: 'クロエ', actor: 'snowkid', x: 950, face: 1 },
@@ -5890,7 +5890,7 @@
   C.push({
     id: 'uruguana', shape: 'ありがとうと言うと、もう回ってこない', name: 'ウルグアナ', sub: 'マテ茶の広場の町', time: 'morning', screens: 5, far: 'harbor_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.5, -57.8],
     hill: '#6a7a6a', ground: ['#c8b8a0', '#a89880', '#d8c8b0'], tint: 'rgba(255,245,230,.05)', bscale: 1.0,
-    props: [['tree_olive', 400, 280], ['stool', 1300, 40], ['tea_table', 2300, 60], ['stool2', 2440, 40], ['tree_olive', 3100, 290], ['lighthouse', 4300, 320]],
+    props: [['tree_olive', 400, 280], ['stool', 1300, 40], ['mate_bench', 2260, 75], ['tree_olive', 3100, 290], ['lighthouse', 4300, 320]],
     buildings: [['es_white', 700, 0.9], ['med_white', 1600, 0.9], ['es_gate', 2800, 0.85], ['it_townhouse', 3600, 0.85]],
     npcs: [
       { id: 'tomas', name: 'トマス', actor: 'backpacker', x: 950, face: 1, leaveWhen: f => f.uy_done, leaveDir: 1 },
@@ -6021,7 +6021,7 @@
   C.push({
     id: 'banglana', shape: 'ゆずったものの中に残っていた', name: 'バングラナ', sub: '川のほとりの村', time: 'morning', screens: 5, far: 'marsh', farBack: 'twilight', timeBack: 'dusk', map: [24.0, 90.0],
     hill: '#4a6a48', ground: ['#a89878', '#887858', '#b8a888'], tint: 'rgba(255,240,220,.05)', bscale: 1.0,
-    props: [['palm', 400, 300], ['textile_stall', 1900, 110], ['palm', 2600, 310], ['reeds', 3300, 90], ['canoe', 3950, 60], ['reeds2', 4300, 90]],
+    props: [['palm', 400, 300], ['kantha_frame', 1120, 75, null, 1], ['textile_stall', 1900, 110], ['palm', 2600, 310], ['reeds', 3300, 90], ['canoe', 3950, 60], ['reeds2', 4300, 90]],
     buildings: [['thatched_farm', 750, 0.85], ['stilt_house', 1650, 0.85], ['thatched_farm', 2900, 0.8]],
     npcs: [
       { id: 'mitu', name: 'ミトゥ', actor: 'sari', x: 950, face: 1 },
