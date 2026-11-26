@@ -187,6 +187,14 @@ for (const c of world.C) {
   if (aph.length >= Math.ceil(insights.length / 2)) R('_world', 'W', `気づきの半分以上が同じ格言の文型（「〜は、〜。」）: ${aph.map(a => a[0]).join('、')}`);
 }
 
+// ---- 帰りの台詞・地の文が、行きと一字一句同じになっていないか
+for (const c of world.C) {
+  const seen = new Set();
+  for (const e of log) if (e.c === c.id && e.phase === '行き') for (const l of e.lines) seen.add(l[2]);
+  for (const e of log) if (e.c === c.id && e.phase === '帰り') for (const l of e.lines)
+    if (l[2] && l[2].length > 12 && seen.has(l[2])) R(c.id, 'W', `帰りが行きと同じ文: ${e.name}「${l[2].slice(0, 40)}」`);
+}
+
 // ---- 解決後に、解決前の台詞が残っていないか（行きの再訪）
 for (const c of world.C) {
   if (!pre[c.id]) continue;
