@@ -7899,7 +7899,7 @@
   C.push({
     id: 'moldova', shape: 'こわい人の庭の春', name: 'モルドヴナ', sub: '赤と白のひもの村', time: 'morning', screens: 5, far: 'vineyard_morning', farBack: 'twilight', timeBack: 'dusk', map: [47.0, 28.8],
     hill: '#6a7a58', ground: ['#a8a080', '#888060', '#b8b090'], tint: 'rgba(245,245,240,.06)', bscale: 1.0,
-    props: [['tree_dead', 400, 250], ['tree_dead', 1400, 240], ['stone_well', 2400, 90], ['tree_dead', 3300, 250], ['nofence', 3700, 70], ['tree_green', 4050, 250]],
+    props: [['tree_dead', 400, 250], ['tree_dead', 1400, 240], ['stone_well', 2400, 90], ['tree_dead', 3300, 250], ['nofence', 3700, 70], ['martisor_tree', 4050, 250]],
     buildings: [['house_small', 750, 0.85], ['house_large', 1750, 0.8], ['house_small', 2800, 0.8], ['elder_house', 4250, 0.75]],
     npcs: [
       { id: 'irinamo', name: 'イリナ', actor: 'farmgirl', x: 950, face: 1 },
@@ -7960,7 +7960,7 @@
   C.push({
     id: 'haitina', shape: '山のむこうに、また山', name: 'ハイチナ', sub: '山また山の道', time: 'morning', screens: 5, far: 'mountains', farBack: 'twilight', timeBack: 'dusk', map: [18.5, -72.3],
     hill: '#4a6a48', ground: ['#a89068', '#887048', '#b8a078'], tint: 'rgba(255,245,225,.05)', bscale: 1.0,
-    props: [['palm', 400, 300], ['tree_green', 1400, 270], ['stool', 2150, 40], ['rock2', 2500, 100], ['tree_green', 3300, 270], ['textile_stall', 4150, 110]],
+    props: [['palm', 400, 300], ['tree_green', 1400, 270], ['stool', 2150, 40], ['rock2', 2500, 100], ['tree_green', 3300, 270], ['textile_stall', 4150, 110], ['mango_basket', 1090, 34, (f, back) => !f.ht_done, 1], ['mango_basket', 3880, 34, (f, back) => f.ht_done, 1]],
     buildings: [['thatched_farm', 750, 0.8], ['sea_shop', 2000, 0.75], ['mx_house', 4400, 0.8]],
     npcs: [
       { id: 'lovely', name: 'ラヴリー', actor: 'girl', x: 950, face: 1, leaveWhen: f => f.ht_done, leaveDir: 1 },
