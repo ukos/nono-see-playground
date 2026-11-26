@@ -5895,7 +5895,7 @@
     npcs: [
       { id: 'tomas', name: 'トマス', actor: 'backpacker', x: 950, face: 1, leaveWhen: f => f.uy_done, leaveDir: 1 },
       { id: 'tomas2', name: 'トマス', actor: 'backpacker', x: 2120, face: 1, when: f => f.uy_done },
-      { id: 'elsa', name: 'マテを入れるエルサ', actor: 'ranchwife', x: 1890, face: 1 },
+      { id: 'elsa', name: 'マテを入れるエルサ', actor: 'latin_granny', x: 1890, face: 1 },
       { id: 'julio', name: '牧童のフリオじいさん', actor: 'cowboy', x: 2570, face: -1 }
     ],
     places: [{ id: 'ronda', name: 'マテの輪', x: 2340, verb: '座る' }],
@@ -5953,11 +5953,11 @@
     props: [['tree_green', 400, 270], ['stool', 1750, 40], ['tree_olive', 2300, 260], ['river_steps', 3450, 70], ['rock_seat', 3720, 80], ['tree_green', 4400, 280]],
     buildings: [['med_white', 700, 0.9], ['mideast_white', 1500, 0.85], ['high_bridge', 2550, 0.72]],
     npcs: [
-      { id: 'emir', name: 'エミル', actor: 'fisherboy', x: 950, face: 1, leaveWhen: f => f.bs_done, leaveDir: 1 },
+      { id: 'emir', name: 'エミル', actor: 'swimboy', x: 950, face: 1, leaveWhen: f => f.bs_done, leaveDir: 1 },
       { id: 'hasanbs', name: 'ハサンじいさん', actor: 'ca_elder', x: 1250, face: -1 },
       { id: 'senad', name: 'コーヒー屋のセナド', actor: 'teaseller', x: 1950, face: -1 },
       { id: 'mirsad', name: '飛びこみ組の頭ミルサド', actor: 'sailor_boy', x: 3000, face: -1 },
-      { id: 'emir2', name: 'エミル', actor: 'fisherboy', x: 3500, face: 1, when: f => f.bs_done }
+      { id: 'emir2', name: 'エミル', actor: 'swimboy', x: 3500, face: 1, when: f => f.bs_done }
     ],
     places: [{ id: 'rockbs', name: '川べりの岩', x: 3800, verb: '見る' }],
     weather: { clear: 7, wind: 2 },
@@ -6026,7 +6026,7 @@
     npcs: [
       { id: 'mitu', name: 'ミトゥ', actor: 'sari', x: 950, face: 1 },
       { id: 'rafiq', name: '仕立て屋のラフィク', actor: 'in_elder', x: 2050, face: -1 },
-      { id: 'nodi', name: 'となりのノディ', actor: 'boy_student', x: 3750, face: -1 }
+      { id: 'nodi', name: 'となりのノディ', actor: 'sa_schoolboy', x: 3750, face: -1 }
     ],
     places: [{ id: 'ghat', name: '舟の渡し場', x: 4000, verb: '待つ' }],
     weather: { clear: 5, drizzle: 3, squall: 1 },
@@ -6075,11 +6075,11 @@
   C.push({
     id: 'slovena', shape: 'ミツバチに知らせる', name: 'スロヴェナ', sub: 'ミツバチの丘の村', time: 'morning', screens: 5, far: 'mountains', farBack: 'twilight', timeBack: 'dusk', map: [46.3, 14.1],
     hill: '#5a7a50', ground: ['#a8b888', '#889868', '#b8c898'], tint: 'rgba(250,250,230,.05)', bscale: 1.0,
-    props: [['tree_green', 400, 270], ['wall_flowers', 1500, 100], ['haystack', 2500, 120], ['nofence', 3600, 70], ['stump', 3900, 50], ['tree_green', 4300, 280]],
+    props: [['tree_green', 400, 270], ['wall_flowers', 1500, 100], ['haystack', 2500, 120], ['nofence', 3550, 70], ['bee_house', 3780, 150], ['tree_green', 4300, 280]],
     buildings: [['house_large', 750, 0.85], ['inn', 1750, 0.85], ['stable', 2800, 0.8]],
     npcs: [
       { id: 'luka', name: 'ルカ', actor: 'boy_frog', x: 950, face: 1 },
-      { id: 'janez', name: '養蜂家のヤネスじいさん', actor: 'oldsmith', x: 1250, face: -1 },
+      { id: 'janez', name: '養蜂家のヤネスじいさん', actor: 'beekeeper', x: 1250, face: -1 },
       { id: 'marijasl', name: 'となりのマリヤ', actor: 'granny_broom', x: 2050, face: -1 },
       { id: 'tone', name: '粉屋のトーネ', actor: 'mustache', x: 3000, face: -1 }
     ],
@@ -6110,7 +6110,7 @@
         const f = S.f;
         if (S.back && f.svn_done) return [['npc', 'normal', 'ルカがハチに話してるのが、垣根ごしに聞こえたわ。……声が、ヤネスより、ずっと大きいの。'], ['npc', 'normal', 'あしたから、わたしの孫の話も、ルカにハチへ伝えてもらおう。']];
         if (S.back) return [['npc', 'normal', '夕方は、ハチも巣に帰って、静かになるのよ。']];
-        if (f.svn_done) return [['npc', 'normal', 'あら、聞いちゃったのね。……あの人、てれ屋だから、言わないでおいてあげて。']];
+        if (f.svn_done) return [['npc', 'normal', 'あら、聞いちゃったのね。……あの人、てれ屋だから、言わないでおいてあげて。'], ['npc', 'normal', 'ルカに、うちの垣根の穴を教えてくるわ。……あそこからなら、ヤネスの声が、いちばんよく聞こえるの。']];
         if (f.svn_ma) return [['npc', 'normal', 'このごろの毎朝の話は、同じ話ばかり。……「柵の向こうの坊主」の話よ。']];
         f.svn_ma = true;
         return [['npc', 'normal', 'ヤネスはね、毎朝、ハチに村のことを話して聞かせるの。だれが生まれた、だれが嫁いだって。'], ['npc', 'normal', 'うちの孫が生まれたことも、わたしより先に、ハチが知ってたのよ。……垣根ごしに、聞こえちゃうの。'], ['npc', 'normal', 'あの人が町へ行ったら、だれがハチに村の話をするのかしら。……ちょっと、さびしいの。']];
@@ -6140,10 +6140,10 @@
   C.push({
     id: 'kirgina', shape: 'もう半分の模様', name: 'キルギナ', sub: 'フェルトの谷の村', time: 'morning', screens: 5, far: 'highland', farBack: 'twilight', timeBack: 'dusk', map: [42.5, 75.5],
     hill: '#6a7a58', ground: ['#a8a878', '#888858', '#b8b888'], tint: 'rgba(250,245,230,.05)', bscale: 1.0,
-    props: [['rock2', 400, 100], ['textile_stall', 1350, 110], ['rock', 2300, 60], ['haystack', 3100, 110], ['rock_moss', 4400, 100]],
+    props: [['rock2', 400, 100], ['textile_stall', 1400, 110, (f, back) => !(back && f.kg_done)], ['shyrdak_pair', 1400, 130, (f, back) => back && f.kg_done], ['rock', 2300, 60], ['haystack', 3100, 110], ['rock_moss', 4400, 100]],
     buildings: [['yurt', 750, 0.85], ['yurt_smoke', 1750, 0.85], ['sheep_pen', 2700, 0.8], ['yurt', 3800, 0.8]],
     npcs: [
-      { id: 'aigerim', name: 'アイゲリム', actor: 'farmgirl', x: 950, face: 1 },
+      { id: 'aigerim', name: 'アイゲリム', actor: 'kg_girl', x: 950, face: 1 },
       { id: 'nurai', name: 'ヌライ', actor: 'ukr_girl', x: 1200, face: -1, when: (f, back) => back && f.kg_done },
       { id: 'gulnara', name: 'フェルト縫いのグルナラばあちゃん', actor: 'herbgranny', x: 2000, face: -1 },
       { id: 'bakyt', name: '馬飼いのバキト', actor: 'falconer', x: 3050, face: -1 }
@@ -6154,7 +6154,7 @@
     talk: {
       aigerim(S) {
         const f = S.f;
-        if (S.back && f.kg_done) return [['npc', 'normal', 'ふたつ、ならべてみたの。わたしの模様のすきまに、ヌライの模様が、ぴったり入った。'], ['npc', 'normal', '夏に帰ってきたら、また、ならべようって。……けんかのことは、ふたりとも、言わなかった。']];
+        if (S.back && f.kg_done) return [['me', '', '（アイゲリムとヌライが、二枚の敷物を、角と角を合わせて、ならべている）'], ['npc', 'normal', 'ふたつ、ならべてみたの。わたしの模様のすきまに、ヌライの模様が、ぴったり入った。'], ['npc', 'normal', '夏に帰ってきたら、また、ならべようって。……けんかのことは、ふたりとも、言わなかった。']];
         if (S.back) return [['npc', 'normal', '……ヌライに会わないまま、行くのかな。']];
         if (f.kg_done) return [['npc', 'normal', 'もう半分が、ヌライの家に？ ……待ってる。ここで、待ってる。']];
         if (f.kg_ai) return [['npc', 'normal', '模様のぬけたところ、ばあちゃんは「もう半分がある」って言うの。']];
