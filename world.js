@@ -389,9 +389,14 @@
       { id: 'envoy', name: '海の向こうの使者', actor: 'knight', x: 4700, face: -1, when: f => !f.envoyMoved },
       { id: 'envoy2', name: '海の向こうの使者', actor: 'knight', x: 1650, face: -1, when: f => f.envoyMoved }
     ],
+    places: [{ id: 'walk_shirakabe', name: '白壁の石段', x: 2300, verb: '登る' }],
     weather: { clear: 6, wind: 2, typhoon: 1, squall: 1 },
     animals: [['cat_white', 2200], ['cat_calico', 3700]],
     talk: {
+      walk_shirakabe(S) {
+        if (S.back) return [['me', '', '（石段を下りる。上から見ると、港がひとつながりに見える）']];
+        return [['me', '', '（白い石段を、何段も登る。……揚げ菓子を持って、使者も、この段を何度も往復したのだろう）']];
+      },
       yui(S) {
         const f = S.f;
         if (S.back && f.yuiKnown) return [['npc', 'fun', '……七つ目で、あちらが先に寝てしまったの。'], ['npc', 'fun', '揚げ菓子の話をしてたら、眠れない理由を忘れちゃった。']];
@@ -734,10 +739,14 @@
       { id: 'miller', name: '粉屋のゴロ', actor: 'oldsmith', x: 2300, face: -1 },
       { id: 'keeper', name: '堤防番のアンナ', actor: 'kasuri', x: 4500, face: -1 }
     ],
-    places: [{ id: 'leak', name: '堤防の手形', x: 450, verb: '見る', when: f => f.dikeFixed }],
+    places: [{ id: 'walk_kazaguruma', name: '堤防の上の道', x: 3400, verb: '歩く' }, { id: 'leak', name: '堤防の手形', x: 450, verb: '見る', when: f => f.dikeFixed }],
     weather: { wind: 1 }, // 風車が排水に回るので、この国はいつも強風
     animals: [['duck', 1300], ['cow', 3300, { mode: 'stay' }], ['cow', 3550, { mode: 'stay', face: -1 }], ['sheep', 5200]],
     talk: {
+      walk_kazaguruma(S) {
+        if (S.back) return [['me', '', '（帰りの堤防の上。風車の羽根が、行きより、ゆっくり回っている）']];
+        return [['me', '', '（堤防の上を歩く。右は海、左は畑。……歩いてみると、海のほうが畑より高いのが、足でわかる）']];
+      },
       leak(S) {
         const f = S.f;
         if (S.back) return [['me', '', '（粘土の手形のとなりに、大人の大きな手形が、ひとつ増えている）']];
@@ -1989,10 +1998,14 @@
       { id: 'vale', name: 'バレ（大きい子組）', actor: 'goggles', x: 2700, face: -1 },
       { id: 'dona', name: '二階のドーニャ・ペパ', actor: 'cholita', x: 1650, face: -1 }
     ],
-    places: [{ id: 'goal', name: '広場のゴール', x: 2100, verb: '守る', when: f => f.tomiTold && f.valeTold }],
+    places: [{ id: 'walk_boca', name: '港への路地', x: 3300, verb: '歩く' }, { id: 'goal', name: '広場のゴール', x: 2100, verb: '守る', when: f => f.tomiTold && f.valeTold }],
     weather: { clear: 7, wind: 2, drizzle: 1 },
     animals: [['dog_spot', 1300], ['cat_orange', 3200], ['crow', 4200]],
     talk: {
+      walk_boca(S) {
+        if (S.back) return [['me', '', '（同じ路地を、こんどはゆっくり歩く。壁のペンキの色が、走っていたときには見えなかった）']];
+        return [['me', '', '（走ったあとの足が、まだ笑っている。……ここの子たちは、毎日この坂を走って帰るのか）']];
+      },
       tomi(S) {
         const f = S.f;
         if (S.back && !f.played) return [['npc', 'normal', 'キーパーなしで、ぼろ負けした。……一年、広場は大きい子たちのもの。']];
@@ -2384,10 +2397,14 @@
       { id: 'pita', name: 'ピタ', actor: 'parka', x: 1400, face: -1 },
       { id: 'tuku', name: 'トゥク老人', actor: 'bearhunter', x: 2350, face: -1 }
     ],
-    places: [{ id: 'crack', name: '東の氷の割れ目', x: 3800, verb: 'のぞく' }],
+    places: [{ id: 'walk_kalaal', name: '氷の上の道', x: 3000, verb: '歩く' }, { id: 'crack', name: '東の氷の割れ目', x: 3800, verb: 'のぞく' }],
     weather: { clear: 5, wind: 3, snow: 2 },
     animals: [['dog_husky', 600], ['dog_samoyed', 1800], ['crow', 3000]],
     talk: {
+      walk_kalaal(S) {
+        if (S.back) return [['me', '', '（帰りの氷の道に、自分の足あとが残っている。行きより、ためらいの少ない足あとだ）']];
+        return [['me', '', '（氷の上は、一歩ずつ、足の裏で確かめながら進む。……ここの人は、歩いた音で氷の厚さを読むという）']];
+      },
       naja(S) {
         const f = S.f;
         if (S.back && f.sawIt) return [['npc', 'normal', '……ほんとに、来てたの？ うそでしょ。'], ['npc', 'normal', 'え、トゥクじいちゃんも見たの？ ……じゃあ、ほんとなんだ。'], ['npc', 'normal', 'ずるい。うそついたの、わたしたちなのに。']];
@@ -2724,10 +2741,14 @@
       { id: 'twins', name: '双子のエッバとエルサ', actor: 'twins', x: 3300, face: -1, h: 0.62 },
       { id: 'gudrun', name: 'グズルンばあちゃん', actor: 'granny_nordic', x: 3800, face: -1 }
     ],
-    places: [{ id: 'camera', name: '三脚の上の写真機', x: 2550, verb: '撮る', when: f => f.ingridTold && f.gudrunTold }],
+    places: [{ id: 'walk_fjordia', name: 'フィヨルドの崖道', x: 4300, verb: '登る' }, { id: 'camera', name: '三脚の上の写真機', x: 2550, verb: '撮る', when: f => f.ingridTold && f.gudrunTold }],
     weather: { clear: 5, fog: 3, drizzle: 2 },
     animals: [['sheep', 600], ['dog_samoyed', 3000], ['crow', 1700]],
     talk: {
+      walk_fjordia(S) {
+        if (S.back) return [['me', '', '（下りの崖道。村の家の窓が、ひとつずつ近づいてくる）']];
+        return [['me', '', '（崖道を登りきると、村がまるごと、写真の枠みたいに見える。……撮る人は、いつもここまで歩いてきたのだ）']];
+      },
       ingrid(S) {
         const f = S.f;
         if (S.back && f.shot) return [['npc', 'normal', 'じいちゃん、焼いた写真を見て、しばらく何も言わなかったの。'], ['npc', 'normal', '……それから、「わしは、こんな顔で笑うのか」って。']];
@@ -2984,9 +3005,14 @@
       { id: 'kids', name: '浜の子どもたち', actor: 'boy_frog', x: 2000, face: -1 },
       { id: 'anna_n', name: '看護師のアンナ', actor: 'nurse', x: 3500, face: -1, when: (f, back) => !back || !f.annaOk }
     ],
+    places: [{ id: 'walk_samoana', name: '浜の道', x: 2750, verb: '歩く' }],
     weather: { clear: 7, squall: 2, wind: 1 },
     animals: [['dog_brown', 1500], ['hen', 2400], ['turtle', 3200]],
     talk: {
+      walk_samoana(S) {
+        if (S.back) return [['me', '', '（帰りの浜の道。もう、歩幅と言葉の拍子が、ぴったり合っている）']];
+        return [['me', '', '（浜の道を歩きながら、口の中で言葉をくり返す。……一歩ごとに、ひと音）']];
+      },
       sione(S) {
         const f = S.f;
         if (S.back && f.annaOk) return [['npc', 'normal', 'アンナ先生、けさの船で、ちゃんと言っていったよ。島じゅうに聞こえる声でな。'], ['npc', 'normal', '……島の言葉は、「また来るね」って意味だ。島を出る人が、島に置いていく約束さ。'], ['me', '', '……ファアレ・マイ。（わたしも、この島に、置いていく）'], ['me', '', '（シオネおじさんが、ウクレレを止めて、大きく笑った）'], ['insight', '', '十年言えなかった言葉は、島を出る日に、戻ってくる約束になった。']];
@@ -3456,10 +3482,14 @@
       { id: 'karim', name: 'カリム', actor: 'boy_student', x: 2600, face: -1 },
       { id: 'youssef', name: 'ラッパのユーセフじいさん', actor: 'teaseller', x: 3500, face: -1 }
     ],
-    places: [{ id: 'cistern', name: '古い貯水槽の入り口', x: 1850, verb: '見る' }],
+    places: [{ id: 'walk_tunisia', name: '井戸のある路地', x: 3050, verb: '歩く' }, { id: 'cistern', name: '古い貯水槽の入り口', x: 1850, verb: '見る' }],
     weather: { clear: 7, wind: 3 },
     animals: [['cat_white', 1300], ['donkey', 3100], ['cat_calico', 4100]],
     talk: {
+      walk_tunisia(S) {
+        if (S.back) return [['me', '', '（夜の路地。井戸の口から、かすかに、港の歌がのぼってくる）']];
+        return [['me', '', '（路地のあちこちに、ふたをした井戸。……耳を近づけながら歩くと、どの井戸も、地面の下でつながっている気がする）']];
+      },
       amina(S) {
         const f = S.f;
         if (S.back && f.tn_yes) return [['npc', 'normal', '合図の三つめで裏返るんでしょう。……町じゅう、そこで歌いだすつもりよ。']];
@@ -3767,10 +3797,14 @@
       { id: 'lotte', name: 'ロッテ', actor: 'girl', x: 2100, face: -1 },
       { id: 'emma', name: '編み物のおばあさん', actor: 'granny_nordic', x: 3500, face: -1 }
     ],
-    places: [{ id: 'canal', name: '運河の橋', x: 2800, verb: '見る' }],
+    places: [{ id: 'walk_belgica', name: '運河沿いの道', x: 1500, verb: '歩く' }, { id: 'canal', name: '運河の橋', x: 2800, verb: '見る' }],
     weather: { clear: 4, drizzle: 4, fog: 2 },
     animals: [['duck', 2600], ['duck', 2700], ['cat_black', 3900]],
     talk: {
+      walk_belgica(S) {
+        if (S.back) return [['me', '', '（帰りに数えたら、九十八歩だった。少しだけ、近くなった気がする）']];
+        return [['me', '', '（店から橋まで、運河沿いに歩いて、ちょうど百歩。……五十年、この百歩が遠かったのだ）']];
+      },
       jules(S) {
         const f = S.f;
         if (f.bg_emma && !f.bg_done) {
@@ -4085,10 +4119,14 @@
       { id: 'baker_mc', name: '昼寝中のパン屋', actor: 'baker_girl', x: 1800, face: -1 },
       { id: 'tomeu', name: '昼寝中のトメウじいさん', actor: 'old_fisher', x: 3250, face: -1 }
     ],
-    places: [{ id: 'fig', name: 'いちじくの木', x: 2600, verb: '実をとる' }, { id: 'donkey', name: '花壇の中のロバ', x: 3750, verb: '呼ぶ' }],
+    places: [{ id: 'walk_mallorca', name: '忍び足の路地', x: 1350, verb: '歩く' }, { id: 'fig', name: 'いちじくの木', x: 2600, verb: '実をとる' }, { id: 'donkey', name: '花壇の中のロバ', x: 3750, verb: '呼ぶ' }],
     weather: { clear: 8, wind: 1 },
     animals: [['donkey', 3700, { mode: 'stay' }], ['cat_orange', 1300], ['rooster', 2200]],
     talk: {
+      walk_mallorca(S) {
+        if (S.back) return [['me', '', '（昼寝の終わった路地。つま先で歩かなくていいのが、足には少しさびしい）']];
+        return [['me', '', '（村じゅうが寝ている。……足音を立てないよう、つま先で歩くと、石だたみの一つ一つがよくわかる）']];
+      },
       pau(S) {
         const f = S.f;
         if (f.mc_home && !f.mc_done) {
@@ -4145,10 +4183,14 @@
       { id: 'britt', name: 'となりのブリットおばあさん', actor: 'granny_broom', x: 2000, face: -1 },
       { id: 'olle', name: '鍛冶屋のオッレ', actor: 'smith', x: 3600, face: -1 }
     ],
-    places: [{ id: 'forge', name: '火の消えた鍛冶場', x: 3100, verb: '見る' }],
+    places: [{ id: 'walk_sverige', name: '谷の道', x: 2550, verb: '歩く' }, { id: 'forge', name: '火の消えた鍛冶場', x: 3100, verb: '見る' }],
     weather: { clear: 4, drizzle: 3, fog: 2 },
     animals: [['cat_black', 1400], ['crow', 2600], ['dog_husky', 4000]],
     talk: {
+      walk_sverige(S) {
+        if (S.back) return [['me', '', '（トン、トン、トン。谷の道を歩くと、鎚の音が、足の拍子と合ってくる）']];
+        return [['me', '', '（谷の道を歩くと、鍛冶場とリーナの家は、思ったより近い。……鎚の音が、まっすぐ届く距離だ）']];
+      },
       lina(S) {
         const f = S.f;
         if (S.back && f.sv_done) return [['npc', 'normal', '……寝たわ。鎚の音が三つ鳴ったら、すうっと。三日ぶりよ。'], ['npc', 'normal', 'あした、オッレさんに、パンを焼いて持っていく。……ゆっくり三つずつ、ありがとうって。']];
@@ -4195,10 +4237,14 @@
       { id: 'harbor', name: '港番のディウフ', actor: 'navylantern', x: 2900, face: -1 },
       { id: 'ousmane', name: 'ウスマンじいさん', actor: 'oldman', x: 3600, face: -1 }
     ],
-    places: [],
+    places: [{ id: 'walk_senegal', name: '港へ下る道', x: 2300, verb: '歩く' }],
     weather: { clear: 7, wind: 3 },
     animals: [['hen', 1300], ['cat_orange', 2400], ['crow', 4000]],
     talk: {
+      walk_senegal(S) {
+        if (S.back) return [['me', '', '（夕方、港から町へ登る。……ウスマンじいさんが、はじめて歩いたのと、同じ向きで）']];
+        return [['me', '', '（バオバブから港へ、まっすぐ下る道。……六十年前、男の子は、この道を逆に、ひとりで登ってきたのだ）']];
+      },
       aminata(S) {
         const f = S.f;
         if (f.sn_day && !f.sn_done) {
@@ -4247,10 +4293,14 @@
       { id: 'mihai', name: '親方のミハイ', actor: 'oldsmith', x: 2000, face: -1 },
       { id: 'ileana', name: 'イレアナおばあさん', actor: 'ru_granny', x: 3500, face: -1 }
     ],
-    places: [{ id: 'shelf', name: 'イレアナの台所の棚', x: 3250, verb: '見る', when: f => f.rm_ilea }],
+    places: [{ id: 'walk_romania', name: '窯へ続く坂', x: 2600, verb: '登る' }, { id: 'shelf', name: 'イレアナの台所の棚', x: 3250, verb: '見る', when: f => f.rm_ilea }],
     weather: { clear: 5, wind: 3, drizzle: 2 },
     animals: [['hen', 1200], ['dog_brown', 2600], ['cat_white', 3900]],
     talk: {
+      walk_romania(S) {
+        if (S.back) return [['me', '', '（下り坂。両手に何も持っていないと、谷の景色がよく見える）']];
+        return [['me', '', '（窯まで、器をかかえて登る坂。……落とさないように、足もとばかり見てしまう）']];
+      },
       ana(S) {
         const f = S.f;
         if (f.rm_shelf && !f.rm_done) {
@@ -4693,10 +4743,14 @@
       { id: 'rada', name: '花嫁のラダ', actor: 'farmgirl', x: 3000, face: -1 },
       { id: 'baba', name: 'バラ摘みのババ・ツヴェタ', actor: 'granny_apron', x: 3650, face: -1 }
     ],
-    places: [],
+    places: [{ id: 'walk_bulgara', name: 'バラ畑のあぜ道', x: 2450, verb: '歩く' }],
     weather: { clear: 6, fog: 2, drizzle: 1 },
     animals: [['hen', 1400], ['sheep', 2500], ['dog_spot', 4100]],
     talk: {
+      walk_bulgara(S) {
+        if (S.back) return [['me', '', '（夕方のあぜ道に、ふたり分の足あとが並んでいる。片方は、とちゅうで、くるっと回っている）']];
+        return [['me', '', '（あぜ道を歩くと、足もとからバラの香りが立つ。……花嫁は毎朝、この道を、歌いながら来ていたのだろう）']];
+      },
       stoyan(S) {
         const f = S.f;
         if (S.back && f.bg2_done) return [['npc', 'normal', 'ラダが、泣く歌を教えてくれた。……ぼくが歌ったら、ラダが笑いころげた。']];
@@ -5263,10 +5317,14 @@
       { id: 'besnik', name: '喫茶店のベスニク', actor: 'chef', x: 2000, face: -1 },
       { id: 'elira', name: 'エリラ', actor: 'farmgirl', x: 3500, face: -1 }
     ],
-    places: [{ id: 'doors', name: '扉の小さな絵', x: 2800, verb: '見る' }],
+    places: [{ id: 'walk_albania', name: '石段の坂', x: 1450, verb: '登る' }, { id: 'doors', name: '扉の小さな絵', x: 2800, verb: '見る' }],
     weather: { clear: 6, fog: 2, drizzle: 1 },
     animals: [['cat_black', 1400], ['donkey', 2400], ['crow', 4000]],
     talk: {
+      walk_albania(S) {
+        if (S.back) return [['me', '', '（夕方の石段。すり減った段の角を、こんどは自分の足でも、ひとつずつ踏んでいく）']];
+        return [['me', '', '（町は坂だらけ。郵便かばんを肩に、毎日この石段を何往復するのだろう。段の角が、すり減って丸い）']];
+      },
       agron(S) {
         const f = S.f;
         if (S.back && f.al_done) return [['npc', 'normal', 'あしたの試験では、扉の絵の話をするよ。……字は読めんが、この町なら、ぜんぶ読める。']];
