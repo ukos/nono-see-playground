@@ -5954,7 +5954,7 @@
     buildings: [['med_white', 700, 0.9], ['mideast_white', 1500, 0.85], ['high_bridge', 2550, 0.72]],
     npcs: [
       { id: 'emir', name: 'エミル', actor: 'fisherboy', x: 950, face: 1, leaveWhen: f => f.bs_done, leaveDir: 1 },
-      { id: 'hasanbs', name: 'ハサンじいさん', actor: 'ca_elder', x: 1250, face: -1, when: (f, back) => back },
+      { id: 'hasanbs', name: 'ハサンじいさん', actor: 'ca_elder', x: 1250, face: -1 },
       { id: 'senad', name: 'コーヒー屋のセナド', actor: 'teaseller', x: 1950, face: -1 },
       { id: 'mirsad', name: '飛びこみ組の頭ミルサド', actor: 'sailor_boy', x: 3000, face: -1 },
       { id: 'emir2', name: 'エミル', actor: 'fisherboy', x: 3500, face: 1, when: f => f.bs_done }
@@ -5979,9 +5979,13 @@
       },
       hasanbs(S) {
         const f = S.f;
-        if (f.bs_done && f.bs_ha) return [['npc', 'normal', 'あの岩は、冷たいぞ。……毛布を、一枚持っていってやらんとな。']];
-        if (f.bs_done) { f.bs_ha = true; return [['npc', 'normal', 'エミルが、わしの岩に座ったそうだな。……ばれたか。'], ['npc', 'normal', 'わしも、高いところが、こわかった。だから、下で待つことにした。……四十年な。']]; }
-        return [['npc', 'normal', '孫が、あした飛ぶ。……わしは、いつもの場所で待っとるよ。']];
+        if (S.back && f.bs_done && f.bs_ha) return [['npc', 'normal', 'あの岩は、冷たいぞ。……毛布を、一枚持っていってやらんとな。']];
+        if (S.back && f.bs_done) { f.bs_ha = true; return [['npc', 'normal', 'エミルが、わしの岩に座ったそうだな。……ばれたか。'], ['npc', 'normal', 'わしも、高いところが、こわかった。だから、下で待つことにした。……四十年な。']]; }
+        if (S.back) return [['npc', 'normal', '孫が、あした飛ぶ。……わしは、いつもの場所で待っとるよ。']];
+        if (f.bs_done) return [['npc', 'normal', '……わしの岩を、見てきたか。エミルが、あっちへ走っていったよ。']];
+        if (f.bs_h0) return [['npc', 'normal', 'あしたは、いつもの場所で、孫を待つよ。……それが、わしの最後の大会だ。']];
+        f.bs_h0 = true;
+        return [['me', '', '（白いひげのおじいさんが、ベンチから、川の下流ばかり見ている）'], ['npc', 'normal', 'エミルのじいさんの、ハサンだ。あしたは、孫の晴れ舞台でな。'], ['npc', 'normal', '飛びこみのコツ？ ……さあな。わしは、橋の上のことは、よう知らんのだ。']];
       },
       senad(S) {
         const f = S.f;
