@@ -6992,7 +6992,7 @@
   C.push({
     id: 'singapora', shape: 'ティッシュで取っておく席', name: 'シンガポーナ', sub: '屋台村の町', time: 'noon', screens: 5, far: 'harbor_morning', farBack: 'city_lights_night', timeBack: 'dusk', map: [1.3, 103.8],
     hill: '#5a6a68', ground: ['#c0b8a8', '#a09888', '#d0c8b8'], tint: 'rgba(255,250,240,.04)', bscale: 1.0,
-    props: [['palm', 400, 300], ['tea_table', 1300, 60], ['stool', 1420, 40], ['tea_table', 2350, 60], ['stool2', 2470, 40], ['tea_table', 3900, 60], ['palm', 4450, 300]],
+    props: [['palm', 400, 300], ['tea_table', 1300, 60], ['stool', 1420, 40], ['tea_table', 2350, 60], ['stool2', 2470, 40], ['hawker_table', 3950, 70, null, 1], ['palm', 4450, 300]],
     buildings: [['city_building', 700, 0.8], ['sea_shop', 1750, 0.85], ['cn_house', 2800, 0.8], ['sea_stall', 3550, 0.85]],
     npcs: [
       { id: 'weiling', name: 'ウェイリン', actor: 'girl', x: 950, face: 1 },
@@ -7014,7 +7014,7 @@
       },
       lim(S) {
         const f = S.f;
-        if (S.back && f.sg_done) return [['npc', 'normal', 'ウェイリンが、あした、ティッシュを持ってくるそうだ。……三十年ぶんの、あとつぎができた。']];
+        if (S.back && f.sg_done) return [['npc', 'normal', 'わしも若いころ、ここで皿洗いをしとった。……三時に座れる席なんか、どこにもなかった。'], ['npc', 'normal', 'ウェイリンが、あした、ティッシュを持ってくるそうだ。……三十年ぶんの、あとつぎができた。']];
         if (S.back) return [['npc', 'normal', '店じまいだ。……ティッシュは、あしたの朝、また置く。']];
         if (f.sg_done) return [['npc', 'normal', 'ばれたか。……シティたちは、朝から晩まで、ここをきれいにしとる。座るひまも、ないんだ。']];
         if (f.sg_li) return [['npc', 'normal', 'チキンライス、もう一杯どうだ。……席？ 立って食べな。']];
@@ -7046,7 +7046,7 @@
   C.push({
     id: 'zanzibana', shape: 'ゾウのいない島のトゲ', name: 'ザンジバナ', sub: '彫り扉の島', time: 'morning', screens: 5, far: 'sea_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-6.2, 39.2],
     hill: '#5a7a68', ground: ['#d0c0a0', '#b0a080', '#e0d0b0'], tint: 'rgba(255,245,230,.05)', bscale: 1.0,
-    props: [['palm', 400, 310], ['textile_stall', 2250, 110], ['palm', 3100, 320], ['palm', 4450, 300]],
+    props: [['palm', 400, 310], ['textile_stall', 2250, 110], ['palm', 3100, 320], ['zanzibar_door', 3960, 140, null, 1], ['palm', 4450, 300]],
     buildings: [['mideast_white', 750, 0.8], ['sea_tall', 1700, 0.85], ['mideast_white', 2800, 0.8], ['sea_tall', 3750, 0.85]],
     npcs: [
       { id: 'bakari', name: '扉彫りのバカリ', actor: 'teaseller', x: 1000, face: 1 },
@@ -7070,7 +7070,7 @@
         const f = S.f;
         if (S.back && f.zb_done) return [['npc', 'normal', '引っ越しの日に、クローブをひと袋あげるの。……新しい家の、最初のにおいにしてって。']];
         if (S.back) return [['npc', 'normal', '市場は、夕方、においがいちばん濃くなるの。']];
-        if (f.zb_done) return [['npc', 'normal', 'トン、トンの音は、トゲだったのね。……あたし、四十年、気づかなかった。']];
+        if (f.zb_done) return [['npc', 'normal', 'トン、トンの音は、トゲだったのね。……あたし、四十年、気づかなかった。'], ['npc', 'normal', '店はちょっと閉めて、扉を見てくる。……あの音の正体、この目で見ておかなきゃ。']];
         if (f.zb_mw) return [['npc', 'normal', 'クローブは、においが強いの。……思い出も、ね。']];
         f.zb_mw = true;
         return [['npc', 'normal', 'スパイスはいかが。クローブ、シナモン、カルダモン。……ジュマのおばあちゃんとは、むかしからの友だちよ。'], ['npc', 'normal', 'あの家は、ふしぎな家でね。赤ちゃんが生まれた日には、きまって、トン、トンって、金づちの音がするの。'], ['npc', 'normal', 'あの家が引っ越したら、あの音も、もう、ここでは聞けないのね。……ちょっと、さびしいわ。']];
