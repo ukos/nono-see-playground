@@ -5706,7 +5706,122 @@
     }
   });
 
-// ---------------------------------------------------------------- 105 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
+// ---------------------------------------------------------------- 105 自分の木だけ見つからない（いちばん遠くの木は、いちばん先に水を飲む）
+  C.push({
+    id: 'pakista', shape: '自分の木だけ見つからない', name: 'パキスタナ', sub: 'アンズの谷の村', time: 'morning', screens: 5, far: 'snow_peaks_noon', farBack: 'twilight', timeBack: 'dusk', map: [36.3, 74.6],
+    hill: '#6a6250', ground: ['#b8a888', '#988868', '#c8b898'], tint: 'rgba(250,240,220,.05)', bscale: 1.0,
+    props: [['tree_green', 400, 260], ['tree_green', 1350, 250], ['stone_wall_low', 2100, 80], ['rock2', 3000, 100], ['river_steps', 3500, 70], ['tree_old_roots', 4050, 300]],
+    buildings: [['pk_mountain', 700, 0.9], ['pk_mountain', 1800, 0.85], ['sheep_pen', 2600, 0.8]],
+    npcs: [
+      { id: 'zainab', name: 'ザイナブ', actor: 'braidgirl', x: 950, face: 1 },
+      { id: 'fatimapk', name: 'アンズ干しのファティマ', actor: 'levant_woman', x: 1950, face: -1 },
+      { id: 'karimpk', name: '水路番のカリムじいさん', actor: 'turban', x: 2950, face: -1 }
+    ],
+    places: [{ id: 'head', name: '水路のはじまり', x: 4000, verb: '見る' }],
+    weather: { clear: 7, wind: 3 },
+    animals: [['sheep', 2500], ['yak', 3300], ['crow', 1500]],
+    talk: {
+      zainab(S) {
+        const f = S.f;
+        if (S.back && f.pk_done) return [['npc', 'joy', 'わたしの木、見てきた。村でいちばん高いところで、いちばん先に、水を飲んでた。'], ['npc', 'joy', '弟に言ってやったの。「あんたの木の水は、わたしの木の前を通ってきたんだよ」って。']];
+        if (S.back) return [['npc', 'normal', '……わたしの木、やっぱり、ないのかな。']];
+        if (f.pk_done) return [['npc', 'joy', 'わたしの木が、水路のはじまりに？ ……見に行ってくる！']];
+        if (f.pk_za) return [['npc', 'normal', '果樹園の木は、ぜんぶ数えたの。三回も。']];
+        f.pk_za = true;
+        return [['me', '', '（女の子が、果樹園の木を、ひとつずつ指さして数えている）'], ['npc', 'normal', 'この村では、子どもが生まれると、アンズの木を一本植えるの。名前を彫った板をつけて。'], ['npc', 'normal', '弟のも、いとこのも、ある。……わたしの木だけ、どこにもないの。'], ['npc', 'normal', 'きょう、弟の木に、はじめて花が咲いたの。みんなでお祝い。……わたし、笑えなかった。']];
+      },
+      fatimapk(S) {
+        const f = S.f;
+        if (S.back && f.pk_done) return [['npc', 'normal', 'ザイナブの木が、水路のはじまりに？ ……あの年、枯れなかった木が、一本だけあったのね。'], ['npc', 'normal', 'あした、娘をつれて、見に行ってみる。……あの木のとなりに、娘の木を植えなおそうかね。']];
+        if (S.back) return [['npc', 'normal', '干したアンズ、ひとつどうぞ。……帰りの道は、長いからね。']];
+        if (f.pk_done) return [['npc', 'normal', 'ザイナブが走っていったよ。……あんなに急ぐあの子、はじめて見た。']];
+        if (f.pk_fa) return [['npc', 'normal', '日照りの年のことは、水路番のじいさんが、いちばんよく知ってるよ。']];
+        f.pk_fa = true;
+        return [['npc', 'normal', 'アンズを干してるの。この村の木は、ぜんぶ、毎年この目で見てきたからね。'], ['npc', 'normal', 'ザイナブの木？ ……果樹園では見たことがないね。あの子の生まれた年は、ひどい日照りでね。'], ['npc', 'normal', '水が果樹園までとどかなくて、植えた苗が、みんな枯れた。……わたしの娘の木も、あの年に。'], ['npc', 'normal', 'だから、あの年のことは、村のだれも話したがらないの。']];
+      },
+      karimpk(S) {
+        const f = S.f;
+        if (S.back && f.pk_done) return [['npc', 'normal', '落ち葉、どけてくれたか。……今朝より、水の音が大きい。'], ['npc', 'normal', 'そうか、あの木か。……わしが上れたころ、毎年、あの木の根元だけ、ぬれていたっけ。']];
+        if (S.back) return [['npc', 'normal', '日が落ちると、谷には、水の音だけが残る。']];
+        if (f.pk_done) return [['npc', 'normal', '水の音が変わった。……はじまりの落ち葉、どけてくれたんだな。']];
+        if (f.pk_ka) return [['npc', 'normal', '水路のはじまりは、この道を、東へ上ったところだ。落ち葉を、たのんだぞ。']];
+        f.pk_ka = true;
+        return [['npc', 'normal', 'わしは水路番だ。氷河の水を、この細い水路で、村まで引いてくる。'], ['npc', 'normal', 'ザイナブの生まれた年？ ……あの子のじいさんが、苗を一本だけかかえて、水路を上っていったよ。'], ['npc', 'normal', 'どこに植えたかは、知らん。わしは膝が悪くて、もう、はじまりまで上れんのだ。'], ['npc', 'normal', '上るなら、たのむ。はじまりの落ち葉をどけてくれ。……つまると、春の水が村に来ない。']];
+      },
+      head(S) {
+        const f = S.f;
+        if (S.back && f.pk_done) return [['me', '', '（夕方の水路。アンズの木の根元が、まだ、しっとりぬれている）']];
+        if (S.back) return [['me', '', '（水路のはじまり。氷河の水が、冷たい音をたてている）']];
+        if (f.pk_done) return [['me', '', '（ザイナブの木。つぼみがひとつ、ふくらんでいる）']];
+        if (!(f.pk_za && f.pk_ka)) return [['me', '', '（岩のあいだから、細い水路が始まっている。そばに、一本の古いアンズの木）']];
+        f.pk_done = true;
+        return [['me', '', '（たまった落ち葉をどけると、水がいきおいよく流れはじめた）'], ['me', '', '（そばのアンズの木。幹に、小さな板。「ザイナブ」と彫ってある）'], ['me', '', '（水路のいちばん上。村のどの木よりも先に、この木が水を飲む）'], ['insight', '', 'いちばん遠くに植えた木は、いちばん先に水を飲む木だった。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 106 絵のない家の絵かき（町じゅうの絵のすみに、その子がいた）
+  C.push({
+    id: 'colombina', shape: '絵のない家の絵かき', name: 'コロンビナ', sub: '腰壁の絵の町', time: 'morning', screens: 5, far: 'valley', farBack: 'twilight', timeBack: 'dusk', map: [6.2, -75.2],
+    hill: '#4a6a48', ground: ['#c0a890', '#a08870', '#d0b8a0'], tint: 'rgba(255,240,230,.05)', bscale: 1.0,
+    props: [['palm', 350, 300], ['wall_flowers', 1350, 110], ['wall_painting', 1720, 56, null, 4], ['bush_berry', 2400, 80], ['wall_painting', 2850, 56, null, 4], ['palm', 4300, 300], ['easel', 1150, 130, (f, back) => back && f.co_done]],
+    buildings: [['mx_house', 800, 0.9], ['it_townhouse', 1650, 0.9], ['mx_house', 2800, 0.9], ['it_townhouse', 3700, 0.85]],
+    npcs: [
+      { id: 'valen', name: 'ヴァレンティナ', actor: 'schoolgirl', x: 900, face: 1 },
+      { id: 'andres', name: 'ペンキ屋のアンドレス', actor: 'painter', x: 1250, face: -1, when: (f, back) => back },
+      { id: 'gilberto', name: 'パン屋のヒルベルト', actor: 'chef', x: 1950, face: -1 },
+      { id: 'carmenco', name: 'カルメンばあちゃん', actor: 'granny_apron', x: 2700, face: 1 }
+    ],
+    places: [{ id: 'panel', name: '腰壁の絵', x: 2950, verb: '見る' }],
+    weather: { clear: 7, wind: 2 },
+    animals: [['dog_brown', 1500], ['rooster', 2300], ['donkey', 3600]],
+    talk: {
+      valen(S) {
+        const f = S.f;
+        if (S.back && f.co_done) return [['npc', 'normal', '数えてきた。十二枚。町じゅうの腰壁に、わたしがいたよ。パン屋さんでは、つまみ食いしてた。'], ['npc', 'normal', '宿題、決めた。うちの腰壁には、この町を、ぜんぶ描くの。']];
+        if (S.back) return [['npc', 'normal', '……白いまま、宿題を出すしかないかな。']];
+        if (f.co_done) return [['npc', 'normal', 'わたしが、町じゅうの絵の中に？ ……数えてくる！']];
+        if (f.co_va) return [['npc', 'normal', 'ほかの家の絵、見てきて。……うちに描けるもの、あるかもしれない。']];
+        f.co_va = true;
+        return [['me', '', '（一軒だけ、腰の高さの壁がまっ白だ。女の子が、その前にしゃがんでいる）'], ['npc', 'normal', 'この町の家は、腰壁に、その家の絵があるの。パン屋はパン、農家はコーヒーの実。'], ['npc', 'normal', 'うちだけ、まっ白。……あしたの宿題、「わたしの家の腰壁」を描くんだって。'], ['npc', 'normal', 'パパはペンキ屋なのに、「うちには描くものがない」って。……ほんとに、ないのかな。']];
+      },
+      andres(S) {
+        const f = S.f;
+        if (f.co_done && f.co_an) return [['npc', 'joy', 'あの子が町をぜんぶ描くなら、ペンキが足りないな。……分けてやらなきゃ。']];
+        if (f.co_done) { f.co_an = true; return [['npc', 'normal', 'ヴァレンティナに、ばれたか。……描くものがないなんて、うそをついた。'], ['npc', 'normal', '自分の家に、自分の子を描くのは、てれくさくてな。……人の家になら、描けたんだ。']]; }
+        return [['npc', 'normal', '娘の宿題か。……うちの壁には、描くものがないんだ。']];
+      },
+      gilberto(S) {
+        const f = S.f;
+        if (S.back && f.co_done) return [['npc', 'normal', 'すみっこの女の子？ ……つまみ食いしてるのが、ヴァレンティナか！ 三年も気づかなかった。'], ['npc', 'normal', '息子に教えたら、笑ってたよ。「毎朝うちのパンを買いに来る子だ」ってな。']];
+        if (S.back) return [['npc', 'normal', '夕方のパンは、もう売り切れだ。……あしたの朝、またおいで。']];
+        if (f.co_done) return [['npc', 'normal', 'うちの絵のすみっこ？ ……あとで、眼鏡をかけて見てみるよ。']];
+        if (f.co_gi) return [['npc', 'normal', 'ほかの家の絵も、ほとんど、アンドレスが描いたんじゃないか。']];
+        f.co_gi = true;
+        return [['npc', 'normal', 'うちの腰壁か？ パン焼きがまの絵さ。描いてくれたのは、ペンキ屋のアンドレスだ。'], ['npc', 'normal', 'あいつ、三晩うちに通って、パンの話を聞いていった。……すみっこだけは、何度も塗りなおしてな。'], ['npc', 'normal', '息子は、パン屋をつがないと言ってる。……でも、この絵の前では、いつも立ち止まるんだ。']];
+      },
+      carmenco(S) {
+        const f = S.f;
+        if (S.back && f.co_done) return [['npc', 'normal', 'すみに、女の子が？ ……ほんとだ。夫のかごに、コーヒーの実をひとつ入れてる。'], ['npc', 'normal', '夫は、子どもをほしがってたの。……アンドレスにそう話したのを、いま思い出した。']];
+        if (S.back) return [['npc', 'normal', '夕方は、絵の色が、いちばんやさしくなるのよ。']];
+        if (f.co_done) return [['npc', 'normal', 'なにか見つけたの？ ……顔が、にこにこしてるわよ。']];
+        if (f.co_ca) return [['npc', 'normal', 'わたしの絵、よく見ていってね。……すみずみまで、あの人の筆だから。']];
+        f.co_ca = true;
+        return [['npc', 'normal', 'わたしの腰壁は、コーヒーをつむ夫の絵。……夫が死んで、顔が思い出せなくなってたの。'], ['npc', 'normal', 'アンドレスが、ひと晩じゅう話を聞いてくれてね。描きあがったら、ちゃんと夫の顔だった。'], ['npc', 'normal', 'あの人の家の壁だけ白いのは、知ってる。……人の家ばかり描いて、自分の家は、あと回し。']];
+      },
+      panel(S) {
+        const f = S.f;
+        if (S.back && f.co_done) return [['me', '', '（夕日の腰壁。すみの女の子が、オレンジ色にそまっている）']];
+        if (S.back) return [['me', '', '（夕方の腰壁の絵。描かれた人の顔が、やさしく見える）']];
+        if (f.co_done) return [['me', '', '（女の子の三つ編みは、一本ずつ、ていねいに描いてある）']];
+        if (!(f.co_va && f.co_gi && f.co_ca)) return [['me', '', '（コーヒーをつむ人の絵。きれいだ。……でも、何を探せばいいのか、まだわからない）']];
+        f.co_done = true;
+        return [['me', '', '（コーヒーをつむ男の人の絵。顔をよせて、すみずみまで見る）'], ['me', '', '（かごのそばに、小さな女の子。三つ編みで、コーヒーの実をひとつ持っている）'], ['me', '', '（パン屋の絵のすみにも、同じ子がいた。パンを、つまみ食いしていた）'], ['insight', '', '絵のない家の子は、町じゅうの絵の中にいた。']];
+      }
+    }
+  });
+
+// ---------------------------------------------------------------- 107 行けない人の手紙をあずかる（旅人の背中で、世界の果てまで）
   C.push({
     id: 'kapuna', shape: '行けない人の手紙をあずかる', name: 'ケープナ', sub: '岬の町', time: 'noon', screens: 5, far: 'cliffs_morning', farBack: 'sea_dusk', timeBack: 'dusk', map: [-34.4, 18.5],
     hill: '#4a6a5a', ground: ['#b8b098', '#989078', '#c8c0a8'], tint: 'rgba(220,240,255,.05)', bscale: 1.0,
@@ -5751,7 +5866,7 @@
     }
   });
 
-// ---------------------------------------------------------------- 106 世界の果ては、来た道が新しくなる場所（旅の折り返し）
+// ---------------------------------------------------------------- 108 世界の果ては、来た道が新しくなる場所（旅の折り返し）
   C.push({
     id: 'fuegina', shape: '世界の果ては、来た道が新しくなる場所', name: 'フエギナ', sub: '世界の果ての町', time: 'morning', screens: 5, far: 'fjord_morning', farBack: 'aurora_night', timeBack: 'dusk', map: [-54.8, -68.3],
     hill: '#4a5a6a', ground: ['#a8b0b8', '#88909a', '#b8c0c8'], tint: 'rgba(210,225,255,.06)', bscale: 1.0,
