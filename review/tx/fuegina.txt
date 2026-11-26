@@ -1,5 +1,5 @@
 == 国: フエギナ（世界の果ての町）
-〔116番目の国／広さ 5 画面／朝／遠景 fjord_morning〕
+〔118番目の国／広さ 5 画面／朝／遠景 fjord_morning〕
 〔天候：晴れ 40%、強風 40%、雪 20%〕
 〔建物：nordic_red、sea_shop、nordic_red／小物：pine_snow、signboard、stool2、pine_snow、lighthouse〕
 〔住人（西から）：郵便局の孫マテオ @1000、果ての郵便局のアンパロ @2100、果ての灯台守 @4000〕
