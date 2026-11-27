@@ -419,7 +419,7 @@ function drawBridge(cam) {
 }
 function drawSign(x, label) {
   if (x < -200 || x > W + 200) return;
-  g.font = 'bold 15px "DotGothic16",monospace'; const tw = g.measureText(label).width + 24;
+  g.font = 'bold 15px "M PLUS Rounded 1c",sans-serif'; const tw = g.measureText(label).width + 24;
   g.fillStyle = '#4a3726'; g.fillRect(x - 3, GROUND - 70, 6, 70);
   g.fillStyle = '#8a6a48'; g.fillRect(x - tw / 2, GROUND - 78, tw, 28);
   g.fillStyle = '#f6eee6'; g.textAlign = 'center'; g.fillText(label, x, GROUND - 58);
@@ -614,7 +614,7 @@ function drawPlaces(cam) {
 function drawPrompt(cam) {
   if (st.talking || st.journal) return; const t = nearTarget(); if (!t) return;
   const x = (t.isPlace ? (t.ax || st.x) : npcX(t)) - cam, y = GROUND - 165 + Math.sin(st.t * 4) * 3, label = t.isPlace ? t.verb : '話す';
-  g.font = '16px "DotGothic16",monospace'; g.textAlign = 'center';
+  g.font = '16px "M PLUS Rounded 1c",sans-serif'; g.textAlign = 'center';
   const bw = Math.max(60, g.measureText('▼' + label).width + 28), bh = 36, bx = x - bw / 2, by = y - bh + 6;
   g.fillStyle = 'rgba(18,13,31,.85)'; g.strokeStyle = '#f3a07a'; g.lineWidth = 2;
   g.beginPath(); if (g.roundRect) g.roundRect(bx, by, bw, bh, bh / 2); else g.rect(bx, by, bw, bh); g.fill(); g.stroke();
@@ -625,12 +625,12 @@ function drawPrompt(cam) {
 function drawHUD(c) {
   const rest = `　${TIME[timeOf(c)].name}・${WN[wx.next || wx.type]}`;
   g.textAlign = 'left';
-  g.font = 'bold 15px "DotGothic16",monospace'; const nw = g.measureText(c.name).width;
-  g.font = '15px "DotGothic16",monospace';
+  g.font = 'bold 15px "M PLUS Rounded 1c",sans-serif'; const nw = g.measureText(c.name).width;
+  g.font = '15px "M PLUS Rounded 1c",sans-serif';
   const tw = Math.max(220, nw + g.measureText(rest).width + 24);
   g.fillStyle = 'rgba(18,13,31,.6)'; g.fillRect(16, 14, tw, 50);
-  g.fillStyle = '#f6eee6'; g.font = 'bold 15px "DotGothic16",monospace'; g.fillText(c.name, 26, 36);
-  g.font = '15px "DotGothic16",monospace'; g.fillText(rest, 26 + nw, 36);
+  g.fillStyle = '#f6eee6'; g.font = 'bold 15px "M PLUS Rounded 1c",sans-serif'; g.fillText(c.name, 26, 36);
+  g.font = '15px "M PLUS Rounded 1c",sans-serif'; g.fillText(rest, 26 + nw, 36);
   const bw = tw - 20; g.fillStyle = 'rgba(255,255,255,.25)'; g.fillRect(26, 48, bw, 4);
   g.fillStyle = 'rgba(255,255,255,.45)'; for (const k of C) g.fillRect(26 + k.x0 / WORLD * bw, 45, 1, 10);
   g.fillStyle = '#f3a07a'; g.fillRect(26 + st.x / WORLD * bw - 3, 44, 6, 12);
