@@ -108,7 +108,7 @@
     id: 'take', shape: '旅人の失敗が役に立つ', name: 'ジャポネ', sub: '棚田の里', time: 'morning', screens: 5, far: 'rice_terraces_morning',
     map: [36, 138], // 世界地図の位置（緯度, 経度）
     hill: '#1f2a22', ground: ['#5f8a4a', '#3a5034', '#7a6a50'], tint: 'rgba(40,60,40,.04)', bscale: 1.05,
-    props: [['torii', 200, 250], ['stone_lantern', 1300, 170], ['pine', 2150, 300], ['stone_lantern', 3150, 170], ['jp_castle', 4300, 430]],
+    props: [['lantern_pole', 200, 250], ['stone_lantern', 1300, 170], ['pine', 2150, 300], ['stone_lantern', 3150, 170], ['jp_castle', 4300, 430]],
     buildings: [['machiya', 450], ['teahouse', 1150], ['nagaya', 3000], ['samurai_mansion', 3700, 0.95]],
     npcs: [
       { id: 'hana', name: 'ハナ（苗運び）', actor: 'okappa', x: 650, face: -1 },
@@ -221,7 +221,7 @@
     id: 'kaze', shape: '歩くこと自体が解決', name: 'モンゴーラ', sub: '風の草原', screens: 6, far: 'highland',
     map: [47, 104], // 世界地図の位置（緯度, 経度）
     hill: '#243024', ground: ['#7aa05a', '#4a6a3a', '#8a7a5a'], tint: 'rgba(60,80,40,.06)', bscale: 1.0,
-    props: [['rock', 600, 90], ['bush', 2000, 80], ['watchtower', 3100, 300], ['rock2', 5200, 100]],
+    props: [['rock', 600, 90], ['bush', 2000, 80], ['tower_ivy', 3100, 340], ['rock2', 5200, 100]],
     buildings: [['yurt_smoke', 700], ['sheep_pen', 1300, 1.1], ['yurt', 2400], ['stable', 3500, 1.15], ['yurt', 4700, 0.9]],
     npcs: [
       { id: 'mei', name: 'アイラ（羊飼い）', actor: 'braidgirl', x: 1900, face: -1 },

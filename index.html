@@ -66,7 +66,7 @@ button:active,button.hold{background:rgba(243,160,122,.28)}
 #map .mk.here circle{fill:#f3a07a;stroke:#2b2233;stroke-width:4}
 #map .mk text{font-size:28px;font-weight:700;fill:#2b2233;paint-order:stroke;stroke:#fffaf0;stroke-width:7px}
 #map ol{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
-#map li button{color:#2b2233;background:#fffaf0;border:1px solid #d8c6a6;height:auto;padding:8px 10px;font-size:14px;line-height:1.3;border-radius:8px}
+#map li button{font-weight:700;color:#2b2233;background:#fffaf0;border:1px solid #d8c6a6;height:auto;padding:8px 10px;font-size:14px;line-height:1.3;border-radius:8px}
 #map li button small{display:block;font-weight:400;font-size:11px;color:#7a6a5a}
 #map li.here button{border:2px solid #e2553f}
 #map .close{margin-top:12px}
@@ -106,10 +106,10 @@ button:active,button.hold{background:rgba(243,160,122,.28)}
 #journal .close{margin-top:auto;padding-top:14px}
 #journal .close button{color:#2b2233;background:#e8dcc4;border-color:#b9a585}
 /* 国に入ったときの名札 */
-#banner{position:absolute;left:50%;top:20%;transform:translateX(-50%);font-family:"DotGothic16",monospace;font-size:clamp(22px,4.4vw,40px);color:#fff7ee;text-shadow:0 3px 0 rgba(20,10,30,.7),0 0 18px rgba(243,160,122,.6);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .8s}
+#banner{position:absolute;left:50%;top:20%;transform:translateX(-50%);font-family:"DotGothic16",monospace;font-weight:700;font-size:clamp(22px,4.4vw,40px);color:#fff7ee;text-shadow:0 3px 0 rgba(20,10,30,.7),0 0 18px rgba(243,160,122,.6);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .8s}
 #banner.on{opacity:1}
-#banner small{display:block;text-align:center;font-size:.42em;color:#ffd9c4;margin-top:4px}
-.log .c{color:#9a7a6a;font-size:12px;margin-right:6px;white-space:nowrap}
+#banner small{display:block;text-align:center;font-weight:400;font-size:.42em;color:#ffd9c4;margin-top:4px}
+.log .c{font-weight:700;color:#9a7a6a;font-size:12px;margin-right:6px;white-space:nowrap}
 .visited{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
 .visited span{background:#fffaf0;border:1px solid #d8c6a6;border-radius:999px;padding:2px 10px;white-space:nowrap}
 .visited span.no{color:#b8a898;border-style:dashed}
